@@ -1,0 +1,11 @@
+#summary Planning du développement
+
+=Planning=
+  * *Mars*: Reverse Engineering & Conception Tables MySQL
+  * *Avril-Juin* : Développement Fonctionnalités Core (PHP)
+  * *Mai-Juillet*: 
+    * Développement GUI/Accès sécurisé
+    * Développement Services Supplémentaires (en parallèle, deuxième stagiaire)
+  * *Aout*:
+    * Documentation
+    * Validation
