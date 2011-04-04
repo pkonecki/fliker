@@ -1,0 +1,10 @@
+#Les schémas représentant l'interface du futur site
+
+= Schéma Vue Sports =
+
+<img src="http://fliker.googlecode.com/files/portail__menu_sport.png" width=800>
+
+
+= Schéma Vue Evènements =
+
+<img src="http://fliker.googlecode.com/files/portail_menu_evenement.png" width=800>
