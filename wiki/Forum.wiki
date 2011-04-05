@@ -1,6 +1,6 @@
 #summary Description détaillée du forum
 
-= Spécification =
+= Spécifications =
 
 Utilise phpBB
 
