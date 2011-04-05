@@ -1,0 +1,11 @@
+#summary Description détaillé du module de réservation
+
+= Spécifications =
+
+  * Utilise phpmyresa
+  * http://phpmyresa.in2p3.fr/
+
+
+= Modélisation =
+
+Listes de fichiers ayant trait à la modélisation du module de reservation (UML, diagrammes de cas d'utilisation etc...)
