@@ -3,9 +3,9 @@
 = Specification =
 
 Développé en php/mysql
-*Gestion utilisateurs, fiches adhérents
-*Inscription
-*Gestion sports/horaires etc...
+  * Gestion utilisateurs, fiches adhérents
+  * Inscription
+  * Gestion sports/horaires etc...
 
 
 = Modélisation =
