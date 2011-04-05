@@ -1,0 +1,11 @@
+#summary Description détaillé du module de calendrier
+
+= Spécifications =
+
+Permet de voir les différentes activités par sport, salle, matèriel etc...
+Utilise le format iCal
+
+
+= Modélisation =
+
+Listes de fichiers ayant trait à la modélisation du calendrier (UML, diagrammes de cas d'utilisation etc...)
