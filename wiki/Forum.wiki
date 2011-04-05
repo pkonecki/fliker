@@ -1,0 +1,10 @@
+#summary Description détaillée du forum
+
+= Spécification =
+
+Utilise phpBB
+
+
+= Modélisation =
+
+Listes de fichiers ayant trait à la modélisation du forum (UML, diagrammes de cas d'utilisation etc...)
