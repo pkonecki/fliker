@@ -1,6 +1,6 @@
 #summary Description détaillé du Core
 
-= Specification =
+= Specifications =
 
 Développé en php/mysql
   * Gestion utilisateurs, fiches adhérents
