@@ -1,0 +1,13 @@
+#summary Description détaillé du Core
+
+= Specification =
+
+Développé en php/mysql
+*Gestion utilisateurs, fiches adhérents
+*Inscription
+*Gestion sports/horaires etc...
+
+
+= Modélisation =
+
+Listes de fichiers ayant trait à la modélisation du core (UML, diagrammes de cas d'utilisation etc...)
