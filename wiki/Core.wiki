@@ -1,4 +1,4 @@
-#summary Description détaillé du Core
+#summary Description détaillée du Core
 
 = Specifications =
 
