@@ -14,7 +14,7 @@ Base d'utilisateurs pour le core
 Le core comprend les fonctions d'inscription, d'administration avec gestion des droits (webmaster,bureau,profs), gestion de fiche adhérent, recherche d'adhérents, de prof etc...
 
 
-= 2. [Planning] =
+= 2. [Calendrier] =
 
 Planning affichant les salles, les horaires, profs...
 
