@@ -1,4 +1,4 @@
-#summary Description détaillé du module de calendrier
+#summary Description détaillée du module de calendrier
 
 = Spécifications =
 
