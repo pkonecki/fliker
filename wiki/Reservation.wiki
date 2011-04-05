@@ -1,4 +1,4 @@
-#summary Description détaillé du module de réservation
+#summary Description détaillée du module de réservation
 
 = Spécifications =
 
