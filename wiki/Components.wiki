@@ -1,0 +1,27 @@
+#summary Les différentes parties du projet
+
+= 0. Wiki =
+
+http://www.asesco.u-psud.fr/wiki/
+
+php/mysql
+
+Base d'utilisateurs pour le core
+
+
+= 1. [Core] =
+
+Le core comprend les fonctions d'inscription, d'administration avec gestion des droits (webmaster,bureau,profs), gestion de fiche adhérent, recherche d'adhérents, de prof etc...
+
+
+= 2. [Planning] =
+
+Planning affichant les salles, les horaires, profs...
+
+= 3. [Reservation] = 
+
+Système de reservation utilisant phpmyresa
+
+= 4. [Forum] =
+
+Forum de discussion phpbb, lien avec le wiki
