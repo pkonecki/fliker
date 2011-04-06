@@ -12,4 +12,6 @@ Développé en php/mysql
 
 Listes de fichiers ayant trait à la modélisation du core (UML, diagrammes de cas d'utilisation etc...)
 
+== Cas d'utilisation ==
+
 http://fliker.googlecode.com/files/Cas%20d%27utilisation.png
