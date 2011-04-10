@@ -15,3 +15,5 @@ Listes de fichiers ayant trait à la modélisation du core (UML, diagrammes de c
 == Cas d'utilisation ==
 
 http://fliker.googlecode.com/files/Cas%20d%27utilisation.png
+
+http://fliker.googlecode.com/files/dcu_inscription.png
