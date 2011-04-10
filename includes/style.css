@@ -1,0 +1,22 @@
+body {
+	/*background-color:#E0E0E0;*/
+	font: 100% verdana, arial, sans-serif;
+
+}
+
+h3 {
+border-bottom: 1px solid #006080;
+letter-spacing: -2px;
+line-height: 0.9em;
+padding: 0px;
+margin: 0px;
+}
+h1 {
+font-size: 180%;
+letter-spacing: -2px;
+line-height: 0.9em;
+font-variant : small-caps;
+padding: 0px;
+margin: 0px;
+}
+
