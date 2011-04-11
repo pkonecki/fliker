@@ -1,5 +1,9 @@
+
+
+== Notes ==
+
 notion de promo pour paiement/adhésion
-Lien paiement < - > adhésion
+Lien paiement <-> adhésion
 problème supplément sections / activité / creneaux + question association gestionnaire (reverser le supplément à la bonne association)
 Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent)
 
@@ -58,33 +62,3 @@ Alertes:
 	-Pas de confirmation par email
 	
 Email : bien gérer le from
-notion de promo pour paiement/adhésion
-Lien paiement <-> adhésion
-problème supplément sections / activité / creneaux + question association gestionnaire (reverser le supplément à la bonne association)
-Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent)
-
-Table adhérent : modularité : deux tables, description ...
-	vérification : langage simplifié de format (à determiner)
-	
--preinscription
-+date creation
-+signature valide quand adresse email validée
-
-+adresse professionnelle
-+numéro d'agent
-+choix assurance : j'ai lu ou non / j'accepte ou non
-+droit à l'image oui/non
-
-Incription:
-conservation données en post
-captcha? en confirmation
-identifiant : email
-gestion de password
-liste des sports:
-	-page séparée : oui
-	-liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
-	-encourager l'inscription chez d'autres assos
-Scénario d'inscription:
-	-recherche par critère
-	-
-	
