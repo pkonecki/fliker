@@ -3,6 +3,15 @@
  <head> 
   <title>Inscription</title> 
   <link rel="stylesheet" type="text/css" href="../includes/style.css" /> 
+	<script type="text/javascript" src="../includes/jquery.js"></script>
+	<script type="text/javascript" src="../includes/jquery.validate.min.js"></script>
+	<script>
+		
+		  $(document).ready(function(){
+			$("#f_inscription").validate();
+		  });
+		
+	</script>
  </head> 
  <body> 
 <h1>Inscription</h1> 
@@ -11,32 +20,37 @@
 	include("normalTask_getChampsAdherents.php");
 	if ($_POST['action'] == 'submitted') {
 $tab = getChampsAdherents();
-		print "<h2>Bla</h2>";
-		print "<FORM action=\"index.php\" method=\"POST\">";
+		print "<h2>Recapitulatif</h2>";
+		print '<TABLE BORDER="1">';
 		foreach($tab as $row){
 			if($row[inscription]==1){
+			print '<TR>';
 			if($row[type]==="varchar")
-			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=text name=".$row[nom]."  value=".$_POST[$row[nom]]."><br/>";
+			print '<TD>'.$row[description].'</TD><TD>'.$_POST[$row[nom]].'</TD>';
 			
 			if($row[type]==="tinyint"){
-				print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=checkbox name=".$row[nom]." value=".$_POST[$row[nom]]."><br/>";
-				print $_POST[$row[nom]];
+				if ($_POST[$row[nom]]==="on")
+				print '<TD>'.$row[description].'</TD><TD>Oui</TD>';
+				else
+				print '<TD>'.$row[description].'</TD><TD>Non</TD>';
 			}
 			}
+			print '</TR>';
 		}
-		print "<input type=\"hidden\" name=\"action\" value=\"submitted\" />";
-		print "<INPUT type=\"submit\" value=\"Send\">";
-		print "</FORM>";
+		print '</TABLE>';
+		print '<button type="button" onclick="history.go(-1)">
+			Modifier
+		</button> ';
 
 	} else {
 	
 		$tab = getChampsAdherents();
 		print "<h2>Exemple Inscription</h2>";
-		print "<FORM action=\"index.php\" method=\"POST\">";
+		print "<FORM id=\"f_inscription\" action=\"index.php\" method=\"POST\">";
 		foreach($tab as $row){
 			if($row[inscription]==1){
 			if($row[type]==="varchar")
-			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=text name=".$row[nom]."><br/>";
+			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=text name=".$row[nom]." id=".$row[nom]." value=\"".$_POST[$row[nom]]."\" class=\"required error\" minlength=\"2\" ><br/>";
 			
 			if($row[type]==="tinyint")
 			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=checkbox name=".$row[nom]."><br/>";
@@ -47,19 +61,7 @@ $tab = getChampsAdherents();
 		print "</FORM>";
 	}
 	
-	/*print "<h2>Exemple modification</h2>";
-	print "<FORM>";
-	foreach($tab as $row){
-		if($row[user_editable]==1){
-		if($row[type]==="varchar")
-		print "".$row[description]." : <INPUT type=text name=".$row[nom]."><br/>";
-		
-		if($row[type]==="tinyint")
-		print "".$row[description]." : <INPUT type=checkbox name=".$row[nom]."><br/>";
-		}
-	}
-	print "</FORM>";
-	*/	
+
 
 ?>
 </body></html> 
