@@ -1,23 +1,23 @@
 #summary Information sur l'avancement jour par jour
 
-= Avant Lundi 11 avril =
+== Avant Lundi 11 avril ==
 
   * Reverse engineering sur les premières versions
   * Veille technologique sur différents framework (Zend, Smarty, Dojo...)
   * Modélisation du projet
 
 
-= Lundi 11 Avril =
+== Lundi 11 Avril ==
 
   * Documentation sur Javascript ( jquery validation de formulaire pour page d'inscription )
   * Développement page d'inscription avec validation en javascript
 
-= Mardi 12 Avril =
+== Mardi 12 Avril ==
  
   * Documentation sur d'autre fonctions de jquery (datepicker)
   * Développement page d'inscription (validation / datepicker )
 
-= Mercredi 13 Avril =
+== Mercredi 13 Avril ==
 
   * Documentation sur la génération de Hash pour sécurisation de password
   * Développement Javascript / PHP / Mysql Page d'inscription
