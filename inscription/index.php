@@ -3,13 +3,19 @@
  <head> 
   <title>Inscription</title> 
   <link rel="stylesheet" type="text/css" href="../includes/style.css" /> 
-	<script type="text/javascript" src="../includes/jquery.js"></script>
-	<script type="text/javascript" src="../includes/jquery.validate.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" /> 
+	<script type="text/javascript" src="../includes/js/jquery.js"></script>
+	<script type="text/javascript" src="../includes/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="../includes/js/jquery-ui.js"></script>
 	<script>
 		
 		  $(document).ready(function(){
 			$("#f_inscription").validate();
 		  });
+		  $(function() {
+			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: '-100:+0' , changeMonth: true });
+
+	});
 		
 	</script>
  </head> 
@@ -45,20 +51,21 @@ $tab = getChampsAdherents();
 	} else {
 	
 		$tab = getChampsAdherents();
-		print "<h2>Exemple Inscription</h2>";
-		print "<FORM id=\"f_inscription\" action=\"index.php\" method=\"POST\">";
+		print '<h2>Exemple Inscription</h2>';
+		print '<FORM id=\'f_inscription\' action=\'index.php\' method=\'POST\'>';
 		foreach($tab as $row){
 			if($row[inscription]==1){
-			if($row[type]==="varchar")
-			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=text name=".$row[nom]." id=".$row[nom]." value=\"".$_POST[$row[nom]]."\" class=\"required error\" minlength=\"2\" ><br/>";
-			
-			if($row[type]==="tinyint")
-			print "<LABEL for =".$row[nom]." >".$row[description]."</LABEL> : <INPUT type=checkbox name=".$row[nom]."><br/>";
+			if($row[type]==='varchar')
+			print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=text name='.$row[nom].' id='.$row[nom].' value=\''.$_POST[$row[nom]].'\' class=\'required error\' minlength=\'2\' ><br/>';
+			if($row[type]==='date')
+			print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=text name='.$row[nom].' id ="datepicker"><br/>';
+			if($row[type]==='tinyint')
+			print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=checkbox name='.$row[nom].'><br/>';
 			}
 		}
-		print "<input type=\"hidden\" name=\"action\" value=\"submitted\" />";
-		print "<INPUT type=\"submit\" value=\"Send\">";
-		print "</FORM>";
+		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
+		print '<INPUT type=\'submit\' value=\'Send\'>';
+		print '</FORM>';
 	}
 	
 
