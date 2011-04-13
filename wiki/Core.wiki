@@ -1,6 +1,6 @@
 #summary Description détaillée du Core
 
-= Specifications =
+== Specifications ==
 
 Développé en php/mysql
   * Gestion utilisateurs, fiches adhérents
@@ -8,12 +8,23 @@ Développé en php/mysql
   * Gestion sports/horaires etc...
 
 
-= Modélisation =
+== Modélisation ==
 
 Listes de fichiers ayant trait à la modélisation du core (UML, diagrammes de cas d'utilisation etc...)
 
-== Cas d'utilisation ==
+=== Cas d'utilisation ===
 
 http://fliker.googlecode.com/files/Cas%20d%27utilisation.png
 
 http://fliker.googlecode.com/files/dcu_inscription.png
+
+== Page d'inscription ==
+
+  * Utilisation de Javascript, Jquery, plugin validation pour vérification des champs dynamique
+  * Utilisation du plugin datepicker de Jquery pour la selection de date
+  * Modularité : différents types de données vérifiables :
+    * Que des lettres
+    * Que des chiffres
+    * email
+    * date
+    * civilité
