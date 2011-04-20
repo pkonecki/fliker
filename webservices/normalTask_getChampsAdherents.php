@@ -3,7 +3,7 @@
 function getChampsAdherents(){
 	
 	include("opendb.php");
-	$query = "SELECT * FROM champs_adherent";
+	$query = "SELECT * FROM champs_adherent ORDER BY ordre ASC";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$champs = array();
