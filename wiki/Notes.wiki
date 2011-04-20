@@ -71,3 +71,8 @@ Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription 
   * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérfiant la disponibilité à la volée
 
 Deux champs nom / tel pour personnes à contacter en cas d'urgence
+
+Champs date validation cookie/gestionnaire
+
+Case a cocher : je n'ai pas d'adresse email
+Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
