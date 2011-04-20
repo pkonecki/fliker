@@ -66,5 +66,8 @@ Champs bases:
  numayantdroit = numéro de carte étudiant/PSUC
 
 Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
+  * possibilité de créer un nouveau numéro (carte perdue)
+  * ne pas créer un numéro si il existe déjà
+  * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérfiant la disponibilité à la volée
 
 Deux champs nom / tel pour personnes à contacter en cas d'urgence
