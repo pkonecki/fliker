@@ -64,3 +64,5 @@ Email : bien gérer le from
 Champs bases:
  numcarte = numéro de carte asesco
  numayantdroit = numéro de carte étudiant/PSUC
+
+Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
