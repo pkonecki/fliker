@@ -76,3 +76,7 @@ Champs date validation cookie/gestionnaire
 
 Case a cocher : je n'ai pas d'adresse email
 Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
+
+
+Mot de passe : à la vérification, encryption md5 + salt
+https: fichier de config fliker.conf
