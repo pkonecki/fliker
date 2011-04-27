@@ -10,10 +10,10 @@ function newUser($tab){
 		if($row[inscription]==1){
 			$colonnes .= $row[nom].",";
 			if($row[type]==='varchar')
-			$values .= "'".$tab[$row[nom]]."',";
+			$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
 			else
 			if($row[type]==='date')
-			$values .= "'".$tab[$row[nom]]."',";
+			$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
 			else
 			if($row[type]==='tinyint'){
 				if ($tab[$row[nom]]==='on') $values .= "1,";

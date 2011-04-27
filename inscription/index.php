@@ -16,19 +16,31 @@ $header = '
 		
 		  $(document).ready(function(){
 			$("#f_inscription").validate({
+			rules : {
+				email: { 
+                required: true, 
+                email: true, 
+                remote: "emails.php" 
+            }
+			
+			},
 			messages: {
 				required : "Ce champ est requis",
-				email : "Veuillez entrer une adresse email valide",
+				email: { 
+					required: "Please enter a valid email address", 
+					minlength: "Please enter a valid email address", 
+					remote: jQuery.format("{0} is already in use") 
+					}, 
 				
 				number : "Veuillez entrer un numéro correct",
 				date : "Veuillez entrer une date valide"
-			
+				
 			}
 			
 			});
 		  });
 		  $(function() {
-			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true });
+			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  });
 
 	});
 		
@@ -86,8 +98,8 @@ $tab = getChampsAdherents();
 		foreach($tab as $row){
 			if($row[inscription]==1){
 			$format =$row[format];
-			if ($row[required]==1)
-				$format ="required ".$row[format];
+			// if ($row[required]==1)
+				// $format ="required ".$row[format];
 			if($row[format] === "civilite"){
 				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=radio name='.$row[nom].' value="mr">Monsieur 
 					<INPUT type=radio name='.$row[nom].' value="mme">Madame 
