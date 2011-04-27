@@ -2,8 +2,21 @@
 
 =Planning=
   * *Mars*: Reverse Engineering & Conception Tables MySQL
-  * *Avril-Juin* : Développement Fonctionnalités Core (PHP)
-  * *Mai-Juillet*: 
+  * *Avril*: Spécification des fonctionnalités core (php/mysql)
+  * *Mai* : Développement Fonctionnalités Core (PHP)
+    * Semaine 18 : Finir formulaire d'inscription (-->envoie d'email/mot de passe)
+    * Semaine 19 : Page de connexion
+    * Semaine 20 : Fiche adherent
+    * Semaine 21 : Formulaire de recherche
+  * *Juin* :
+    * Semaine 22 : 
+    * Semaine 23 :
+    * Semaine 24 :
+    * Semaine 25 :
+    * Semaine 26 :
+
+  * *Mai-Juillet*:
+ 
     * Développement GUI/Accès sécurisé
     * Développement Services Supplémentaires (en parallèle, deuxième stagiaire)
   * *Aout*:
