@@ -9,16 +9,32 @@
     * Semaine 20 : Fiche adherent
     * Semaine 21 : Formulaire de recherche
   * *Juin* :
-    * Semaine 22 : 
-    * Semaine 23 :
-    * Semaine 24 :
+    * Semaine 22 : 7 fonctions d'ajout/modification
+    * Semaine 23 : 
+    * Semaine 24 : Monitoring
     * Semaine 25 :
     * Semaine 26 :
 
-  * *Mai-Juillet*:
- 
-    * Développement GUI/Accès sécurisé
-    * Développement Services Supplémentaires (en parallèle, deuxième stagiaire)
+  * *Juillet*:
+    * Semaine 27:
+    * Semaine 28: 
+    * Semaine 29: Vac
+    * Semaine 30: Vac
   * *Aout*:
+    * Semaine 31: Vac
+    * Semaine 32:
+    * Semaine 33:
+    * Semaine 34:
+    * Semaine 35:
+ 
     * Documentation
     * Validation
+
+=Perspectives=
+
+  * *Forum*
+  * *Système de reservation*
+  * *Affichage Agenda*
+  * *Production d'iCal*
+  * *Synchro comptes* : Forum / résa / wiki
+  * *Portail Sport*
