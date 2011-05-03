@@ -31,7 +31,7 @@ http://fliker.googlecode.com/files/dcu_inscription.png
 
 == Fonctions d'ajout/suppression/modification ==
 
-  * *Eléments visées*
+  * *Eléments visés*
     * Sections
     * Créneau
     * Activité
@@ -39,3 +39,11 @@ http://fliker.googlecode.com/files/dcu_inscription.png
     * Paiement
     * Adhésion
     * Responsables
+
+== Liste de fonctions de monitoring ==
+
+|| *Tache*                              || *Manuel?* || *Fréquence* || *Action* ||
+|| Adhérents non validés || O            ||     ?              || purge si trouvés (purge complète adhesion etc...) ||
+|| Synchro LDAP                || N            ||     ?              || Récupérer le numéro d'ayant droit + notification (homonymie + non trouvés LDAP)   ||
+|| Détection des soldes négatifs || O || ?                || Notification bureau + prof + adhérent ||
+|| Detection de données non cohérentes dans la base (exemple : sans adhésion) || O || ? || notification bureau ||
