@@ -13,11 +13,11 @@
     * Semaine 23 : 
     * Semaine 24 : Monitoring
     * Semaine 25 :
-    * Semaine 26 :
+    * Semaine 26 : Fonctions de customisation
 
   * *Juillet*:
     * Semaine 27:
-    * Semaine 28: 
+    * Semaine 28: Portail
     * Semaine 29: Vac
     * Semaine 30: Vac
   * *Aout*:
