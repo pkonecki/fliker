@@ -28,3 +28,14 @@ http://fliker.googlecode.com/files/dcu_inscription.png
     * email
     * date
     * civilité
+
+== Fonctions d'ajout/suppression/modification ==
+
+  * *Eléments visées*
+    * Sections
+    * Créneau
+    * Activité
+    * Asso
+    * Paiement
+    * Adhésion
+    * Responsables
