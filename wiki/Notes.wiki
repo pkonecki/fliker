@@ -82,3 +82,9 @@ Mot de passe : à la vérification, encryption md5 + salt
 https: fichier de config fliker.conf
 
 ==> champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+
+Changements UML:
+  * Nouveau supplément_cotisation asso
+  * Supprimer champs cotisation dans asso
+  * Généraliser Responsables (idem suppléments)
+  * Supprimer lien id_prof adherent <> créneau
