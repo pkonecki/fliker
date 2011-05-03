@@ -5,12 +5,12 @@ function add_include_path ($path){
             trigger_error("Include path '{$path}' not exists", E_USER_WARNING);
             continue;
         }
-        
+
         $paths = explode(PATH_SEPARATOR, get_include_path());
-        
+
         if (array_search($path, $paths) === false)
             array_push($paths, $path);
-        
+
         set_include_path(implode(PATH_SEPARATOR, $paths));
     }
 }
@@ -18,17 +18,17 @@ function add_include_path ($path){
 function remove_include_path ($path){
     foreach (func_get_args() AS $path)    {
         $paths = explode(PATH_SEPARATOR, get_include_path());
-        
+
         if (($k = array_search($path, $paths)) !== false)
             unset($paths[$k]);
         else
             continue;
-        
+
         if (!count($paths))        {
             trigger_error("Include path '{$path}' can not be removed because it is the only", E_USER_NOTICE);
             continue;
         }
-        
+
         set_include_path(implode(PATH_SEPARATOR, $paths));
     }
 }
@@ -37,8 +37,10 @@ $path=$_SERVER['DOCUMENT_ROOT']."/fliker";
 $webservices=$path."/webservices";
 $includes=$path."/includes";
 $inscription=$path."/inscription";
+$photos=$path."/photos";
 add_include_path($webservices);
 add_include_path($includes);
 add_include_path($inscription);
+
 
 ?>
