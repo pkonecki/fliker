@@ -80,3 +80,5 @@ Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'em
 
 Mot de passe : à la vérification, encryption md5 + salt
 https: fichier de config fliker.conf
+
+==> champs validation LDAP : 3 valeurs : faux/vrai/desactivé
