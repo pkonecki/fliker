@@ -1,21 +1,26 @@
 == Notes ==
 
-notion de promo pour paiement/adhésion
-Lien paiement <-> adhésion
-problème supplément sections / activité / creneaux + question association gestionnaire (reverser le supplément à la bonne association)
-Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent)
+===notion de promo pour paiement/adhésion===
+  * <s>Champ promo dans adhesion/paiement</s>
+  * Notion de promo courante: stocker la valeur, + la borne de la valeur (date)
 
-Table adhérent : modularité : deux tables, description ...
-	vérification : langage simplifié de format (à determiner)
-	
--preinscription
-+date creation
-+signature valide quand adresse email validée
+===Lien paiement < - > adhésion===
+  * Faire table de hash 
 
-+adresse professionnelle
-+numéro d'agent
-+choix assurance : j'ai lu ou non / j'accepte ou non
-+droit à l'image oui/non
+===Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent) ===
+  * Faire table de hash
+
+===Table adhérent ===
+  * <s>modularité : deux tables, description ...</s>
+  * <s>vérification : langage simplifié de format (à determiner)</s>
+  * Séparer données login/données perso? Customisation supplémentaire assos locales	
+  * -preinscription  --> +date creation
+  * <s>+signature valide quand adresse email validée</s>
+  * +adresse professionnelle (cf customisation locale PSUC)
+  * <s>+numéro d'agent</s>(cf numayantdroit)
+  * +champ exemple dans champs_adherent
+  * +choix assurance : j'ai lu ou non / j'accepte ou non
+  * +droit à l'image oui/non
 
 Incription:
 conservation données en post
@@ -83,8 +88,15 @@ https: fichier de config fliker.conf
 
 ==> champs validation LDAP : 3 valeurs : faux/vrai/desactivé
 
-Changements UML:
-  * Nouveau supplément_cotisation asso
-  * Supprimer champs cotisation dans asso
-  * Généraliser Responsables (idem suppléments)
-  * Supprimer lien id_prof adherent <> créneau
+
+===Changements UML:===
+    * Nouveau supplément_cotisation asso
+    * Supprimer champs cotisation dans asso
+    * Généraliser Responsables (idem suppléments)
+    * Supprimer lien id_prof adherent <> créneau
+    * <s>généraliser supplément sections / activité / creneaux </s>
+    * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
+
+Table section
+   + description
+   + logo
