@@ -4,7 +4,7 @@ $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
  <head>
-  <title>Inscription</title>
+  <title>::Fliker::Inscription</title>
   <link rel="stylesheet" type="text/css" href="../includes/style.css" />
   <link rel="stylesheet" type="text/css" href="../includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
 	<script type="text/javascript" src="../includes/js/jquery.js"></script>
@@ -15,33 +15,43 @@ $header = '
 	<script>
 
 		  $(document).ready(function(){
-			$("#f_inscription").validate({
-			rules : {
-				required : {
-					required: true,
-					minlength: 2
+		  	$.extend($.validator.messages, {
+		        required: "Ce champs est requis",
+		        number: "Veuillez entrer un numéro correct"
 
-				},
+    		});
+
+			$("#f_inscription").validate({
+
+			rules : {
 				email: {
 	                required: true,
 	                email: true,
 	                remote: "emails.php"
             	},
-            	categorie: "required",
+            	categorie: "required"
 
 			},
 			messages: {
-				required : "Ce champ est requis",
 				email: {
 					required: "Ce champs est requis",
 					email: "Entrez une adresse email valide",
 					remote: "L\'adresse email est déjà utilisée"
 					},
+				categorie : "Ce champs est requis"
 
-				number : "Veuillez entrer un numéro correct",
-				date : "Veuillez entrer une date valide"
 
-			}
+			},
+			errorPlacement: function(error, element) {
+	            if ( element.is(":radio") )
+	                error.appendTo( element.parent() );
+	          	else
+                	error.appendTo( element.parent() );
+        	},
+        	success: function(label) {
+            	// set   as text for IE
+            	label.html(" ").addClass("checked");
+	        }
 
 			});
 		  });
@@ -68,6 +78,10 @@ $dest_dossier = "../photos";
 
 	if ($_POST['action'] == 'submitted') {
 
+		if(!(strcmp($_SESSION['uid'],"") == 0)){
+			session_start();
+
+
 		$_SESSION=$_POST;
 		$tab = getChampsAdherents();
 		print $header;
@@ -77,10 +91,10 @@ $dest_dossier = "../photos";
 			if($row[inscription]==1){
 				print '<TR>';
 				if($row[type]==="varchar")
-					print '<TD>'.$row[description].'</TD><TD>'.$_POST[$row[nom]].'</TD>';
+					print '<TD>'.$row[description].'</TD><TD>'.$_SESSION[$row[nom]].'</TD>';
 
 				if($row[type]==="tinyint"){
-					if ($_POST[$row[nom]]==="on")
+					if ($_SESSION[$row[nom]]==="on")
 						print '<TD>'.$row[description].'</TD><TD>Oui</TD>';
 					else
 						print '<TD>'.$row[description].'</TD><TD>Non</TD>';
@@ -106,47 +120,61 @@ $dest_dossier = "../photos";
 		</FORM>
 		';
 		print $footer;
+		}
+		else {
+			header("location: index.php") ;
+		}
+
+
 	} else if ($_POST['action'] == 'confirmed'){
 		include("normalTask_newUser.php");
 		newUser($_SESSION);
 		print $header;
 		print "<h2>Félicitations!</h2> Votre inscription a été enregistrée! Veuillez vérifier vos email pour valider votre inscription!";
 		print $footer;
+		session_unset();
 		session_destroy();
 	}
 	else {
-
+		session_start();
 		print $header;
 		$tab = getChampsAdherents();
 		print '<br/><FORM id="f_inscription" action="index.php" enctype="multipart/form-data" method="POST">';
+		print '<table border=0>';
 		foreach($tab as $row){
 			if($row[inscription]==1){
-			$format =$row[format];
-			if ($row[required]==1)
-				$format .=" required ";
+			$format ="class=\"$row[format]\"";
+			if ($row[required]==1) $format ="class=\"required\"";
 			if($row[format] === "categorie"){
-				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=radio name='.$row[nom].' value="M">Homme
-					<INPUT type=radio name='.$row[nom].' value="F">Femme
-					<br/>';
+				print '<tr ><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td>
+					<td>
+					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M">Homme
+					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F">Femme
+					</td>
+					</tr>
+					</div>';
 			}
 			else
 			if($row[type]==='varchar')
-				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=text name='.$row[nom].' id='.$row[nom].' value="'.$_POST[$row[nom]].'" class="'.$format.'" minlength="2" ><br/>';
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="'.$row[nom].'" '.$format.' ></td></tr>';
 			else
 			if($row[type]==='date')
-				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=text name='.$row[nom].' id ="datepicker" class="'.$format.'"><br/>';
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.' ></td></tr>';
 			else
 			if($row[type]==='tinyint')
-				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=checkbox name='.$row[nom].' class="'.$format.'"><br/>';
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'></td></tr>';
 			else
 			if($row[type]==='file')
-				print '<LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : <INPUT type=file name='.$row[nom].' class="'.$format.'"><br/>';
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=file name='.$row[nom].' '.$format.'></td></tr>';
 
 			}
 		}
 		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
-		print '<INPUT type=\'submit\' value=\'Send\'>';
+		print '<tr><td><INPUT type=\'submit\' value=\'Send\'></td></tr>';
+
+		print '</table>';
 		print '</FORM>';
+		$_SESSION['uid']=session_id();
 		print $footer;
 	}
 

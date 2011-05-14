@@ -33,6 +33,11 @@ function remove_include_path ($path){
     }
 }
 
+function protect($string){
+	$string = trim(strip_tags(addslashes($string)));
+	return $string;
+}
+
 $path=$_SERVER['DOCUMENT_ROOT']."/fliker";
 $webservices=$path."/webservices";
 $includes=$path."/includes";
