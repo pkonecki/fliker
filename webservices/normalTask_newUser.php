@@ -20,12 +20,19 @@ function newUser($tab){
 				else $values .= "0,";
 			}
 			if($row[type]==='file'){
-				$values .= "'".mysql_real_escape_string($tab[$row[nom]][name])."',";
+				if($tab[$row[nom]][name]===""){
+					$values .= "0,";
+				} else {
+					$values .= "1,";
+				}
+
+
 			}
 
 		}
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
+	print $activationKey;
 	$colonnes .= "pre_inscription,last_modif,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
 
