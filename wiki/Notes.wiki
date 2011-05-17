@@ -22,39 +22,49 @@
   * +choix assurance : j'ai lu ou non / j'accepte ou non
   * +droit à l'image oui/non
 
-Incription:
-conservation données en post
-captcha? en confirmation
-identifiant : email
-gestion de password
-liste des sports:
-	-page séparée : oui
-	-liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
-	-encourager l'inscription chez d'autres assos
-Scénario d'inscription:
-	-recherche par critère
-	-
+===Inscription:===
+  * <s>conservation données en post</s>
+  * captcha? en confirmation (basse priorité)
+  * <s>identifiant : email</s>
+  * <s>gestion de password</s>
+  * liste des sports:
+    * page séparée : oui
+    * liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
+    * encourager l'inscription chez d'autres assos (liste unique + pop up d'info hover)
+  * Scénario d'inscription:
+    * recherche par critère (portail sport) --> inscription
+    * inscription -->liste de sports alphabétique
+  * Certificat médical / photo
+    * Stocker dans un repertoire en modifiant le nom du fichier : année_nom_prenom_id		
+  * Compétiteur : vrai /faux
+    * Basse priorité
+    * Gestion via fonctions existantes (section/activité/supplément) : documenter
+
+
+===Table des sports===
+  * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
+
 	
-Ajout Enregistrement paiement -> bureau
-	Gestion de privilèges descendante (Bureau peut attribuer droit prof)
-	Prof peut créer un créneau
-	Envoie email prof bureau
+===Fonctions de saisie/modification===
+  * Gestion de privilèges descendante (Bureau peut attribuer droit prof)
+    * Notification email prof bureau en cas de modif de ses droits
+      * (BP) Préférences notification weekly/daily/a chaque fois/non
+  * Ajout Enregistrement paiement -> bureau
+  * Prof peut créer un créneau
+  * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc...
 	
 	
-Recherche:
-	Recherche modulaire : ajouter regles/ et/ou
-	Critères: Nom, Prénom, Email, Catégorie (masculin/féminin)
-			- Par créneau, activité, section, asso, --> menu arbre
-			Check : Avec ou sans photo
-			Afficher les profs / bureau / webmaster
-	Selection des colonnes à afficher
-	Restreindre liste des sports en fonction du niveau (que les sports d'un prof)
+===Recherche:===
+  * Recherche modulaire : 
+    * Ajouter regles de recherche / et/ou
+    * Selection des colonnes à afficher
+  * Critères:
+    *  Nom, Prénom, Email, Catégorie (masculin/féminin)
+    * Par créneau, activité, section, asso, --> menu arbre
+    * Check : Avec ou sans photo
+    * Afficher les profs / bureau / webmaster
+  * Restreindre liste des sports en fonction du niveau (que les sports d'un prof)
 	
-Certificat médical / photo
-	Stocker dans un repertoire en modifiant le nom du fichier : 
-		année_nom_prenom_id
-		
-Compétiteur : vrai /faux
 
 
 Alertes:
@@ -97,6 +107,12 @@ https: fichier de config fliker.conf
     * <s>généraliser supplément sections / activité / creneaux </s>
     * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
 
-Table section
-   + description
-   + logo
+===Table section===
+    * <s>description</s>
+    * <s>logo</s>
+
+===Table présence (basse priorité)===
+    * Table de hash créneau + adhérent
+    * Fonction pour générer fiche de présence
+    * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
+    * Fonction pour générer et archiver stats + purge table en fin d'année
