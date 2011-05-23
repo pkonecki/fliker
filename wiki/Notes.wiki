@@ -17,16 +17,32 @@
   * -preinscription  --> +date creation
   * <s>+signature valide quand adresse email validée</s>
   * +adresse professionnelle (cf customisation locale PSUC)
-  * <s>+numéro d'agent</s>(cf numayantdroit)
+  * <s>+numéro d'agent</s>(cf numayantdroit : numéro de carte étudiant/CNRS etc...)
   * +champ exemple dans champs_adherent
   * +choix assurance : j'ai lu ou non / j'accepte ou non
   * +droit à l'image oui/non
+  * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
+  * Champs date validation cookie/gestionnaire
+  * Deux champs nom / tel pour personnes à contacter en cas d'urgence
+
+===Paiement===
+  * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
+    * possibilité de créer un nouveau numéro (carte perdue)
+    * ne pas créer un numéro si il existe déjà
+    * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
+
+
+
+
+
+
 
 ===Inscription:===
   * <s>conservation données en post</s>
   * captcha? en confirmation (basse priorité)
   * <s>identifiant : email</s>
   * <s>gestion de password</s>
+    * Mot de passe : à la vérification, <s>encryption md5</s> + salt
   * liste des sports:
     * page séparée : oui
     * liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
@@ -39,7 +55,8 @@
   * Compétiteur : vrai /faux
     * Basse priorité
     * Gestion via fonctions existantes (section/activité/supplément) : documenter
-
+  * Case a cocher : je n'ai pas d'adresse email
+    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
 
 ===Table des sports===
   * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
@@ -49,6 +66,10 @@
   * Gestion de privilèges descendante (Bureau peut attribuer droit prof)
     * Notification email prof bureau en cas de modif de ses droits
       * (BP) Préférences notification weekly/daily/a chaque fois/non
+    * Privilèges détectés par les tables de hash responsables
+      * Donne droit modification sur tout ce qui est  à son niveau et en dessous
+      * Donne droit a donner des droits seulement sur ce qui est en dessous
+    * Administrateur : champ privilège à 1 dans table adhérent
   * Ajout Enregistrement paiement -> bureau
   * Prof peut créer un créneau
   * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc...
@@ -67,36 +88,26 @@
 	
 
 
-Alertes:
-	Interface pour gérer les alertes
-	-Gens pas à jour (solde != 0)
-	-Pas de certificats médical (surtout pour compétiteurs)
-	-Pas de sport
-	-Pas de confirmation par email
+===Alertes===
+  * Interface pour gérer (activer/désactiver/déclencher manuellement/daily,weekly etc...) les alertes
+    * /!\ Gens pas à jour (solde != 0)
+    * /!\ Pas de certificats médical (surtout pour compétiteurs)
+    * /!\ Pas de sport
+    * /!\ Pas de confirmation par email
+  * Peu urgent: interface pour créer des alertes
 	
-Email : bien gérer le from
+=== Envoi d'Email===
+  * bien gérer le from
+    * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email prof sinon
+  * Bien gérer le to
+    * Vérifier qu'on envoie pas l'email deux fois à une même personne
+    * Un email par personne ; question timer/repartition dans le temps
+  * Conserver un copie des mails envoyés : envoyer l'email au from
 
 Champs bases:
- numcarte = numéro de carte asesco
- numayantdroit = numéro de carte étudiant/PSUC
-
-Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
-  * possibilité de créer un nouveau numéro (carte perdue)
-  * ne pas créer un numéro si il existe déjà
-  * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérfiant la disponibilité à la volée
-
-Deux champs nom / tel pour personnes à contacter en cas d'urgence
-
-Champs date validation cookie/gestionnaire
-
-Case a cocher : je n'ai pas d'adresse email
-Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
-
-
-Mot de passe : à la vérification, encryption md5 + salt
 https: fichier de config fliker.conf
 
-==> champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+
 
 
 ===Changements UML:===
@@ -106,6 +117,7 @@ https: fichier de config fliker.conf
     * <s>Supprimer lien id_prof adherent <> créneau</s>
     * <s>généraliser supplément sections / activité / creneaux </s>
     * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
+    * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
 
 ===Table section===
     * <s>description</s>
@@ -116,3 +128,7 @@ https: fichier de config fliker.conf
     * Fonction pour générer fiche de présence
     * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
     * Fonction pour générer et archiver stats + purge table en fin d'année
+
+===Images===
+  * imagemagic pour compresser
+  * Convertir les images en jpeg
