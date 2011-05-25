@@ -9,6 +9,7 @@ $header = '
  <head>
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
  </head>
  <body>
 <h1>Fliker</h1> ';
@@ -17,8 +18,9 @@ $footer = '</body></html>';
 
 print $header;
 include("userdiv.php");
-
-
+print '<div id=content>';
+include("fiche_adherent.php");
+print '</div>';
 print $footer;
 
 

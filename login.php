@@ -1,8 +1,8 @@
 <?php
 session_start();
 include("./includes/paths.php");
-
-
+include("normalTask_getChampsAdherents.php");
+$tab = getChampsAdherents();
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -68,6 +68,10 @@ if($_POST['submit']){
 					$_SESSION['uid'] = $row['id'];
 					$_SESSION['user'] = $username;
 
+					foreach($tab as $champ){
+						$_SESSION[$champ['nom']]=$row[$champ['nom']];
+
+					}
 					//show message
 					print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 							<html>
