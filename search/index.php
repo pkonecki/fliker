@@ -55,8 +55,14 @@ if($_POST['action']==="submitted"){
 </fieldset>
 	<div id="assos">
 	<select id="select_assos" multiple="multiple" class="multiselect" name="select_assos[]">
-		<option>Asesco</option>
-		<option>PSUC</option>
+		<option value="asesco" >Asesco</option>
+		<option value="psuc" >PSUC</option>
+	</select>
+	</div>
+	<div id="sports">
+		<select id="select_sport" multiple="multiple" class="multiselect" name="select_sport[]">
+		<option value="asesco" >Gym</option>
+		<option value="psuc" >Baby Foot</option>
 	</select>
 	</div>
 
