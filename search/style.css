@@ -1,0 +1,16 @@
+#main {
+float : left;
+
+}
+
+#assos {
+position : relative;
+float : left;
+
+
+}
+
+.multiselect {
+	width: 250px;
+	height: 100px;
+}
