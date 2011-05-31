@@ -78,12 +78,14 @@
 ===Recherche:===
   * Recherche modulaire : 
     * Ajouter regles de recherche / et/ou
+    * Par defaut: nom,prénom,email,catégorie (détecter si vide) -> utiliser table des champs
     * Selection des colonnes à afficher
   * Critères:
     *  Nom, Prénom, Email, Catégorie (masculin/féminin)
     * Par créneau, activité, section, asso, --> menu arbre
     * Check : Avec ou sans photo
-    * Afficher les profs / bureau / webmaster
+    * Afficher seulement les profs / bureau / webmaster (checkbox)
+    * Radio: Complet/Normal/Trombino
   * Restreindre liste des sports en fonction du niveau (que les sports d'un prof)
 	
 
