@@ -5,10 +5,10 @@
   * Notion de promo courante: stocker la valeur, + la borne de la valeur (date)
 
 ===Lien paiement < - > adhésion===
-  * Faire table de hash 
+  * <s>Faire table de hash </s>
 
 ===Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent) ===
-  * Faire table de hash
+  * <s>Faire table de hash</s>
 
 ===Table adhérent ===
   * <s>modularité : deux tables, description ...</s>
