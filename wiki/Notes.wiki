@@ -86,6 +86,8 @@
     * Check : Avec ou sans photo
     * Afficher seulement les profs / bureau / webmaster (checkbox)
     * Radio: Complet/Normal/Trombino
+    * Check: Adhésion illégitime (=pas de supplément défini)
+    * <s>Select Solde a jour/pas a jour</s>
   * Restreindre liste des sports en fonction du niveau (que les sports d'un prof)
 	
 
