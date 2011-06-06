@@ -71,9 +71,28 @@
       * Donne droit a donner des droits seulement sur ce qui est en dessous
     * Administrateur : champ privilège à 1 dans table adhérent
   * Ajout Enregistrement paiement -> bureau
-  * Prof peut créer un créneau
   * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc...
-	
+  * Association 
+    * Ajout entité
+    * Ajout Supplément
+    * Ajout Responsable
+  * Section
+    * Ajout entité
+    * Ajout Supplément
+    * Ajout Responsable
+  * Activité
+    * Ajout entité
+    * Ajout Supplément
+    * Ajout Responsable
+  * Créneau
+    * Ajout entité
+    * Ajout Supplément
+    * Ajout Responsable
+  * Paiement
+    * Ajout entité
+  * Adhésion
+  * Fiche Adhérent
+
 	
 ===Recherche:===
   * Recherche modulaire : 
