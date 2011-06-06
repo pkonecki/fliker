@@ -10,6 +10,8 @@ $header = '
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+  <link rel="stylesheet" type="text/css" href="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.css" />
+
  </head>
  <body>
 <h1>Fliker</h1> ';
@@ -18,8 +20,18 @@ $footer = '</body></html>';
 
 print $header;
 include("userdiv.php");
+include("menu.php");
 print '<div id=content>';
-include("fiche_adherent.php");
+if(!empty($_GET['page'])){
+	switch($_GET['page']){
+		case 1:
+			include("fiche_adherent.php");
+			break;
+		case 2:
+			include("search.php");
+			break;
+	}
+} else include("fiche_adherent.php");
 print '</div>';
 print $footer;
 

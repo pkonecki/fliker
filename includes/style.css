@@ -1,4 +1,4 @@
-* { margin: 0; padding: 0; font-size: 11px; }
+*{ font-size: 11px; }
 
 body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
 body { color: #333;  background-color: #fff; text-align: left; }
@@ -50,10 +50,7 @@ table.tabbedtable label { text-align: right; padding-right: 9px; }
 .largelink { border: 1px solid #cacaca; padding: 10px; background-color: #E8EEF7; font-size: 1.2em; font-weight: bold; }
 .largelinkwrap { padding-top: 10px; padding-bottom: 10px; }
 
-.multiselect {
-	width: 250px;
-	height: 100px;
-}
+
 #userdiv{
 	position: absolute;
 	top: 10px;
@@ -163,6 +160,35 @@ table.tabbedtable label { text-align: right; padding-right: 9px; }
 #f_inscription #lsignupsubmit {
   visibility: hidden;
 }
+
+#f_search{
+
+margin: 0 auto;
+
+
+}
+
+#f_search .main {
+	float : left;
+	width : 45%;
+}
+
+#f_search .selects{
+	float : left;
+	width : 45%;
+}
+
+#f_search .buttons{
+clear : both;
+text-align:center;
+width : 93%;
+}
+
+#f_search .affichage{
+clear : both;
+width : 93%;
+}
+
 /*
 body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
 body { color: #333;  background-color: #fff; text-align: left; }
