@@ -24,6 +24,7 @@
   * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
   * Champs date validation cookie/gestionnaire
   * Deux champs nom / tel pour personnes à contacter en cas d'urgence
+  * + rattachement (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)
 
 ===Paiement===
   * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
