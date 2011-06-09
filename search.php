@@ -1,4 +1,12 @@
-<?php session_start(); ?>
+<?php session_start();
+if((strcmp($_SESSION['user'],"") == 0)){
+	print "Vous n'êtes pas connecté!";
+}
+else {
+
+
+
+?>
 <script type="text/javascript" src="./includes/js/jquery.js"></script>
 <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
 <script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
@@ -187,7 +195,7 @@ include("normalTask_getCreneaux.php");
 <script type="text/javascript">
 $('#add_field').click(function() {
 	var nr_of_field = parseInt($('#f_search [name=field_count]').val()) + 1;
-	$('#filters').append('<div id="set'+nr_of_field+'"><select id="set'+nr_of_field+'_type" name="set'+nr_of_field+'_type"><option label="Nom" value="1">Nom</option><option label="Prénom" value="2">Prénom</option><option label="Email" value="3">Email</option><option label="Catégorie" value="4">Catégorie</option></select><select id="set'+nr_of_field+'_action" name="set'+nr_of_field+'_action" ><option label="Contient" value="1">Contient</option><option label="Commence" value="2">Commence</option><option label="Est" value="3">Est</option></select><input type="text" id="set'+nr_of_field+'_text" name="set'+nr_of_field+'_text"/></div>');
+	$('#filters').append('<div id="set'+nr_of_field+'"><select id="set'+nr_of_field+'_type" name="set'+nr_of_field+'_type"><option label="Nom" value="1">Nom</option><option label="Prénom" value="2">Prénom</option><option label="Email" value="3">Email</option><option label="Catégorie" value="4">Catégorie</option></select> <select id="set'+nr_of_field+'_action" name="set'+nr_of_field+'_action" ><option label="Contient" value="1">Contient</option><option label="Commence" value="2">Commence</option><option label="Est" value="3">Est</option></select> <input type="text" id="set'+nr_of_field+'_text" name="set'+nr_of_field+'_text"/></div>');
 	$('#f_search [name=field_count]').val(nr_of_field)
 });
 $('#reset').click(function() {
@@ -200,3 +208,8 @@ $('#tree_root').checkboxTree({
 </script>
 
 </body></html>
+
+<?php
+//fin else connexion
+}
+?>

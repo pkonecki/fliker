@@ -67,7 +67,7 @@ $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script
 print $script;
 	if ($_POST['action'] == 'modification') {
 		$tab = getChampsAdherents();
-		print '<br/><FORM id="f_adherent_modif" action="index.php" enctype="multipart/form-data" method="POST">';
+		print '<br/><FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
 		print '<table border=0>';
 		foreach($tab as $row){
 			if($row[user_editable]==1){
@@ -151,7 +151,7 @@ print $script;
 			}
 			print '</TABLE>';
 
-			print '<FORM action="index.php" method="POST">
+			print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'modification\' />
 		<INPUT type=\'submit\' value=\'Modifier\'>
 		</FORM>
