@@ -72,14 +72,7 @@ if($_POST['submit']){
 						$_SESSION[$champ['nom']]=$row[$champ['nom']];
 
 					}
-					//Resps assos
-					$resp_query = "SELECT id_asso FROM resp_asso WHERE id_adh='".$row['id']."'";
-					$resp_res = mysql_query($resp_query);
-					$resp_tab = array();
-					while($resp_row = mysql_fetch_array($resp_res)){
-						$resp_tab[] = $resp_row['id_asso'];
-					}
-					$_SESSION['resp_asso']=$resp_tab;
+
 
 					//show message
 					print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
