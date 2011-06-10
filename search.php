@@ -3,6 +3,20 @@ if((strcmp($_SESSION['user'],"") == 0)){
 	print "Vous n'êtes pas connecté!";
 }
 else {
+	$query="SELECT * FROM resp_act  WHERE id_adh='".$_SESSION[uid]."'
+	UNION
+	SELECT * FROM resp_cren  WHERE id_adh='".$_SESSION[uid]."'
+ 	UNION
+ 	SELECT * FROM resp_section  WHERE id_adh='".$_SESSION[uid]."' ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	
+	else if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1'){
+		print 'Vous n\'avez pas accès à cette page.';
+	}
+	
+	else{
 
 
 
@@ -145,24 +159,26 @@ include("normalTask_getCreneaux.php");
 
 	if($_POST['action']==="submitted"){
 	//SQL
-	$sql = "SELECT * FROM adherent,activite,adhesion WHERE true ";
+	$sql = "SELECT DISTINCT ADR.* FROM adherent ADR ,adhesion ADS, creneau CR WHERE true ";
 	for($i = 0; $i < $_POST['field_count']; $i++){
+
 		$n=$i+1;
 		$type="set".$n."_type";
 		$action="set".$n."_action";
 		$text="set".$n."_text";
+		if(empty($_POST[$text])) continue;
 		switch($_POST[$type]){
 			case 1: //Nom
-					$sql.="AND nom ";
+					$sql.="AND ADR.nom ";
 					break;
 			case 2: //Prénom
-					$sql.="AND prenom ";
+					$sql.="AND ADR.prenom ";
 					break;
 			case 3: //email
-					$sql.="AND email ";
+					$sql.="AND ADR.email ";
 					break;
 			case 4: //Catégorie
-					$sql.="AND categorie ";
+					$sql.="AND ADR.categorie ";
 					break;
 
 
@@ -181,6 +197,17 @@ include("normalTask_getCreneaux.php");
 
 
 	}
+	$sql.=" AND ( true ";
+	foreach($tab as $section){
+		foreach($section[activites] as $activite){			 
+
+			foreach($activite[creneaux] as $creneau){
+				 if(!empty($_POST['cre'.$section[id]])) $sql.=" OR ADS.id_cre='".$creneau[id]."' ";
+			}
+		}
+	}
+	
+	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id";
 	print $sql;
 }
 
@@ -211,5 +238,6 @@ $('#tree_root').checkboxTree({
 
 <?php
 //fin else connexion
+}
 }
 ?>
