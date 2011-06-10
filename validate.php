@@ -76,17 +76,18 @@ $header = '
 $footer = '</body></html>';
 
 if ($_POST['action']==="submitted") {
+
 	include("opendb.php");
 	$password =$_POST['password'];
 	$id = $_POST['id'];
-	$sql="UPDATE adherent SET password = MD5('$password') WHERE id = '$id'";
+	$sql="UPDATE adherent SET password = MD5('$password'), activationkey = '', active=1 WHERE id = '$id'";
 	if (!mysql_query($sql)){
 		die('Error: ' . mysql_error());
 	}
 	else {
 		print $header;
 
-		print '<div>Votre inscription est terminée!</div>';
+		print '<div>Votre inscription est validée!</div>';
 
 		print $footer;
 	}
@@ -95,6 +96,10 @@ if ($_POST['action']==="submitted") {
 else {
 
 	$queryString = $_SERVER['QUERY_STRING'];
+	if (empty($queryString)){
+		print('Il n\'y a pas de clef de validation');
+	}
+	else {
 	$query = "SELECT * FROM adherent where activationkey='$queryString' ";
 	include("opendb.php");
 	$result = mysql_query($query) or die(mysql_error());
@@ -102,14 +107,10 @@ else {
 	while($row = mysql_fetch_array($result)){
 
 	  	if ($queryString == $row["activationkey"]){
-	  		$sql="UPDATE adherent SET activationkey = '', active=1 WHERE (id = $row[id])";
-	  		//$sql = "Select * from adherent";
-	  		if (!mysql_query($sql)){
-	  			die('Error: ' . mysql_error());
-	  		}
-	  		else {
+	  		
+	  		
 	  			print $header;
-			 	print "<div>Bravo! " . $row["prenom"] . ", votre compte a été activé.";
+			 	print "<div>Bravo! " . $row["prenom"] . ", votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription";
 			  	print '
 				<form name="f_password" id="f_password" action="validate.php" method="POST">
 				<table border=0>
@@ -124,7 +125,7 @@ else {
 				';
 	     		print '</div>';
 	  			print $footer;
-	  		}
+	  		
 
 	  }
 
@@ -135,5 +136,6 @@ else {
 	else print 'La clef de validation n\'est pas bonne!';
 	include("closedb.php");
 
+	}
 }
 ?>
