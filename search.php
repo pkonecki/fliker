@@ -112,13 +112,13 @@ include("normalTask_getCreneaux.php");
 	}
 
 	foreach($tab as $section){
-		print '<li><input type="checkbox" value="'.$section[id].'"><label>'.$section[nom].'</label>';
+		print '<li><input type="checkbox" name="section'.$section[id].'" '.checked('section'.$section[id],$section[id]).' value="'.$section[id].'"><label>'.$section[nom].'</label>';
 		print '<ul id="activites">';
 		foreach($section[activites] as $act){
-			print '<li><input type="checkbox" value="'.$act[id].'"><label>'.$act[nom].'</label>';
+			print '<li><input type="checkbox" name="act'.$act[id].'" '.checked('act'.$act[id],$act[id]).' value="'.$act[id].'"><label>'.$act[nom].'</label>';
 			print '<ul id="creneaux">';
 			foreach($act[creneaux] as $cre){
-				print '<li><input type="checkbox" value="'.$cre[id].'"><label>'.$cre[jour].' - '.$cre[debut].'</label>';
+				print '<li><input type="checkbox" name="cre'.$cre[id].'" '.checked('cre'.$cre[id],$cre[id]).' value="'.$cre[id].'"><label>'.$cre[jour].' - '.$cre[debut].'</label>';
 			}
 			print '</ul>';
 		}
