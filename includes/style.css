@@ -26,42 +26,50 @@ strong, b { font-weight: bold; }
 
 /* PAGE ELEMENTS */
 
-/* Content */
+/* menu */
+#main_menu{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+#main_menu li {
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	display:inline;
+}
+#main_menu a {
+	margin: 0;
+	padding: 8px 12px;
+	text-decoration: none;
+}
+#main_menu a:hover {
 
-#content { margin: 0em auto; width: 765px; padding: 10px 0 10px 0; text-align: left; /* Win IE5 */ }
+	padding-bottom: 8px;
+}
+
+#content {clear:both; margin: 0em auto; width: 100%; padding: 10px 0 10px 0; text-align: left; }
 .content { margin-left: 4.5em; margin-right: 4.5em; }
 .content ol, .content ul, .content li { font-size: 1.0em; line-height: 1.3em; margin: 0.2em 0 0.1em 1.5em; }
 .content ol.terms li { margin-bottom: 1em; }
 
-/* Header */
 
-#header { padding-bottom: 10em; }
-#headerlogo { float: left; }
-#headerlogo img { width: 188px; height: 83px;  }
-#headernav { float: right; }
 
 label { font-weight: bold; }
 #reminders label { font-weight: normal; }
 
-table.tabbedtable { padding-left: 3em; }
-table.tabbedtable td { padding-bottom: 5px; }
-table.tabbedtable label { text-align: right; padding-right: 9px; }
-.hiddenlabel { visibility: hidden; }
-.largelink { border: 1px solid #cacaca; padding: 10px; background-color: #E8EEF7; font-size: 1.2em; font-weight: bold; }
-.largelinkwrap { padding-top: 10px; padding-bottom: 10px; }
 
 
 #userdiv{
 	position: absolute;
 	top: 10px;
 	right: 10px;
-
 }
 
 #content{
 	position: absolute;
 	left : 20px;
-
 }
 /* Signup form */
 
@@ -162,20 +170,17 @@ table.tabbedtable label { text-align: right; padding-right: 9px; }
 }
 
 #f_search{
-
-margin: 0 auto;
-
-
+	margin: 0 auto;
 }
 
 #f_search .main {
 	float : left;
-	width : 45%;
+	width : 400px;
 }
 
 #f_search .selects{
 	float : left;
-	width : 45%;
+	width : 300px;
 }
 
 #f_search .buttons{
@@ -196,7 +201,7 @@ table {
   color: #363636;
   background: #f6f6f6;
   text-align:left;
-  }
+}
 caption {
   text-align: center;
   font: bold 16px arial, helvetica, sans-serif;

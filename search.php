@@ -24,7 +24,7 @@ else {
 <script type="text/javascript" src="./includes/js/jquery.js"></script>
 <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
 <script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
-<h1>Recherche</h1>
+<h2>Recherche</h2>
 
 <?php
 
@@ -208,7 +208,7 @@ include("normalTask_getChampsAdherents.php");
 	}
 	
 	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id";
-	print $sql;
+	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
 	
@@ -221,14 +221,17 @@ include("normalTask_getChampsAdherents.php");
 	foreach($tab as $champ){
 
 		if ($champ[user_viewable]==1) {
-			print '<th>'.$champ['nom'].'</th>';
+			print '<th>'.$champ['description'].'</th>';
 		}
 	}
 	
 	print '</tr></thead>';
 	print '<tbody>';
+	$i = 0;
 	while($row = mysql_fetch_array($results)){
-		print '<tr>';
+		$i++;
+		if($i % 2 == 0) print '<tr>';
+		else print '<tr class="odd">';
 		foreach($tab as $champ){
 			if ($champ[user_viewable]==1) {
 				print '<td>'.$row[$champ['nom']].'</td>';
