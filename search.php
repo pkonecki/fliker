@@ -10,8 +10,8 @@ else {
  	SELECT * FROM resp_section  WHERE id_adh='".$_SESSION[uid]."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
+	include("closedb.php");
 	if (!$results) echo mysql_error();
-	
 	else if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1'){
 		print 'Vous n\'avez pas accès à cette page.';
 	}
@@ -50,7 +50,7 @@ function multiselected($post,$val){
 }
 
 include("normalTask_getCreneaux.php");
-
+include("normalTask_getChampsAdherents.php");
 
 	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
@@ -110,8 +110,8 @@ include("normalTask_getCreneaux.php");
 </fieldset>
 <fieldset class="selects">
 	<ul id="tree_root">
-		<li><input type="checkbox"><label>Sections</label>
-			<ul id="sections">
+		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Sections</label>
+			<ul id="sections"  >
 	';
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
@@ -140,14 +140,15 @@ include("normalTask_getCreneaux.php");
 	}
 
 	print '</ul>';
-
-
+	$first = empty($_POST[affichage]);
+	$second = 'checked';
+	$third = checked('affichage','1');
 	print '
 	</ul>
 </fieldset>
 <fieldset class="affichage">
 <label for="affichage">Affichage:</label>
-	<input '.checked('affichage','1').' type="radio" name="affichage" value="1" >Avec Photos</input>
+	<input '.($first ? $second : $third ).' type="radio" name="affichage" value="1" >Avec Photos</input>
 	<input '.checked('affichage','2').' type="radio" name="affichage" value="2" >Complet</input>
 	<input '.checked('affichage','3').' type="radio" name="affichage" value="3" >Trombino</input>
 </fieldset>
@@ -197,18 +198,47 @@ include("normalTask_getCreneaux.php");
 
 
 	}
-	$sql.=" AND ( true ";
+	$sql.=" AND ADS.id_cre IN ('0'";
 	foreach($tab as $section){
-		foreach($section[activites] as $activite){			 
-
+		foreach($section[activites] as $activite){
 			foreach($activite[creneaux] as $creneau){
-				 if(!empty($_POST['cre'.$section[id]])) $sql.=" OR ADS.id_cre='".$creneau[id]."' ";
+				 if(!empty($_POST['cre'.$creneau[id]])) $sql.=",'".$creneau[id]."' ";
 			}
 		}
 	}
 	
 	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id";
 	print $sql;
+	$tab = getChampsAdherents();
+	include("opendb.php");
+	
+	$results = mysql_query($sql);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+	$num=mysql_num_rows($results);
+	print '<table class="search_results" >';
+	print '<thead><tr>';
+	foreach($tab as $champ){
+
+		if ($champ[user_viewable]==1) {
+			print '<th>'.$champ['nom'].'</th>';
+		}
+	}
+	
+	print '</tr></thead>';
+	print '<tbody>';
+	while($row = mysql_fetch_array($results)){
+		print '<tr>';
+		foreach($tab as $champ){
+			if ($champ[user_viewable]==1) {
+				print '<td>'.$row[$champ['nom']].'</td>';
+			}
+		}
+		print '</tr>';
+	}
+	print '</tbody>';
+	print '</table>';
+	
 }
 
 
