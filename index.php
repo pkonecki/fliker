@@ -21,7 +21,7 @@ $footer = '</body></html>';
 print $header;
 include("userdiv.php");
 include("menu.php");
-print '<div id=content>';
+print '<div id="content">';
 if(!empty($_GET['page'])){
 	switch($_GET['page']){
 		case 1:
