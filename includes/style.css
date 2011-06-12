@@ -175,7 +175,7 @@ label { font-weight: bold; }
 
 #f_search .main {
 	float : left;
-	width : 400px;
+	width : 345px;
 }
 
 #f_search .selects{
@@ -186,12 +186,12 @@ label { font-weight: bold; }
 #f_search .buttons{
 clear : both;
 text-align:center;
-width : 93%;
+width : 669px;
 }
 
 #f_search .affichage{
 clear : both;
-width : 93%;
+width : 669px;
 }
 
 table {

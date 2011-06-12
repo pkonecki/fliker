@@ -69,6 +69,7 @@ $footer = '</body></html>';
 
 include("../includes/paths.php");
 include("normalTask_getChampsAdherents.php");
+require("class.imageconverter.php");
 function get_extension($nom) {
 	$nom = explode(".", $nom);
 	$nb = count($nom);
@@ -104,6 +105,7 @@ $dest_dossier = "../photos";
 					$_SESSION[$row[nom]]=$_FILES[$row[nom]];
 					$dest_fichier = $_POST[email].'.'.get_extension($_FILES[$row[nom]][name]);
 					move_uploaded_file($_FILES['photo']['tmp_name'], $photos ."\\". $dest_fichier);
+					$img = new ImageConverter($photos ."\\". $dest_fichier,'jpg');
 
 				}
 

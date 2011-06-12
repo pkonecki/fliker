@@ -24,7 +24,7 @@ else {
 <script type="text/javascript" src="./includes/js/jquery.js"></script>
 <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
 <script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
-<h2>Recherche</h2>
+<h2 id="toggle_f_search">Recherche</h2>
 
 <?php
 
@@ -54,6 +54,7 @@ include("normalTask_getChampsAdherents.php");
 
 	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
+	//print '<button id="toggle_f_search">Toggle</button>';
 	print '<form id="f_search" method="post" action="index.php?page=2">
 <fieldset class="main">
 	<input type="hidden" name="field_count" value="'.$_POST['field_count'].'" />
@@ -148,7 +149,8 @@ include("normalTask_getChampsAdherents.php");
 </fieldset>
 <fieldset class="affichage">
 <label for="affichage">Affichage:</label>
-	<input '.($first ? $second : $third ).' type="radio" name="affichage" value="1" >Avec Photos</input>
+	<input '.checked('photos','photos').' type="checkbox" name="photos" value="photos" >Avec Photos</input>
+	<input '.($first ? $second : $third ).' type="radio" name="affichage" value="1" >Simple</input>
 	<input '.checked('affichage','2').' type="radio" name="affichage" value="2" >Complet</input>
 	<input '.checked('affichage','3').' type="radio" name="affichage" value="3" >Trombino</input>
 </fieldset>
@@ -217,29 +219,49 @@ include("normalTask_getChampsAdherents.php");
 	include("closedb.php");
 	$num=mysql_num_rows($results);
 	print '<table class="search_results" >';
-	print '<thead><tr>';
-	foreach($tab as $champ){
-
-		if ($champ[user_viewable]==1) {
-			print '<th>'.$champ['description'].'</th>';
-		}
+	switch($_POST['affichage']){
+		case 1: //Simple
+			print '<thead><tr>';
+			foreach($tab as $champ){
+		
+				if ($champ[search_simple]==1) {
+					print '<th>'.$champ['description'].'</th>';
+				}
+			}
+			
+			print '</tr></thead>';
+			print '<tbody>';
+			$i = 0;
+			while($row = mysql_fetch_array($results)){
+				$i++;
+				if($i % 2 == 0) print '<tr>';
+				else print '<tr class="odd">';
+				foreach($tab as $champ){
+					
+					if ($champ[search_simple]==1){
+						if($champ[type]==='varchar')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='date')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='tinyint')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='file')
+							print '<td>'.$row[$champ['nom']].'</td>';
+					}
+				}
+				print '</tr>';
+			}
+			print '</tbody>';
+		break;
+		case 2: //Complet
+		break;
+		case 3: //Trombino
+		break;
 	}
 	
-	print '</tr></thead>';
-	print '<tbody>';
-	$i = 0;
-	while($row = mysql_fetch_array($results)){
-		$i++;
-		if($i % 2 == 0) print '<tr>';
-		else print '<tr class="odd">';
-		foreach($tab as $champ){
-			if ($champ[user_viewable]==1) {
-				print '<td>'.$row[$champ['nom']].'</td>';
-			}
-		}
-		print '</tr>';
-	}
-	print '</tbody>';
 	print '</table>';
 	
 }
@@ -264,6 +286,9 @@ $('#reset').click(function() {
 });
 $('#tree_root').checkboxTree({
       /* specify here your options */
+    });
+$("#toggle_f_search").click(function () {
+      $("#f_search").slideToggle("slow");
     });
 </script>
 
