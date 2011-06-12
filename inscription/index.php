@@ -106,6 +106,8 @@ $dest_dossier = "../photos";
 					$dest_fichier = $_POST[email].'.'.get_extension($_FILES[$row[nom]][name]);
 					move_uploaded_file($_FILES['photo']['tmp_name'], $photos ."\\". $dest_fichier);
 					$img = new ImageConverter($photos ."\\". $dest_fichier,'jpg');
+					rename($_POST[email].'.jpg',$photos ."\\".$_POST[email].'.jpg');
+					unlink($photos ."\\". $dest_fichier);
 
 				}
 
