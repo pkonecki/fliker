@@ -8,6 +8,7 @@ function get_extension($nom) {
 	$nb = count($nom);
 	return strtolower($nom[$nb-1]);
 }
+
 $dest_dossier = "../photos";
 $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
 	<script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
