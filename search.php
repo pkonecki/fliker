@@ -209,7 +209,7 @@ include("normalTask_getChampsAdherents.php");
 		}
 	}
 	
-	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id";
+	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id ORDER BY ADR.nom";
 	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
@@ -218,9 +218,10 @@ include("normalTask_getChampsAdherents.php");
 	if (!$results) echo mysql_error();
 	include("closedb.php");
 	$num=mysql_num_rows($results);
-	print '<table class="search_results" >';
+
 	switch($_POST['affichage']){
 		case 1: //Simple
+			print '<table class="search_results" >';
 			print '<thead><tr>';
 			foreach($tab as $champ){
 		
@@ -268,8 +269,10 @@ include("normalTask_getChampsAdherents.php");
 				print '</tr>';
 			}
 			print '</tbody>';
+			print '</table>';
 		break;
 		case 2: //Complet			
+			print '<table class="search_results" >';
 			print '<thead><tr>';
 			foreach($tab as $champ){
 		
@@ -317,12 +320,43 @@ include("normalTask_getChampsAdherents.php");
 				print '</tr>';
 			}
 			print '</tbody>';
+			print '</table>';
 		break;
 		case 3: //Trombino
+			$i=0;
+			print '<table>';
+			while($row = mysql_fetch_array($results)){
+				
+				
+				if($i % 5 == 0) print '<tr>';
+				$i++;
+				print '<td>';
+				foreach($tab as $champ){
+					
+					if ($champ[search_trombi]==1){
+						if($champ[type]==='varchar')
+							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+						else
+						if($champ[type]==='date')
+							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+						else
+						if($champ[type]==='tinyint')
+							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+						else
+						if($champ[type]==='file'){
+							$photo="photos/".$row['email'].".jpg";
+							print '<span class="trombi"><img src="'.$photo.'" height="150" width="135"></span>';
+						}
+					}
+				}
+				print '</td>';
+				if($i % 5 == 0) print '</tr>';
+			}
+			print '</table>';
 		break;
 	}
 	
-	print '</table>';
+	
 	
 }
 

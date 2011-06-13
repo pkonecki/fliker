@@ -231,6 +231,9 @@ background: #f1f1f1;
 tbody th, tbody td {
 padding:5px;
 }
+span.trombi {
+display:block;
+}
 
 /*
 body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
