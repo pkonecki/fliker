@@ -225,7 +225,18 @@ include("normalTask_getChampsAdherents.php");
 			foreach($tab as $champ){
 		
 				if ($champ[search_simple]==1) {
+					if($champ[type]==='varchar')
 					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='date')
+					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='tinyint')
+					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='file' && $_POST['photos']==='photos'){
+					print '<th>'.$champ['description'].'</th>';
+					}
 				}
 			}
 			
@@ -248,15 +259,64 @@ include("normalTask_getChampsAdherents.php");
 						if($champ[type]==='tinyint')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='file')
-							print '<td>'.$row[$champ['nom']].'</td>';
+						if($champ[type]==='file' && $_POST['photos']==='photos'){
+							$photo="photos/".$row['email'].".jpg";
+							print '<TD><img src="'.$photo.'" height="70"></TD>';
+						}
 					}
 				}
 				print '</tr>';
 			}
 			print '</tbody>';
 		break;
-		case 2: //Complet
+		case 2: //Complet			
+			print '<thead><tr>';
+			foreach($tab as $champ){
+		
+				if ($champ[user_viewable]==1) {
+					if($champ[type]==='varchar')
+					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='date')
+					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='tinyint')
+					print '<th>'.$champ['description'].'</th>';
+					else
+					if($champ[type]==='file' && $_POST['photos']==='photos'){
+					print '<th>'.$champ['description'].'</th>';
+					}
+				}
+			}
+			
+			print '</tr></thead>';
+			print '<tbody>';
+			$i = 0;
+			while($row = mysql_fetch_array($results)){
+				$i++;
+				if($i % 2 == 0) print '<tr>';
+				else print '<tr class="odd">';
+				foreach($tab as $champ){
+					
+					if ($champ[user_viewable]==1){
+						if($champ[type]==='varchar')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='date')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='tinyint')
+							print '<td>'.$row[$champ['nom']].'</td>';
+						else
+						if($champ[type]==='file' && $_POST['photos']==='photos'){
+							$photo="photos/".$row['email'].".jpg";
+							print '<TD><img src="'.$photo.'" height="70"></TD>';
+						}
+					}
+				}
+				print '</tr>';
+			}
+			print '</tbody>';
 		break;
 		case 3: //Trombino
 		break;
