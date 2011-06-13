@@ -23,11 +23,14 @@ function modifUser($tab){
 					$set .= "0,";
 				} else {
 					$set .= "1,";
-					$dest_fichier = $tab[email].'.'.get_extension($_FILES[$row[nom]][name]);
-					move_uploaded_file($_FILES['photo']['tmp_name'], $photos ."\\". $dest_fichier);
-					$img = new ImageConverter($photos ."\\". $dest_fichier,'jpg');
-					rename($_POST[email].'.jpg',$photos ."\\".$_POST[email].'.jpg');
-					unlink($photos ."\\". $dest_fichier);
+					$dest_fichier = $_SESSION['user'].'.'.get_extension($_FILES[$row[nom]][name]);
+					print $dest_fichier;
+					$photos=$_SERVER['DOCUMENT_ROOT']."/fliker/photos";
+					print $photos;
+					move_uploaded_file($_FILES['photo']['tmp_name'], $photos ."/". $dest_fichier);
+					$img = new ImageConverter($photos ."/". $dest_fichier,'jpg');
+					rename($_SESSION['user'].'.jpg',$photos ."/".$_SESSION['user'].'.jpg');
+					unlink($photos ."/". $dest_fichier);
 				}
 
 
