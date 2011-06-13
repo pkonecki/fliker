@@ -1,7 +1,7 @@
 <?php
 
 function modifUser($tab){
-
+	require("class.imageconverter.php");
 	$champs = getChampsAdherents();
 	$set = "";
 	include("opendb.php");
@@ -23,6 +23,11 @@ function modifUser($tab){
 					$set .= "0,";
 				} else {
 					$set .= "1,";
+					$dest_fichier = $tab[email].'.'.get_extension($_FILES[$row[nom]][name]);
+					move_uploaded_file($_FILES['photo']['tmp_name'], $photos ."\\". $dest_fichier);
+					$img = new ImageConverter($photos ."\\". $dest_fichier,'jpg');
+					rename($_POST[email].'.jpg',$photos ."\\".$_POST[email].'.jpg');
+					unlink($photos ."\\". $dest_fichier);
 				}
 
 
