@@ -108,7 +108,6 @@ $dest_dossier = "../photos";
 					$img = new ImageConverter($photos ."\\". $dest_fichier,'jpg');
 					rename($_POST[email].'.jpg',$photos ."\\".$_POST[email].'.jpg');
 					unlink($photos ."\\". $dest_fichier);
-
 				}
 
 			}
