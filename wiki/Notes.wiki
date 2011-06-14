@@ -32,12 +32,6 @@
     * ne pas créer un numéro si il existe déjà
     * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
 
-
-
-
-
-
-
 ===Inscription:===
   * <s>conservation données en post</s>
   * captcha? en confirmation (basse priorité)
@@ -70,6 +64,7 @@
 
 ===Table des sports===
   * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
+    * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc... 
 
 	
 ===Fonctions de saisie/modification===
@@ -77,11 +72,12 @@
     * Notification email prof bureau en cas de modif de ses droits
       * (BP) Préférences notification weekly/daily/a chaque fois/non
     * Privilèges détectés par les tables de hash responsables
-      * Donne droit modification sur tout ce qui est  à son niveau et en dessous
-      * Donne droit a donner des droits seulement sur ce qui est en dessous
+      * Donne droit modification sur tout (sauf responsable) ce qui est  à son niveau et en dessous
+      * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous
     * Administrateur : champ privilège à 1 dans table adhérent
   * Ajout Enregistrement paiement -> bureau
-  * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc...
+  * Table de hash asso/section--> défini qui a le droit d'ajouter/supprimer/modifier les suppléments et le droit de recherche
+    * Les suppléments définissent un droit de recherche sur les sections/etc... aussi bien avec id_asso_paie que id_asso_adh
   * Association 
     * Ajout entité
     * Ajout Supplément
@@ -162,7 +158,3 @@ https: fichier de config fliker.conf
     * Fonction pour générer fiche de présence
     * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
     * Fonction pour générer et archiver stats + purge table en fin d'année
-
-===Images===
-  * imagemagic pour compresser
-  * Convertir les images en jpeg
