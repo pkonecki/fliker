@@ -96,7 +96,7 @@
     * Ajout Supplément
     * Ajout Responsable
   * Paiement
-    * Ajout entité
+    * Ajout entité : par bureau de sup.id_asso_paie
   * Adhésion
   * Fiche Adhérent
 
