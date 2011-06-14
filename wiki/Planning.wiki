@@ -9,10 +9,10 @@
     * Semaine 20 : Fiche adherent
     * Semaine 21 : Formulaire de recherche
   * *Juin* :
-    * Semaine 22 : 7 fonctions d'ajout/modification
+    * Semaine 22 : 
     * Semaine 23 : 
-    * Semaine 24 : Monitoring
-    * Semaine 25 :
+    * Semaine 24 : 7 fonctions d'ajout/modification
+    * Semaine 25 : Monitoring
     * Semaine 26 : Fonctions de customisation
 
   * *Juillet*:
