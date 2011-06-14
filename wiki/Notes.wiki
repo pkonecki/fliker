@@ -73,10 +73,10 @@
       * (BP) Préférences notification weekly/daily/a chaque fois/non
     * Privilèges détectés par les tables de hash responsables
       * Donne droit modification sur tout (sauf responsable) ce qui est  à son niveau et en dessous
-      * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous
+      * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous et dans la même association
     * Administrateur : champ privilège à 1 dans table adhérent
   * Ajout Enregistrement paiement -> bureau
-  * Table de hash asso/section--> défini qui a le droit d'ajouter/supprimer/modifier les suppléments et le droit de recherche
+  * Table de hash asso/section (initialisée par création section)--> défini qui a le droit supprimer/modifier la section y compris les suppléments + donne le droit de recherche
     * Les suppléments définissent un droit de recherche sur les sections/etc... aussi bien avec id_asso_paie que id_asso_adh
   * Association 
     * Ajout entité
@@ -86,6 +86,7 @@
     * Ajout entité
     * Ajout Supplément
     * Ajout Responsable
+    * Ajout (mais pas suppression) d'association gestionnaire dans la table de hash
   * Activité
     * Ajout entité
     * Ajout Supplément
