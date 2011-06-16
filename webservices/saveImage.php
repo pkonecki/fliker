@@ -1,6 +1,5 @@
 <?php
 function saveImage($fichier,$dossier){
-	require_once("./includes/paths.php");
 	if(!is_dir($GLOBALS['root']."/".$dossier)) mkdir($GLOBALS['root']."/".$dossier);
 	$ext =get_extension($_FILES[$dossier]['name']);
 	if($ext==='jpeg') $ext='jpg';
