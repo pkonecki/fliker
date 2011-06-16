@@ -142,7 +142,7 @@ print $script;
 							print '<TD>'.$row[description].'</TD><TD>Non</TD>';
 					}
 					if($row[type]==='file'){
-						$photo="photos/".$_SESSION['user'].".jpg";
+						$photo="includes/thumb.php?file=".$_SESSION['user'].".jpg";
 						print '<TD>'.$row[description].'</TD><TD><img src="'.$photo.'" height="150"></TD>';
 
 					}

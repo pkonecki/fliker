@@ -261,7 +261,7 @@ include("normalTask_getChampsAdherents.php");
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
 						if($champ[type]==='file' && $_POST['photos']==='photos'){
-							$photo="photos/".$row['email'].".jpg";
+							$photo="includes/thumb.php?file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
 						}
 					}
@@ -312,7 +312,7 @@ include("normalTask_getChampsAdherents.php");
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
 						if($champ[type]==='file' && $_POST['photos']==='photos'){
-							$photo="photos/".$row['email'].".jpg";
+							$photo="includes/thumb.php?file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
 						}
 					}
@@ -344,8 +344,8 @@ include("normalTask_getChampsAdherents.php");
 							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
 						else
 						if($champ[type]==='file'){
-							$photo="photos/".$row['email'].".jpg";
-							print '<span class="trombi"><img src="'.$photo.'" height="150" width="135"></span>';
+							$photo="includes/thumb.php?file=".$row['email'].".jpg";
+							print '<span class="trombi"><img src="'.$photo.'" ></span>';
 						}
 					}
 				}
