@@ -1,5 +1,5 @@
 <?php
-
+require_once("getChampsAdherents.php");
 function getAdherent($user){
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 
