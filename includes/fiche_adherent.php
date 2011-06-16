@@ -1,7 +1,7 @@
 <?php
 session_start();
-include("normalTask_getChampsAdherents.php");
-include("normalTask_getAdherent.php");
+include("getChampsAdherents.php");
+include("getAdherent.php");
 getAdherent($_SESSION['user']);
 function get_extension($nom) {
 	$nom = explode(".", $nom);
@@ -85,8 +85,8 @@ print $script;
 					}
 					print '<tr ><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td>
 						<td>
-						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M" '.$homme.' >Homme
-						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F" '.$femme.' >Femme
+						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M" '.$homme.' >Masculin
+						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F" '.$femme.' >Féminin
 						</td>
 						</tr>
 						</div>';
@@ -107,7 +107,7 @@ print $script;
 			}
 		}
 		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
-		print '<tr><td><INPUT type=\'submit\' value=\'Send\'></td></tr>';
+		print '<tr><td colspan="2"><INPUT type=\'submit\' value=\'Send\'></td></tr>';
 
 		print '</table>';
 		print '</FORM>';
@@ -120,7 +120,7 @@ print $script;
 	}
 	else {
 		if ($_POST['action'] == 'submitted'){
-			include("normalTask_modifUser.php");
+			include("modifUser.php");
 			modifUser($_POST);
 			getAdherent($_SESSION['user']);
 		}

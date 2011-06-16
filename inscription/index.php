@@ -68,7 +68,7 @@ $header = '
 $footer = '</body></html>';
 
 include("../includes/paths.php");
-include("normalTask_getChampsAdherents.php");
+include("getChampsAdherents.php");
 require("class.imageconverter.php");
 function get_extension($nom) {
 	$nom = explode(".", $nom);
@@ -130,7 +130,7 @@ $dest_dossier = "../photos";
 
 
 	} else if ($_POST['action'] == 'confirmed'){
-		include("normalTask_newUser.php");
+		include("newUser.php");
 		newUser($_SESSION);
 		print $header;
 		print "<h2>Félicitations!</h2> Votre inscription a été enregistrée! Veuillez vérifier vos email pour valider votre inscription!";
@@ -151,8 +151,8 @@ $dest_dossier = "../photos";
 			if($row[format] === "categorie"){
 				print '<tr ><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td>
 					<td>
-					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M">Homme
-					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F">Femme
+					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M">Masculin
+					<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F">Féminin
 					</td>
 					</tr>
 					</div>';
@@ -173,7 +173,7 @@ $dest_dossier = "../photos";
 			}
 		}
 		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
-		print '<tr><td><INPUT type=\'submit\' value=\'Send\'></td></tr>';
+		print '<tr><td colspan="2"><INPUT type=\'submit\' value=\'Send\'></td></tr>';
 
 		print '</table>';
 		print '</FORM>';

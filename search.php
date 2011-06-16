@@ -7,7 +7,9 @@ else {
 	UNION
 	SELECT * FROM resp_cren  WHERE id_adh='".$_SESSION[uid]."'
  	UNION
- 	SELECT * FROM resp_section  WHERE id_adh='".$_SESSION[uid]."' ";
+ 	SELECT * FROM resp_section  WHERE id_adh='".$_SESSION[uid]."'
+ 	UNION
+	SELECT * FROM resp_asso  WHERE id_adh='".$_SESSION[uid]."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	include("closedb.php");
@@ -49,14 +51,14 @@ function multiselected($post,$val){
 	return "";
 }
 
-include("normalTask_getCreneaux.php");
-include("normalTask_getChampsAdherents.php");
+include("getCreneaux.php");
+include("getChampsAdherents.php");
 
 	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	//print '<button id="toggle_f_search">Toggle</button>';
 	print '<form id="f_search" method="post" action="index.php?page=2">
-<fieldset class="main">
+<fieldset class="main"><legend>Critères Adhérent</legend>
 	<input type="hidden" name="field_count" value="'.$_POST['field_count'].'" />
 	<input type="hidden" name="action" value="submitted" />
 	<div id="solde">
@@ -109,7 +111,7 @@ include("normalTask_getChampsAdherents.php");
 	<button type="button" id="add_field">Ajouter un champ</button>
 
 </fieldset>
-<fieldset class="selects">
+<fieldset class="selects"><legend>Sélection des créneaux</legend>
 	<ul id="tree_root">
 		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Sections</label>
 			<ul id="sections"  >
@@ -147,8 +149,7 @@ include("normalTask_getChampsAdherents.php");
 	print '
 	</ul>
 </fieldset>
-<fieldset class="affichage">
-<label for="affichage">Affichage:</label>
+<fieldset class="affichage"><legend>Affichage</legend>
 	<input '.checked('photos','photos').' type="checkbox" name="photos" value="photos" >Avec Photos</input>
 	<input '.($first ? $second : $third ).' type="radio" name="affichage" value="1" >Simple</input>
 	<input '.checked('affichage','2').' type="radio" name="affichage" value="2" >Complet</input>
