@@ -67,10 +67,17 @@ label { font-weight: bold; }
 	right: 10px;
 }
 
-#content{
-	position: absolute;
-	left : 20px;
+fieldset { 
+margin:0.2em;
+border:1px solid 
 }
+
+legend {
+  padding: 0.2em 0.5em;
+  border:1px solid;
+  font-size:90%;
+  text-align:left;
+  }
 /* Signup form */
 
 #f_inscription table {
@@ -106,7 +113,7 @@ label { font-weight: bold; }
 }
 
 #f_inscription label.error {
-  background:url("http://fliker.dyndns.org/fliker/images/unchecked.gif") no-repeat 0px 0px;
+  background:url("../images/unchecked.gif") no-repeat 0px 0px;
   padding-left: 16px;
   padding-bottom: 2px;
   font-weight: bold;
@@ -114,7 +121,7 @@ label { font-weight: bold; }
 }
 
 #f_inscription label.checked {
-  background:url("http://fliker.dyndns.org/fliker/images/checked.gif") no-repeat 0px 0px;
+  background:url("../images/checked.gif") no-repeat 0px 0px;
 }
 
 #f_inscription .success_msg {

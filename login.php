@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("./includes/paths.php");
-include("normalTask_getChampsAdherents.php");
+include("getChampsAdherents.php");
 $tab = getChampsAdherents();
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
