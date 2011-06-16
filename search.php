@@ -381,6 +381,13 @@ $('#reset').click(function() {
 });
 $('#tree_root').checkboxTree({
       /* specify here your options */
+      onCheck: {
+                ancestors: 'checkIfFull',
+                descendants: 'check'
+            },
+            onUncheck: {
+                ancestors: 'uncheck'
+            }
     });
 $("#toggle_f_search").click(function () {
       $("#f_search").slideToggle("slow");

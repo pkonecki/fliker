@@ -38,11 +38,11 @@ function protect($string){
 	return $string;
 }
 
-$path=$_SERVER['DOCUMENT_ROOT']."/fliker";
-$webservices=$path."/webservices";
-$includes=$path."/includes";
-$inscription=$path."/inscription";
-$photos=$path."/photos";
+$GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
+$webservices=$GLOBALS['root']."/webservices";
+$includes=$GLOBALS['root']."/includes";
+$inscription=$GLOBALS['root']."/inscription";
+$photos=$GLOBALS['root']."/photo";
 add_include_path($webservices);
 add_include_path($includes);
 add_include_path($inscription);

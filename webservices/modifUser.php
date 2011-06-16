@@ -2,6 +2,7 @@
 
 function modifUser($tab){
 	require("class.imageconverter.php");
+	require("saveImage.php");
 	$champs = getChampsAdherents();
 	$set = "";
 	include("opendb.php");
@@ -23,6 +24,8 @@ function modifUser($tab){
 					$set .= "0,";
 				} else {
 					$set .= "1,";
+					saveImage($_SESSION['user'],$row[nom]);
+					/*
 					$ext =get_extension($_FILES[$row[nom]][name]);
 					if($ext==='jpeg') $ext='jpg';
 					$dest_fichier = $_SESSION['user'].'.'.$ext;
@@ -33,6 +36,7 @@ function modifUser($tab){
 						rename($_SESSION['user'].'.jpg',$photos ."/".$_SESSION['user'].'.jpg');
 						unlink($photos ."/". $dest_fichier);
 					}
+					*/
 				}
 
 
