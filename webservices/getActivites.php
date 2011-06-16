@@ -1,13 +1,12 @@
 <?php
 
-function getActivite($userid,$sectionid){
-	if(empty($sectionid)) return;
+function getActivites($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
-			$query = "SELECT * FROM `activite` where `id_sec` = '".$sectionid."'  ";
+			$query = "SELECT * FROM `activite`  ";
 		} else {
 			if (!empty($userid)) {
-				$query = "SELECT * FROM `activite` A, `resp_act` R WHERE id_adh = '".$userid."' AND R.id_sec = S.id";
+				$query = "SELECT * FROM `activite` A, `resp_act` R WHERE id_adh = '".$userid."' AND R.id_act = A.id";
 			}
 			else return;
 		}

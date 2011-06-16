@@ -1,6 +1,6 @@
 <?php
 
-function getSection($userid){
+function getSections($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
 			$query = "SELECT * FROM `section` ";
