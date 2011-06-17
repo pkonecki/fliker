@@ -22,16 +22,20 @@ print $header;
 include("userdiv.php");
 include("menu.php");
 print '<div id="content">';
-if(!empty($_GET['page'])){
-	switch($_GET['page']){
-		case 1:
-			include("fiche_adherent.php");
-			break;
-		case 2:
-			include("search.php");
-			break;
-	}
-} else include("fiche_adherent.php");
+if(empty($_GET['page'])) $_GET['page']=1;
+
+switch($_GET['page']){
+	case 1:
+		include("fiche_adherent.php");
+		break;
+	case 2:
+		include("search.php");
+		break;
+	case 3:
+		include("fiche_asso.php");
+	break;
+}
+
 print '</div>';
 print $footer;
 
