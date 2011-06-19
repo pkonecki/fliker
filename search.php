@@ -1,6 +1,6 @@
 <?php session_start();
 if((strcmp($_SESSION['user'],"") == 0)){
-	print "Vous n'êtes pas connecté!";
+	print "<p>Vous n'êtes pas connecté</p>";
 }
 else {
 	$query="SELECT * FROM resp_act  WHERE id_adh='".$_SESSION[uid]."'
@@ -262,7 +262,8 @@ include("getChampsAdherents.php");
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
 						if($champ[type]==='file' && $_POST['photos']==='photos'){
-							$photo="includes/thumb.php?file=".$row['email'].".jpg";
+							$_SESSION['auth_thumb']='true';
+							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
 						}
 					}
@@ -313,7 +314,8 @@ include("getChampsAdherents.php");
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
 						if($champ[type]==='file' && $_POST['photos']==='photos'){
-							$photo="includes/thumb.php?file=".$row['email'].".jpg";
+							$_SESSION['auth_thumb']='true';
+							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
 						}
 					}
@@ -345,7 +347,8 @@ include("getChampsAdherents.php");
 							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
 						else
 						if($champ[type]==='file'){
-							$photo="includes/thumb.php?file=".$row['email'].".jpg";
+							$_SESSION['auth_thumb']='true';
+							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<span class="trombi"><img src="'.$photo.'" ></span>';
 						}
 					}

@@ -38,6 +38,12 @@ function protect($string){
 	return $string;
 }
 
+function get_extension($nom) {
+	$nom = explode(".", $nom);
+	$nb = count($nom);
+	return strtolower($nom[$nb-1]);
+}
+
 $GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
 $webservices=$GLOBALS['root']."/webservices";
 $includes=$GLOBALS['root']."/includes";

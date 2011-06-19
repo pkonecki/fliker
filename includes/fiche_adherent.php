@@ -3,11 +3,7 @@ session_start();
 include("getChampsAdherents.php");
 include("getAdherent.php");
 getAdherent($_SESSION['user']);
-function get_extension($nom) {
-	$nom = explode(".", $nom);
-	$nb = count($nom);
-	return strtolower($nom[$nb-1]);
-}
+
 
 $dest_dossier = "../photos";
 $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
@@ -68,7 +64,7 @@ $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script
 print $script;
 	if ($_POST['action'] == 'modification') {
 		$tab = getChampsAdherents();
-		print '<br/><FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
+		print '<FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
 		print '<table border=0>';
 		foreach($tab as $row){
 			if($row[user_editable]==1){
@@ -142,9 +138,9 @@ print $script;
 							print '<TD>'.$row[description].'</TD><TD>Non</TD>';
 					}
 					if($row[type]==='file'){
-						$photo="includes/thumb.php?file=".$_SESSION['user'].".jpg";
+						$_SESSION['auth_thumb']='true';
+						$photo="includes/thumb.php?folder=".$row['nom']."&file=".$_SESSION['user'].".jpg";
 						print '<TD>'.$row[description].'</TD><TD><img src="'.$photo.'" height="150"></TD>';
-
 					}
 
 				}
@@ -159,7 +155,7 @@ print $script;
 		';
 		}
 		else {
-			print "<p>Vous n'etes pas connecté</p>";
+			print "<p>Vous n'êtes pas connecté</p>";
 		}
 	}
 

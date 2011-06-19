@@ -1,9 +1,10 @@
 <?php
+session_start();
 require_once 'paths.php';
 require_once 'ThumbLib.inc.php';
-
+if(!($_SESSION['auth_thumb']==='true')) die();
 $fileName = (isset($_GET['file'])) ? urldecode($_GET['file']) : null;
-$fileName = $photos."/".$fileName;
+$fileName = $GLOBALS['root']."/".$_GET['folder']."/".$fileName;
 if ($fileName == null || !file_exists($fileName))
 {
      // handle missing images however you want... perhaps show a default image??  Up to you...
