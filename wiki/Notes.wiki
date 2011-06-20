@@ -166,7 +166,7 @@ https: fichier de config fliker.conf
   * +table d'associations possibles pour un statut (ex: etudiant -->Asesco et PSUC)
   * Choix des créneaux
   * Calcul des associations auxquelles s'inscrire par critère de priorité :
-    * 1: Maximum de sports
-    * 2: Minimum d'associations
-    * 3: Cout minimum
-    * 4: Random si plusieurs choix (rare)
+    # Maximum de sports
+    # Minimum d'associations
+    # Cout minimum
+    # Random si plusieurs choix (rare)
