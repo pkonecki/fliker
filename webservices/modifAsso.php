@@ -9,7 +9,8 @@ function modifAsso($tab){
 	//Description
 	if(!empty($tab['description'])) $set.="description='".mysql_real_escape_string($tab['description'])."', ";
 	//logo
-	if(!empty($tab['logo_asso'])) saveImage($tab['id'],"logo_asso");
+	//if(!empty($tab['logo_asso']))
+	 saveImage($tab['id'],"logo_asso");
 	//url
 	if(!empty($tab['url'])) $set.="url='".mysql_real_escape_string($tab['url'])."', ";
 	//cotisation

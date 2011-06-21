@@ -21,8 +21,8 @@ catch (Exception $e)
      // handle error here however you'd like
 }
 
-$thumb->adaptiveResize(135, 150);
-$thumb->cropFromCenter(135, 150);
+$thumb->resize(135, 150);
+//$thumb->cropFromCenter(135, 150);
 $thumb->show();
 
 ?>
