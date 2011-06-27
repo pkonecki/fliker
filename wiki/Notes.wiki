@@ -27,7 +27,8 @@
   * + Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)
   * Vérification : case a cocher pour certain champs (doit être verifier) ex: numayantdroit/certificat med
     * LDAP utilisera cette case
-    * Table de hash champ adherent <--> adherent + date
+    * Table de hash champ adherent <-> adherent + date
+
 ===Paiement===
   * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
     * possibilité de créer un nouveau numéro (carte perdue)
