@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
 include("getChampsAdherents.php");
 include("getAdherent.php");
