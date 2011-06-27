@@ -12,23 +12,22 @@
     * Semaine 22 : 
     * Semaine 23 : 
     * Semaine 24 : 7 fonctions d'ajout/modification
-    * Semaine 25 : Monitoring
-    * Semaine 26 : Fonctions de customisation
+    * Semaine 25 :
+    * Semaine 26 : 
 
   * *Juillet*:
-    * Semaine 27:
-    * Semaine 28: Portail
-    * Semaine 29: Vac
+    * Semaine 27: Monitoring
+    * Semaine 28: Gestion des présences
+    * Semaine 29: Vac / Notes 
     * Semaine 30: Vac
   * *Aout*:
     * Semaine 31: Vac
-    * Semaine 32:
-    * Semaine 33:
-    * Semaine 34:
-    * Semaine 35:
+    * Semaine 32: Tests / Portail
+    * Semaine 33: Tests 
+    * Semaine 34: Tests
+    * Semaine 35: Tests / Fonctions de customisation
  
-    * Documentation
-    * Validation
+    * Documentation (phil)
 
 =Perspectives=
 
