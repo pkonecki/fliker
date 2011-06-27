@@ -397,7 +397,6 @@ $("#toggle_f_search").click(function () {
     });
 </script>
 
-</body></html>
 
 <?php
 //fin else connexion
