@@ -1,8 +1,13 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
+if((strcmp($_SESSION['user'],"") == 0)){
+	print "<p>Vous n'êtes pas connecté</p>";
+	die();
+}
 include("getAdherent.php");
 include_once("getAssociations.php");
+
 getAdherent($_SESSION['user']);
 $tab=getAssociations($_SESSION['uid']);
 if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
@@ -10,7 +15,7 @@ if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
 	die();
 }
 if ($_POST['action'] == 'modification') {
-
+	print '<h2>Fiche Association: Modification</h2>';	
 	print '<FORM id="f_asso_modif" action="index.php?page=3&asso='.$_GET['asso'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	print '<tr><td class="label"><LABEL for ="nom" >Nom</LABEL> : </td><td><INPUT type=text name="nom" id="nom" value="'.$tab[$_GET['asso']]['nom'].'"></td></tr>';
@@ -26,6 +31,7 @@ if ($_POST['action'] == 'modification') {
 
 } else
 if ($_POST['action'] == 'new') {
+	print '<h2>Nouvelle Association</h2>';	
 	print '<FORM id="f_asso_new" action="index.php?page=3" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	print '<tr><td class="label"><LABEL for ="nom" >Nom</LABEL> : </td><td><INPUT type=text name="nom" id="nom" ></td></tr>';
@@ -40,6 +46,7 @@ if ($_POST['action'] == 'new') {
 	
 } else
 if ($_POST['action'] == 'suppression_confirm') {
+	print '<h2>Supprimer Association?</h2>';	
 	print '<FORM action="index.php?page=3" method="POST">
 			<input type="hidden" name="id" value="'.$_GET['asso'].'" />
 			<input type="hidden" name="action" value="suppression" />
@@ -77,12 +84,13 @@ else {
 				
 			}
 			print '</ul>';
-			print '<td colspan=2><FORM action="index.php?page=3" method="POST">
+			if($_SESSION['privilege']==="1") print '<td colspan=2><FORM action="index.php?page=3" method="POST">
 			<input type="hidden" name="action" value="new" />
 			<INPUT type="submit" value="Nouvelle">
 			</FORM></td>';
 			
 		} else {
+			print '<h2>Fiche Association</h2>';	
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['asso']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['asso']]['description'].'</td></tr>';
@@ -92,16 +100,39 @@ else {
 			$photo="includes/thumb.php?folder=logo_asso&file=".$_GET['asso'].".jpg";
 			print '<tr><TD>'.$row[description].'</TD><TD><img src="'.$photo.'" ></TD></tr>';		
 			print '<tr>';
-			print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+			print '<td colspan="2"><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />
 					<INPUT type="submit" value="Modifier">
 					</FORM></td>';
-			print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+			print '</tr>';
+					
+			if($_SESSION['privilege']==="1") print '<tr><td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_confirm" />
 					<INPUT type="submit" value="Supprimer">
-					</FORM></td>';		
-			print '</tr>';					
+					</FORM></td></tr>';		
+
 			print '</table>';
+			
+			//liste sections de l'asso
+			include('getSectionsByAsso.php');
+			$sections=getSectionsByAsso($_GET['asso']);
+			print '<h3>Sections de l\'association</h3>';	
+			print '<ul>';
+			foreach($sections as $section){
+				print '<li>
+				<FORM action="index.php?page=4&section='.$section['id'].'" method="POST">
+					<input type="hidden" name="action" value="suppression_confirm" />
+					<a href=index.php?page=4&section='.$section['id'].'>'.$section['nom'].'</a>
+					<INPUT type="image" src="images/unchecked.gif" value="submit">
+					</FORM></li>';
+				
+			}
+			print '</ul>';
+			print '<td colspan=2><FORM action="index.php?page=4" method="POST">
+			<input type="hidden" name="action" value="new" />
+			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
+			<INPUT type="submit" value="Nouvelle">
+			</FORM></td>';
 			
 		}
 	
