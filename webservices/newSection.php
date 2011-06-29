@@ -12,11 +12,15 @@ function newSection($tab){
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
 	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
-	
-	
 	include("opendb.php");
 	$query = "INSERT INTO section ".$colonnes." VALUES ".$set." ";
 	//echo $query;
+	$results = mysql_query($query);
+	if (!$results){ 
+		echo mysql_error();
+		die();
+	}
+	$query = "INSERT INTO asso_section (id_asso,id_sec) VALUES (".$tab['id_asso'].",".mysql_insert_id().")";
 	$results = mysql_query($query);
 	if (!$results){ 
 		echo mysql_error();

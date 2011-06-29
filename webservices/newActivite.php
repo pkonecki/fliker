@@ -5,11 +5,13 @@ function newActivite($tab){
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die('il faut un nom!');
 	$set = "(";
-	$colonnes="(nom,description,url)";
+	$colonnes="(nom,description,id_sec,url)";
 	//nom
 	$set.="'".mysql_real_escape_string($tab['nom'])."', ";
 	//Description
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
+	//id_sec
+	$set.="'".mysql_real_escape_string($tab['id_sec'])."', ";
 	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
 	

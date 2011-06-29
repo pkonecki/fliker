@@ -3,10 +3,21 @@
 function getSections($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
-			$query = "SELECT * FROM `section` ";
+			$query = "SELECT A.id id_asso, A.nom nom_asso, S.* 
+						FROM section S, association A, asso_section HS
+						WHERE A.id=HS.id_asso
+						AND HS.id_sec=S.id ";
 		} else {
 			if (!empty($userid)) {
-				$query = "SELECT * FROM `section` S, `resp_section` R WHERE `id_adh` = '".$userid."' AND R.id_sec = S.id";
+				$query = "SELECT A.id id_asso, A.nom nom_asso, S.* 
+						FROM section S, association A, asso_section HS
+						WHERE A.id=HS.id_asso
+						AND HS.id_sec=S.id
+							AND
+							(
+							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '".$userid."')
+							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
+							)";
 			}
 			else return;
 		}

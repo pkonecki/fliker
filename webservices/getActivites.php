@@ -3,10 +3,24 @@
 function getActivites($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
-			$query = "SELECT * FROM `activite`  ";
+			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
+						FROM activite AC, section S, association A, asso_section HS
+						WHERE AC.id_sec=S.id
+						AND A.id=HS.id_asso
+						AND HS.id_sec=S.id";
 		} else {
 			if (!empty($userid)) {
-				$query = "SELECT * FROM `activite` A, `resp_act` R WHERE id_adh = '".$userid."' AND R.id_act = A.id";
+				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
+						FROM activite AC, section S, association A, asso_section HS
+						WHERE AC.id_sec=S.id
+						AND A.id=HS.id_asso
+						AND HS.id_sec=S.id
+							AND
+							(
+							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '".$userid."')
+							OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '".$userid."')
+							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
+							)";
 			}
 			else return;
 		}
