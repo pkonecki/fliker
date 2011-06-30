@@ -3,6 +3,7 @@
 function modifSection($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
+	include("opendb.php");
 	//$set = "";
 	//nom
 	if(!empty($tab['nom'])) $set.="nom='".mysql_real_escape_string($tab['nom'])."', ";
@@ -14,7 +15,6 @@ function modifSection($tab){
 	//url
 	if(!empty($tab['url'])) $set.="url='".mysql_real_escape_string($tab['url'])."', ";
 	if ($set==="") return;
-	include("opendb.php");
 	$set=substr($set,0,-2);
 	$query = "UPDATE section SET ".$set." WHERE id=".$tab['id']."";
 	//echo $query;

@@ -4,6 +4,7 @@ function newSection($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die('il faut un nom!');
+	include("opendb.php");
 	$set = "(";
 	$colonnes="(nom,description,url)";
 	//nom
@@ -12,7 +13,6 @@ function newSection($tab){
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
 	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
-	include("opendb.php");
 	$query = "INSERT INTO section ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);

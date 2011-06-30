@@ -4,6 +4,7 @@ function newAsso($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die();
+	include("opendb.php");
 	$set = "(";
 	$colonnes="(nom,description,url,cotisation)";
 	//nom
@@ -14,7 +15,6 @@ function newAsso($tab){
 	$set.="'".mysql_real_escape_string($tab['url'])."', ";
 	//cotisation
 	$set.="'".mysql_real_escape_string($tab['cotisation'])."') ";
-	include("opendb.php");
 	$query = "INSERT INTO association ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);
