@@ -14,10 +14,6 @@ if ($_POST['action'] == 'modification') {
 	print '<FORM id="f_creneau_modif" action="index.php?page=6&creneau='.$_GET['creneau'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	print '<tr><td class="label"><LABEL for ="nom" >Nom</LABEL> : </td><td><INPUT type=text name="nom" id="nom" value="'.$tab[$_GET['creneau']]['nom'].'"></td></tr>';
-	print '<tr><td class="label"><LABEL for ="description" >Description</LABEL> : </td><td><TEXTAREA rows=3 cols=25 name="description" id="description">'.$tab[$_GET['creneau']]['description'].'</TEXTAREA></td></tr>';
-	print '<tr><td class="label"><LABEL for ="logo_creneau" >Logo</LABEL> : </td><td><INPUT type=file name="logo_creneau" ></td></tr>';
-	print '<tr><td class="label"><LABEL for ="url" >URL</LABEL> : </td><td><INPUT type=text name="url" id="url" value="'.$tab[$_GET['creneau']]['url'].'"></td></tr>';
-	print '<tr><td class="label"><LABEL for ="cotisation" >Cotisation</LABEL> : </td><td><INPUT type=text name="cotisation" id="cotisation" value="'.$tab[$_GET['creneau']]['cotisation'].'"></td></tr>';
 	print '<input type="hidden" name="action" value="submitted" />';
 	print '<input type="hidden" name="id" value="'.$tab[$_GET['creneau']]['id'].'" />';
 	print '<tr><td colspan="2"><INPUT type="submit" value="Envoyer" ></td></tr>';
@@ -73,7 +69,7 @@ else {
 			print '<ul>';
 			$tab=getCreneaux($_SESSION['uid']);
 			foreach($tab as $creneau){
-				print '<li><a href=index.php?page=6&creneau='.$creneau['id'].'>'.$creneau['nom'].'</a></li>';
+				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
 				
 			}
 			print '</ul>';
@@ -88,9 +84,6 @@ else {
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['creneau']]['description'].'</td></tr>';
 			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['creneau']]['url'].'</td></tr>';		
 			print '<tr><td class="label">Cotisation : </td><td>'.$tab[$_GET['creneau']]['cotisation'].'</td></tr>';
-			$_SESSION['auth_thumb']='true';
-			$photo="includes/thumb.php?folder=logo_creneau&file=".$_GET['creneau'].".jpg";
-			print '<tr><TD>'.$row[description].'</TD><TD><img src="'.$photo.'" ></TD></tr>';		
 			print '<tr>';
 			print '<td><FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />

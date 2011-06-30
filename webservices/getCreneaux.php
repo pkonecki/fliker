@@ -3,7 +3,7 @@
 function getCreneaux($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
-			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre 
+			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre
 						FROM activite AC, creneau CR, section S, association A, asso_section HS
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
@@ -11,7 +11,7 @@ function getCreneaux($userid){
 						AND HS.id_sec=S.id ";
 		} else {
 			if (!empty($userid)) {
-				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre 
+				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre , CR.fin fin_cre
 						FROM activite AC, creneau CR, section S, association A, asso_section HS
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
