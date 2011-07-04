@@ -11,9 +11,11 @@ $header = '
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-timepicker.css" />
   <link rel="stylesheet" type="text/css" href="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.css" />
   <script type="text/javascript" src="./includes/js/jquery.js"></script>
   <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.ui.timepicker.js"></script>
  </head>
  <body>
 <h1>Fliker</h1> ';

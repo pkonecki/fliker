@@ -6,7 +6,7 @@ include_once("getSections.php");
 getAdherent($_SESSION['user']);
 $tab=getSections($_SESSION['uid']);
 if(isset($_GET['section']) && !isset($tab[$_GET['section']])){
-	print '<p>Vous n"avez pas accès à cette page!</p>';
+	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
 if ($_POST['action'] == 'modification') {
@@ -69,10 +69,10 @@ else {
 		
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
+		$tab=getSections($_SESSION['uid']);
 		if(empty($_GET['section'])){
 			print '<h2>Vos sections</h2>';	
 			print '<ul>';
-			$tab=getSections($_SESSION['uid']);
 			foreach($tab as $section){
 				print '<li><a href=index.php?page=4&section='.$section['id'].'>'.$section['nom'].'</a></li>';
 			}

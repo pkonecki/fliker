@@ -6,7 +6,7 @@ include_once("getActivites.php");
 getAdherent($_SESSION['user']);
 $tab=getActivites($_SESSION['uid']);
 if(isset($_GET['act']) && !isset($tab[$_GET['act']])){
-	print '<p>Vous n"avez pas accès à cette page!</p>';
+	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
 if ($_POST['action'] == 'modification') {
@@ -68,19 +68,17 @@ else {
 		
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
+		$tab=getActivites($_SESSION['uid']);
 		if(empty($_GET['act'])){
 			print '<h2>Vos Activités</h2>';	
 			print '<ul>';
-			$tab=getActivites($_SESSION['uid']);
+
 			foreach($tab as $act){
 				print '<li><a href=index.php?page=5&act='.$act['id'].'>'.$act['nom'].'</a></li>';
 				
 			}
 			print '</ul>';
-			print '<td colspan=2><FORM action="index.php?page=5" method="POST">
-			<input type="hidden" name="action" value="new" />
-			<INPUT type="submit" value="Nouvelle">
-			</FORM></td>';
+
 			
 		} else {
 			print '<h2>Fiche Activité</h2>';
@@ -98,6 +96,25 @@ else {
 					</FORM></td>';	
 			print '</tr>';					
 			print '</table>';
+			//Liste de créneaux
+			include('getCreneauxByActivite.php');
+		    $crens = getCreneauxByActivite($_GET['act']);
+			print '<h2>Créneaux de l\'activité</h2>';	
+			print '<ul>';
+			foreach($crens as $creneau){
+				print '<FORM action="index.php?page=6&creneau='.$creneau['id'].'" method="POST">
+					<input type="hidden" name="action" value="suppression_confirm" />
+				<li><a href=index.php?page=6&creneau='.$creneau['id'].'>'.$creneau['jour'].' - '.$creneau['debut'].' - '.$creneau['fin'].'</a>
+				<INPUT type="image" src="images/unchecked.gif" value="submit">
+					</FORM></li>';
+				
+			}
+			print '</ul>';
+			print '<td colspan=2><FORM action="index.php?page=6" method="POST">
+			<input type="hidden" name="action" value="new" />
+			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
+			<INPUT type="submit" value="Nouveau">
+			</FORM></td>';
 			
 		}
 	
