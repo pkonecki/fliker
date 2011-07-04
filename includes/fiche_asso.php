@@ -11,7 +11,7 @@ include_once("getAssociations.php");
 getAdherent($_SESSION['user']);
 $tab=getAssociations($_SESSION['uid']);
 if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
-	print '<p>Vous n"avez pas accès à cette page!</p>';
+	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
 if ($_POST['action'] == 'modification') {
@@ -75,10 +75,11 @@ else {
 		
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
+		$tab=getAssociations($_SESSION['uid']);
 		if(empty($_GET['asso'])){
 			print '<h2>Vos associations</h2>';	
 			print '<ul>';
-			$tab=getAssociations($_SESSION['uid']);
+
 			foreach($tab as $asso){
 				print '<li><a href=index.php?page=3&asso='.$asso['id'].'>'.$asso['nom'].'</a></li>';
 				

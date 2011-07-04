@@ -71,11 +71,6 @@ include("../includes/paths.php");
 include("getChampsAdherents.php");
 include("saveImage.php");
 require("class.imageconverter.php");
-function get_extension($nom) {
-	$nom = explode(".", $nom);
-	$nb = count($nom);
-	return strtolower($nom[$nb-1]);
-}
 $dest_dossier = "../photos";
 
 	if ($_POST['action'] == 'submitted') {
@@ -158,7 +153,7 @@ $dest_dossier = "../photos";
 				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="'.$row[nom].'" '.$format.' ></td></tr>';
 			else
 			if($row[type]==='date')
-				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.' ></td></tr>';
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text readonly name="'.$row[nom].'" id ="datepicker" '.$format.' ></td></tr>';
 			else
 			if($row[type]==='tinyint')
 				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'></td></tr>';
