@@ -16,12 +16,12 @@
     * Semaine 26 : 
 
   * *Juillet*:
-    * Semaine 27: Monitoring
-    * Semaine 28: Gestion des présences
-    * Semaine 29: Vac / Notes 
-    * Semaine 30: Vac
+    * Semaine 27: Ajout Responsable/Suppléments (changement UML supplément)
+    * Semaine 28: Ajout adhésion/Paiements
+    * Semaine 29: Vac / Gestion des présences
+    * Semaine 30: Vac / Monitoring
   * *Aout*:
-    * Semaine 31: Vac
+    * Semaine 31: Vac / Notes
     * Semaine 32: Tests / Portail
     * Semaine 33: Tests 
     * Semaine 34: Tests
