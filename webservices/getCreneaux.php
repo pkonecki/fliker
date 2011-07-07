@@ -8,7 +8,8 @@ function getCreneaux($userid){
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
 						AND A.id=HS.id_asso
-						AND HS.id_sec=S.id ";
+						AND HS.id_sec=S.id 
+						ORDER BY nom_sec";
 		} else {
 			if (!empty($userid)) {
 				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre , CR.fin fin_cre, CR.lieu lieu
@@ -24,6 +25,7 @@ function getCreneaux($userid){
 							OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '".$userid."')
 							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
 							)
+							ORDER BY nom_sec
 						";
 			}
 			else return;

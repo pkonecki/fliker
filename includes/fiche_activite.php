@@ -127,25 +127,3 @@ else {
 
 
 ?>
-<script type="text/javascript">
-function populatectlSection() {
-   
-    $.getJSON('includes/sections.php', function(data) {
-		  var items = [];
-		
-		  $.each(data, function(key, val) {
-		    $('#ctlSection').append('<option id="' + key + '">' + val + '</option>');
-		  });
-		
-
-    });
-
-}
-
-$(document).ready(function() {
-	
-	populatectlSection();
-
-	
-});
-</script>
