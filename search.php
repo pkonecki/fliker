@@ -119,13 +119,13 @@ include("getChampsAdherents.php");
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau[id_sec]][nom]=$creneau[nom_sec];
-		$tab[$creneau[id_sec]][id]=$creneau[id_sec];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][nom]=$creneau[nom_act];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][id]=$creneau[id_act];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
+		$tab[$creneau[nom_sec]][nom]=$creneau[nom_sec];
+		$tab[$creneau[nom_sec]][id]=$creneau[id_sec];
+		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][nom]=$creneau[nom_act];
+		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][id]=$creneau[id_act];
+		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
+		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
+		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
 	}
 
 	foreach($tab as $section){
@@ -135,7 +135,7 @@ include("getChampsAdherents.php");
 			print '<li><input type="checkbox" name="act'.$act[id].'" '.checked('act'.$act[id],$act[id]).' value="'.$act[id].'"><label>'.$act[nom].'</label>';
 			print '<ul id="creneaux">';
 			foreach($act[creneaux] as $cre){
-				print '<li><input type="checkbox" name="cre'.$cre[id].'" '.checked('cre'.$cre[id],$cre[id]).' value="'.$cre[id].'"><label>'.$cre[jour].' - '.$cre[debut].'</label>';
+				print '<li><input type="checkbox" name="cre'.$cre[id].'" '.checked('cre'.$cre[id],$cre[id]).' value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).'</label>';
 			}
 			print '</ul>';
 		}

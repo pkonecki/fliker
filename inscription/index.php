@@ -14,53 +14,7 @@ $header = '
 
 	<script>
 
-		  $(document).ready(function(){
-		  	$.extend($.validator.messages, {
-		        required: "Ce champs est requis",
-		        number: "Veuillez entrer un numéro correct"
-
-    		});
-
-			$("#f_inscription").validate({
-
-			rules : {
-				email: {
-	                required: true,
-	                email: true,
-	                remote: "emails.php"
-            	},
-            	categorie: "required"
-
-			},
-			messages: {
-				email: {
-					required: "Ce champs est requis",
-					email: "Entrez une adresse email valide",
-					remote: "L\'adresse email est déjà utilisée"
-					},
-				categorie : "Ce champs est requis"
-
-
-			},
-			errorPlacement: function(error, element) {
-	            if ( element.is(":radio") )
-	                error.appendTo( element.parent() );
-	          	else
-                	error.appendTo( element.parent() );
-        	},
-        	success: function(label) {
-            	// set   as text for IE
-            	label.html(" ").addClass("checked");
-	        }
-
-			});
-		  });
-		  $(function() {
-			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  });
-
-	});
-
-	</script>
+		  	</script>
  </head>
  <body>
 <h1>Inscription</h1> ';
@@ -100,6 +54,9 @@ $dest_dossier = "../photos";
 					print '<TD>'.$row[description].'</TD><TD>'.$_FILES[$row[nom]][name].'</TD>';
 					saveImage($_SESSION['email'],$row[nom]);
 				}
+				if($row[type]==="select")
+					print '<TD>'.$row[description].'</TD><TD>'.$_SESSION[$row[nom]].'</TD>';
+
 
 			}
 			print '</TR>';
@@ -160,6 +117,9 @@ $dest_dossier = "../photos";
 			else
 			if($row[type]==='file')
 				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=file name='.$row[nom].' '.$format.'></td></tr>';
+			else
+			if($row[type]==='select')
+				print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><SELECT name='.$row[nom].' id="'.$row[nom].'" '.$format.'></SELECT></td></tr>';
 
 			}
 		}
@@ -175,3 +135,70 @@ $dest_dossier = "../photos";
 
 
 ?>
+<script type="text/javascript">
+function populatectlStatuts() {
+   
+    $.getJSON('../includes/statuts.php', function(data) {
+		  var items = [];
+		
+		  $.each(data, function(key, val) {
+		    $('#statut').append('<option value="' + val + '">' + key + '</option>');
+		  });
+		
+
+    });
+
+}
+
+$(document).ready(function() {
+	
+	populatectlStatuts();
+
+
+		  	$.extend($.validator.messages, {
+		        required: "Ce champs est requis",
+		        number: "Veuillez entrer un numéro correct"
+
+    		});
+
+			$("#f_inscription").validate({
+
+			rules : {
+				email: {
+	                required: true,
+	                email: true,
+	                remote: "emails.php"
+            	},
+            	categorie: "required"
+
+			},
+			messages: {
+				email: {
+					required: "Ce champs est requis",
+					email: "Entrez une adresse email valide",
+					remote: "L\'adresse email est déjà utilisée"
+					},
+				categorie : "Ce champs est requis"
+
+
+			},
+			errorPlacement: function(error, element) {
+	            if ( element.is(":radio") )
+	                error.appendTo( element.parent() );
+	          	else
+                	error.appendTo( element.parent() );
+        	},
+        	success: function(label) {
+            	// set   as text for IE
+            	label.html(" ").addClass("checked");
+	        }
+
+			});
+		  });
+		  $(function() {
+			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  });
+
+	});
+
+
+</script>
