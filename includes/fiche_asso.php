@@ -5,9 +5,9 @@ if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 	die();
 }
-include("getAdherent.php");
-include_once("getAssociations.php");
-
+include_once("Adherent.php");
+include_once("Asso.php");
+include_once("Section.php");
 getAdherent($_SESSION['user']);
 $tab=getAssociations($_SESSION['uid']);
 if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
@@ -60,17 +60,14 @@ if ($_POST['action'] == 'suppression_confirm') {
 
 else {
 	if ($_POST['action'] === 'submitted'){
-		include("modifAsso.php");
 		modifAsso($_POST);
 		
 	}
 	if ($_POST['action'] === 'submitted_new'){
-		include("newAsso.php");
 		newAsso($_POST);
 		
 	}
 	if ($_POST['action'] === 'suppression'){
-		include("delAsso.php");
 		delAsso($_POST['id']);
 		
 	}
@@ -115,7 +112,6 @@ else {
 			print '</table>';
 			
 			//liste sections de l'asso
-			include('getSectionsByAsso.php');
 			$sections=getSectionsByAsso($_GET['asso']);
 			print '<h3>Sections de l\'association</h3>';	
 			print '<ul>';

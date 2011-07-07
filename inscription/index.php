@@ -22,7 +22,7 @@ $header = '
 $footer = '</body></html>';
 
 include("../includes/paths.php");
-include("getChampsAdherents.php");
+include("Adherent.php");
 include("saveImage.php");
 require("class.imageconverter.php");
 $dest_dossier = "../photos";
@@ -78,8 +78,7 @@ $dest_dossier = "../photos";
 
 
 	} else if ($_POST['action'] == 'confirmed'){
-		include("newUser.php");
-		newUser($_SESSION);
+		newAdherent($_SESSION);
 		print $header;
 		print "<h2>Félicitations!</h2> Votre inscription a été enregistrée! Veuillez vérifier vos email pour valider votre inscription!";
 		print $footer;
