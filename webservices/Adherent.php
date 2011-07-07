@@ -1,7 +1,6 @@
 <?php
 
-function newUser($tab){
-	//include("normalTask_getChampsAdherents.php");
+function newAdherent($tab){
 	$champs = getChampsAdherents();
 	$colonnes ="(";
 	$values ="(";
@@ -61,7 +60,7 @@ function newUser($tab){
 
 }
 
-require_once("getChampsAdherents.php");
+
 function getAdherent($user){
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 
@@ -98,7 +97,7 @@ function getChampsAdherents(){
 	return $champs;
 }
 
-function modifUser($tab){
+function modifAdherent($tab){
 	require("class.imageconverter.php");
 	require("saveImage.php");
 	$champs = getChampsAdherents();
