@@ -1,8 +1,9 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include("getAdherent.php");
-include_once("getSections.php");
+include_once("Adherent.php");
+include_once("Section.php");
+include_once("Activite.php");
 getAdherent($_SESSION['user']);
 $tab=getSections($_SESSION['uid']);
 if(isset($_GET['section']) && !isset($tab[$_GET['section']])){
@@ -54,17 +55,14 @@ if ($_POST['action'] == 'suppression_confirm') {
 
 else {
 	if ($_POST['action'] === 'submitted'){
-		include("modifSection.php");
 		modifSection($_POST);
 		
 	}
 	if ($_POST['action'] === 'submitted_new'){
-		include("newSection.php");
 		newSection($_POST);
 		
 	}
 	if ($_POST['action'] === 'suppression'){
-		include("delSection.php");
 		delSection($_POST['id']);
 		
 	}
@@ -97,7 +95,6 @@ else {
 			print '</tr>';					
 			print '</table>';
 			//Liste d'activités
-			include('getActivitesBySection.php');
 		    $acts = getActivitesBySection($_GET['section']);
 		    print '<h3>Activités de la section</h3>';	
 			print '<ul>';

@@ -1,8 +1,7 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include("getChampsAdherents.php");
-include("getAdherent.php");
+include_once("Adherent.php");
 getAdherent($_SESSION['user']);
 
 
@@ -117,8 +116,8 @@ print $script;
 	}
 	else {
 		if ($_POST['action'] == 'submitted'){
-			include("modifUser.php");
-			modifUser($_POST);
+
+			modifAdherent($_POST);
 			getAdherent($_SESSION['user']);
 		}
 		if(!(strcmp($_SESSION['user'],"") == 0)){

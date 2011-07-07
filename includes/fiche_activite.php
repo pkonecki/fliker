@@ -1,8 +1,9 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include("getAdherent.php");
-include_once("getActivites.php");
+include_once("Adherent.php");
+include_once("Activite.php");
+include_once('Creneau.php');
 getAdherent($_SESSION['user']);
 $tab=getActivites($_SESSION['uid']);
 if(isset($_GET['act']) && !isset($tab[$_GET['act']])){
@@ -53,17 +54,14 @@ if ($_POST['action'] == 'suppression_confirm') {
 
 else {
 	if ($_POST['action'] === 'submitted'){
-		include("modifActivite.php");
 		modifActivite($_POST);
 		
 	}
 	if ($_POST['action'] === 'submitted_new'){
-		include("newActivite.php");
 		newActivite($_POST);
 		
 	}
 	if ($_POST['action'] === 'suppression'){
-		include("delActivite.php");
 		delActivite($_POST['id']);
 		
 	}
@@ -97,7 +95,6 @@ else {
 			print '</tr>';					
 			print '</table>';
 			//Liste de créneaux
-			include('getCreneauxByActivite.php');
 		    $crens = getCreneauxByActivite($_GET['act']);
 			print '<h2>Créneaux de l\'activité</h2>';	
 			print '<ul>';

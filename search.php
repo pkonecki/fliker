@@ -51,8 +51,8 @@ function multiselected($post,$val){
 	return "";
 }
 
-include("getCreneaux.php");
-include("getChampsAdherents.php");
+include("Creneau.php");
+include("Adherent.php");
 
 	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;

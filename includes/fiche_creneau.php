@@ -1,8 +1,8 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include("getAdherent.php");
-include_once("getCreneaux.php");
+include_once("Adherent.php");
+include_once("Creneau.php");
 function selected($post,$val,$tab){
 	if ($tab[$_GET['creneau']][$post]===$val) {
 		return "selected";
@@ -79,17 +79,14 @@ if ($_POST['action'] == 'suppression_confirm') {
 
 else {
 	if ($_POST['action'] === 'submitted'){
-		include("modifCreneau.php");
 		modifcreneau($_POST);
 		
 	}
 	if ($_POST['action'] === 'submitted_new'){
-		include("newCreneau.php");
 		newcreneau($_POST);
 		
 	}
 	if ($_POST['action'] === 'suppression'){
-		include("delCreneau.php");
 		delcreneau($_POST['id']);
 		
 	}
