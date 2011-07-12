@@ -7,18 +7,25 @@ function newAdherent($tab){
 	include("opendb.php");
 	foreach($champs as $row){
 		if($row[inscription]==1){
-			$colonnes .= $row[nom].",";
-			if($row[type]==='varchar')
+			
+			if($row[type]==='varchar'){
+				$colonnes .= $row[nom].",";
 				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
+			}
 			else
-			if($row[type]==='date')
+			if($row[type]==='date'){
+				$colonnes .= $row[nom].",";
 				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
+			}
 			else
 			if($row[type]==='tinyint'){
+				$colonnes .= $row[nom].",";
 				if ($tab[$row[nom]]==='on') $values .= "1,";
 				else $values .= "0,";
-			}
+			} 
+			else
 			if($row[type]==='file'){
+			$colonnes .= $row[nom].",";
 				if($tab[$row[nom]][name]===""){
 					$values .= "0,";
 				} else {
@@ -27,7 +34,10 @@ function newAdherent($tab){
 
 
 			}
-
+			if($row[type]==='select'){
+				$colonnes .= 'id_'.$row[nom].",";
+				$values .= "'".mysql_real_escape_string($tab['id_'.$row[nom]])."',";
+			}
 		}
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
@@ -62,25 +72,26 @@ function newAdherent($tab){
 
 
 function getAdherent($user){
-	if(!(strcmp($_SESSION['user'],"") == 0)){
+		$return = array();
+		$tab = getChampsAdherents();
+		include("opendb.php");
 
+		$query = "SELECT * FROM `adherent` WHERE `id` = '".$user."'";
 
-	$tab = getChampsAdherents();
-	include("opendb.php");
-
-	$query = "SELECT * FROM `adherent` WHERE `email` = '".$user."'";
-
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$row = mysql_fetch_assoc($results);
-	foreach($tab as $champ){
-		if ($champ[user_editable]==1) {
-			$_SESSION[$champ['nom']]=$row[$champ['nom']];
+		$results = mysql_query($query);
+		if (!$results) echo mysql_error();
+		$row = mysql_fetch_assoc($results);
+		foreach($tab as $champ){
+				if($champ['type']==='select'){ 
+					$return[$champ['nom']]=$row['id_'.$champ['nom']];
+				}
+				else {
+					$return[$champ['nom']]=$row[$champ['nom']];
+				}
 		}
-	}
-	include("closedb.php");
-
-	}
+		include("closedb.php");
+	
+	return $return;
 }
 
 function getChampsAdherents(){
@@ -126,7 +137,9 @@ function modifAdherent($tab){
 				}
 
 
-			}
+			} else
+			if($row[type]==='select')
+				$set .= "'".mysql_real_escape_string($tab['id_'.$row[nom]])."',";
 
 		}
 	}
@@ -142,5 +155,85 @@ function modifAdherent($tab){
 	include("closedb.php");
 
 }
+
+function getAdherents(){
+	$query = "SELECT * FROM adherent ORDER BY nom ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+}
+
+function getStatuts(){
+	$query = "SELECT * FROM statut ORDER BY nom ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row['nom'];
+	}
+	include("closedb.php");
+	return $tab;
+	
+	
+}
+
+
+
+function addSup($tb,$id_tb,$id_sup_fk,$type,$valeur,$id_statut){
+	//Add sup
+	$query = "INSERT INTO sup(type,valeur,id_statut) VALUES ('$type','$valeur','$id_statut')";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$id_sup = mysql_insert_id();
+	if($id_sup_fk==0){
+		//Determiner max tb.id_sup_fk + 1
+		$req1="SELECT  greatest(max(A.id_sup_fk), max(S.id_sup_fk) , max(AC.id_sup_fk), max(C.id_sup_fk) ) as id_sup_fk  FROM association A,section S,activite AC,creneau C "; 
+		$res1=mysql_query($req1); 
+		if (!$res1) echo mysql_error();
+		$id_sup_fk=mysql_result($res1,0,"id_sup_fk");
+		$id_sup_fk++;
+		echo "NEW SUP FK = $id_sup_fk";
+		//Update asso.id_sup_fk
+		$req2 = "UPDATE $tb SET id_sup_fk='$id_sup_fk' WHERE id='$id_tb'";
+		$res2=mysql_query($req2); 
+		if (!$res2) echo mysql_error();
+		
+	} 
+	//Ajouter sup_fk avec id_sup_fk déterminé
+	$req3="INSERT INTO sup_fk (id,id_sup) VALUES ('$id_sup_fk','$id_sup')";
+	$res3=mysql_query($req3); 
+	if (!$res3) echo mysql_error();
+	include("closedb.php");
+}
+
+function delSup($id){
+	$query = "DELETE FROM sup WHERE id='$id'";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+}
+
+function getSup($tb,$id_asso){
+	$query = "SELECT S.*,SF.id id_sup_fk, ST.nom statut FROM sup S ,sup_fk SF , $tb A, statut ST WHERE A.id_sup_fk=SF.id AND SF.id_sup=S.id AND S.id_statut=ST.id AND A.id='$id_asso'  ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+}
+
 
 ?>

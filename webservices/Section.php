@@ -120,5 +120,35 @@ function modifSection($tab){
 	include("closedb.php");
 
 }
+function ajoutResponsableSec($id_sec,$id_adh){
+	include("opendb.php");
+	$query = "INSERT into resp_section(id_sec,id_adh) VALUES ('$id_sec.','$id_adh')";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+	
+}
+function delRespSec($id_sec,$id_adh){
+	include("opendb.php");
+	$query = "DELETE FROM resp_section WHERE id_sec='$id_sec' AND id_adh='$id_adh' ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+}
 
+function getResponsablesSec($id_sec){
+
+	$query = "SELECT * FROM `adherent` A ,resp_section RA WHERE A.id=RA.id_adh AND RA.id_sec='$id_sec'  ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+	
+	
+}
 ?>

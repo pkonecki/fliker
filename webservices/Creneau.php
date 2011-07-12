@@ -124,4 +124,36 @@ function modifCreneau($tab){
 
 }
 
+function ajoutResponsableCre($id_cre,$id_adh){
+	include("opendb.php");
+	$query = "INSERT into resp_cren(id_cre,id_adh) VALUES ('$id_cre.','$id_adh')";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+	
+}
+function delRespCre($id_cre,$id_adh){
+	include("opendb.php");
+	$query = "DELETE FROM resp_cren WHERE id_cre='$id_cre' AND id_adh='$id_adh' ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+}
+
+function getResponsablesCre($id_cre){
+
+	$query = "SELECT * FROM `adherent` A ,resp_cren RA WHERE A.id=RA.id_adh AND RA.id_cre='".$id_cre."'  ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+	
+	
+}
+
 ?>

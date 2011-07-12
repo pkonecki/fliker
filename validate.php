@@ -118,7 +118,7 @@ else {
 			  	<tr><td>Vérifiez votre mot de passe: </td><td><input name="password_confirm" type="password" id="password_confirm" size="25"></td></tr>
 			  	<input type="hidden" name="action" value="submitted" />
 			  	<input type="hidden" name="id" value="'.$row[id].'" />
-			  	<tr><td><input type="submit" value="Envoyer!"/></td></tr>
+			  	<tr><td colspan=2 ><input type="submit" value="Envoyer!"/></td></tr>
 			  	</table>
 				</form>
 

@@ -69,6 +69,8 @@ if($_POST['submit']){
 					$_SESSION['user'] = $username;
 
 					foreach($tab as $champ){
+						if($champ['type']==='select') $_SESSION[$champ['nom']]=$row['id_'.$champ['nom']];
+						else
 						$_SESSION[$champ['nom']]=$row[$champ['nom']];
 
 					}
