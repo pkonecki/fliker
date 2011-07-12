@@ -12,9 +12,7 @@ function newAsso($tab){
 	//Description
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
 	//url
-	$set.="'".mysql_real_escape_string($tab['url'])."', ";
-	//cotisation
-	$set.="'".mysql_real_escape_string($tab['cotisation'])."') ";
+	$set.="'".mysql_real_escape_string($tab['url'])."') ";
 	$query = "INSERT INTO association ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);
@@ -75,8 +73,6 @@ function modifAsso($tab){
 	 saveImage($tab['id'],"logo_asso");
 	//url
 	if(!empty($tab['url'])) $set.="url='".mysql_real_escape_string($tab['url'])."', ";
-	//cotisation
-	if(!empty($tab['cotisation'])) $set.="cotisation='".mysql_real_escape_string($tab['cotisation'])."', ";
 	if ($set==="") return;
 	$set=substr($set,0,-2);
 	$query = "UPDATE association SET ".$set." WHERE id=".$tab['id']."";
@@ -86,4 +82,41 @@ function modifAsso($tab){
 	include("closedb.php");
 
 }
+
+function ajoutResponsableAsso($id_asso,$id_adh){
+	include("opendb.php");
+	$query = "INSERT into resp_asso(id_asso,id_adh) VALUES ('$id_asso.','$id_adh')";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+	
+}
+function delRespAsso($id_asso,$id_adh){
+	include("opendb.php");
+	$query = "DELETE FROM resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+}
+
+function getResponsablesAsso($id_asso){
+
+	$query = "SELECT * FROM adherent A ,resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso'  ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+	
+	
+}
+
+
+
+
+
 ?>

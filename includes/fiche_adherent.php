@@ -2,7 +2,15 @@
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
 include_once("Adherent.php");
-getAdherent($_SESSION['user']);
+include_once("Select.php");
+if (!isset($_GET['adh'])) {
+	$id_adh =$_SESSION['uid'];
+	$edit=true;
+}
+else {
+	$id_adh=$_GET['adh'];
+}
+$adh = getAdherent($id_adh);
 
 
 $dest_dossier = "../photos";
@@ -62,7 +70,7 @@ $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script
 	</script>';
 
 print $script;
-	if ($_POST['action'] == 'modification') {
+	if ($_POST['action'] == 'modification' && $edit) {
 		$tab = getChampsAdherents();
 		print '<FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
 		print '<table border=0>';
@@ -71,7 +79,7 @@ print $script;
 				$format ="class=\"$row[format]\"";
 				if ($row[required]==1) $format ="class=\"required\"";
 				if($row[format] === "categorie"){
-					if($_SESSION[$row['nom']]==='M'){
+					if($adh[$row['nom']]==='M'){
 						$homme='checked';
 						$femme='';
 					} else {
@@ -89,17 +97,26 @@ print $script;
 				}
 				else
 				if($row[type]==='varchar')
-					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="'.$row[nom].'" '.$format.' value="'.$_SESSION[$row['nom']].'"></td></tr>';
+					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="'.$row[nom].'" '.$format.' value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='date')
-					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.'  value="'.$_SESSION[$row['nom']].'"></td></tr>';
+					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='tinyint')
-					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'  value="'.$_SESSION[$row['nom']].'"></td></tr>';
+					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='file')
 					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=file name='.$row[nom].' '.$format.'  ></td></tr>';
-
+				else
+				if($row['type']==='select'){
+					$values = getSelect($row['nom']);
+					
+					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><SELECT name="id_'.$row['nom'].'" id="id_'.$row['nom'].'" '.$format.'>';
+					foreach($values as $key => $value){
+						print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
+					}
+					print '</SELECT></td></tr>';
+				}
 			}
 		}
 		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
@@ -107,18 +124,12 @@ print $script;
 
 		print '</table>';
 		print '</FORM>';
-
-
-
-
-
-
 	}
 	else {
-		if ($_POST['action'] == 'submitted'){
+		if ($_POST['action'] == 'submitted' && $edit){
 
 			modifAdherent($_POST);
-			getAdherent($_SESSION['user']);
+			$adh = getAdherent($id_adh);
 		}
 		if(!(strcmp($_SESSION['user'],"") == 0)){
 
@@ -129,26 +140,29 @@ print $script;
 				if($row[user_viewable]==1){
 					print '<TR>';
 					if($row[type]==="varchar")
-						print '<TD>'.$row[description].'</TD><TD>'.$_SESSION[$row[nom]].'</TD>';
+						print '<TD>'.$row[description].'</TD><TD>'.$adh[$row[nom]].'</TD>';
 
 					if($row[type]==="tinyint"){
-						if ($_SESSION[$row[nom]]==="on")
+						if ($adh[$row[nom]]==="on")
 							print '<TD>'.$row[description].'</TD><TD>Oui</TD>';
 						else
 							print '<TD>'.$row[description].'</TD><TD>Non</TD>';
 					}
 					if($row[type]==='file'){
 						$_SESSION['auth_thumb']='true';
-						$photo="includes/thumb.php?folder=".$row['nom']."&file=".$_SESSION['user'].".jpg";
+						$photo="includes/thumb.php?folder=".$row['nom']."&file=".$adh['email'].".jpg";
 						print '<TD>'.$row[description].'</TD><TD><img src="'.$photo.'" height="150"></TD>';
+					}
+					if($row['type']==="select"){
+						$tab=getSelect($row['nom']);
+						print '<TD>'.$row['description'].'</TD><TD>'.$tab[$adh[$row['nom']]].'</TD>';
 					}
 
 				}
 				print '</TR>';
 			}
 			print '</TABLE>';
-
-			print '<FORM action="index.php?page=1" method="POST">
+			if($edit) print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'modification\' />
 		<INPUT type=\'submit\' value=\'Modifier\'>
 		</FORM>

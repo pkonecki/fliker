@@ -52,7 +52,33 @@ if ($_POST['action'] == 'suppression_confirm') {
 	
 }
 
-else {
+else if ($_POST['action'] == 'suppression_resp_confirm') {
+	print '<h2>Supprimer Responsable?</h2>';
+	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
+			<input type="hidden" name="id_resp" value="'.$_GET['resp'].'" />
+			<input type="hidden" name="action" value="suppression_resp" />
+			<INPUT type="submit" value="Oui">
+			</FORM>';
+	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			<INPUT type="submit" value="Non">
+			</FORM>';
+	
+}
+else if ($_POST['action'] == 'suppression_sup_confirm') {
+	print '<h2>Supprimer Supplément?</h2>';
+	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
+			<input type="hidden" name="id_sup" value="'.$_GET['sup'].'" />
+			<input type="hidden" name="action" value="suppression_sup" />
+			<INPUT type="submit" value="Oui">
+			</FORM>';
+	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+				<INPUT type="submit" value="Non">
+				</FORM>';
+	
+}
+else{
 	if ($_POST['action'] === 'submitted'){
 		modifActivite($_POST);
 		
@@ -63,7 +89,18 @@ else {
 	}
 	if ($_POST['action'] === 'suppression'){
 		delActivite($_POST['id']);
-		
+	}
+	if ($_POST['action'] === 'suppression_resp'){
+		delRespActivite($_POST['id_act'],$_POST['id_resp']);
+	}
+	if ($_POST['action'] === 'new_resp'){
+		ajoutResponsableAct($_POST['id_act'],$_POST['id_resp']);
+	}
+	if ($_POST['action'] === 'suppression_sup'){
+		delSup($_POST['id_sup']);
+	}
+	if ($_POST['action'] === 'new_sup'){
+		addSup("activite",$_POST['id_act'],$_POST['id_sup_fk'],$_POST['type'],$_POST['valeur'],$_POST['id_statut']);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getActivites($_SESSION['uid']);
@@ -112,7 +149,58 @@ else {
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
 			<INPUT type="submit" value="Nouveau">
 			</FORM></td>';
+			//Liste de responsables
+			$resps = getResponsablesAct($_GET['act']);
+			print '<h3>Responsables de l\'activité</h3>';
+			print '<ul>';
+			foreach ($resps as $id => $adh) {
+				print '<FORM action="index.php?page=5&resp='.$id.'&act='.$_GET['act'].'" method="POST">
+					<input type="hidden" name="action" value="suppression_resp_confirm" />
+				<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
+				<INPUT type="image" src="images/unchecked.gif" value="submit">
+					</FORM></li>';
+			}
+			print '</ul>';
+			print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			<input type="hidden" name="action" value="new_resp" />
+			<input type="hidden" name="id_act" value="'.$_GET['act'].'">';
+			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" >';
+			$candidates = getAdherents();
+			foreach ($candidates as $key => $value) {
+				if(!isset($resps[$key])) print '<OPTION value='.$key.' >'.$value['prenom'].' '.$value['nom'].'</OPTION>';
+			}
+			print '<INPUT type="submit" /> ';
+			print '</SELECT>';
+			print '</FORM>';
+			//Liste de suppléments
+			$sups = getSup("activite",$_GET['act']);
+			print '<h3>Suppléments de l\'activité</h3>';
+			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th><th>+/-</th></tr>';
+			foreach ($sups as $id => $sup) {
+				print '<tr><FORM action="index.php?page=5&act='.$id.'&act='.$_GET['act'].'" method="POST">
+					<input type="hidden" name="action" value="suppression_sup_confirm" />
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].'$</td><td>'.$sup['statut'].'</td>
+				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
+					</FORM></tr>';
+			}
 			
+			print '<tr><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			<input type="hidden" name="action" value="new_sup" />
+			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
+			<input type="hidden" name="id_sup_fk" value="'.$tab[$_GET['act']]['id_sup_fk'].'">
+			<td><INPUT type="text" name="type"></INPUT></td>
+			<td><INPUT type="text" name="valeur"></INPUT></td>
+			<td><SELECT name="id_statut">';
+			$status = getStatuts();
+			foreach ($status as $key => $value) {
+				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
+			}
+			
+			print '</SELECT></td>
+			<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
+			';
+			print '</FORM>';
+			print '</table>';
 		}
 	
 	}
