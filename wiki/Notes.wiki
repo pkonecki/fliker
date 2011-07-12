@@ -1,4 +1,3 @@
-
 == Notes ==
 
 ===Urgence===
@@ -7,8 +6,9 @@
   * Table types de paiements (cheque/espece/cb/dispense)
   * Association destinataire table supplément
   * Table mère pour asso/section/act/cre
+  * Changer id_statut en id_asso_adh pour sec/act/cre
   * Adhesion: Ne pas afficher les créneaux sans prof/responsables au dessus
-  * 
+  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
 
 ===notion de promo pour paiement/adhésion===
   * <s>Champ promo dans adhesion/paiement</s>
