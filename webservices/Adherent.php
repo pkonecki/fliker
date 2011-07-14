@@ -186,29 +186,18 @@ function getStatuts(){
 
 
 
-function addSup($tb,$id_tb,$id_sup_fk,$type,$valeur,$id_statut){
+function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie){
 	//Add sup
-	$query = "INSERT INTO sup(type,valeur,id_statut) VALUES ('$type','$valeur','$id_statut')";
+	if($tb==="association") $col = "id_statut";
+	else $col="id_asso_adh";
+	$query = "INSERT INTO sup(type,valeur,$col,id_asso_paie) VALUES ('$type','$valeur','$id_fk','$id_asso_paie')";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$id_sup = mysql_insert_id();
-	if($id_sup_fk==0){
-		//Determiner max tb.id_sup_fk + 1
-		$req1="SELECT  greatest(max(A.id_sup_fk), max(S.id_sup_fk) , max(AC.id_sup_fk), max(C.id_sup_fk) ) as id_sup_fk  FROM association A,section S,activite AC,creneau C "; 
-		$res1=mysql_query($req1); 
-		if (!$res1) echo mysql_error();
-		$id_sup_fk=mysql_result($res1,0,"id_sup_fk");
-		$id_sup_fk++;
-		echo "NEW SUP FK = $id_sup_fk";
-		//Update asso.id_sup_fk
-		$req2 = "UPDATE $tb SET id_sup_fk='$id_sup_fk' WHERE id='$id_tb'";
-		$res2=mysql_query($req2); 
-		if (!$res2) echo mysql_error();
-		
-	} 
+
 	//Ajouter sup_fk avec id_sup_fk déterminé
-	$req3="INSERT INTO sup_fk (id,id_sup) VALUES ('$id_sup_fk','$id_sup')";
+	$req3="INSERT INTO sup_fk (id_ent,id_sup) VALUES ('$id_tb','$id_sup')";
 	$res3=mysql_query($req3); 
 	if (!$res3) echo mysql_error();
 	include("closedb.php");
@@ -222,8 +211,13 @@ function delSup($id){
 	include("closedb.php");
 }
 
-function getSup($tb,$id_asso){
-	$query = "SELECT S.*,SF.id id_sup_fk, ST.nom statut FROM sup S ,sup_fk SF , $tb A, statut ST WHERE A.id_sup_fk=SF.id AND SF.id_sup=S.id AND S.id_statut=ST.id AND A.id='$id_asso'  ";
+function getSup($tb,$id_tb){
+	if($tb==="association") {
+		$query = "SELECT S.*,SF.id_ent id_ent, ST.nom statut FROM sup S ,sup_fk SF , statut ST WHERE SF.id_sup=S.id AND S.id_statut=ST.id AND SF.id_ent='$id_tb'  ";
+	} else {
+		$query = "SELECT S.*,SF.id_ent id_ent FROM sup S ,sup_fk SF WHERE SF.id_sup=S.id AND SF.id_ent='$id_tb'  ";
+	}
+
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -235,5 +229,17 @@ function getSup($tb,$id_asso){
 	return $tab;
 }
 
+function getAssos(){
+	$query = "SELECT * FROM association ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row['nom'];
+	}
+	include("closedb.php");
+	return $tab;
+}
 
 ?>
