@@ -5,8 +5,20 @@ function newAsso($tab){
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die();
 	include("opendb.php");
+	//Nouvelle entité
+	$q1 = "INSERT INTO entite VALUES ()";
+	$r1 = mysql_query($q1);
+	if (!$r1){ 
+		echo mysql_error();
+		die();
+	}
+	$id = mysql_insert_id();
+	
+	// Asso
 	$set = "(";
-	$colonnes="(nom,description,url,cotisation)";
+	$colonnes="(id,nom,description,url,cotisation)";
+	//id
+	$set.="'$id', ";
 	//nom
 	$set.="'".mysql_real_escape_string($tab['nom'])."', ";
 	//Description
@@ -28,7 +40,7 @@ function newAsso($tab){
 function delAsso($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM association WHERE id=".$id."";
+	$query = "DELETE FROM entite WHERE id=".$id."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

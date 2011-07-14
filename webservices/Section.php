@@ -5,8 +5,16 @@ function newSection($tab){
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die('il faut un nom!');
 	include("opendb.php");
-	$set = "(";
-	$colonnes="(nom,description,url)";
+	$q1 = "INSERT INTO entite VALUES ()";
+	$r1 = mysql_query($q1);
+	if (!$r1){ 
+		echo mysql_error();
+		die();
+	}
+	$id = mysql_insert_id();
+	
+	$set = "('$id', ";
+	$colonnes="(id,nom,description,url)";
 	//nom
 	$set.="'".mysql_real_escape_string($tab['nom'])."', ";
 	//Description

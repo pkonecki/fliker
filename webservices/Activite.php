@@ -3,11 +3,21 @@
 function newActivite($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
+	//Nouvelle entité
+	include("opendb.php");
+	$q1 = "INSERT INTO entite VALUES ()";
+	$r1 = mysql_query($q1);
+	if (!$r1){ 
+		echo mysql_error();
+		die();
+	}
+	$id = mysql_insert_id();
 	
 	if(empty($tab['nom'])) die('il faut un nom!');
-	include("opendb.php");
 	$set = "(";
-	$colonnes="(nom,description,id_sec,url)";
+	$colonnes="(id,nom,description,id_sec,url)";
+	//id
+	$set.="'$id', ";
 	//nom
 	$set.="'".mysql_real_escape_string($tab['nom'])."', ";
 	//Description
@@ -31,7 +41,7 @@ function newActivite($tab){
 function delActivite($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM activite WHERE id=".$id."";
+	$query = "DELETE FROM entite WHERE id=".$id."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

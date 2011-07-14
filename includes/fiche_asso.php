@@ -104,7 +104,8 @@ else {
 		delSup($_POST['id_sup']);
 	}
 	if ($_POST['action'] === 'new_sup'){
-		addSup("association",$_POST['id_asso'],$_POST['id_sup_fk'],$_POST['type'],$_POST['valeur'],$_POST['id_statut']);
+		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
+		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso']);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
@@ -201,9 +202,9 @@ else {
 			
 			print '<tr><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 			<input type="hidden" name="action" value="new_sup" />
-			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'">
-			<input type="hidden" name="id_sup_fk" value="'.$tab[$_GET['asso']]['id_sup_fk'].'">
-			<td><INPUT type="text" name="type"></INPUT></td>
+			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
+			<INPUT type="hidden" name="type" value="Cotisation" / >
+			<td><INPUT type="text" name="lol" value="Cotisation" disabled ></INPUT></td>
 			<td><INPUT type="text" name="valeur"></INPUT></td>
 			<td><SELECT name="id_statut">';
 			$status = getStatuts();

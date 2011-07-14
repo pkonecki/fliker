@@ -4,8 +4,19 @@ function newCreneau($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	include("opendb.php");
+	//Nouvelle entité
+	$q1 = "INSERT INTO entite VALUES ()";
+	$r1 = mysql_query($q1);
+	if (!$r1){ 
+		echo mysql_error();
+		die();
+	}
+	$id = mysql_insert_id();
+	
 	$set = "(";
-	$colonnes="(jour,debut,fin,lieu,id_act)";
+	$colonnes="(id,jour,debut,fin,lieu,id_act)";
+	//id
+	$set.="'$id', ";
 	//Jour
 	$set.="'".mysql_real_escape_string($tab['jour_cre'])."', ";
 	//Debut
@@ -30,7 +41,7 @@ function newCreneau($tab){
 function delCreneau($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM creneau WHERE id=".$id."";
+	$query = "DELETE FROM entite WHERE id=".$id."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -58,7 +69,7 @@ function getCreneaux($userid){
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '".$userid."')
+							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
 							OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '".$userid."')
 							OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '".$userid."')
 							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
