@@ -250,7 +250,18 @@ function getMyAdherents($userid){
 		AND A.id=HS.id_asso
 		AND HS.id_sec=S.id
 		AND AD.id_cre=CR.id
-		AND ADH.id=AD.id_adh 
+		AND
+			(  
+				ADH.id IN 
+				(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso=A.id)
+				OR ADH.id IN
+				(SELECT id_adh FROM resp_section WHERE resp_section.id_sec=S.id)
+				OR ADH.id IN 
+				(SELECT id_adh FROM resp_act WHERE resp_act.id_act=AC.id)
+				OR ADH.id IN
+				(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre=CR.id)
+				
+			)
 		AND
 		(
 			(
@@ -259,6 +270,7 @@ function getMyAdherents($userid){
 			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
 			)
+			
 		)		
 		";
 	include("opendb.php");
