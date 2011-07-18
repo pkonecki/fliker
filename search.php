@@ -23,9 +23,6 @@ else {
 
 
 ?>
-<script type="text/javascript" src="./includes/js/jquery.js"></script>
-<script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
-<script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
 <h2 id="toggle_f_search">Recherche</h2>
 
 <?php

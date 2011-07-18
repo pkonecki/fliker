@@ -8,7 +8,13 @@ if (!isset($_GET['adh'])) {
 	$edit=true;
 }
 else {
-	$id_adh=$_GET['adh'];
+	$tab = getMyAdherents($_SESSION['uid']);
+	print_r($tab);
+	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
+	else { 
+		print 'Vous n\'avez pas accès à cette page';
+		die();
+	}
 }
 $adh = getAdherent($id_adh);
 
