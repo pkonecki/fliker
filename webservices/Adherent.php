@@ -243,15 +243,16 @@ function getAssos(){
 }
 
 function getMyAdherents($userid){
-	$query="SELECT  A.id_adh
-		FROM activite AC, creneau CR, section S, association A, asso_section HS , adhesion AD, adherent A
+	$query="SELECT  ADH.id
+		FROM activite AC, creneau CR, section S, association A, asso_section HS , adhesion AD, adherent ADH
 		WHERE CR.id_act=AC.id
 		AND AC.id_sec=S.id
 		AND A.id=HS.id_asso
 		AND HS.id_sec=S.id
 		AND AD.id_cre=CR.id
-		AND A.id=AD.id_adh 
+		AND ADH.id=AD.id_adh 
 		AND
+		(
 			(
 			S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
 			OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
