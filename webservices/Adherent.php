@@ -251,27 +251,24 @@ function getMyAdherents($userid){
 		AND HS.id_sec=S.id
 		AND AD.id_cre=CR.id
 		AND
-			(  
-				ADH.id IN 
-				(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso=A.id)
-				OR ADH.id IN
-				(SELECT id_adh FROM resp_section WHERE resp_section.id_sec=S.id)
-				OR ADH.id IN 
-				(SELECT id_adh FROM resp_act WHERE resp_act.id_act=AC.id)
-				OR ADH.id IN
-				(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre=CR.id)
-				
-			)
-		AND
 		(
-			(
 			S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
 			OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
 			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
-			)
-			
-		)		
+		)	
+		AND
+		(  
+			ADH.id IN 
+			(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
+			OR ADH.id IN
+			(SELECT id_adh FROM resp_section WHERE resp_section.id_sec IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid'))
+			OR ADH.id IN 
+			(SELECT id_adh FROM resp_act WHERE resp_act.id_act IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid'))
+			OR ADH.id IN
+			(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid'))
+				
+		)	
 		";
 	include("opendb.php");
 	$results = mysql_query($query);
