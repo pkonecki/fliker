@@ -242,4 +242,38 @@ function getAssos(){
 	return $tab;
 }
 
+function getMyAdherents($userid){
+	$query="SELECT  CR.id id_cre
+		FROM activite AC, creneau CR, section S, association A, asso_section HS , adhesion AD
+		WHERE CR.id_act=AC.id
+		AND AC.id_sec=S.id
+		AND A.id=HS.id_asso
+		AND HS.id_sec=S.id
+		AND AD.id_cre=CR.id
+		AND
+			(
+			S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
+			OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
+			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
+			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
+			)
+		)
+	OR id_adh IN 
+		(
+		SELECT A.id id_adh FROM adherent A ,resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso IN 
+			( SELECT A.id id_asso FROM association A, resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id )
+		)	
+		
+		
+		";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row['id'];
+	}
+	include("closedb.php");
+	return $tab;
+}
 ?>

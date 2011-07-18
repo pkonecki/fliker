@@ -12,10 +12,15 @@ $header = '
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-timepicker.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.filter.css" />
   <link rel="stylesheet" type="text/css" href="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.css" />
   <script type="text/javascript" src="./includes/js/jquery.js"></script>
   <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.timepicker.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.multiselect.min.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.multiselect.filter.js"></script>
+  <script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
  </head>
  <body>
 <h1>Fliker</h1> ';
@@ -52,6 +57,12 @@ switch($_GET['page']){
 print '</div>';
 print $footer;
 
-
-
 ?>
+<script type="text/javascript">
+$(".filterselect").multiselect({
+   multiple: false,
+   header: "Select an option",
+   noneSelectedText: "Select an Option",
+   selectedList: 1
+}).multiselectfilter();
+</script>

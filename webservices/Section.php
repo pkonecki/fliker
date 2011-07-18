@@ -66,8 +66,8 @@ function getSections($userid){
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '".$userid."')
-							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
+							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
+							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
 							)";
 			}
 			else return;
