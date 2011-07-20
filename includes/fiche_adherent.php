@@ -1,20 +1,18 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include_once("Adherent.php");
-include_once("Select.php");
 if (!isset($_GET['adh'])) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
 }
 else {
 	$tab = getMyAdherents($_SESSION['uid']);
-	print_r($tab);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
 	else { 
 		print 'Vous n\'avez pas accès à cette page';
 		die();
 	}
+	$resp=true;
 }
 $adh = getAdherent($id_adh);
 
@@ -140,6 +138,7 @@ print $script;
 		if(!(strcmp($_SESSION['user'],"") == 0)){
 
 			$tab = getChampsAdherents();
+			print '<div id="fiche">';
 			print "<h2>Fiche adherent</h2>";
 			print '<TABLE BORDER="0">';
 			foreach($tab as $row){
@@ -169,10 +168,16 @@ print $script;
 			}
 			print '</TABLE>';
 			if($edit) print '<FORM action="index.php?page=1" method="POST">
-		<input type=\'hidden\' name=\'action\' value=\'modification\' />
-		<INPUT type=\'submit\' value=\'Modifier\'>
-		</FORM>
-		';
+			<input type=\'hidden\' name=\'action\' value=\'modification\' />
+			<INPUT type=\'submit\' value=\'Modifier\'>
+			</FORM>
+			</div>
+			';
+			//Paiements
+			if($resp){
+				print '<div id="paiements"><h2>Paiements</h2>';
+				print '</div>';
+			}
 		}
 		else {
 			print "<p>Vous n'êtes pas connecté</p>";

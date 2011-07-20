@@ -1,8 +1,8 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-include_once("Adherent.php");
-include_once("Creneau.php");
+
+
 function selected($post,$val,$tab){
 	if ($tab[$_GET['creneau']][$post]===$val) {
 		return "selected";
@@ -170,7 +170,7 @@ else {
 			print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<input type="hidden" name="action" value="new_resp" />
 			<input type="hidden" name="id_cre" value="'.$_GET['creneau'].'">';
-			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" >';
+			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" class="filterselect">';
 			$candidates = getAdherents();
 			foreach ($candidates as $key => $value) {
 				if(!isset($resps[$key])) print '<OPTION value='.$key.' >'.$value['prenom'].' '.$value['nom'].'</OPTION>';
