@@ -2,8 +2,13 @@
 session_start();
 define('_VALID_INCLUDE', TRUE);
 include("./includes/paths.php");
-
-
+include_once("Adherent.php");
+include_once("Activite.php");
+include_once('Creneau.php');
+include_once("Asso.php");
+include_once("Section.php");
+include_once('Select.php');
+include_once('Adhesion.php');
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -23,46 +28,51 @@ $header = '
   <script type="text/javascript" src="http://checkboxtree.googlecode.com/svn/tags/checkboxtree-0.5/jquery.checkboxtree.min.js"></script>
  </head>
  <body>
+<div id="top">
 <h1>Fliker</h1> ';
-
 $footer = '</body></html>';
-
 print $header;
 include("userdiv.php");
-include("menu.php");
-print '<div id="content">';
-if(empty($_GET['page'])) $_GET['page']=1;
-
-switch($_GET['page']){
-	case 1:
-		include("fiche_adherent.php");
-		break;
-	case 2:
-		include("search.php");
-		break;
-	case 3:
-		include("fiche_asso.php");
-	break;
-	case 4:
-		include("fiche_section.php");
-	break;
-	case 5:
-		include("fiche_activite.php");
-	break;
-	case 6:
-		include("fiche_creneau.php");
-	break;	
-}
-
 print '</div>';
+if(!(strcmp($_SESSION['user'],"") == 0)){
+	include("menu.php");
+	print '<div id="content">';
+	if(empty($_GET['page'])) $_GET['page']=1;
+
+	switch($_GET['page']){
+		case 1:
+			include("fiche_adherent.php");
+			break;
+		case 2:
+			include("search.php");
+			break;
+		case 3:
+			include("fiche_asso.php");
+		break;
+		case 4:
+			include("fiche_section.php");
+		break;
+		case 5:
+			include("fiche_activite.php");
+		break;
+		case 6:
+			include("fiche_creneau.php");
+		break;	
+		case 7:
+			include("fiche_adhesion.php");
+		break;
+	}
+	print '</div>';
+} else print 'Vous n\'êtes pas connecté';
+
 print $footer;
 
 ?>
 <script type="text/javascript">
 $(".filterselect").multiselect({
    multiple: false,
-   header: "Select an option",
-   noneSelectedText: "Select an Option",
+   header: "Choisissez un",
+   noneSelectedText: "Choisissez un",
    selectedList: 1
 }).multiselectfilter();
 </script>

@@ -5,9 +5,6 @@ if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 	die();
 }
-include_once("Adherent.php");
-include_once("Asso.php");
-include_once("Section.php");
 getAdherent($_SESSION['user']);
 $tab=getAssociations($_SESSION['uid']);
 if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){

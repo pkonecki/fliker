@@ -1,7 +1,14 @@
 *{ font-size: 11px; }
 
-body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
-body { color: #333;  background-color: #fff; text-align: left; }
+body, input, select, textarea { 
+	font-family: verdana, arial, helvetica, sans-serif; 
+	font-size: 11px; 
+}
+body {
+	color: #333;
+	background-color: #fff;
+	text-align: left;
+}
 
 a:link { color:#0060BF; text-decoration: underline; }
 a:visited { color:#0060BF; text-decoration: underline; }
@@ -10,18 +17,19 @@ a:hover { color:#000000; text-decoration: underline; }
 
 
 h1, h2, h3, h4, h5, h6 { font-family: "Lucida Grande", "Lucida Sans Unicode", geneva, verdana, arial, helvetica, sans-serif; font-weight: bold; color: #333; }
-h1 { font-size: 1.8em; margin: 0em 0em 0.6em 0em; color: #333; }
-h2 { font-size: 1.5em; margin: 1.2em 0em 0.4em 0em; }
-h3 { font-size: 1.4em; margin: 1.2em 0em 0.4em 0em; color: #333; }
-h4 { font-size: 1.2em; margin: 1.2em 0em 0.4em 0em; }
-h5 { font-size: 1.0em; margin: 1.2em 0em 0.4em 0em; }
-h6 { font-size: 0.8em; margin: 1.2em 0em 0.4em 0em; }
+h1 { font-size: 1.8em; margin: 0em; color: #333; }
+h2 { font-size: 1.5em; margin: 0em; }
+h3 { font-size: 1.4em; margin: 0em; color: #333; }
+h4 { font-size: 1.2em; margin: 0em; }
+h5 { font-size: 1.0em; margin: 0em; }
+h6 { font-size: 0.8em; margin: 0em; }
 
 img { border: 0px; }
+div {
+	padding : 0em;
+	margin  : 0em;
+}
 
-p { font-size: 1.0em; line-height: 1.3em; margin: 1.2em 0em 1.2em 0em; }
-li > p { margin-top: 0.2em; }
-pre { font-family: monospace; font-size: 1.0em; }
 strong, b { font-weight: bold; }
 
 /* PAGE ELEMENTS */
@@ -29,24 +37,20 @@ strong, b { font-weight: bold; }
 /* menu */
 #main_menu{
 	list-style: none;
-	margin: 0;
-	padding: 0;
-	width: 100%;
+	margin: 0.4em 0em 0.4em 0em;
+	padding : 0em;
+
 }
 #main_menu li {
 	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
 	display:inline;
 }
 #main_menu a {
-	margin: 0;
 	padding: 8px 12px;
 	text-decoration: none;
 }
 #main_menu a:hover {
 
-	padding-bottom: 8px;
 }
 
 #content {clear:both; margin: 0em auto; width: 100%; padding: 10px 0 10px 0; text-align: left; }
@@ -59,7 +63,18 @@ strong, b { font-weight: bold; }
 label { font-weight: bold; }
 #reminders label { font-weight: normal; }
 
+#top{
+	border-bottom : 1px solid #C9D7F1;
+}
 
+
+div#fiche {
+	float : left;
+}
+
+div#paiements {
+	float : left;
+}
 
 #userdiv{
 	position: absolute;
