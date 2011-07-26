@@ -9,6 +9,7 @@ include_once("Asso.php");
 include_once("Section.php");
 include_once('Select.php');
 include_once('Adhesion.php');
+include_once('Supplement.php');
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>

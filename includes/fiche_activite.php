@@ -176,7 +176,7 @@ else{
 			print '<h3>Suppléments de l\'activité</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>+/-</th></tr>';
 			foreach ($sups as $id => $sup) {
-				print '<tr><FORM action="index.php?page=5&act='.$id.'&act='.$_GET['act'].'" method="POST">
+				print '<tr><FORM action="index.php?page=5&sup='.$id.'&act='.$_GET['act'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup_confirm" />
 				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].'$</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>

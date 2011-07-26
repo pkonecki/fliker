@@ -179,6 +179,28 @@ function getResponsablesCre($id_cre){
 	
 }
 
+function getAllCreneaux(){
+	
+	$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
+						FROM activite AC, creneau CR, section S, association A, asso_section HS
+						WHERE CR.id_act=AC.id
+						AND AC.id_sec=S.id
+						AND A.id=HS.id_asso
+						AND HS.id_sec=S.id 
+						ORDER BY nom_sec";
+		
+
+		include("opendb.php");
+		$results = mysql_query($query);
+		if (!$results) echo mysql_error();
+		$tab = array();
+		while($row = mysql_fetch_array($results)){
+			$tab[$row['id_cre']] = $row;
+		}
+		include("closedb.php");
+		return $tab;
+	
+}
 
 
 
