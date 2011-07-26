@@ -157,10 +157,7 @@ function getResponsablesAct($id_act){
 	}
 	include("closedb.php");
 	return $tab;
-	
-	
 }
-
 
 
 ?>
