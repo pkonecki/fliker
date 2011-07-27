@@ -1,5 +1,7 @@
 == Notes ==
-
+  * Table config avec url site, promo
+  * Page admin: changer promo, mode standby (pas d'adhesion)
+  * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
 ===Urgence===
 
   * Table types de suppléments (cotiz,location, caution, supplément)
