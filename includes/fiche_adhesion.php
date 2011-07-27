@@ -63,10 +63,10 @@ if ($_POST['action'] == 'select_assos' && $edit) {
 		}
 		print '</tr>';
 	}
-	print "<tr><td>Total</td><td id=\"total\"></td></tr>";
+	print "<tr><td>Total</td><td id=\"total\">0</td></tr>";
 	print "<span hidden id=id_statut_adh>$id_statut_adh</span>";
 	print '</TABLE>
-	<INPUT type="submit" value="Valider"><INPUT type="reset" value="Remettre à zéro" ></FORM>';
+	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>';
 } else 
 {
 	if ($_POST['action'] == 'submitted' && $edit){
@@ -115,7 +115,9 @@ $('#tree_root').checkboxTree({
                 ancestors: 'uncheck'
             }
     });
-
+$('.reset').click(function() {
+		$('#total').text("0");
+	});
 $(".radio_cre").click(function() {
 		var params = {};
 		$("input[type=radio]:checked.radio_cre").each(function(){
@@ -130,6 +132,8 @@ $(".radio_cre").click(function() {
 				}
 		);
 });
+
+
 /*
 function updateCout(){
 	total=0;
@@ -150,9 +154,6 @@ function updateCout(){
 	$('#total').append(total);
 };
 
-function reset(){
-	$(".total_cre").each($(this).empty());
-	$('#total').empty();
-};
+
 */
 </script>
