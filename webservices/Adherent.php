@@ -7,7 +7,7 @@ function newAdherent($tab){
 	include("opendb.php");
 	foreach($champs as $row){
 		if($row[inscription]==1){
-			
+
 			if($row[type]==='varchar'){
 				$colonnes .= $row[nom].",";
 				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
@@ -22,7 +22,7 @@ function newAdherent($tab){
 				$colonnes .= $row[nom].",";
 				if ($tab[$row[nom]]==='on') $values .= "1,";
 				else $values .= "0,";
-			} 
+			}
 			else
 			if($row[type]==='file'){
 			$colonnes .= $row[nom].",";
@@ -58,7 +58,7 @@ function newAdherent($tab){
 	//send mail
 	$to      = $tab[email];
 	$subject = " Votre inscription à l'ASESCO";
-	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant:\rhttp://fliker.dyndns.org/verify.php?$activationKey\r\rSi c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
+	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant: \rhttp://fliker.dyndns.org/validate.php?$activationKey\r\r Si c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
 	$headers = 'From: noreply@fliker.dyndns.org' . "\r\n" .
 
     'Reply-To: bureau@asesco.fr' . "\r\n" .
@@ -82,7 +82,7 @@ function getAdherent($user){
 		if (!$results) echo mysql_error();
 		$row = mysql_fetch_assoc($results);
 		foreach($tab as $champ){
-				if($champ['type']==='select'){ 
+				if($champ['type']==='select'){
 					$return[$champ['nom']]=$row['id_'.$champ['nom']];
 				}
 				else {
@@ -90,12 +90,12 @@ function getAdherent($user){
 				}
 		}
 		include("closedb.php");
-	
+
 	return $return;
 }
 
 function getChampsAdherents(){
-	
+
 	include("opendb.php");
 	$query = "SELECT * FROM champs_adherent ORDER BY ordre ASC";
 	$results = mysql_query($query);
@@ -133,7 +133,7 @@ function modifAdherent($tab){
 				} else {
 					$set .= "1,";
 					saveImage($_SESSION['user'],$row[nom]);
-					
+
 				}
 
 
@@ -180,8 +180,8 @@ function getStatuts(){
 	}
 	include("closedb.php");
 	return $tab;
-	
-	
+
+
 }
 
 
@@ -198,7 +198,7 @@ function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie){
 
 	//Ajouter sup_fk avec id_sup_fk déterminé
 	$req3="INSERT INTO sup_fk (id_ent,id_sup) VALUES ('$id_tb','$id_sup')";
-	$res3=mysql_query($req3); 
+	$res3=mysql_query($req3);
 	if (!$res3) echo mysql_error();
 	include("closedb.php");
 }
@@ -256,19 +256,19 @@ function getMyAdherents($userid){
 			OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
 			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
-		)	
+		)
 		AND
-		(  
-			ADH.id IN 
+		(
+			ADH.id IN
 			(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
 			OR ADH.id IN
 			(SELECT id_adh FROM resp_section WHERE resp_section.id_sec IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid'))
-			OR ADH.id IN 
+			OR ADH.id IN
 			(SELECT id_adh FROM resp_act WHERE resp_act.id_act IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid'))
 			OR ADH.id IN
 			(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid'))
-				
-		)	
+
+		)
 		";
 	include("opendb.php");
 	$results = mysql_query($query);
