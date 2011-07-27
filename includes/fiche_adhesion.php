@@ -8,7 +8,7 @@ if (!isset($_GET['adh'])) {
 else {
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
-	else { 
+	else {
 		print 'Vous n\'avez pas accès à cette page';
 		die();
 	}
@@ -67,7 +67,7 @@ if ($_POST['action'] == 'select_assos' && $edit) {
 	print "<span hidden id=id_statut_adh>$id_statut_adh</span>";
 	print '</TABLE>
 	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>';
-} else 
+} else
 {
 	if ($_POST['action'] == 'submitted' && $edit){
 
@@ -134,26 +134,4 @@ $(".radio_cre").click(function() {
 });
 
 
-/*
-function updateCout(){
-	total=0;
-	
-	$.getJSON("controleur.php",
-			{"action" : "calculer",
-			"nombre_a" : $("input#nombre_a").val(),
-			"nombre_b" : $("input#nombre_b").val() },
-			function(data) {
-				$("#total").val(data['total']);
-			}
-			);
-			
-	$(".asso_cre").each(function() {
-		$(this).("input[type='radio']:checked").val();
-    });
-	$('#total').empty();
-	$('#total').append(total);
-};
-
-
-*/
 </script>
