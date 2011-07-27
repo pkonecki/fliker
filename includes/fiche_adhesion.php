@@ -50,18 +50,23 @@ if ($_POST['action'] == 'select_assos' && $edit) {
 	<input type="hidden" name="action" value="submitted" />';
 	$id_statut_adh=$adh['statut'];
 	print '<TABLE>';
-	$assos_cre=getCoutsCreneaux();
+	$assos_cre=getAssosCreneaux();
 	foreach($_POST['cre'] as $cre){
 		print '<tr>';
-		print '<td>'.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td>';
+		print '<td>'.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
 		if(isset($assos_cre[$id_statut_adh][$cre]))
-		foreach($assos_cre[$id_statut_adh][$cre] as $assos){
-			print "<LABEL FOR=\"asso_cre_$cre\">{$assos['nom_asso']}</LABEL><input type=\"radio\" value=\"{$assos['id_asso']}\" name=\"asso_cre_$cre\" >";
+		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso){
+
+			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
+			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre_$cre\" cre=\"$cre\" class=\"radio_cre\">
+			";
 		}
-		print '</td></tr>';
+		print '</tr>';
 	}
+	print "<tr><td>Total</td><td id=\"total\"></td></tr>";
+	print "<span hidden id=id_statut_adh>$id_statut_adh</span>";
 	print '</TABLE>
-	<INPUT type="submit" value="Valider"></FORM>';
+	<INPUT type="submit" value="Valider"><INPUT type="reset" value="Remettre à zéro" ></FORM>';
 } else 
 {
 	if ($_POST['action'] == 'submitted' && $edit){
@@ -110,4 +115,44 @@ $('#tree_root').checkboxTree({
                 ancestors: 'uncheck'
             }
     });
+
+$(".radio_cre").click(function() {
+		var params = {};
+		$("input[type=radio]:checked.radio_cre").each(function(){
+			params["cre_"+$(this,'input[type=radio]:checked').attr('cre')] = $(this,'input[type=radio]:checked').val();
+		});
+		params['id_statut_adh'] = $('#id_statut_adh').text();
+		//alert($.param(params));
+		$.getJSON("webservices/cout_adh.php",
+				params,
+				function(data) {
+					$("#total").text(data['total']);
+				}
+		);
+});
+/*
+function updateCout(){
+	total=0;
+	
+	$.getJSON("controleur.php",
+			{"action" : "calculer",
+			"nombre_a" : $("input#nombre_a").val(),
+			"nombre_b" : $("input#nombre_b").val() },
+			function(data) {
+				$("#total").val(data['total']);
+			}
+			);
+			
+	$(".asso_cre").each(function() {
+		$(this).("input[type='radio']:checked").val();
+    });
+	$('#total').empty();
+	$('#total').append(total);
+};
+
+function reset(){
+	$(".total_cre").each($(this).empty());
+	$('#total').empty();
+};
+*/
 </script>
