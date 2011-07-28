@@ -9,8 +9,8 @@
   * Table types de suppléments (cotiz,location, caution, supplément)
   * Table types de paiements (cheque/espece/cb/dispense)
   * Association destinataire table supplément
-  * Table mère pour asso/section/act/cre
-  * Changer id_statut en id_asso_adh pour sec/act/cre
+  * <s>Table mère pour asso/section/act/cre</s>
+  * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
   * Adhesion: Ne pas afficher les créneaux sans prof/responsables au dessus
   * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
   * Ajouter gestion select dans recherche
@@ -39,7 +39,7 @@
   * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
   * Champs date validation cookie/gestionnaire
   * Deux champs nom / tel pour personnes à contacter en cas d'urgence
-  * + Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)
+  * <s>+ Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)</s>
   * Vérification : case a cocher pour certain champs (doit être verifier) ex: numayantdroit/certificat med
     * LDAP utilisera cette case
     * Table de hash champ adherent <-> adherent + date
@@ -56,9 +56,9 @@
   * <s>identifiant : email</s>
     * Demander 2 fois email
   * <s>gestion de password</s>
-    * Mot de passe : à la vérification, <s>encryption md5</s> + salt
+    * <s>Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
-    * page séparée : oui
+    * <s>page séparée : oui</s>
     * liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
     * encourager l'inscription chez d'autres assos (liste unique + pop up d'info hover)
   * Scénario d'inscription:
