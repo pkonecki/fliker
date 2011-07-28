@@ -2,6 +2,8 @@
   * Table config avec url site, promo
   * Page admin: changer promo, mode standby (pas d'adhesion)
   * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
+  * Présence: fonctionnement par semaine, possibilité de marquer des semaines de vacances
+    * Evénements exceptionnels: table spéciale?
 ===Urgence===
 
   * Table types de suppléments (cotiz,location, caution, supplément)
