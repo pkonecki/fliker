@@ -220,7 +220,7 @@ function multiselected($post,$val){
 	switch($_POST['affichage']){
 		case 1: //Simple
 			print '<table class="search_results" >';
-			print '<thead><tr>';
+			print '<thead><tr><th>Fiche</th>';
 			foreach($tab as $champ){
 		
 				if ($champ[search_simple]==1) {
@@ -246,6 +246,7 @@ function multiselected($post,$val){
 				$i++;
 				if($i % 2 == 0) print '<tr>';
 				else print '<tr class="odd">';
+				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td>';
 				foreach($tab as $champ){
 					
 					if ($champ[search_simple]==1){
@@ -272,7 +273,7 @@ function multiselected($post,$val){
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" >';
-			print '<thead><tr>';
+			print '<thead><tr><th>Fiche</th>';
 			foreach($tab as $champ){
 		
 				if ($champ[user_viewable]==1) {
@@ -298,6 +299,7 @@ function multiselected($post,$val){
 				$i++;
 				if($i % 2 == 0) print '<tr>';
 				else print '<tr class="odd">';
+				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td>';
 				foreach($tab as $champ){
 					
 					if ($champ[user_viewable]==1){

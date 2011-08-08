@@ -4,7 +4,10 @@ session_start();
 if (!isset($_GET['adh'])) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
-}
+} else if($_SESSION['privilege']==1){
+		$resp=true;
+		$id_adh=$_GET['adh'];
+	}
 else {
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
@@ -31,13 +34,13 @@ if ($_POST['action'] == 'nouvelle' && $edit) {
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][fin]=$creneau[fin_cre];
 	}
-
+	$ads=getAdhesions($id_adh);
 
 	foreach($tab as $act){
 		print '<li><input type="checkbox" name="act'.$act[id].'"  value="'.$act[id].'"><label>'.$act[nom].'</label>';
 		print '<ul id="creneaux">';
 		foreach($act[creneaux] as $cre){
-			print '<li><input type="checkbox" name="cre[]"  value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).' - '.substr($cre[fin],0,-3).'</label>';
+			if (!isset($ads['cre'.$cre['id']]) ) print '<li><input type="checkbox" name="cre[]"  value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).' - '.substr($cre[fin],0,-3).'</label>';
 		}
 		print '</ul>';
 
@@ -45,7 +48,8 @@ if ($_POST['action'] == 'nouvelle' && $edit) {
 	print '</ul>';
 	print '<INPUT type="submit" value="Suite"></FORM>';
 } else
-if ($_POST['action'] == 'select_assos' && $edit) {
+if ($_POST['action'] == 'select_assos' && $edit && !empty($_POST['cre']) ) {
+	
 	print '<FORM action="index.php?page=7" method="POST">
 	<input type="hidden" name="action" value="submitted" />';
 	$id_statut_adh=$adh['statut'];
@@ -56,10 +60,8 @@ if ($_POST['action'] == 'select_assos' && $edit) {
 		print '<td>'.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
 		if(isset($assos_cre[$id_statut_adh][$cre]))
 		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso){
-
 			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
-			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre_$cre\" cre=\"$cre\" class=\"radio_cre\">
-			";
+			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
 		}
 		print '</tr>';
 	}
@@ -71,30 +73,60 @@ if ($_POST['action'] == 'select_assos' && $edit) {
 {
 	if ($_POST['action'] == 'submitted' && $edit){
 
+		if(!empty($_POST['asso_cre']) ) newAdhesions($_POST['asso_cre'],$id_adh);
+
+	}
+	if ($_POST['action'] === 'suppression_ads'){
+		delAdhesion($_POST['id_ads']);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
-		print '<h2>Vos adhésions</h2>';
-		$ads=getAdhesions($id_adh);
+		print '<h2><a href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a> | Adhésions</h2>';
+		$ads=getAdhesions($id_adh);//GetMyAdhesions(id_adh)
 		$crens=getAllCreneaux();
+		$assos=getAllAssociations();
 		print '<TABLE>';
-		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th>';
-		foreach($ads as $key => $value){
-			print '<tr>';
+		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th><th>Association de rattachement</th><th>Supprimer</th>';
+		foreach($ads as $key => $value) if(is_numeric($key)){
+			print '<tr><FORM action="index.php?page=7&ads='.$key.'" method="POST">
+				<input type="hidden" name="action" value="suppression_ads_confirm" />';
 			print "<td>{$value['date']}</td>";
 			print "<td>{$crens[$value['id_cre']]['nom_act']}</td>";
 			print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
 			print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']}</td>";
 			print "<td>{$value['statut']}</td>";
 			print "<td>{$value['promo']}</td>";
-			print '</tr>';
+			print "<td>{$assos[$value['id_asso']]['nom']}</td>";
+			print '<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
+				</FORM></tr>';
 		}
 		print '</TABLE>';
 		print '<FORM action="index.php?page=7" method="POST">
 		<input type="hidden" name="action" value="nouvelle" />
 		<INPUT type="submit" value="Nouvelle">
-		</FORM>
-		</div>
-		';
+		</FORM>';
+
+		print '<h2>Facture</h2><table>';
+		print "<th>Entité du supplément</th><th>Type du supplément</th><th>Valeur</th><th>Payer à</th>";
+		$tab = getFacture($ads,$adh['statut']);
+		foreach($tab['assos'] as $row){
+			print "<tr><td>Association {$assos[$row['id_asso_paie']]['nom']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td><td>{$assos[$row['id_asso_paie']]['nom']}</td></tr>";
+		}
+		foreach($tab['secs'] as $row){
+			print "<tr><td>Section {$row['nom_sec']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td><td>{$assos[$row['id_asso_paie']]['nom']}</td></tr>";
+		}
+		foreach($tab['acts'] as $row){
+			print "<tr><td>Activité {$row['nom_act']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td><td>{$assos[$row['id_asso_paie']]['nom']}</td></tr>";
+		}
+		foreach($tab['cres'] as $row){
+			print "<tr><td>Créneau {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td><td>{$assos[$row['id_asso_paie']]['nom']}</td></tr>";
+		}
+		print '</table>';
+		print '<h2>Totaux</h2><p>Préparez des cheques aux ordres des associations respectives</p>';
+		print '<table><th>A payer à</th><th>Total</th>';
+		foreach($tab['totaux'] as $asso => $total){
+			print "<tr><td>{$assos[$asso]['nom']}</td><td>$total</td></tr>";
+		}
+		print '</table>';
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";

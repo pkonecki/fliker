@@ -4,7 +4,11 @@ session_start();
 if (!isset($_GET['adh'])) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
-}
+} else if($_SESSION['privilege']==1){
+	$resp=true;
+	$edit=true;
+	$id_adh=$_GET['adh'];
+} 
 else {
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
@@ -12,10 +16,11 @@ else {
 		print 'Vous n\'avez pas accès à cette page';
 		die();
 	}
+	
 	$resp=true;
 }
 $adh = getAdherent($id_adh);
-
+print '<h2>Fiche adherent | <a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></h2>';
 
 $dest_dossier = "../photos";
 $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
@@ -139,7 +144,7 @@ print $script;
 
 			$tab = getChampsAdherents();
 			print '<div id="fiche">';
-			print "<h2>Fiche adherent</h2>";
+			
 			print '<TABLE BORDER="0">';
 			foreach($tab as $row){
 				if($row[user_viewable]==1){
@@ -173,11 +178,7 @@ print $script;
 			</FORM>
 			</div>
 			';
-			//Paiements
-			if($resp){
-				print '<div id="paiements"><h2>Paiements</h2>';
-				print '</div>';
-			}
+
 		}
 		else {
 			print "<p>Vous n'êtes pas connecté</p>";
