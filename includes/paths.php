@@ -44,6 +44,12 @@ function get_extension($nom) {
 	return strtolower($nom[$nb-1]);
 }
 
+function print_r_html ($arr) {
+print '<pre>';
+print_r($arr);
+print '<pre>';
+}
+
 $GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
 $webservices=$GLOBALS['root']."/webservices";
 $includes=$GLOBALS['root']."/includes";
