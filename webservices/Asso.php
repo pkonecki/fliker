@@ -127,7 +127,19 @@ function getResponsablesAsso($id_asso){
 	
 }
 
-
+function getAllAssociations(){
+	$query = "SELECT * FROM association A";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row[id]] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+	
+}
 
 
 
