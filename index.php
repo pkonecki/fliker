@@ -10,6 +10,7 @@ include_once("Section.php");
 include_once('Select.php');
 include_once('Adhesion.php');
 include_once('Supplement.php');
+include_once("Paiement.php");
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -58,7 +59,7 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 		break;
 		case 6:
 			include("fiche_creneau.php");
-		break;	
+		break;
 		case 7:
 			include("fiche_adhesion.php");
 		break;

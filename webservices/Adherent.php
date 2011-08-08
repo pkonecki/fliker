@@ -280,4 +280,20 @@ function getMyAdherents($userid){
 	include("closedb.php");
 	return $tab;
 }
+
+function getMyAssos($userid){
+	$query="SELECT  A.*
+		FROM association A, resp_asso RS
+		WHERE A.id=RS.id_asso AND RS.id_adh=$userid
+		";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+		$tab[$row['id']] = $row['nom'];
+	}
+	include("closedb.php");
+	return $tab;
+}
 ?>

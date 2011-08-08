@@ -5,19 +5,21 @@ if (!isset($_GET['adh'])) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
 } else if($_SESSION['privilege']==1){
-	$resp=true;
-	$edit=true;
+	$admin=true;
 	$id_adh=$_GET['adh'];
-} 
+}
 else {
+	if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
+		$resp_asso=true;
+		$assos_resp=getMyAssos($_SESSION['uid']);
+	}
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
-	else { 
+	else {
 		print 'Vous n\'avez pas accès à cette page';
 		die();
 	}
-	
-	$resp=true;
+
 }
 $adh = getAdherent($id_adh);
 print '<h2>Fiche adherent | <a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></h2>';
@@ -119,7 +121,7 @@ print $script;
 				else
 				if($row['type']==='select'){
 					$values = getSelect($row['nom']);
-					
+
 					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><SELECT name="id_'.$row['nom'].'" id="id_'.$row['nom'].'" '.$format.'>';
 					foreach($values as $key => $value){
 						print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
@@ -144,7 +146,7 @@ print $script;
 
 			$tab = getChampsAdherents();
 			print '<div id="fiche">';
-			
+
 			print '<TABLE BORDER="0">';
 			foreach($tab as $row){
 				if($row[user_viewable]==1){

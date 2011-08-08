@@ -5,17 +5,21 @@ if (!isset($_GET['adh'])) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
 } else if($_SESSION['privilege']==1){
-		$resp=true;
+		$admin=true;
 		$id_adh=$_GET['adh'];
-	}
+}
 else {
+	if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
+		$resp_asso=true;
+		$assos_resp=getMyAssos($_SESSION['uid']);
+	}
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
 	else {
 		print 'Vous n\'avez pas accès à cette page';
 		die();
 	}
-	$resp=true;
+
 }
 $adh = getAdherent($id_adh);
 $creneaux=getAllCreneaux();
@@ -49,7 +53,7 @@ if ($_POST['action'] == 'nouvelle' && $edit) {
 	print '<INPUT type="submit" value="Suite"></FORM>';
 } else
 if ($_POST['action'] == 'select_assos' && $edit && !empty($_POST['cre']) ) {
-	
+
 	print '<FORM action="index.php?page=7" method="POST">
 	<input type="hidden" name="action" value="submitted" />';
 	$id_statut_adh=$adh['statut'];
@@ -81,6 +85,7 @@ if ($_POST['action'] == 'select_assos' && $edit && !empty($_POST['cre']) ) {
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		print '<h2><a href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a> | Adhésions</h2>';
+		//Adhésions
 		$ads=getAdhesions($id_adh);//GetMyAdhesions(id_adh)
 		$crens=getAllCreneaux();
 		$assos=getAllAssociations();
@@ -104,7 +109,7 @@ if ($_POST['action'] == 'select_assos' && $edit && !empty($_POST['cre']) ) {
 		<input type="hidden" name="action" value="nouvelle" />
 		<INPUT type="submit" value="Nouvelle">
 		</FORM>';
-
+		//Facture
 		print '<h2>Facture</h2><table>';
 		print "<th>Entité du supplément</th><th>Type du supplément</th><th>Valeur</th><th>Payer à</th>";
 		$tab = getFacture($ads,$adh['statut']);
@@ -127,6 +132,22 @@ if ($_POST['action'] == 'select_assos' && $edit && !empty($_POST['cre']) ) {
 			print "<tr><td>{$assos[$asso]['nom']}</td><td>$total</td></tr>";
 		}
 		print '</table>';
+		//Päiements
+		print "<h2>Paiements</h2>";
+		$paiements=getMyPaiements($id_adh);
+		//print_r_html($paiements);
+		print "<table><th>Date</th><th>Type</th><th>Numéro</th><th>Remarque</th><th>Promo</th><th>Details</th>";
+		foreach ($paiements as $id => $row ) {
+			print "<tr>";
+			print "<td>{$row['date']}</td><td>{$row['type']}</td><td>{$row['num']}</td><td>{$row['remarque']}</td><td>{$row['promo']}</td><td><img src=\"images/downarrow.gif\" class=\"toggle\" /></td>";
+			print "</tr>";
+			print "<tr style=\"display : none; \"><td>Suppléments:</td><td colspan=5><table><th>Type</th><th>A payer</th><th>Payé</th><th>Payer à</th>";
+			foreach($row['ps'] as $row2){
+				print "<tr><td>{$row2['type_sup']}</td><td>{$row2['valeur_sup']}</td><td>{$row2['valeur_paiement']}</td><td>{$assos[$row2['id_asso_paie']]['nom']}</td></tr>";
+			}
+			print "</table></td></tr>";
+		}
+		print "</table>";
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";
@@ -164,6 +185,9 @@ $(".radio_cre").click(function() {
 				}
 		);
 });
-
+$(".toggle").click(function () {
+      $(this).parent().parent().next().toggle();
+      //alert($(this).parent().parent().next().html());
+    });
 
 </script>
