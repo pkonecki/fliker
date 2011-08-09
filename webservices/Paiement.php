@@ -32,6 +32,24 @@ function getMyPaiements($userid){
 	return $tab;
 }
 
+function addPaiement($tab){
+	print_r_html($tab);
+	$query= "INSERT INTO paiement (id_adh,type,num,remarque,promo,date)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."' )";
+
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$id_p=mysql_insert_id();
+	$q2 = "INSERT INTO paiement_sup (id_paiement,id_sup,valeur) VALUES ";
+	foreach($tab['sup'] as $id_sup => $valeur){
+		$q2 .= "('$id_p', '$id_sup','$valeur' ),";
+	}
+	$q2 = substr($q2,0,-1);
+	$r2 = mysql_query($q2);
+	if (!$r2) echo mysql_error();
+	include("closedb.php");
+}
+
 
 
 ?>
