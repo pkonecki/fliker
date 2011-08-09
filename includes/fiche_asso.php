@@ -12,7 +12,7 @@ if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
 	die();
 }
 if ($_POST['action'] == 'modification') {
-	print '<h2>Fiche Association: Modification</h2>';	
+	print '<h2>Fiche Association: Modification</h2>';
 	print '<FORM id="f_asso_modif" action="index.php?page=3&asso='.$_GET['asso'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	print '<tr><td class="label"><LABEL for ="nom" >Nom</LABEL> : </td><td><INPUT type=text name="nom" id="nom" value="'.$tab[$_GET['asso']]['nom'].'"></td></tr>';
@@ -27,7 +27,7 @@ if ($_POST['action'] == 'modification') {
 
 } else
 if ($_POST['action'] == 'new') {
-	print '<h2>Nouvelle Association</h2>';	
+	print '<h2>Nouvelle Association</h2>';
 	print '<FORM id="f_asso_new" action="index.php?page=3" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	print '<tr><td class="label"><LABEL for ="nom" >Nom</LABEL> : </td><td><INPUT type=text name="nom" id="nom" ></td></tr>';
@@ -38,10 +38,10 @@ if ($_POST['action'] == 'new') {
 	print '<tr><td colspan="2"><INPUT type="submit" value="Envoyer"></td></tr>';
 	print '</table>';
 	print '</FORM>';
-	
+
 } else
 if ($_POST['action'] == 'suppression_confirm') {
-	print '<h2>Supprimer Association?</h2>';	
+	print '<h2>Supprimer Association?</h2>';
 	print '<FORM action="index.php?page=3" method="POST">
 			<input type="hidden" name="id" value="'.$_GET['asso'].'" />
 			<input type="hidden" name="action" value="suppression" />
@@ -50,7 +50,7 @@ if ($_POST['action'] == 'suppression_confirm') {
 	print '<FORM action="index.php?page=3" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else if ($_POST['action'] == 'suppression_resp_confirm') {
 	print '<h2>Supprimer Responsable?</h2>';
@@ -63,7 +63,7 @@ else if ($_POST['action'] == 'suppression_resp_confirm') {
 	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<h2>Supprimer Supplément?</h2>';
@@ -76,20 +76,20 @@ else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else {
 	if ($_POST['action'] === 'submitted'){
 		modifAsso($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'submitted_new'){
 		newAsso($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'suppression'){
 		delAsso($_POST['id']);
-		
+
 	}
 	if ($_POST['action'] === 'suppression_resp'){
 		delRespAsso($_POST['id_asso'],$_POST['id_resp']);
@@ -106,46 +106,61 @@ else {
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
+		print '<ul id="submenu">';
+		if($tot_asso > 0){
+			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
+		}
+		if($tot_sec > 0){
+			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
+		}
+		if($tot_act > 0){
+			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
+		}
+		if($tot_cre > 0){
+			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
+		}
+		print '</ul>';
 		if(empty($_GET['asso'])){
-			print '<h2>Vos associations</h2>';	
+
+			print '<h2>Vos associations</h2>';
 			print '<ul>';
 
 			foreach($tab as $asso){
 				print '<li><a href=index.php?page=3&asso='.$asso['id'].'>'.$asso['nom'].'</a></li>';
-				
+
 			}
 			print '</ul>';
 			if($_SESSION['privilege']==="1") print '<td colspan=2><FORM action="index.php?page=3" method="POST">
 			<input type="hidden" name="action" value="new" />
 			<INPUT type="submit" value="Nouvelle">
 			</FORM></td>';
-			
+
 		} else {
-			print '<h2>Fiche Association</h2>';	
+			print '<h2>Fiche Association</h2>';
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['asso']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['asso']]['description'].'</td></tr>';
-			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['asso']]['url'].'</td></tr>';		
+			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['asso']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
 			$photo="includes/thumb.php?folder=logo_asso&file=".$_GET['asso'].".jpg";
-			print '<tr><TD>'.$row[description].'</TD><TD><img src="'.$photo.'" ></TD></tr>';		
+			print '<tr><TD>'.$row[description].'</TD><TD><img src="'.$photo.'" ></TD></tr>';
 			print '<tr>';
 			print '<td colspan="2"><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />
 					<INPUT type="submit" value="Modifier">
 					</FORM></td>';
 			print '</tr>';
-					
+
 			if($_SESSION['privilege']==="1") print '<tr><td colspan=2><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_confirm" />
 					<INPUT type="submit" value="Supprimer">
-					</FORM></td></tr>';		
+					</FORM></td></tr>';
 
 			print '</table>';
-			
+
 			//liste sections de l'asso
 			$sections=getSectionsByAsso($_GET['asso']);
-			print '<h3>Sections de l\'association</h3>';	
+			print '<h3>Sections de l\'association</h3>';
 			print '<ul>';
 			foreach($sections as $section){
 				print '<li>
@@ -154,7 +169,7 @@ else {
 					<a href=index.php?page=4&section='.$section['id'].'>'.$section['nom'].'</a>
 					<INPUT type="image" src="images/unchecked.gif" value="submit">
 					</FORM></li>';
-				
+
 			}
 			print '</ul>';
 			print '<td colspan=2><FORM action="index.php?page=4" method="POST">
@@ -196,7 +211,7 @@ else {
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}
-			
+
 			print '<tr><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 			<input type="hidden" name="action" value="new_sup" />
 			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
@@ -208,14 +223,14 @@ else {
 			foreach ($status as $key => $value) {
 				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 			}
-			
+
 			print '</SELECT></td>
 			<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
 			';
 			print '</FORM>';
 			print '</table>';
 		}
-	
+
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";
