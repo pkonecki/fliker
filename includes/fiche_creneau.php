@@ -23,7 +23,7 @@ if ($_POST['action'] == 'modification') {
 	print '<tr><td class="label"><LABEL for ="jour" >Jour</LABEL> : </td><td>
 	<SELECT name="jour_cre" id="jour_cre">
 	<OPTION value="Lundi" '.selected('jour_cre',"Lundi",$tab).' >Lundi</OPTION>
-	<OPTION value="Mardi" '.selected('jour_cre',"Mardi",$tab).' >Mardi</OPTION>	
+	<OPTION value="Mardi" '.selected('jour_cre',"Mardi",$tab).' >Mardi</OPTION>
 	<OPTION value="Mercredi" '.selected('jour_cre',"Mercredi",$tab).' >Mercredi</OPTION>
 	<OPTION value="Jeudi" '.selected('jour_cre',"Jeudi",$tab).' >Jeudi</OPTION>
 	<OPTION value="Vendredi" '.selected('jour_cre',"Vendredi",$tab).' >Vendredi</OPTION>
@@ -47,7 +47,7 @@ if ($_POST['action'] == 'new') {
 	print '<tr><td class="label"><LABEL for ="jour" >Jour</LABEL> : </td><td>
 	<SELECT name="jour_cre" id="jour_cre">
 	<OPTION value="Lundi" selected >Lundi</OPTION>
-	<OPTION value="Mardi" >Mardi</OPTION>	
+	<OPTION value="Mardi" >Mardi</OPTION>
 	<OPTION value="Mercredi" >Mercredi</OPTION>
 	<OPTION value="Jeudi" >Jeudi</OPTION>
 	<OPTION value="Vendredi" >Vendredi</OPTION>
@@ -62,7 +62,7 @@ if ($_POST['action'] == 'new') {
 	print '<input type="hidden" name="id_act" value="'.$_POST['id_act'].'">';
 	print '</table>';
 	print '</FORM>';
-	
+
 } else
 if ($_POST['action'] == 'suppression_confirm') {
 	print '<h2>Supprimer le Créneau?</h2>';
@@ -74,7 +74,7 @@ if ($_POST['action'] == 'suppression_confirm') {
 	print '<FORM action="index.php?page=6" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else if ($_POST['action'] == 'suppression_resp_confirm') {
 	print '<h2>Supprimer Responsable?</h2>';
@@ -87,7 +87,7 @@ else if ($_POST['action'] == 'suppression_resp_confirm') {
 	print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<h2>Supprimer Supplément?</h2>';
@@ -100,20 +100,20 @@ else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else {
 	if ($_POST['action'] === 'submitted'){
 		modifcreneau($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'submitted_new'){
 		newcreneau($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'suppression'){
 		delcreneau($_POST['id']);
-		
+
 	}
 	if ($_POST['action'] === 'suppression_resp'){
 		delRespCre($_POST['id_cre'],$_POST['id_resp']);
@@ -130,22 +130,37 @@ else {
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getCreneaux($_SESSION['uid']);
+		print '<ul id="submenu">';
+		if($tot_asso > 0){
+			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
+		}
+		if($tot_sec > 0){
+			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
+		}
+		if($tot_act > 0){
+			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
+		}
+		if($tot_cre > 0){
+			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
+		}
+		print '</ul>';
 		if(empty($_GET['creneau'])){
-			print '<h2>Vos Créneaux</h2>';	
+
+			print '<h2>Vos Créneaux</h2>';
 			print '<ul>';
 
 			foreach($tab as $creneau){
 				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
-				
+
 			}
 			print '</ul>';
-			
+
 		} else {
 			print '<h2>Fiche Créneau</h2>';
 			print '<table>';
 			print '<tr><td class="label">Activité : </td><td>'.$tab[$_GET['creneau']]['nom_act'].'</td></tr>';
 			print '<tr><td class="label">Jour : </td><td>'.$tab[$_GET['creneau']]['jour_cre'].'</td></tr>';
-			print '<tr><td class="label">Debut : </td><td>'.$tab[$_GET['creneau']]['debut_cre'].'</td></tr>';		
+			print '<tr><td class="label">Debut : </td><td>'.$tab[$_GET['creneau']]['debut_cre'].'</td></tr>';
 			print '<tr><td class="label">Fin : </td><td>'.$tab[$_GET['creneau']]['fin_cre'].'</td></tr>';
 			print '<tr><td class="label">Lieu : </td><td>'.$tab[$_GET['creneau']]['lieu'].'</td></tr>';
 			print '<tr>';
@@ -190,7 +205,7 @@ else {
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}
-			
+
 			print '<tr><FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<input type="hidden" name="action" value="new_sup" />
 			<input type="hidden" name="id_cre" value="'.$_GET['creneau'].'">
@@ -200,7 +215,7 @@ else {
 			foreach ($assos as $key => $value) {
 				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 			}
-			
+
 			print '</SELECT></td>';
 			print '<td><SELECT name="id_asso_paie">';
 			foreach ($assos as $key => $value) {
@@ -212,7 +227,7 @@ else {
 			print '</FORM>';
 			print '</table>';
 		}
-	
+
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";

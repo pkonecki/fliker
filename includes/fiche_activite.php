@@ -34,7 +34,7 @@ if ($_POST['action'] == 'new') {
 	print '<tr><td colspan="2"><INPUT type="submit" value="Envoyer"></td></tr>';
 	print '</table>';
 	print '</FORM>';
-	
+
 } else
 if ($_POST['action'] == 'suppression_confirm') {
 	print '<h2>Supprimer Activité?</h2>';
@@ -46,7 +46,7 @@ if ($_POST['action'] == 'suppression_confirm') {
 	print '<FORM action="index.php?page=5" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 
 else if ($_POST['action'] == 'suppression_resp_confirm') {
@@ -60,7 +60,7 @@ else if ($_POST['action'] == 'suppression_resp_confirm') {
 	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 			<INPUT type="submit" value="Non">
 			</FORM>';
-	
+
 }
 else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<h2>Supprimer Supplément?</h2>';
@@ -73,16 +73,16 @@ else if ($_POST['action'] == 'suppression_sup_confirm') {
 	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 				<INPUT type="submit" value="Non">
 				</FORM>';
-	
+
 }
 else{
 	if ($_POST['action'] === 'submitted'){
 		modifActivite($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'submitted_new'){
 		newActivite($_POST);
-		
+
 	}
 	if ($_POST['action'] === 'suppression'){
 		delActivite($_POST['id']);
@@ -102,36 +102,51 @@ else{
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getActivites($_SESSION['uid']);
+		print '<ul id="submenu">';
+		if($tot_asso > 0){
+			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
+		}
+		if($tot_sec > 0){
+			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
+		}
+		if($tot_act > 0){
+			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
+		}
+		if($tot_cre > 0){
+			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
+		}
+		print '</ul>';
 		if(empty($_GET['act'])){
-			print '<h2>Vos Activités</h2>';	
+
+			print '<h2>Vos Activités</h2>';
 			print '<ul>';
 
 			foreach($tab as $act){
 				print '<li><a href=index.php?page=5&act='.$act['id'].'>'.$act['nom'].'</a></li>';
-				
+
 			}
 			print '</ul>';
 
-			
+
 		} else {
 			print '<h2>Fiche Activité</h2>';
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['act']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['act']]['description'].'</td></tr>';
-			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['act']]['url'].'</td></tr>';		
+			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['act']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
 			$photo="includes/thumb.php?folder=logo_act&file=".$_GET['act'].".jpg";
-			print '<tr><TD>'.$row['description'].'</TD><TD><img src="'.$photo.'" ></TD></tr>';		
+			print '<tr><TD>'.$row['description'].'</TD><TD><img src="'.$photo.'" ></TD></tr>';
 			print '<tr>';
 			print '<td colspan=2><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />
 					<INPUT type="submit" value="Modifier">
-					</FORM></td>';	
-			print '</tr>';					
+					</FORM></td>';
+			print '</tr>';
 			print '</table>';
 			//Liste de créneaux
 		    $crens = getCreneauxByActivite($_GET['act']);
-			print '<h2>Créneaux de l\'activité</h2>';	
+			print '<h2>Créneaux de l\'activité</h2>';
 			print '<ul>';
 			foreach($crens as $creneau){
 				print '<FORM action="index.php?page=6&creneau='.$creneau['id'].'" method="POST">
@@ -139,7 +154,7 @@ else{
 				<li><a href=index.php?page=6&creneau='.$creneau['id'].'>'.$creneau['jour'].' - '.$creneau['debut'].' - '.$creneau['fin'].'</a>
 				<INPUT type="image" src="images/unchecked.gif" value="submit">
 					</FORM></li>';
-				
+
 			}
 			print '</ul>';
 			print '<td colspan=2><FORM action="index.php?page=6" method="POST">
@@ -182,7 +197,7 @@ else{
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}
-			
+
 			print '<tr><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 			<input type="hidden" name="action" value="new_sup" />
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
@@ -203,7 +218,7 @@ else{
 			print '</FORM>';
 			print '</table>';
 		}
-	
+
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";

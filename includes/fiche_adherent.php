@@ -1,7 +1,7 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 session_start();
-if (!isset($_GET['adh'])) {
+if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid']) {
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
 } else if($_SESSION['privilege']==1){
@@ -22,7 +22,7 @@ else {
 
 }
 $adh = getAdherent($id_adh);
-print '<h2>Fiche adherent | <a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></h2>';
+print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a></li><li><a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></li></ul>';
 
 $dest_dossier = "../photos";
 $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
@@ -42,20 +42,12 @@ $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script
 			$("#f_adherent_modif").validate({
 
 			rules : {
-				email: {
-	                required: true,
-	                email: true,
-	                remote: "emails.php"
-            	},
+
             	categorie: "required"
 
 			},
 			messages: {
-				email: {
-					required: "Ce champs est requis",
-					email: "Entrez une adresse email valide",
-					remote: "L\'adresse email est déjà utilisée"
-					},
+
 				categorie : "Ce champs est requis"
 
 
@@ -131,6 +123,8 @@ print $script;
 			}
 		}
 		print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
+		print "<INPUT type=\"hidden\" name=\"id_adh\" value =\"$id_adh\">";
+		print "<INPUT type=\"hidden\" name=\"email\" value =\"{$adh['email']}\">";
 		print '<tr><td colspan="2"><INPUT type=\'submit\' value=\'Send\'></td></tr>';
 
 		print '</table>';
@@ -146,7 +140,7 @@ print $script;
 
 			$tab = getChampsAdherents();
 			print '<div id="fiche">';
-
+			print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
 			print '<TABLE BORDER="0">';
 			foreach($tab as $row){
 				if($row[user_viewable]==1){

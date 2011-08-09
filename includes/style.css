@@ -1,8 +1,8 @@
 *{ font-size: 11px; }
 
-body, input, select, textarea { 
-	font-family: verdana, arial, helvetica, sans-serif; 
-	font-size: 11px; 
+body, input, select, textarea {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 11px;
 }
 body {
 	color: #333;
@@ -33,9 +33,20 @@ div {
 strong, b { font-weight: bold; }
 
 /* PAGE ELEMENTS */
+#top{
+	border-bottom : 1px solid #C9D7F1;
+	padding-bottom: 4px;
+}
+
+#title{
+	display: inline-block;
+}
 
 /* menu */
+
+
 #main_menu{
+	display: inline-block;
 	list-style: none;
 	margin: 0.4em 0em 0.4em 0em;
 	padding : 0em;
@@ -46,12 +57,41 @@ strong, b { font-weight: bold; }
 	display:inline;
 }
 #main_menu a {
+
 	padding: 8px 12px;
 	text-decoration: none;
 }
-#main_menu a:hover {
-
+#main_menu a:hover, #main_menu  a.selected  {
+	background: url("../images/hover.gif") bottom center no-repeat;
+	padding-bottom: 8px;
 }
+
+
+#submenu {
+	display:inline-block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	/* width: 100%; */
+}
+#submenu li {
+	display:inline-block;
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+#submenu a {
+
+	display:inline-block;
+	margin: 0;
+	padding: 8px 12px;
+	text-decoration: none;
+}
+#submenu a:hover, #submenu a.selected {
+	background: url("../images/hover.gif") bottom center no-repeat;
+
+	padding-bottom: 8px;
+	}
 
 #content {clear:both; margin: 0em auto; width: 100%; padding: 10px 0 10px 0; text-align: left; }
 .content { margin-left: 4.5em; margin-right: 4.5em; }
@@ -63,18 +103,8 @@ strong, b { font-weight: bold; }
 label { font-weight: bold; }
 #reminders label { font-weight: normal; }
 
-#top{
-	border-bottom : 1px solid #C9D7F1;
-}
 
 
-div#fiche {
-	float : left;
-}
-
-div#paiements {
-	float : left;
-}
 
 #userdiv{
 	position: absolute;
@@ -82,9 +112,9 @@ div#paiements {
 	right: 10px;
 }
 
-fieldset { 
+fieldset {
 margin:0.2em;
-border:1px solid 
+border:1px solid
 }
 
 legend {

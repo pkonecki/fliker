@@ -8,7 +8,7 @@ $fileName = $GLOBALS['root']."/".$_GET['folder']."/".$fileName;
 if ($fileName == null || !file_exists($fileName))
 {
      // handle missing images however you want... perhaps show a default image??  Up to you...
-     print "FILE NOT FOUND";
+    $fileName=$GLOBALS['root']."/images/notfound.gif";
 }
 
 try

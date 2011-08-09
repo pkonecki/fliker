@@ -31,13 +31,14 @@ $header = '
  </head>
  <body>
 <div id="top">
-<h1>Fliker</h1> ';
+<h1 id="title">Fliker</h1> ';
 $footer = '</body></html>';
 print $header;
+if(!(strcmp($_SESSION['user'],"") == 0)) include("menu.php");
 include("userdiv.php");
 print '</div>';
 if(!(strcmp($_SESSION['user'],"") == 0)){
-	include("menu.php");
+
 	print '<div id="content">';
 	if(empty($_GET['page'])) $_GET['page']=1;
 

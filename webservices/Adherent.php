@@ -132,7 +132,7 @@ function modifAdherent($tab){
 					$set .= "0,";
 				} else {
 					$set .= "1,";
-					saveImage($_SESSION['user'],$row[nom]);
+					saveImage($tab['email'],$row[nom]);
 
 				}
 
@@ -146,7 +146,7 @@ function modifAdherent($tab){
 
 	$set .="last_modif='".date( 'Y-m-d H:i:s')."'";
 
-	$query = "UPDATE adherent SET ".$set." WHERE email='".$_SESSION['user']."'";
+	$query = "UPDATE adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -257,7 +257,7 @@ function getMyAdherents($userid){
 			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
 		)
-		AND
+		OR
 		(
 			ADH.id IN
 			(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
@@ -282,7 +282,9 @@ function getMyAdherents($userid){
 }
 
 function getMyAssos($userid){
-	$query="SELECT  A.*
+	if($userid==-1) $query="SELECT  A.*
+		FROM association A";
+	else $query="SELECT  A.*
 		FROM association A, resp_asso RS
 		WHERE A.id=RS.id_asso AND RS.id_adh=$userid
 		";
