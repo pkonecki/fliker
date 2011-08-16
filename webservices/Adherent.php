@@ -243,13 +243,26 @@ function getAssos(){
 }
 
 function getMyAdherents($userid){
-	$query="SELECT  ADH.id
+	$query="SELECT  ADH.id 
 		FROM activite AC, creneau CR, section S, association A, asso_section HS , adhesion AD, adherent ADH
 		WHERE CR.id_act=AC.id
 		AND AC.id_sec=S.id
 		AND A.id=HS.id_asso
 		AND HS.id_sec=S.id
 		AND AD.id_cre=CR.id
+		AND ( AD.id_adh=ADH.id
+			OR
+			(
+				ADH.id IN
+				(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
+				OR ADH.id IN
+				(SELECT id_adh FROM resp_section WHERE resp_section.id_sec IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid'))
+				OR ADH.id IN
+				(SELECT id_adh FROM resp_act WHERE resp_act.id_act IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid'))
+				OR ADH.id IN
+				(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid'))
+			)
+		)
 		AND
 		(
 			S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
@@ -257,19 +270,8 @@ function getMyAdherents($userid){
 			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
 		)
-		OR
-		(
-			ADH.id IN
-			(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
-			OR ADH.id IN
-			(SELECT id_adh FROM resp_section WHERE resp_section.id_sec IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid'))
-			OR ADH.id IN
-			(SELECT id_adh FROM resp_act WHERE resp_act.id_act IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid'))
-			OR ADH.id IN
-			(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid'))
-
-		)
 		";
+		
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

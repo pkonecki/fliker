@@ -11,6 +11,7 @@ function getMyPaiements($userid){
 	$query="SELECT  P.*
 		FROM paiement P
 		WHERE P.id_adh=$userid
+		ORDER BY P.date DESC
 		";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -33,9 +34,7 @@ function getMyPaiements($userid){
 }
 
 function addPaiement($tab){
-	print_r_html($tab);
 	$query= "INSERT INTO paiement (id_adh,type,num,remarque,promo,date)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."' )";
-
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

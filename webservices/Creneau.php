@@ -84,7 +84,7 @@ function getCreneaux($userid){
 							OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
 							OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
 							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
-							OR CR.id IN (SELECT id_cre FROM adhesion WHERE id_adh = '$userid')
+							/*OR CR.id IN (SELECT id_cre FROM adhesion WHERE id_adh = '$userid')*/
 							)
 							ORDER BY nom_sec
 						";

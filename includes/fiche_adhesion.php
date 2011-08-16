@@ -11,6 +11,7 @@ if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid']) {
 	$assos_resp=getMyAssos(-1);
 	if(!isset($_GET['asso'])) $current_asso=key($assos_resp);
 	else $current_asso=$_GET['asso'];
+
 }
 else {
 	if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
@@ -20,6 +21,7 @@ else {
 		else $current_asso=$_GET['asso'];
 	}
 	$tab = getMyAdherents($_SESSION['uid']);
+
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
 	else {
 		print 'Vous n\'avez pas accès à cette page';
@@ -108,11 +110,12 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		//Adhésions
 		$ads=getAdhesions($id_adh);//GetMyAdhesions(id_adh)
 		$crens=getAllCreneaux();
+		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
 		print "<h2>Adhésions de {$adh['prenom']} {$adh['nom']}</h2>";
 		print '<TABLE>';
 		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th><th>Association de rattachement</th><th>Supprimer</th>';
-		foreach($ads as $key => $value) if(is_numeric($key) && ($self || $value['id_asso']==$current_asso)){
+		foreach($ads as $key => $value) if(is_numeric($key) && ($self || $value['id_asso']==$current_asso || isset($mycrens[$value['id_cre']]))){
 			print '<tr><FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
 				<input type="hidden" name="action" value="suppression_ads" />
 				<input type="hidden" name="id_ads" value='.$key.' />
@@ -128,7 +131,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 				</FORM></tr>';
 		}
 		print '</TABLE>';
-		print '<FORM action="index.php?page=7" method="POST">
+		if ($self || $resp_asso) print '<FORM action="index.php?page=7" method="POST">
 		<input type="hidden" name="action" value="nouvelle" />
 		<INPUT type="submit" value="Nouvelle">
 		</FORM>';
