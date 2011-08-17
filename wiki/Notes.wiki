@@ -1,11 +1,28 @@
-== Notes ==
+= Notes =
   * Table config avec url site, promo
   * Page admin: changer promo, mode standby (pas d'adhesion)
   * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
   * Présence: fonctionnement par semaine, possibilité de marquer des semaines de vacances
     * Evénements exceptionnels: table spéciale?
-===Urgence===
 
+===notion de promo pour paiement/adhésion===
+  * <s>Champ promo dans adhesion/paiement</s>
+  * Notion de promo courante: stocker la valeur, + la borne de la valeur (date)
+
+===lien paiement < - > adhésion===
+  * <s>Faire table de hash </s>
+
+===Changements UML:===
+    * <s>Nouveau supplément_cotisation asso</s>
+    * <s>Supprimer champs cotisation dans asso</s>
+    * <s>Généraliser Responsables (idem suppléments)</s>
+    * <s>Supprimer lien id_prof adherent <> créneau</s>
+    * <s>généraliser supplément sections / activité / creneaux </s>
+    * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
+    * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+
+
+===Urgences===
   * Table types de suppléments (cotiz,location, caution, supplément)
   * Table types de paiements (cheque/espece/cb/dispense)
   * Association destinataire table supplément
@@ -15,21 +32,32 @@
   * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
   * Ajouter gestion select dans recherche
 
-===notion de promo pour paiement/adhésion===
-  * <s>Champ promo dans adhesion/paiement</s>
-  * Notion de promo courante: stocker la valeur, + la borne de la valeur (date)
 
-===Lien paiement < - > adhésion===
-  * <s>Faire table de hash </s>
+===Associations===
+  * Tables des statuts (etudiant/personel/exterieur)
+  * +table d'associations possibles pour un statut (ex: etudiant -->Asesco et PSUC)
+  * Choix des créneaux
+  * Calcul des associations auxquelles s'inscrire par critère de priorité :
+    # Maximum de sports
+    # Minimum d'associations
+    # Cout minimum
+    # Random si plusieurs choix (rare)
 
-===Adhérent : id_asso/num_carte -> table (plusieurs assos pour un adherent) ===
-  * <s>Faire table de hash</s>
 
-===Table adhérent ===
-  * <s>modularité : deux tables, description ...</s>
+===Sports===
+  * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
+    * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc... 
+  * <s>description</s>
+  * <s>logo</s>
+
+
+===Adhérents===
+  * id_asso/num_carte -> table (plusieurs assos pour un adherent)
+    * <s>Faire table de hash entre adh et asso</s>
+  * <s>modularité -> deux tables : data + description des data </s>
   * <s>vérification : langage simplifié de format (à determiner)</s>
   * Séparer données login/données perso? Customisation supplémentaire assos locales	
-  * -preinscription  --> +date creation
+  * -preinscription --> +date creation
   * <s>+signature valide quand adresse email validée</s>
   * +adresse professionnelle (cf customisation locale PSUC)
   * <s>+numéro d'agent</s>(cf numayantdroit : numéro de carte étudiant/CNRS etc...)
@@ -44,13 +72,8 @@
     * LDAP utilisera cette case
     * Table de hash champ adherent <-> adherent + date
 
-===Paiement===
-  * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
-    * possibilité de créer un nouveau numéro (carte perdue)
-    * ne pas créer un numéro si il existe déjà
-    * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
 
-===Inscription:===
+===Inscriptions===
   * <s>conservation données en post</s>
   * captcha? en confirmation (basse priorité)
   * <s>identifiant : email</s>
@@ -81,9 +104,36 @@
     * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
   * Catégorie Homme/Femme --> Masculin/Féminin
 
-===Table des sports===
-  * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
-    * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc... 
+
+===Paiements===
+  * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
+    * possibilité de créer un nouveau numéro (carte perdue)
+    * ne pas créer un numéro si il existe déjà
+    * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
+
+
+===Présences===
+    * Table de hash créneau + adhérent
+    * Fonction pour générer fiche de présence
+    * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
+    * Fonction pour générer et archiver stats + purge table en fin d'année
+
+	
+===Recherches===
+  * Recherche modulaire : 
+    * <s>Ajouter regles de recherche / et </s>/ou
+    * <s>Par defaut: nom,prénom,email,catégorie (détecter si vide) -> utiliser table des champs</s>
+    * Selection des colonnes à afficher
+  * Critères:
+    * <s>Nom, Prénom, Email, Catégorie (masculin/féminin)</s>
+    * <s>Par créneau, activité, section, asso, --> menu arbre</s>
+      * Décocher automatiquement si vide en dessous
+    * <s>Check : Avec ou sans photo</s>
+    * Afficher seulement les profs / bureau / webmaster (checkbox)
+    * <s>Radio: Complet/Normal/Trombino</s>
+    * Check: Adhésion illégitime (=pas de supplément défini)
+    * <s>Select Solde a jour/pas a jour</s>
+  * <s>Restreindre liste des sports en fonction du niveau (que les sports d'un prof)</s>	
 
 	
 ===Fonctions de saisie/modification===
@@ -120,32 +170,6 @@
   * Fiche Adhérent
 
 	
-===Recherche:===
-  * Recherche modulaire : 
-    * <s>Ajouter regles de recherche / et </s>/ou
-    * <s>Par defaut: nom,prénom,email,catégorie (détecter si vide) -> utiliser table des champs</s>
-    * Selection des colonnes à afficher
-  * Critères:
-    * <s>Nom, Prénom, Email, Catégorie (masculin/féminin)</s>
-    * <s>Par créneau, activité, section, asso, --> menu arbre</s>
-      * Décocher automatiquement si vide en dessous
-    * <s>Check : Avec ou sans photo</s>
-    * Afficher seulement les profs / bureau / webmaster (checkbox)
-    * <s>Radio: Complet/Normal/Trombino</s>
-    * Check: Adhésion illégitime (=pas de supplément défini)
-    * <s>Select Solde a jour/pas a jour</s>
-  * <s>Restreindre liste des sports en fonction du niveau (que les sports d'un prof)</s>
-	
-
-
-===Alertes===
-  * Interface pour gérer (activer/désactiver/déclencher manuellement/daily,weekly etc...) les alertes
-    * /!\ Gens pas à jour (solde != 0)
-    * /!\ Pas de certificats médical (surtout pour compétiteurs)
-    * /!\ Pas de sport
-    * /!\ Pas de confirmation par email
-  * Peu urgent: interface pour créer des alertes
-	
 === Envoi d'Email===
   * bien gérer le from
     * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email prof sinon
@@ -158,34 +182,10 @@ Champs bases:
 https: fichier de config fliker.conf
 
 
-
-
-===Changements UML:===
-    * <s>Nouveau supplément_cotisation asso</s>
-    * <s>Supprimer champs cotisation dans asso</s>
-    * <s>Généraliser Responsables (idem suppléments)</s>
-    * <s>Supprimer lien id_prof adherent <> créneau</s>
-    * <s>généraliser supplément sections / activité / creneaux </s>
-    * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
-    * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
-
-===Table section===
-    * <s>description</s>
-    * <s>logo</s>
-
-===Table présence (basse priorité)===
-    * Table de hash créneau + adhérent
-    * Fonction pour générer fiche de présence
-    * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
-    * Fonction pour générer et archiver stats + purge table en fin d'année
-
-
-===Calcul appartenance association===
-  * Tables des statuts (etudiant/personel/exterieur)
-  * +table d'associations possibles pour un statut (ex: etudiant -->Asesco et PSUC)
-  * Choix des créneaux
-  * Calcul des associations auxquelles s'inscrire par critère de priorité :
-    # Maximum de sports
-    # Minimum d'associations
-    # Cout minimum
-    # Random si plusieurs choix (rare)
+===Alertes===
+  * Interface pour gérer (activer/désactiver/déclencher manuellement/daily,weekly etc...) les alertes
+    * /!\ Gens pas à jour (solde != 0)
+    * /!\ Pas de certificats médical (surtout pour compétiteurs)
+    * /!\ Pas de sport
+    * /!\ Pas de confirmation par email
+  * Peu urgent: interface pour créer des alertes
