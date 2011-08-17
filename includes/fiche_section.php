@@ -193,7 +193,7 @@ else {
 			foreach ($sups as $id => $sup) {
 				print '<tr><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup_confirm" />
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].'$</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}

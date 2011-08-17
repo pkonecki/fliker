@@ -207,7 +207,7 @@ else {
 			foreach ($sups as $id => $sup) {
 				print '<tr><FORM action="index.php?page=3&sup='.$id.'&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup_confirm" />
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].'$</td><td>'.$sup['statut'].'</td>
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$sup['statut'].'</td>
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}

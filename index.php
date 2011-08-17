@@ -11,10 +11,16 @@ include_once('Select.php');
 include_once('Adhesion.php');
 include_once('Supplement.php');
 include_once("Paiement.php");
-$header = '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+include_once("General.php");
+
+$current_promo=getParam('promo');
+setlocale(LC_ALL, 'fr_FR');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
@@ -31,8 +37,9 @@ $header = '
  </head>
  <body>
 <div id="top">
-<h1 id="title">Fliker</h1> ';
-$footer = '</body></html>';
+<h1 id="title">Fliker</h1>
+<?php
+
 print $header;
 if(!(strcmp($_SESSION['user'],"") == 0)) include("menu.php");
 include("userdiv.php");
@@ -64,6 +71,9 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 		case 7:
 			include("fiche_adhesion.php");
 		break;
+		case 8:
+			include("fiche_presence.php");
+		break;
 	}
 	print '</div>';
 } else print 'Vous n\'êtes pas connecté';
@@ -71,6 +81,7 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 print $footer;
 
 ?>
+</body></html>
 <script type="text/javascript">
 $(".filterselect").multiselect({
    multiple: false,

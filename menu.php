@@ -21,5 +21,8 @@ if($tot_act > 0){
 if($tot_cre > 0){
 	print '<li><a class="'.(($_GET['page']==6 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Gestion</a></li>';
 }
+if($tot > 0){
+	print '<li><a class="'.(($_GET['page']==8) ? 'selected' : '').'" href="index.php?page=8&week='.week_isonumber(time()).'">Présence</a></li>';
+}
 print '</ul>';
 ?>
