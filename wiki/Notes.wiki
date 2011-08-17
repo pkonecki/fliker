@@ -14,10 +14,13 @@
     * bouton changer promo pour affichage
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
+    * bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)
   * ADHESIONS :
     * gestion des adhésions impossibles (archiver/notifier ces demandes)
   * ADHERENTS :
     * bouton pour changer son passwd
+  * SECTION :
+    * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
 
   * Table types de suppléments (cotiz, location, caution, supplément)
   * Table types de paiements (cheque/espece/cb/dispense)
