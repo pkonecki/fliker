@@ -6,30 +6,33 @@
 
 ===Urgences===
   * PAIEMENTS:
-    * calcul auto promo
+    * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
     * calcul auto total du paiement (pour comparaison avec val du chq)
-    * stocker/afficher : paiement enregistré par "nom" le "date"
+    * stocker/afficher : paiement enregistré par "nom"
     * gestion statut : préinscrit/partiel/àjour/résilié
+    * ajout champs "date de la transaction"
   * PROMOS :
-    * bouton changer promo pour affichage
+    * bouton changer promo pour affichage (paiements + adhésions + présence)
+    * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
     * bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)
   * ADHESIONS :
     * gestion des adhésions impossibles (archiver/notifier ces demandes)
+    * Ne pas afficher les créneaux sans prof/responsables au dessus (ni les section désactivées) (ni rien du tout si mode standby)
   * ADHERENTS :
-    * bouton pour changer son passwd
+    * bouton pour changer son passwd (seulement par adhérent)
+    * bouton pour dés/activer un compte (seulement par admin)
+    * bouton pour changer son statut (seulement par admin)
+    * bouton pour changer son email (par pratiquant ou admin => envoi d'un cookie/email pour réactivation)
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
-
+  * AUTRES :
   * Table types de suppléments (cotiz, location, caution, supplément)
   * Table types de paiements (cheque/espece/cb/dispense)
-  * Association destinataire table supplément
+  * <s>Association destinataire table supplément</s>
   * <s>Table mère pour asso/section/act/cre</s>
   * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
-  * Adhesion: Ne pas afficher les créneaux sans prof/responsables au dessus
-  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
-  * Ajouter gestion select dans recherche
 
 
 ===Config/Install du logiciel===
@@ -38,15 +41,15 @@
 
 ===Login/Logout===
   * bouton "j'ai oublié mon passwd" -> renvoyer un cookie par email
-  * bouton "je suis un gros boulet" -> rediriger vers "RT"
+  * peu urgent : bouton "je suis un gros boulet" -> rediriger vers "RT"
 
 
 ===Notion de promo===
   * Page admin :
     * changer de promo courante (stocker dans table sql)
     * booléen mode standby (inscriptions ok mais pas d'adhesions)
-  * <s>Champ promo dans adhesions/paiements</s>
-  * <s>Champ promo dans présences</s>
+  * <s>Champ promo dans table adhesions/paiements</s>
+  * <s>Champ promo dans table présences</s>
 
 
 ===Changements UML===
@@ -128,6 +131,7 @@
   * Case a cocher : je n'ai pas d'adresse email
     * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
   * Catégorie Homme/Femme --> Masculin/Féminin
+  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
 
 
 ===Paiements===
@@ -229,6 +233,7 @@ https: fichier de config fliker.conf
     * /!\ Pas de confirmation du cookie par email et/ou email invalide
     * /!\ Adhésion impossible
     * /!\ Nouvelle adhésion valide (invitation à prendre contact)
+    * /!\ Paiement qui ne correspond plus à une facture (ex : statut du pratiquant a changé or paiement déjà fait => plus de correspondance paiement/supplément => admin doit detruire paiement et le resaisir)
 
 
 ===plugin LDAP===
