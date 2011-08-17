@@ -17,20 +17,21 @@
 
   * *Juillet*:
     * Semaine 27: Ajout Responsable/Suppléments (changement UML supplément)
-    * Semaine 28: Ajout adhésion/Paiements
-    * Semaine 29: Vac / Gestion des présences
-    * Semaine 30: Vac / Monitoring
+    * Semaine 28: Gestion Adhésions/Paiements + Présences
+    * Semaine 29: Vac   / Suite Adhésions/Paiements
+    * Semaine 30: Vac   / Suite Adhésions/Paiements
   * *Aout*:
-    * Semaine 31: Vac / Notes
-    * Semaine 32: Tests / Portail
-    * Semaine 33: Tests 
-    * Semaine 34: Tests
+    * Semaine 31: Vac   / Suite Adhésions/Paiements
+    * Semaine 32: Tests / Fin Adhésions/Paiements
+    * Semaine 33: Tests / Fin Présences
+    * Semaine 34: Tests / Monitoring, Notes
     * Semaine 35: Tests / Fonctions de customisation
  
     * Documentation (phil)
 
 =Perspectives=
 
+  * *Portail*
   * *Forum*
   * *Système de reservation*
   * *Affichage Agenda*
