@@ -72,25 +72,24 @@ function newAdherent($tab){
 
 
 function getAdherent($user){
-		$return = array();
-		$tab = getChampsAdherents();
-		include("opendb.php");
+	$return = array();
+	$tab = getChampsAdherents();
+	include("opendb.php");
 
-		$query = "SELECT * FROM `adherent` WHERE `id` = '".$user."'";
+	$query = "SELECT * FROM `adherent` WHERE `id` = '".$user."'";
 
-		$results = mysql_query($query);
-		if (!$results) echo mysql_error();
-		$row = mysql_fetch_assoc($results);
-		foreach($tab as $champ){
-				if($champ['type']==='select'){
-					$return[$champ['nom']]=$row['id_'.$champ['nom']];
-				}
-				else {
-					$return[$champ['nom']]=$row[$champ['nom']];
-				}
-		}
-		include("closedb.php");
-
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$row = mysql_fetch_assoc($results);
+	foreach($tab as $champ){
+			if($champ['type']==='select'){
+				$return[$champ['nom']]=$row['id_'.$champ['nom']];
+			}
+			else {
+				$return[$champ['nom']]=$row[$champ['nom']];
+			}
+	}
+	include("closedb.php");
 	return $return;
 }
 
@@ -169,6 +168,19 @@ function getAdherents(){
 	return $tab;
 }
 
+function getAdherentsByCreneau($id_cre,$promo){
+	$query = "SELECT ADH.* FROM adherent ADH, adhesion AD WHERE AD.id_adh=ADH.id  AND AD.id_cre=$id_cre AND AD.promo=$promo ORDER BY nom ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+}
+
 function getStatuts(){
 	$query = "SELECT * FROM statut ORDER BY nom ";
 	include("opendb.php");
@@ -185,49 +197,6 @@ function getStatuts(){
 }
 
 
-
-function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie){
-	//Add sup
-	if($tb==="association") $col = "id_statut";
-	else $col="id_asso_adh";
-	$query = "INSERT INTO sup(type,valeur,$col,id_asso_paie) VALUES ('$type','$valeur','$id_fk','$id_asso_paie')";
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$id_sup = mysql_insert_id();
-
-	//Ajouter sup_fk avec id_sup_fk déterminé
-	$req3="INSERT INTO sup_fk (id_ent,id_sup) VALUES ('$id_tb','$id_sup')";
-	$res3=mysql_query($req3);
-	if (!$res3) echo mysql_error();
-	include("closedb.php");
-}
-
-function delSup($id){
-	$query = "DELETE FROM sup WHERE id='$id'";
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	include("closedb.php");
-}
-
-function getSup($tb,$id_tb){
-	if($tb==="association") {
-		$query = "SELECT S.*,SF.id_ent id_ent, ST.nom statut FROM sup S ,sup_fk SF , statut ST WHERE SF.id_sup=S.id AND S.id_statut=ST.id AND SF.id_ent='$id_tb'  ";
-	} else {
-		$query = "SELECT S.*,SF.id_ent id_ent FROM sup S ,sup_fk SF WHERE SF.id_sup=S.id AND SF.id_ent='$id_tb'  ";
-	}
-
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$tab = array();
-	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row;
-	}
-	include("closedb.php");
-	return $tab;
-}
 
 function getAssos(){
 	$query = "SELECT * FROM association ";

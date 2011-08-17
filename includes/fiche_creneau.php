@@ -151,7 +151,6 @@ else {
 
 			foreach($tab as $creneau){
 				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
-
 			}
 			print '</ul>';
 
@@ -201,7 +200,7 @@ else {
 			foreach ($sups as $id => $sup) {
 				print '<tr><FORM action="index.php?page=6&sup='.$id.'&creneau='.$_GET['creneau'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup_confirm" />
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].'$</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
 				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
 					</FORM></tr>';
 			}

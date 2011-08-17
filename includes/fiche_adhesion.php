@@ -29,6 +29,12 @@ else {
 	}
 
 }
+if(isset($_GET['promo'])) {
+	$promo=$_GET['promo'];
+} else {
+	$promo=$current_promo;
+}
+
 $adh = getAdherent($id_adh);
 $creneaux=getAllCreneaux();
 if ($_POST['action'] == 'nouvelle' && $self) {
@@ -46,7 +52,7 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][fin]=$creneau[fin_cre];
 	}
-	$ads=getAdhesions($id_adh);
+	$ads=getAdhesions($id_adh,$promo);
 
 	foreach($tab as $act){
 		print '<li><input type="checkbox" name="act'.$act[id].'"  value="'.$act[id].'"><label>'.$act[nom].'</label>';
@@ -108,7 +114,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			foreach($assos_resp as $key => $asso) print "<a href=\"index.php?page=7&adh=$id_adh&asso=$key\">$asso</a> ";
 		}
 		//Adhésions
-		$ads=getAdhesions($id_adh);//GetMyAdhesions(id_adh)
+		$ads=getAdhesions($id_adh,$promo);//GetMyAdhesions(id_adh)
 		$crens=getAllCreneaux();
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
@@ -194,7 +200,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			print '</table>';
 		}
 
-		//Päiements
+		//Paiements
 		print "<h2>Paiements</h2>";
 		$paiements=getMyPaiements($id_adh);
 		//print_r_html($paiements);
