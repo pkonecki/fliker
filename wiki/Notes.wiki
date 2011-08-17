@@ -1,13 +1,19 @@
 = Notes =
-  * Table config avec url site, promo
-  * Page admin: changer promo, mode standby (pas d'adhesion)
+
+
+===Config/Install du logiciel===
+  * Fichier de config avec url site, params connexion sql...
   * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
   * Présence: fonctionnement par semaine, possibilité de marquer des semaines de vacances
     * Evénements exceptionnels: table spéciale?
 
-===notion de promo pour paiement/adhésion===
+
+===Notion de promo===
+  * Page admin :
+    * changer de promo courante (stocker dans table sql)
+    * booléen mode standby (inscriptions ok mais pas d'adhesions)
   * <s>Champ promo dans adhesion/paiement</s>
-  * Notion de promo courante: stocker la valeur, + la borne de la valeur (date)
+
 
 ===lien paiement < - > adhésion===
   * <s>Faire table de hash </s>
@@ -189,3 +195,14 @@ https: fichier de config fliker.conf
     * /!\ Pas de sport
     * /!\ Pas de confirmation par email
   * Peu urgent: interface pour créer des alertes
+
+
+===LDAP===
+  * booléen d'activation du check + params connexion dans table/config
+
+
+===Table de Customisation / admin===
+  * stocker/modifier Bornes de la Promo courante
+    * actuellement hardcodé = (next Monday after 31/08 -> sem du 30/06)
+    * stocker dates vac et fériés pour supprimer colonnes présences ...
+  *
