@@ -1,9 +1,40 @@
 = Notes =
 
 
+* /!\documentation à faire/!\*
+
+
+===Urgences===
+  * PAIEMENTS:
+    * calcul auto promo
+    * calcul auto total du paiement (pour comparaison avec val du chq)
+    * stocker/afficher : paiement enregistré par "nom" le "date"
+  * PROMOS :
+    * bouton changer promo pour affichage
+  * RECHERCHE :
+    * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
+  * ADHESIONS :
+    * gestion des adhésions impossibles (archiver/notifier ces demandes)
+  * ADHERENTS :
+    * bouton pour changer son passwd
+
+  * Table types de suppléments (cotiz, location, caution, supplément)
+  * Table types de paiements (cheque/espece/cb/dispense)
+  * Association destinataire table supplément
+  * <s>Table mère pour asso/section/act/cre</s>
+  * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
+  * Adhesion: Ne pas afficher les créneaux sans prof/responsables au dessus
+  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
+  * Ajouter gestion select dans recherche
+
+
 ===Config/Install du logiciel===
-  * Fichier de config avec url site, params connexion sql...
-  * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
+  * Fichier de config avec url site, params connexion sql ...
+
+
+===Login/Logout===
+  * bouton "j'ai oublié mon passwd" -> renvoyer un cookie par email
+  * bouton "je suis un gros boulet" -> rediriger vers "RT"
 
 
 ===Notion de promo===
@@ -14,24 +45,13 @@
   * <s>Champ promo dans présences</s>
 
 
-===Changements UML:===
+===Changements UML===
     * <s>Nouveau supplément_cotisation asso</s>
     * <s>Supprimer champs cotisation dans asso</s>
     * <s>Généraliser Responsables (idem suppléments)</s>
     * <s>Supprimer lien id_prof adherent <> créneau</s>
     * <s>généraliser supplément sections / activité / creneaux </s>
     * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
-
-
-===Urgences===
-  * Table types de suppléments (cotiz,location, caution, supplément)
-  * Table types de paiements (cheque/espece/cb/dispense)
-  * Association destinataire table supplément
-  * <s>Table mère pour asso/section/act/cre</s>
-  * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
-  * Adhesion: Ne pas afficher les créneaux sans prof/responsables au dessus
-  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
-  * Ajouter gestion select dans recherche
 
 
 ===Associations===
@@ -112,6 +132,7 @@
     * possibilité de créer un nouveau numéro (carte perdue)
     * ne pas créer un numéro si il existe déjà
     * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
+  * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
 
 
 ===Présences===
@@ -120,6 +141,7 @@
     * <s> Affichage / archivage selon promo </s>
     * Imprimer fiche de présence
   * Evénements exceptionnels (stages, matchs...) : table spéciale ?
+  * Stocker dates vac et fériés pour supprimer colonnes présences ?
 
 
 ===Recherches===
@@ -137,8 +159,9 @@
     * Check: Adhésion illégitime (=pas de supplément défini)
     * <s>Select Solde a jour/pas a jour</s>
   * <s>Restreindre liste des sports en fonction du niveau (que les sports d'un prof)</s>	
+  * Possibilité recherche restreinte (juste nom/prénom + case envoi email (mais email caché)) pour les simples pratiquants dans leur activité
 
-	
+
 ===Fonctions de saisie/modification===
   * Gestion de privilèges descendante (Bureau peut attribuer droit prof)
     * Notification email prof bureau en cas de modif de ses droits
@@ -194,13 +217,31 @@ https: fichier de config fliker.conf
   * Peu urgent: interface pour créer des alertes
 
 
-===LDAP===
+===plugin LDAP===
   * booléen d'activation du check + params connexion dans table/config
   * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+
+
+===plugins paiements en ligne===
+  * SoGé ?
+  * Paypal ?
+
+
+===plugin "inventaire"===
+  * stocker les achats de matériel pour chaque section
+    * date (promo) d'acquisition, coût, upload pdf devis/facture, etc.
+    * fonction d'affichage (tri par promo, par coût, par nom)
+    * fonction de saisie/modif/suppresion
+
+
+===Synoptiques/Statistiques===
+  * tableau promos / sections
+    * nbr d'inscrits à jour (par assos)
+    * nbr d'inscrits assidus mais pas à jour (par assos)
+    * nbr touristes = pas assidus et pas à jour (par assos)
+    * recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections = asso)
 
 
 ===Table de Customisation / admin===
   * stocker/modifier Bornes de la Promo courante
     * actuellement hardcodé = (next Monday after 31/08 -> sem du 30/06)
-    * stocker dates vac et fériés pour supprimer colonnes présences ...
-  *
