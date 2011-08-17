@@ -4,19 +4,15 @@
 ===Config/Install du logiciel===
   * Fichier de config avec url site, params connexion sql...
   * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
-  * Présence: fonctionnement par semaine, possibilité de marquer des semaines de vacances
-    * Evénements exceptionnels: table spéciale?
 
 
 ===Notion de promo===
   * Page admin :
     * changer de promo courante (stocker dans table sql)
     * booléen mode standby (inscriptions ok mais pas d'adhesions)
-  * <s>Champ promo dans adhesion/paiement</s>
+  * <s>Champ promo dans adhesions/paiements</s>
+  * <s>Champ promo dans présences</s>
 
-
-===lien paiement < - > adhésion===
-  * <s>Faire table de hash </s>
 
 ===Changements UML:===
     * <s>Nouveau supplément_cotisation asso</s>
@@ -25,7 +21,6 @@
     * <s>Supprimer lien id_prof adherent <> créneau</s>
     * <s>généraliser supplément sections / activité / creneaux </s>
     * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
-    * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
 
 
 ===Urgences===
@@ -112,6 +107,7 @@
 
 
 ===Paiements===
+  * <s>Faire table de hash paiement < - > adhésion </s>
   * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
     * possibilité de créer un nouveau numéro (carte perdue)
     * ne pas créer un numéro si il existe déjà
@@ -119,12 +115,13 @@
 
 
 ===Présences===
-    * Table de hash créneau + adhérent
-    * Fonction pour générer fiche de présence
-    * Fonction pour remplir présence : tableau adhérent / créneau --> case a cocher
-    * Fonction pour générer et archiver stats + purge table en fin d'année
+  * <s> Table de hash créneau < - > adhérent </s>
+    * <s> Afficher/Remplir présence -> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher </s>
+    * <s> Affichage / archivage selon promo </s>
+    * Imprimer fiche de présence
+  * Evénements exceptionnels (stages, matchs...) : table spéciale ?
 
-	
+
 ===Recherches===
   * Recherche modulaire : 
     * <s>Ajouter regles de recherche / et </s>/ou
@@ -199,6 +196,7 @@ https: fichier de config fliker.conf
 
 ===LDAP===
   * booléen d'activation du check + params connexion dans table/config
+  * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
 
 
 ===Table de Customisation / admin===
