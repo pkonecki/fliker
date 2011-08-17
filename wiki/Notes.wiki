@@ -9,6 +9,7 @@
     * calcul auto promo
     * calcul auto total du paiement (pour comparaison avec val du chq)
     * stocker/afficher : paiement enregistré par "nom" le "date"
+    * gestion statut : préinscrit/partiel/àjour/résilié
   * PROMOS :
     * bouton changer promo pour affichage
   * RECHERCHE :
