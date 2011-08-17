@@ -212,18 +212,30 @@ Champs bases:
 https: fichier de config fliker.conf
 
 
-===Alertes===
-  * Interface pour gérer (activer/désactiver/déclencher manuellement/daily,weekly etc...) les alertes
+===Alertes / Notifications===
+  * Interface pour customiser "mon espace" : accepte ou non de recevoir les alertes (une par une, digest par jour/semaine/etc)
+    * pratiquants : peuvent refuser de recevoir mails des co-pratiquants mais obligation recevoir mails des resps + alertes :
+      * pas à jour ou pas certif : weekly (ou val réglée par resp)
+      * pas d'adésion cette année : 6 mois (ou val réglée par resp)
+    * responsables : obligation recevoir tous mails + alertes mais réglage possible des fréquences :
+      * email non confirmé (cookie) : weekly
+      * email invalide (notification revenue en erreur) : immédiat
+      * adhésion impossible : immédiat
+      * nouvelle adhésion : immédiat
+  * Interface pour déclencher manuellement ou cron (daily/weekly ...) les checks :
     * /!\ Gens pas à jour (solde != 0)
     * /!\ Pas de certificats médical (surtout pour compétiteurs)
-    * /!\ Pas de sport
-    * /!\ Pas de confirmation par email
-  * Peu urgent: interface pour créer des alertes
+    * /!\ Pas d'adhésion
+    * /!\ Pas de confirmation du cookie par email et/ou email invalide
+    * /!\ Adhésion impossible
+    * /!\ Nouvelle adhésion valide (invitation à prendre contact)
 
 
 ===plugin LDAP===
   * booléen d'activation du check + params connexion dans table/config
   * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+  * + réglage fréquence du check
+  * + notification associée vers responsable (et pratiquant ?)
 
 
 ===plugins paiements en ligne===
@@ -246,6 +258,9 @@ https: fichier de config fliker.conf
     * recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections = asso)
 
 
-===Table de Customisation / admin===
+===peu urgent : Table de Customisation / Admin===
+  * ajouter des champs dans la fiche adhérent
+    * et gérer les descriptions + formats de saisie acceptés
   * stocker/modifier Bornes de la Promo courante
     * actuellement hardcodé = (next Monday after 31/08 -> sem du 30/06)
+  * interface pour créer des alertes
