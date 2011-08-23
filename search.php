@@ -70,7 +70,7 @@ function multiselected($post,$val){
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
 		<option '.selected('set1_type','1').' label="Nom" value="1">Nom</option>
-		<option '.selected('set1_type','2').' label="Pr&eacute;bom" value="2">Pr&eacute;nom</option>
+		<option '.selected('set1_type','2').' label="Pr&eacute;nom" value="2">Pr&eacute;nom</option>
 		<option '.selected('set1_type','3').' label="Email" value="3">Email</option>
 		<option '.selected('set1_type','4').' label="Cat&eacute;gorie" value="4">Cat&eacute;gorie</option>
 	</select>
@@ -91,9 +91,9 @@ function multiselected($post,$val){
 		print '<div id="set'.$n.'">
 	<select id="set'.$n.'_type" name="set'.$n.'_type">
 		<option '.selected($type,'1').' label="Nom" value="1">Nom</option>
-		<option '.selected($type,'2').' label="Pr&eacute;bom" value="2">Pr&eacute;nom</option>
+		<option '.selected($type,'2').' label="Prénom" value="2">Prénom</option>
 		<option '.selected($type,'3').' label="Email" value="3">Email</option>
-		<option '.selected($type,'4').' label="Cat&eacute;gorie" value="4">Cat&eacute;gorie</option>
+		<option '.selected($type,'4').' label="Catégorie" value="4">Catégorie</option>
 		</select>
 		<select id="set'.$n.'_action" name="set'.$n.'_action">
 		<option '.selected($action,'1').' label="Contient" value="1">Contient</option>

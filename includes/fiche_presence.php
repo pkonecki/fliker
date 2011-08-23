@@ -9,10 +9,16 @@ if(isset($_GET['promo'])) {
 }
 if($_POST['action']==="addpresence"){
 	//print_r_html($_POST);
-	modifPresence($_POST['id_adh'],$_POST['id_cre'],$_GET['week'],$promo,isset($_POST['present']));
+	modifPresence($_POST['id_adh'],$_POST['id_cre'],$_POST['week'],$promo,isset($_POST['present']));
 }
 
-
+print "<p>Promo:<SELECT id=\"promo\" >";
+print "<OPTION value=$current_promo ".($_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
+for ($i=1; $i<=10; $i++ ){
+	$p=$current_promo-$i;
+	print "<OPTION value=\"$p\" ".($_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
+}
+print "</SELECT></p>";
 
 $tab=getCreneaux($_SESSION['uid']);
 foreach($tab as $creneau){
@@ -48,7 +54,7 @@ foreach($tab as $creneau){
 	$w_debut=strtotime("next Monday",$w_debut);
 	$w_fin=strtotime("06/30/{$promo}");
 	$date=$w_debut;
-	print "<table ".($_GET['cre']==$cre ? "" : "style=\"display:none;\"" )."><tr><th>Jour<br>Mois</th>";
+	print "<table ".($_GET['cre']==$cre ? "" : "style=\"display:none;\"" )."><thead><tr><th>Jour<br>Mois</th>";
 	
 	while ($date < $w_fin ){
 		$week=strftime("%V",$date);
@@ -58,18 +64,25 @@ foreach($tab as $creneau){
 		print "<th>$range</th>";
 		$date = strtotime("+1 week",$date);
 	}
-	print "</tr>";
+	print "</tr></thead>";
+	$date=$w_debut;
+	print "<tfoot><tr><td></td>";
+	while ($date < $w_fin ){
+		print "<td></td>";
+		$date = strtotime("+1 week",$date);
+	}
+	print "</tr></tfoot>";
 	foreach($adhs as $id_adh => $row){
 		print "<tr><th>{$row['prenom']} {$row['nom']}</th>";
 		$date=$w_debut;
 		while ($date < $w_fin){
 			$week=strftime("%V",$date);
 			print "<td>
-			<form class=\"auto\" action=\"index.php?page=8&week={$week}&cre=$cre&promo=$promo\" method=\"POST\">
+			<form class=\"auto\" action=\"index.php?page=8&cre=$cre&promo=$promo\" method=\"POST\">
 			<input type=\"hidden\" name=\"action\" value=\"addpresence\">
 			<input type=\"hidden\" name=\"id_adh\" value=\"$id_adh\">
 			<input type=\"hidden\" name=\"id_cre\" value=\"$cre\">
-			<input type=\"hidden\" name=\"week\" value=\"{$week}\">
+			<input type=\"hidden\" name=\"week\" value=\"$week\">
 			
 			<input type=\"checkbox\" name=\"present\" ".((etaitPresent($id_adh,$cre,$week,$promo)) ? 'checked' : '')." />
 			</form>
@@ -91,5 +104,24 @@ $(".auto").change( function (){
 $(".toggle").click(function () {
 	$(this).parent().next().toggle();
 	//alert($(this).parent().parent().next().html());
+});
+$('#promo').change( function (){
+	window.location.search = "page=8&week="+$.getUrlVar('week')+"&cre="+$.getUrlVar('cre')+"&promo="+$(this).val();
+});
+$.extend({
+  getUrlVars: function(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  },
+  getUrlVar: function(name){
+    return $.getUrlVars()[name];
+  }
 });
 </script>
