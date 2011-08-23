@@ -114,7 +114,7 @@ function getFacture($ads,$id_statut_adh){
 	$t_acts = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($acts) AS A GROUP BY A.id_asso_paie";
 	$t_cres = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($cres) AS A GROUP BY A.id_asso_paie";
 
-	print $total;
+
 	include("opendb.php");
 	$results = mysql_query($assos);
 	if (!$results) echo mysql_error();
@@ -162,6 +162,8 @@ function getFacture($ads,$id_statut_adh){
 	while($row = mysql_fetch_array($results)){
 		$totaux[$row['id_asso_paie']] += $row['total'];
 	}
+	
+
 	include("closedb.php");
 	$ret=array();
 	$ret['assos']=$tab_assos;
@@ -169,6 +171,9 @@ function getFacture($ads,$id_statut_adh){
 	$ret['acts']=$tab_acts;
 	$ret['cres']=$tab_cres;
 	$ret['totaux']=$totaux;
+
 	return $ret;
 }
+
+
 ?>

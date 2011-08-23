@@ -49,6 +49,28 @@ function addPaiement($tab){
 	include("closedb.php");
 }
 
+function delPaiement($id){
 
+	$query = "DELETE FROM paiement WHERE id='$id'";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+
+}
+
+function getPaiementsSup($id_adh){
+	$query = "SELECT SUM(PS.valeur) total,PS.id_sup FROM paiement P, paiement_sup PS WHERE P.id=PS.id_paiement AND P.id_adh=$id_adh GROUP BY PS.id_sup";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$totaux= array();
+	while($row = mysql_fetch_array($results)){
+
+		$totaux[$row['id_sup']] += $row['total'];
+	}
+	include("closedb.php");
+	return $totaux;
+}
 
 ?>
