@@ -23,8 +23,10 @@ else {
 
 
 ?>
-<h2 id="toggle_f_search">Recherche</h2>
-
+<div>
+<h2 class="inline">Recherche</h2>
+<img src="images/downarrow.gif" class="inline" id="toggle_f_search" ></img>
+</div>
 <?php
 
 function selected($post,$val){
@@ -215,12 +217,14 @@ function multiselected($post,$val){
 	$results = mysql_query($sql);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
+
+	mysql_data_seek($results,0);
 	$num=mysql_num_rows($results);
 
 	switch($_POST['affichage']){
 		case 1: //Simple
 			print '<table class="search_results" >';
-			print '<thead><tr><th>Fiche</th>';
+			print '<thead><tr><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
 		
 				if ($champ[search_simple]==1) {
@@ -243,10 +247,30 @@ function multiselected($post,$val){
 			print '<tbody>';
 			$i = 0;
 			while($row = mysql_fetch_array($results)){
+				
+				$stop = false;
+				switch ($_POST['select_solde']){
+					case 1:
+					//indifférent
+					break;
+					case 2:
+					//positif
+					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
+					break;
+					case 3:
+					//négatif
+					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
+					break;
+					case 4:
+					//nul
+					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
+					break;
+				}
+				if($stop) continue;
 				$i++;
 				if($i % 2 == 0) print '<tr>';
 				else print '<tr class="odd">';
-				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td>';
+				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
 					
 					if ($champ[search_simple]==1){
@@ -273,7 +297,7 @@ function multiselected($post,$val){
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" >';
-			print '<thead><tr><th>Fiche</th>';
+			print '<thead><tr><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
 		
 				if ($champ[user_viewable]==1) {
@@ -296,10 +320,29 @@ function multiselected($post,$val){
 			print '<tbody>';
 			$i = 0;
 			while($row = mysql_fetch_array($results)){
+				$stop = false;
+				switch ($_POST['select_solde']){
+					case 1:
+					//indifférent
+					break;
+					case 2:
+					//positif
+					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
+					break;
+					case 3:
+					//négatif
+					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
+					break;
+					case 4:
+					//nul
+					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
+					break;
+				}
+				if($stop) continue;
 				$i++;
 				if($i % 2 == 0) print '<tr>';
 				else print '<tr class="odd">';
-				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td>';
+				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
 					
 					if ($champ[user_viewable]==1){
@@ -328,7 +371,25 @@ function multiselected($post,$val){
 			$i=0;
 			print '<table>';
 			while($row = mysql_fetch_array($results)){
-				
+				$stop = false;
+				switch ($_POST['select_solde']){
+					case 1:
+					//indifférent
+					break;
+					case 2:
+					//positif
+					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
+					break;
+					case 3:
+					//négatif
+					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
+					break;
+					case 4:
+					//nul
+					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
+					break;
+				}
+				if($stop) continue;
 				
 				if($i % 5 == 0) print '<tr>';
 				$i++;
@@ -384,16 +445,16 @@ $('#reset').click(function() {
 $('#tree_root').checkboxTree({
       /* specify here your options */
       onCheck: {
-                ancestors: 'checkIfFull',
+                ancestors: 'check',
                 descendants: 'check'
             },
-            onUncheck: {
+      onUncheck: {
                 ancestors: 'uncheck'
             }
-    });
+});
 $("#toggle_f_search").click(function () {
       $("#f_search").slideToggle("slow");
-    });
+});
 </script>
 
 
