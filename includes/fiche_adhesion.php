@@ -128,7 +128,11 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			print "</p>";
 		}
 		//Adhésions
-		$ads=getAdhesions($id_adh,$promo);//GetMyAdhesions(id_adh)
+		if ($self){
+			$ads=getAdhesions($id_adh,$promo);
+		} else {
+			$ads=getMyAdhesions($id_adh,$promo);
+		}
 		$crens=getAllCreneaux();
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
@@ -236,7 +240,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			}
 			print '</table>';
 		}
-
+		print "SOOOOOOLDE:".getSolde($id_adh,$promo);
 		//Paiements
 		print "<h2>Paiements</h2>";
 		$paiements=getMyPaiements($id_adh);

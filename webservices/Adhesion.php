@@ -13,6 +13,15 @@ function getAdhesions($uid,$promo){
 	return $tab;
 }
 
+function getMyAdhesions($id_adh,$promo){
+	$mycrens=getCreneaux($_SESSION['uid']);
+	$ads= getAdhesions($id_adh,$promo);
+	foreach ($ads as $key => $value){
+		if(!isset($mycrens[$value['id_cre']])) unset($ads[$key]);
+	}
+	return $ads;
+}
+
 function newAdhesions($tab,$id_adh){
 	$query= "INSERT INTO adhesion (id_adh,id_cre,id_asso,date,promo)  VALUES ";
 	foreach($tab as $cre => $asso){

@@ -269,4 +269,21 @@ function getMyAssos($userid){
 	include("closedb.php");
 	return $tab;
 }
+
+function getSolde($id_adh,$promo){
+	$mycrens=getCreneaux($_SESSION['uid']);
+	$ads= getAdhesions($id_adh,$promo);
+	foreach ($ads as $key => $value){
+		if(!isset($mycrens[$value['id_cre']])) unset($ads[$key]);
+	}
+	$adh = getAdherent($id_adh);
+	$tab = getFacture($ads,$adh['statut']);
+	$p_sup = getPaiementsSup($id_adh);
+	$solde=0;
+	foreach($tab['assos'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
+	foreach($tab['secs'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];	
+	foreach($tab['acts'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];	
+	foreach($tab['cres'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
+	return -$solde;
+}
 ?>
