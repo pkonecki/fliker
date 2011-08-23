@@ -24,5 +24,8 @@ if($tot_cre > 0){
 if($tot > 0){
 	print '<li><a class="'.(($_GET['page']==8) ? 'selected' : '').'" href="index.php?page=8">Présence</a></li>';
 }
+if($_SESSION['privilege']==='1'){
+		print '<li><a class="'.(($_GET['page']==9) ? 'selected' : '').'" href="index.php?page=9">Admin</a></li>';
+}
 print '</ul>';
 ?>

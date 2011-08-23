@@ -43,7 +43,9 @@ strong, b { font-weight: bold; }
 }
 
 /* menu */
-
+.inline{
+	display: inline-block;
+}
 
 #main_menu{
 	display: inline-block;
@@ -93,7 +95,14 @@ strong, b { font-weight: bold; }
 	padding-bottom: 8px;
 	}
 
-#content {clear:both; margin: 0em auto; width: 100%; padding: 10px 0 10px 0; text-align: left; }
+#content {
+	clear:both;
+	margin: 0em auto; 
+	width: 100%;
+	left: 15%;
+	padding: 10px 2px 10px 2px; 
+	text-align: left; 
+}
 .content { margin-left: 4.5em; margin-right: 4.5em; }
 .content ol, .content ul, .content li { font-size: 1.0em; line-height: 1.3em; margin: 0.2em 0 0.1em 1.5em; }
 .content ol.terms li { margin-bottom: 1em; }

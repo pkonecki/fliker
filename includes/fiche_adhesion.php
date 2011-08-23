@@ -25,6 +25,7 @@ else {
 	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
 	else {
 		print 'Vous n\'avez pas accès à cette page';
+		print $die_footer;
 		die();
 	}
 
@@ -240,7 +241,6 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			}
 			print '</table>';
 		}
-		print "SOOOOOOLDE:".getSolde($id_adh,$promo);
 		//Paiements
 		print "<h2>Paiements</h2>";
 		$paiements=getMyPaiements($id_adh);

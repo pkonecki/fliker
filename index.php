@@ -40,7 +40,6 @@ setlocale(LC_ALL, 'fr_FR');
 <h1 id="title">Fliker</h1>
 <?php
 
-print $header;
 if(!(strcmp($_SESSION['user'],"") == 0)) include("menu.php");
 include("userdiv.php");
 print '</div>';
@@ -74,11 +73,14 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 		case 8:
 			include("fiche_presence.php");
 		break;
+		case 9:
+			include("fiche_admin.php");
+		break;
 	}
 	print '</div>';
 } else print 'Vous n\'êtes pas connecté';
+$die_footer="</div></body></html>";
 
-print $footer;
 
 ?>
 </body></html>
