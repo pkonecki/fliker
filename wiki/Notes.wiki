@@ -270,3 +270,7 @@ https: fichier de config fliker.conf
   * stocker/modifier Bornes de la Promo courante
     * actuellement hardcodé = (next Monday after 31/08 -> sem du 30/06)
   * interface pour créer des alertes
+  * internationalisation :
+    * <s>gestion du symbole monétaire</s>
+    * param de config pour choisir langue
+    * codage des strings affichées à l'écran dans des tables sql, indéxées par le param de locale ... (cf. wikipedia)
