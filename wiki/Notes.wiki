@@ -46,8 +46,8 @@
 
 
 ===Login/Logout===
-  * bouton "j'ai oublié mon passwd" -> renvoyer un cookie par email
-  * peu urgent : bouton "je suis un gros boulet" -> rediriger vers "RT"
+  * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
+  * peu urgent : bouton "je suis un gros boulet" --> rediriger vers "RT"
 
 
 ===Notion de promo===
@@ -86,9 +86,9 @@
 
 
 ===Adhérents===
-  * id_asso/num_carte -> table (plusieurs assos pour un adherent)
+  * id_asso/num_carte --> table (plusieurs assos pour un adherent)
     * <s>Faire table de hash entre adh et asso</s>
-  * <s>modularité -> deux tables : data + description des data </s>
+  * <s>modularité --> deux tables : data + description des data </s>
   * <s>vérification : langage simplifié de format (à determiner)</s>
   * Séparer données login/données perso? Customisation supplémentaire assos locales	
   * -preinscription --> +date creation
@@ -168,7 +168,7 @@
 ===Recherches===
   * Recherche modulaire : 
     * <s>Ajouter regles de recherche / et </s>/ou
-    * <s>Par defaut: nom,prénom,email,catégorie (détecter si vide) -> utiliser table des champs</s>
+    * <s>Par defaut: nom,prénom,email,catégorie (détecter si vide) --> utiliser table des champs</s>
     * Selection des colonnes à afficher
   * Critères:
     * <s>Nom, Prénom, Email, Catégorie (masculin/féminin)</s>
@@ -191,7 +191,7 @@
       * Donne droit modification sur tout (sauf responsable) ce qui est  à son niveau et en dessous
       * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous et dans la même association
     * Administrateur : champ privilège à 1 dans table adhérent
-  * Ajout Enregistrement paiement -> bureau
+  * Ajout Enregistrement paiement --> bureau
   * Table de hash asso/section (initialisée par création section) --> défini qui a le droit supprimer/modifier la section y compris les suppléments + donne le droit de recherche
     * Les suppléments définissent un droit de recherche sur les sections/etc... aussi bien avec id_asso_paie que id_asso_adh
   * Association 
@@ -278,7 +278,7 @@
   * ajouter des champs dans la fiche adhérent
     * et gérer les descriptions + formats de saisie acceptés
   * stocker/modifier Bornes de la Promo courante
-    * actuellement hardcodé = (next Monday after 31/08 -> sem du 30/06)
+    * actuellement hardcodé = (next Monday after 31/08 --> sem du 30/06)
   * interface pour créer des alertes
   * internationalisation :
     * <s>gestion du symbole monétaire</s>
