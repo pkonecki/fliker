@@ -7,16 +7,16 @@
 ===Urgences===
   * PAIEMENTS:
     * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
-    * calcul auto total du paiement (pour comparaison avec val du chq)
+    * <s>calcul auto total du paiement (pour comparaison avec val du chq)</s>
     * stocker/afficher : paiement enregistré par "nom"
     * gestion statut : préinscrit/partiel/àjour/résilié
     * ajout champs "date de la transaction"
   * PROMOS :
-    * bouton changer promo pour affichage (paiements + adhésions + présence)
+    * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
     * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
-    * bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)
+    * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
   * ADHESIONS :
     * gestion des adhésions impossibles (archiver/notifier ces demandes)
     * Ne pas afficher les créneaux sans prof/responsables au dessus (ni les section désactivées) (ni rien du tout si mode standby)
