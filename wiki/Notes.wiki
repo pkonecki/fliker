@@ -12,7 +12,7 @@
   * PAIEMENTS:
     * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
     * <s>calcul auto total du paiement (pour comparaison avec val du chq)</s>
-    * stocker/afficher : paiement enregistré par "nom"
+    * <s>stocker/afficher : paiement enregistré par "nom"</s>
     * <s>gestion statut : active/résilié</s>/impossible
     * ajout champs "date de la transaction"
   * PROMOS :
