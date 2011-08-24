@@ -69,7 +69,7 @@
 
 ===Associations===
   * Tables des statuts (etudiant/personel/exterieur)
-  * +table d'associations possibles pour un statut (ex: etudiant -->Asesco et PSUC)
+  * +table d'associations possibles pour un statut (ex: etudiant --> Asesco et PSUC)
   * Choix des créneaux
   * Calcul des associations auxquelles s'inscrire par critère de priorité :
     # Maximum de sports
@@ -104,7 +104,7 @@
   * <s>+ Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)</s>
   * Vérification : case a cocher pour certain champs (doit être verifier) ex: numayantdroit/certificat med
     * LDAP utilisera cette case
-    * Table de hash champ adherent <-> adherent + date
+    * Table de hash champ adherent < - > adherent + date
 
 
 ===Inscriptions===
@@ -158,7 +158,7 @@
 
 ===Présences===
   * <s> Table de hash créneau < - > adhérent </s>
-    * <s> Afficher/Remplir présence -> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher </s>
+    * <s> Afficher/Remplir présence --> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher </s>
     * <s> Affichage / archivage selon promo </s>
     * Imprimer fiche de présence
   * Evénements exceptionnels (stages, matchs...) : table spéciale ?
@@ -172,7 +172,7 @@
     * Selection des colonnes à afficher
   * Critères:
     * <s>Nom, Prénom, Email, Catégorie (masculin/féminin)</s>
-    * <s>Par créneau, activité, section, asso, --> menu arbre</s>
+    * <s>Par créneau/activité/section/asso --> menu arbre</s>
       * Décocher automatiquement si vide en dessous
     * <s>Check : Avec ou sans photo</s>
     * Afficher seulement les profs / bureau / webmaster (checkbox)
@@ -192,7 +192,7 @@
       * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous et dans la même association
     * Administrateur : champ privilège à 1 dans table adhérent
   * Ajout Enregistrement paiement -> bureau
-  * Table de hash asso/section (initialisée par création section)--> défini qui a le droit supprimer/modifier la section y compris les suppléments + donne le droit de recherche
+  * Table de hash asso/section (initialisée par création section) --> défini qui a le droit supprimer/modifier la section y compris les suppléments + donne le droit de recherche
     * Les suppléments définissent un droit de recherche sur les sections/etc... aussi bien avec id_asso_paie que id_asso_adh
   * Association 
     * Ajout entité
