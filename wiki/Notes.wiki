@@ -1,7 +1,11 @@
 = Notes =
 
 
-* /!\documentation à faire/!\*
+* /!\documentation à faire/!\ *
+  * schémas d'utilisation/fonctions pour chaque écran affiché
+    * ex : workflow de la procédure d'inscription, etc.
+  * au minimum lister toutes les fonctionalités et "politiques" codées (qui ne sont pas forcément dans cette liste wiki)
+    * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
 
 
 ===Urgences===
@@ -37,7 +41,7 @@
 
 
 ===Config/Install du logiciel===
-  * Fichier de config avec url site, params connexion sql ...
+  * Fichier de config avec url base site, params connexion sql ...
 
 
 ===Login/Logout===
@@ -113,9 +117,16 @@
     * <s>page séparée : oui</s>
     * liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
     * encourager l'inscription chez d'autres assos (liste unique + pop up d'info hover)
-  * Scénario d'inscription:
-    * recherche par critère (portail sport) --> inscription
-    * inscription -->liste de sports alphabétique
+  * 2 Scénarii d'inscription:
+    * recherche par critère (portail sport)
+      * mémorisation des sports choisis
+      * création d'une fiche adhérent
+      * envoi d'email de confirmation (cookie) avec facture
+    * inscription
+      * création d'une fiche adhérent
+      * envoi d'email de confirmation (cookie) sans facture
+      * choix des sports (liste javascript)
+      * affichage facture
   * Stocker dans un repertoire en modifiant le nom du fichier : id.ext		
     * Certificat médical
     * <s>photo</s>
@@ -212,9 +223,7 @@
     * Vérifier qu'on envoie pas l'email deux fois à une même personne
     * Un email par personne ; question timer/repartition dans le temps
   * Conserver un copie des mails envoyés : envoyer l'email au from
-
-Champs bases:
-https: fichier de config fliker.conf
+  * Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
 
 
 ===Alertes / Notifications===
