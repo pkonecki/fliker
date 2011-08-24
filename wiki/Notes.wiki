@@ -18,6 +18,7 @@
   * PROMOS :
     * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
     * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
+    * bouton de purge des certificats méd (et autres ?) en fin d'année ?
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
     * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
@@ -33,11 +34,11 @@
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
-  * Table types de suppléments (cotiz, location, caution, supplément)
-  * Table types de paiements (cheque/espece/cb/dispense)
-  * <s>Association destinataire table supplément</s>
-  * <s>Table mère pour asso/section/act/cre</s>
-  * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
+    * Table types de suppléments (cotiz, location, caution, supplément)
+    * Table types de paiements (cheque/espece/cb/dispense)
+    * <s>Association destinataire table supplément</s>
+    * <s>Table mère pour asso/section/act/cre</s>
+    * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
 
 
 ===Config/Install du logiciel===
