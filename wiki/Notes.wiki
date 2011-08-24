@@ -17,6 +17,7 @@
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
     * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
+    * bouton pour n'afficher que les "non-confirmés" (cookie envoyé par email jamais validé) + DATE DE PRE-INSCRIPTION
   * ADHESIONS :
     * gestion des adhésions impossibles (archiver/notifier ces demandes)
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus </s>(ni les section désactivées) (ni rien du tout si mode standby)
