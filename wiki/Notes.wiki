@@ -18,20 +18,21 @@
   * PROMOS :
     * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
     * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
-    * bouton de purge des certificats méd / n° carte (?) / en fin d'année ?
+    * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
     * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
-    * bouton pour n'afficher que les "non-confirmés" (cookie envoyé par email jamais validé) + DATE DE PRE-INSCRIPTION + bouton "résiliation massive" sur ce formulaire recherche (pour virer les touristes)
+    * si aucun sport coché alors afficher les adhérents actifs mais sans adhésion pour promo en cours (uniquement pour resp asso)
     * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément)
+    * comptes désactivés affichés en rouge ou avec un flag visible
   * ADHESIONS :
-    * gestion des adhésions impossibles (archiver/notifier ces demandes)
+    * gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus </s>(ni les section désactivées) (ni rien du tout si mode standby)
   * ADHERENTS :
     * bouton pour changer son passwd (seulement par adhérent)
     * bouton pour dés/activer un compte (seulement par admin)
-    * bouton pour changer son statut (seulement par admin)
-    * bouton pour changer son email (par pratiquant ou admin => envoi d'un cookie/email pour réactivation)
+    * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
+    * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation)
     * affichage du certif
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
