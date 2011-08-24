@@ -14,7 +14,7 @@
     * <s>calcul auto total du paiement (pour comparaison avec val du chq)</s>
     * <s>stocker/afficher : paiement enregistré par "nom"</s>
     * <s>gestion statut : active/résilié</s>/impossible
-    * ajout champs "date de la transaction"
+    * <s>ajout champs "date de la transaction"</s>
   * PROMOS :
     * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
     * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
