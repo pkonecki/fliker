@@ -13,16 +13,17 @@
     * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
     * <s>calcul auto total du paiement (pour comparaison avec val du chq)</s>
     * stocker/afficher : paiement enregistré par "nom"
-    * gestion statut : préinscrit/partiel/àjour/résilié
+    * <s>gestion statut : active/résilié</s>/impossible
     * ajout champs "date de la transaction"
   * PROMOS :
     * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
     * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
-    * bouton de purge des certificats méd (et autres ?) en fin d'année ?
+    * bouton de purge des certificats méd / n° carte (?) / en fin d'année ?
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
     * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
-    * bouton pour n'afficher que les "non-confirmés" (cookie envoyé par email jamais validé) + DATE DE PRE-INSCRIPTION
+    * bouton pour n'afficher que les "non-confirmés" (cookie envoyé par email jamais validé) + DATE DE PRE-INSCRIPTION + bouton "résiliation massive" sur ce formulaire recherche (pour virer les touristes)
+    * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément)
   * ADHESIONS :
     * gestion des adhésions impossibles (archiver/notifier ces demandes)
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus </s>(ni les section désactivées) (ni rien du tout si mode standby)
@@ -31,6 +32,7 @@
     * bouton pour dés/activer un compte (seulement par admin)
     * bouton pour changer son statut (seulement par admin)
     * bouton pour changer son email (par pratiquant ou admin => envoi d'un cookie/email pour réactivation)
+    * affichage du certif
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
@@ -223,8 +225,10 @@
   * Bien gérer le to
     * Vérifier qu'on envoie pas l'email deux fois à une même personne
     * Un email par personne ; question timer/repartition dans le temps
-  * Conserver un copie des mails envoyés : envoyer l'email au from
+    * Mettre les TO en BCC:
+  * Conserver un copie des mails envoyés ou au moins mettre le from en CC: 
   * Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
+  * Possibilité pour un adhérent de se mettre en "liste rouge" (seulement contre mails des autres adhérents)
 
 
 ===Alertes / Notifications===
