@@ -51,6 +51,7 @@
 ===Login/Logout===
   * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
   * peu urgent : bouton "je suis un gros boulet" --> rediriger vers "RT"
+  * après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé 
 
 
 ===Notion de promo===
