@@ -186,7 +186,13 @@ function getAllCreneaux(){
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
 						AND A.id=HS.id_asso
-						AND HS.id_sec=S.id 
+						AND HS.id_sec=S.id
+						AND (
+							A.id IN (SELECT id_asso FROM resp_asso )
+							OR S.id IN (SELECT id_sec FROM resp_section )
+							OR AC.id IN (SELECT id_act FROM resp_act )
+							OR CR.id IN (SELECT id_cre FROM resp_cren )
+							)
 						ORDER BY nom_sec";
 		
 

@@ -37,7 +37,17 @@ function newAdhesions($tab,$id_adh){
 function delAdhesion($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM adhesion WHERE id=$id ";
+	$query = "UPDATE adhesion SET statut=1 WHERE id=$id ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+
+}
+
+function actAdhesion($id){
+	include("opendb.php");
+	if(!isset($id)) return;
+	$query = "UPDATE adhesion SET statut=0 WHERE id=$id ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");

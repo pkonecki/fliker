@@ -11,6 +11,11 @@ if(isset($_GET['asso']) && !isset($tab[$_GET['asso']])){
 	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
+if(isset($_GET['promo'])) {
+	$promo=$_GET['promo'];
+} else {
+	$promo=$current_promo;
+}
 if ($_POST['action'] == 'modification') {
 	print '<h2>Fiche Association: Modification</h2>';
 	print '<FORM id="f_asso_modif" action="index.php?page=3&asso='.$_GET['asso'].'" enctype="multipart/form-data" method="POST">';
@@ -102,7 +107,7 @@ else {
 	}
 	if ($_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
-		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso']);
+		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
@@ -201,7 +206,7 @@ else {
 			print '</SELECT>';
 			print '</FORM>';
 			//Liste de suppléments
-			$sups = getSup("association",$_GET['asso']);
+			$sups = getSup("association",$_GET['asso'],$promo);
 			print '<h3>Suppléments de l\'asssociation</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th><th>+/-</th></tr>';
 			foreach ($sups as $id => $sup) {
@@ -240,3 +245,5 @@ else {
 
 
 ?>
+<script>
+</script>

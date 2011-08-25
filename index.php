@@ -14,6 +14,7 @@ include_once("Paiement.php");
 include_once("General.php");
 
 $current_promo=getParam('promo');
+$GLOBALS['current_promo']=$current_promo;
 setlocale(LC_ALL, 'fr_FR');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"

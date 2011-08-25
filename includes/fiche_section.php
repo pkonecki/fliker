@@ -7,6 +7,11 @@ if(isset($_GET['section']) && !isset($tab[$_GET['section']])){
 	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
+if(isset($_GET['promo'])) {
+	$promo=$_GET['promo'];
+} else {
+	$promo=$current_promo;
+}
 if ($_POST['action'] == 'modification') {
 	print '<h2>Modifier Section</h2>';
 	print '<FORM id="f_section_modif" action="index.php?page=4&section='.$_GET['section'].'" enctype="multipart/form-data" method="POST">';
@@ -98,7 +103,7 @@ else {
 	}
 	if ($_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
-		addSup("section",$_POST['id_sec'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie']);
+		addSup("section",$_POST['id_sec'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		print '<ul id="submenu">';
@@ -186,7 +191,7 @@ else {
 			print '</SELECT>';
 			print '</FORM>';
 			//Liste de suppléments
-			$sups = getSup("section",$_GET['section']);
+			$sups = getSup("section",$_GET['section'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments de la section</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>+/-</th></tr>';

@@ -7,6 +7,11 @@ if(isset($_GET['act']) && !isset($tab[$_GET['act']])){
 	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
+if(isset($_GET['promo'])) {
+	$promo=$_GET['promo'];
+} else {
+	$promo=$current_promo;
+}
 if ($_POST['action'] == 'modification') {
 	print '<h2>Modifier Activité</h2>';
 	print '<FORM id="f_act_modif" action="index.php?page=5&act='.$_GET['act'].'" enctype="multipart/form-data" method="POST">';
@@ -98,7 +103,7 @@ else{
 	}
 	if ($_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
-		addSup("activite",$_POST['id_act'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie']);
+		addSup("activite",$_POST['id_act'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getActivites($_SESSION['uid']);
@@ -186,7 +191,7 @@ else{
 			print '</SELECT>';
 			print '</FORM>';
 			//Liste de suppléments
-			$sups = getSup("activite",$_GET['act']);
+			$sups = getSup("activite",$_GET['act'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments de l\'activité</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>+/-</th></tr>';
