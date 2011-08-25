@@ -218,7 +218,7 @@ function multiselected($post,$val){
 	if (!$results) echo mysql_error();
 	include("closedb.php");
 
-	mysql_data_seek($results,0);
+	//mysql_data_seek($results,0);
 	$num=mysql_num_rows($results);
 
 	switch($_POST['affichage']){

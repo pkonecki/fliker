@@ -200,11 +200,12 @@ $(document).ready(function() {
 	        }
 
 			});
-		  });
-		  $(function() {
-			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  });
-
+});
+$(function() {
+	$( "#datepicker" ).datepicker({ 
+		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
 	});
+});
 
 
 </script>

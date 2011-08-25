@@ -34,7 +34,7 @@ function getMyPaiements($userid){
 }
 
 function addPaiement($tab){
-	$query= "INSERT INTO paiement (id_adh,type,num,remarque,promo,date)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."' )";
+	$query= "INSERT INTO paiement (id_adh,type,num,remarque,promo,date,date_t,recorded_by)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."','{$tab['date_t']}' ,'{$tab['recorded_by']}' )";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

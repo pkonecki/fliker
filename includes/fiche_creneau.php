@@ -9,7 +9,11 @@ function selected($post,$val,$tab){
 	}
 	else return "";
 }
-
+if(isset($_GET['promo'])) {
+	$promo=$_GET['promo'];
+} else {
+	$promo=$current_promo;
+}
 getAdherent($_SESSION['user']);
 $tab=getCreneaux($_SESSION['uid']);
 if(isset($_GET['creneau']) && !isset($tab[$_GET['creneau']])){
@@ -126,7 +130,7 @@ else {
 	}
 	if ($_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
-		addSup("creneau",$_POST['id_cre'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie']);
+		addSup("creneau",$_POST['id_cre'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getCreneaux($_SESSION['uid']);
@@ -193,7 +197,7 @@ else {
 			print '</SELECT>';
 			print '</FORM>';
 			//Liste de suppléments
-			$sups = getSup("creneau",$_GET['creneau']);
+			$sups = getSup("creneau",$_GET['creneau'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments du créneau</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>+/-</th></tr>';
