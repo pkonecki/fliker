@@ -157,7 +157,7 @@ print $script;
 					if($row[type]==='file'){
 						$_SESSION['auth_thumb']='true';
 						$photo="includes/thumb.php?folder=".$row['nom']."&file=".$adh['email'].".jpg";
-						print '<TD>'.$row[description].'</TD><TD><img src="'.$photo.'" height="150"></TD>';
+						print '<TD>'.$row['description'].'</TD><TD><a href="'.$row['nom'].'/'.$adh['email'].'.jpg"><img src="'.$photo.'" height="150"></a></TD>';
 					}
 					if($row['type']==="select"){
 						$tab=getSelect($row['nom']);

@@ -105,6 +105,13 @@ else{
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
 		addSup("activite",$_POST['id_act'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
+	if ($_POST['action'] === 'copy_old_sups'){
+		$sups = getSup("activite",$_GET['act'],$_POST['old_promo']);
+		foreach ($sups as $key => $value) {
+			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";
+			addSup("activite",$_GET['act'],$value['type'],$value['valeur'],$value['id_asso_adh'],$value['id_asso_paie'],$promo);
+		}
+	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getActivites($_SESSION['uid']);
 		print '<ul id="submenu">';
@@ -194,33 +201,53 @@ else{
 			$sups = getSup("activite",$_GET['act'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments de l\'activité</h3>';
-			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>+/-</th></tr>';
+			//Selection Promo
+			print "<p>Promo:<SELECT id=\"promo\" >";
+			print "<OPTION value=$current_promo ".($_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
+			for ($i=1; $i<=10; $i++ ){
+				$p=$current_promo-$i;
+				print "<OPTION value=\"$p\" ".($_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
+			}
+			print "</SELECT></p>";
+			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
+			if($promo==$current_promo) print '<th>+/-</th>';
+			print '</tr>';
 			foreach ($sups as $id => $sup) {
-				print '<tr><FORM action="index.php?page=5&sup='.$id.'&act='.$_GET['act'].'" method="POST">
+				print '<tr>
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
+			if($promo==$current_promo) 	print '<td><FORM action="index.php?page=5&sup='.$id.'&act='.$_GET['act'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup_confirm" />
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>
-				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
-					</FORM></tr>';
+					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>';
+				print'</tr>';
 			}
 
-			print '<tr><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
-			<input type="hidden" name="action" value="new_sup" />
-			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
-			<td><INPUT type="text" name="type"></INPUT></td>
-			<td><INPUT type="text" name="valeur"></INPUT></td>
-			<td><SELECT name="id_asso_adh">';
-			foreach ($assos as $key => $value) {
-				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
-			}
-			print '</SELECT></td>';
-			print '<td><SELECT name="id_asso_paie">';
-			foreach ($assos as $key => $value) {
-				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
-			}
-			print '</SELECT></td>
-			<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
-			';
-			print '</FORM>';
+			if($promo==$current_promo) {
+				print '<tr><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+				<input type="hidden" name="action" value="new_sup" />
+				<input type="hidden" name="id_act" value="'.$_GET['act'].'">
+				<td><INPUT type="text" name="type"></INPUT></td>
+				<td><INPUT type="text" name="valeur"></INPUT></td>
+				<td><SELECT name="id_asso_adh">';
+				foreach ($assos as $key => $value) {
+					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
+				}
+				print '</SELECT></td>';
+				print '<td><SELECT name="id_asso_paie">';
+				foreach ($assos as $key => $value) {
+					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
+				}
+				print '</SELECT></td>
+				<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
+				';
+				print '</FORM>';
+			}	else {
+						print '<td colspan=4>
+						<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+						<input type="hidden" name="old_promo" value="'.$_GET['promo'].'" >
+						<input type="hidden" name="action" value="copy_old_sups" >
+						<INPUT type="submit" class="confirm" value="Recopier ces suppléments dans la promo courante" >
+						</FORM></td>';
+					}
 			print '</table>';
 		}
 
@@ -233,3 +260,8 @@ else{
 
 
 ?>
+<script type="text/javascript">
+$('#promo').change( function (){
+	window.location.search = "page=5&act="+$.getUrlVar('act')+"&promo="+$(this).val();
+});
+</script>

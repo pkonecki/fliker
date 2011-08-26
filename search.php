@@ -63,11 +63,14 @@ function multiselected($post,$val){
 	<div id="solde">
 		<label for="select_solde">Solde est</label>
 		<select id="select_solde" name="select_solde">
-			<option '.selected('select_solde','1').' label="Indiff&eacute;rrent" value="1">Indiff&eacute;rrent</option>
+			<option '.selected('select_solde','1').' label="Indiff&eacute;rent" value="1">Indiff&eacute;rrent</option>
 			<option '.selected('select_solde','2').' label="Positif" value="2">Positif</option>
 			<option '.selected('select_solde','3').' label="N&eacute;gatif" value="3">N&eacute;gatif</option>
 			<option '.selected('select_solde','4').' label="Nul" value="4">Nul</option>
 		</select>
+	</div>
+	<div id="responsable">
+		<input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Seulement responsable</input>
 	</div>
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
@@ -162,7 +165,7 @@ function multiselected($post,$val){
 
 	if($_POST['action']==="submitted"){
 	//SQL
-	$sql = "SELECT DISTINCT ADR.* FROM adherent ADR ,adhesion ADS, creneau CR WHERE true ";
+	$sql = "SELECT DISTINCT ADR.* FROM adherent ADR WHERE true ";
 	for($i = 0; $i < $_POST['field_count']; $i++){
 
 		$n=$i+1;
@@ -200,16 +203,37 @@ function multiselected($post,$val){
 
 
 	}
-	$sql.=" AND ADS.id_cre IN ('0'";
+	$in="('0'";
 	foreach($tab as $section){
 		foreach($section[activites] as $activite){
 			foreach($activite[creneaux] as $creneau){
-				 if(!empty($_POST['cre'.$creneau[id]])) $sql.=",'".$creneau[id]."' ";
+				 if(!empty($_POST['cre'.$creneau[id]])) $in.=",'".$creneau[id]."' ";
 			}
 		}
 	}
+	$in.=" ) ";
+	$sql.="AND ( false ";
+	if (isset($_POST['responsable'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
+	$sql.="OR (ADR.id IN (
+		SELECT  ADH.id 
+		FROM activite AC, creneau CR, section S, association A, asso_section HS , adherent ADH
+		WHERE CR.id_act=AC.id
+		AND AC.id_sec=S.id
+		AND A.id=HS.id_asso
+		AND HS.id_sec=S.id
+		AND CR.id IN $in
+		AND (
+			A.id IN (SELECT id_asso FROM resp_asso RA WHERE RA.id_adh=ADH.id )
+			OR
+			S.id IN (SELECT id_sec FROM resp_section RA WHERE RA.id_adh=ADH.id )
+			OR
+			AC.id IN (SELECT id_act FROM resp_act RA WHERE RA.id_adh=ADH.id )
+			OR
+			CR.id IN (SELECT id_cre FROM resp_cren RA WHERE RA.id_adh=ADH.id )
+			)
+		 ) )";
 	
-	$sql.=" ) AND  ADR.id=ADS.id_adh AND ADS.id_cre=CR.id ORDER BY ADR.nom";
+	$sql.=" ) ORDER BY ADR.nom";
 	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
@@ -217,8 +241,6 @@ function multiselected($post,$val){
 	$results = mysql_query($sql);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
-
-	//mysql_data_seek($results,0);
 	$num=mysql_num_rows($results);
 
 	switch($_POST['affichage']){

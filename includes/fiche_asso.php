@@ -44,44 +44,6 @@ if ($_POST['action'] == 'new') {
 	print '</table>';
 	print '</FORM>';
 
-} else
-if ($_POST['action'] == 'suppression_confirm') {
-	print '<h2>Supprimer Association?</h2>';
-	print '<FORM action="index.php?page=3" method="POST">
-			<input type="hidden" name="id" value="'.$_GET['asso'].'" />
-			<input type="hidden" name="action" value="suppression" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=3" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
-}
-else if ($_POST['action'] == 'suppression_resp_confirm') {
-	print '<h2>Supprimer Responsable?</h2>';
-	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
-			<input type="hidden" name="id_resp" value="'.$_GET['resp'].'" />
-			<input type="hidden" name="action" value="suppression_resp" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
-}
-else if ($_POST['action'] == 'suppression_sup_confirm') {
-	print '<h2>Supprimer Supplément?</h2>';
-	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
-			<input type="hidden" name="id_sup" value="'.$_GET['sup'].'" />
-			<input type="hidden" name="action" value="suppression_sup" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
 }
 else {
 	if ($_POST['action'] === 'submitted'){
@@ -108,6 +70,14 @@ else {
 	if ($_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
 		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],$promo);
+	}
+	if ($_POST['action'] === 'copy_old_sups'){
+		$sups = getSup("association",$_GET['asso'],$_POST['old_promo']);
+		foreach ($sups as $key => $value) {
+			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";
+			addSup("association",$_GET['asso'],$value['type'],$value['valeur'],$value['id_statut'],$value['id_asso_paie'],$promo);
+		}
+
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
@@ -156,9 +126,10 @@ else {
 					</FORM></td>';
 			print '</tr>';
 
-			if($_SESSION['privilege']==="1") print '<tr><td colspan=2><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_confirm" />
-					<INPUT type="submit" value="Supprimer">
+			if($_SESSION['privilege']==="1") print '<tr><td colspan=2><FORM action="index.php?page=3" method="POST">
+					<input type="hidden" name="action" value="suppression" />
+					<input type="hidden" name="id" value="'.$_GET['asso'].'" />
+					<INPUT type="submit" class="confirm" value="Supprimer">
 					</FORM></td></tr>';
 
 			print '</table>';
@@ -169,10 +140,11 @@ else {
 			print '<ul>';
 			foreach($sections as $section){
 				print '<li>
-				<FORM action="index.php?page=4&section='.$section['id'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_confirm" />
-					<a href=index.php?page=4&section='.$section['id'].'>'.$section['nom'].'</a>
-					<INPUT type="image" src="images/unchecked.gif" value="submit">
+				<FORM action="index.php?page=4" method="POST">
+					<input type="hidden" name="action" value="suppression" />
+					<input type="hidden" name="id" value="'.$section['id'].'" />
+					<a href="index.php?page=4&section='.$section['id'].'">'.$section['nom'].'</a>
+					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
 
 			}
@@ -188,9 +160,11 @@ else {
 			print '<ul>';
 			foreach ($resps as $id => $adh) {
 				print '<FORM action="index.php?page=3&resp='.$id.'&asso='.$_GET['asso'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_resp_confirm" />
+					<input type="hidden" name="action" value="suppression_resp" />
+					<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
+					<input type="hidden" name="id_resp" value="'.$id.'" />
 				<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
-				<INPUT type="image" src="images/unchecked.gif" value="submit">
+				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
 			}
 			print '</ul>';
@@ -206,33 +180,53 @@ else {
 			print '</SELECT>';
 			print '</FORM>';
 			//Liste de suppléments
-			$sups = getSup("association",$_GET['asso'],$promo);
 			print '<h3>Suppléments de l\'asssociation</h3>';
-			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th><th>+/-</th></tr>';
+			//Selection Promo
+			print "<p>Promo:<SELECT id=\"promo\" >";
+			print "<OPTION value=$current_promo ".($_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
+			for ($i=1; $i<=10; $i++ ){
+				$p=$current_promo-$i;
+				print "<OPTION value=\"$p\" ".($_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
+			}
+			print "</SELECT></p>";
+			//Suppléments
+			$sups = getSup("association",$_GET['asso'],$promo);
+			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th>';
+			if($promo==$current_promo) print '<th>+/-</th>';
+			print '</tr>';
 			foreach ($sups as $id => $sup) {
-				print '<tr><FORM action="index.php?page=3&sup='.$id.'&asso='.$_GET['asso'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_sup_confirm" />
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$sup['statut'].'</td>
-				<td><INPUT type="image" src="images/unchecked.gif" value="submit"></td>
-					</FORM></tr>';
+				print '<tr><td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$sup['statut'].'</td>';
+				if($promo==$current_promo) print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+					<input type="hidden" name="action" value="suppression_sup" /><input type="hidden" name="id_sup" value="'.$id.'" /><INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></td>
+					</FORM>'; 
+				print '</tr>';
 			}
 
-			print '<tr><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-			<input type="hidden" name="action" value="new_sup" />
-			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
-			<INPUT type="hidden" name="type" value="Cotisation" / >
-			<td><INPUT type="text" name="lol" value="Cotisation" disabled ></INPUT></td>
-			<td><INPUT type="text" name="valeur"></INPUT></td>
-			<td><SELECT name="id_statut">';
-			$status = getStatuts();
-			foreach ($status as $key => $value) {
-				print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
-			}
+			if($promo==$current_promo){
+				print '<tr><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+				<input type="hidden" name="action" value="new_sup" />
+				<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
+				<INPUT type="hidden" name="type" value="Cotisation" / >
+				<td><INPUT type="text" name="lol" value="Cotisation" disabled ></INPUT></td>
+				<td><INPUT type="text" name="valeur"></INPUT></td>
+				<td><SELECT name="id_statut">';
+				$status = getStatuts();
+				foreach ($status as $key => $value) {
+					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
+				}
 
-			print '</SELECT></td>
-			<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
-			';
-			print '</FORM>';
+				print '</SELECT></td>
+				<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
+				';
+			print '</FORM></tr>';
+			} else {
+				print '<td colspan=3>
+				<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+				<input type="hidden" name="old_promo" value="'.$_GET['promo'].'" >
+				<input type="hidden" name="action" value="copy_old_sups" >
+				<INPUT type="submit" class="confirm" value="Recopier ces suppléments dans la promo courante" >
+				</FORM></td>';
+			}
 			print '</table>';
 		}
 
@@ -245,5 +239,11 @@ else {
 
 
 ?>
-<script>
+<script type="text/javascript">
+$('#promo').change( function (){
+	window.location.search = "page=3&asso="+$.getUrlVar('asso')+"&promo="+$(this).val();
+});
+
+
+
 </script>

@@ -28,7 +28,7 @@ function newSection($tab){
 		echo mysql_error();
 		die();
 	}
-	$query = "INSERT INTO asso_section (id_asso,id_sec) VALUES (".$tab['id_asso'].",".mysql_insert_id().")";
+	$query = "INSERT INTO asso_section (id_asso,id_sec) VALUES (".$tab['id_asso'].",".$id.")";
 	$results = mysql_query($query);
 	if (!$results){ 
 		echo mysql_error();

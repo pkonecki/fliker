@@ -35,6 +35,7 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.multiselect.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.multiselect.filter.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.checkboxtree.min.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.confirm.js"></script>
  </head>
  <body>
 <div id="top">
@@ -92,4 +93,31 @@ $(".filterselect").multiselect({
    noneSelectedText: "Choisissez un",
    selectedList: 1
 }).multiselectfilter();
+$('.confirm').confirm({
+  timeout:3000,
+  msg:'Etes-vous sur?',
+  wrapper:'<div class="conf_dial"></div>',
+  buttons: {
+	ok:'Oui',
+	cancel:'Non',
+    wrapper:'<button></button>',
+    separator:'  '
+  }  
+});
+$.extend({
+  getUrlVars: function(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  },
+  getUrlVar: function(name){
+    return $.getUrlVars()[name];
+  }
+});
 </script>
