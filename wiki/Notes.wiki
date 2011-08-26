@@ -89,27 +89,27 @@
 
 
 ===Adhérents===
+  * Catégorie Homme/Femme --> Masculin/Féminin
+  * -preinscription --> +date creation
+  * +adresse professionnelle (cf customisation locale PSUC)
+  * +champ exemple dans champs_adherent
+  * +choix assurance : j'ai lu ou non / j'accepte ou non
+  * +droit à l'image oui/non
+  * +champs date de validation du cookie
+  * Deux champs nom / tel pour personnes à contacter en cas d'urgence
+  * Case a cocher : je n'ai pas d'adresse email
+    * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc. 
+    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
   * id_asso/num_carte --> table (plusieurs assos pour un adherent)
     * <s>Faire table de hash entre adh et asso</s>
   * <s>modularité --> deux tables : data + description des data </s>
   * <s>vérification : langage simplifié de format (à determiner)</s>
   * Séparer données login/données perso? Customisation supplémentaire assos locales	
-  * -preinscription --> +date creation
   * <s>+signature valide quand adresse email validée</s>
-  * +adresse professionnelle (cf customisation locale PSUC)
   * <s>+numéro d'agent</s>(cf numayantdroit : numéro de carte étudiant/CNRS etc...)
-  * +champ exemple dans champs_adherent
-  * +choix assurance : j'ai lu ou non / j'accepte ou non
-  * +droit à l'image oui/non
   * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
-  * +champs date de validation du cookie
-  * Deux champs nom / tel pour personnes à contacter en cas d'urgence
   * <s>+ Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)</s>
   * peu urgent : Compétiteur : vrai /faux (il suffit de gérer cette info via fonctions existantes (section/activité/supplément) --> documenter !)
-  * Case a cocher : je n'ai pas d'adresse email
-    * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc. 
-    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
-  * Catégorie Homme/Femme --> Masculin/Féminin
   * Vérification par un gestionnaire : case a cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
     * LDAP utilisera cette case
     * Table de hash champ adherent < - > adherent + date
@@ -124,19 +124,25 @@
     * <s>Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
     * <s>page séparée : oui</s>
-    * liste dynamique en fct statut (etu/pers) /age/critères personalisés(prix/lieu/type/horaire)...
-    * encourager l'inscription chez d'autres assos (liste unique + pop up d'info hover)
-  * 2 Scénarii d'inscription:
+    * peu urgent voire pas nécessaire : liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire) ...
+    * encourager l'inscription chez d'autres assos (liste unique + popup d'info onmousehover)
+  * 2 Scénarii d'inscription :
     * recherche par critère (portail sport)
       * mémorisation des sports choisis
       * création d'une fiche adhérent
+      * choix de l'asso pour les sports choisis en fonction du statut nouvellement déclaré
+        * Calcul des associations auxquelles s'inscrire par critère de priorité :
+        # Maximum de sports
+        # Minimum d'associations
+        # Cout minimum
+        # Random si plusieurs choix (rare)
       * envoi d'email de confirmation (cookie) avec facture
-    * inscription
+    * <s>inscription
       * création d'une fiche adhérent
       * envoi d'email de confirmation (cookie) sans facture
-      * choix des sports (liste javascript)
+      * choix des sports (liste javascript) avec choix manuel asso (si suppléments existent pour le statut déclaré) ou "impossible" (mais conservé si pas de sup)
       * affichage facture
-
+      </s>
   * Stocker dans un repertoire en modifiant le nom du fichier : id.ext		
     * <s>Certificat médical</s>
     * <s>photo</s>
@@ -148,29 +154,22 @@
       * Taille de redimensionnement par défaut
       * Taille thumb
 
-  * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
-  * Choix des créneaux :
-    * Calcul des associations auxquelles s'inscrire par critère de priorité :
-    # Maximum de sports
-    # Minimum d'associations
-    # Cout minimum
-    # Random si plusieurs choix (rare)
-
 
 ===Paiements===
   * <s>Faire table de hash paiement < - > adhésion </s>
-  * Numéro de carte asesco: en générer un qu'a partir du moment ou l'inscription est validée/payée
-    * possibilité de créer un nouveau numéro (carte perdue)
+  * Numéro de carte asesco:
+    * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
+    * proposer le 1er n° libre + textbox pour saisir un autre choix
     * ne pas créer un numéro si il existe déjà
-    * Boite avec propositions de numéro libres et possibilité de remplir un numéro à la main en vérifiant la disponibilité à la volée
-  * Solde: prendre adhesion selon mycréneau puis selects paiements de ces adhesions
+    * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)
+  * affichage du Solde: prendre adhésions selon mycréneaux puis selects paiements de ces adhésions et calcul diff
 
 
 ===Présences===
   * <s> Table de hash créneau < - > adhérent </s>
     * <s> Afficher/Remplir présence --> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher </s>
     * <s> Affichage / archivage selon promo </s>
-    * Imprimer fiche de présence
+    * bouton pour Imprimer fiche de présence
   * Evénements exceptionnels (stages, matchs...) : table spéciale ?
   * Stocker dates vac et fériés pour supprimer colonnes présences ?
 
