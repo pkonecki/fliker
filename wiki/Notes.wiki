@@ -8,6 +8,9 @@
     * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
 
 
+* penser à enlever l'affichage écran du cookie de validation email à l'inscription !!!
+
+
 ===Urgences===
   * PAIEMENTS:
     * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
@@ -17,7 +20,7 @@
     * <s>ajout champs "date de la transaction"</s>
   * PROMOS :
     * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
-    * gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier ...
+    * <s>gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier</s>
     * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
   * RECHERCHE :
     * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
@@ -38,20 +41,22 @@
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
     * Table types de suppléments (cotiz, location, caution, supplément)
-    * Table types de paiements (cheque/espece/cb/dispense)
+    * Table types de paiements (chèque/espèces/CB/paypal/dispense)
     * <s>Association destinataire table supplément</s>
     * <s>Table mère pour asso/section/act/cre</s>
     * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
 
 
 ===Config/Install du logiciel===
-  * Fichier de config avec url base site, params connexion sql ...
+  * <s>Fichier de config avec params connexion sql</s>
+  * Mettre url base site dans table "admin" (ou fichier conf ?)
+  * peu urgent : Script d'init pour exécuter un sql (init db) + créer compte admin
 
 
 ===Login/Logout===
   * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
-  * peu urgent : bouton "je suis un gros boulet" --> rediriger vers "RT"
-  * après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé 
+  * bouton "je suis un gros boulet" --> rediriger vers "RT"
+  * <s>après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé</s>
 
 
 ===Notion de promo===
@@ -72,19 +77,13 @@
 
 
 ===Associations===
-  * Tables des statuts (etudiant/personel/exterieur)
-  * +table d'associations possibles pour un statut (ex: etudiant --> Asesco et PSUC)
-  * Choix des créneaux
-  * Calcul des associations auxquelles s'inscrire par critère de priorité :
-    # Maximum de sports
-    # Minimum d'associations
-    # Cout minimum
-    # Random si plusieurs choix (rare)
+  * <s>Tables des statuts (etudiant/personel/exterieur ...)</s>
+  * <s>associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments déclarés</s>
 
 
 ===Sports===
-  * Catégorie (basse priorité) : table de catégories + table de hash activité/categorie
-    * Fonction de saisie/modif catégorie d'activité pour responsable activité + admin etc... 
+  * peu urgent : Catégorie : table de catégories + table de hash activité/categorie
+    * Fonction de saisie/modif catégories d'activités pour responsables activités + admins etc... 
   * <s>description</s>
   * <s>logo</s>
 
@@ -113,7 +112,7 @@
 
 ===Inscriptions===
   * <s>conservation données en post</s>
-  * captcha? en confirmation (basse priorité)
+  * peu urgent : captcha en confirmation
   * <s>identifiant : email</s>
     * Demander 2 fois email
   * <s>gestion de password</s>
@@ -143,12 +142,17 @@
       * Taille de redimensionnement par défaut
       * Taille thumb
   * Compétiteur : vrai /faux
-    * Basse priorité
-    * Gestion via fonctions existantes (section/activité/supplément) : documenter
+    * peu urgent car il suffit de gérer cette info via fonctions existantes (section/activité/supplément) : documenter !
   * Case a cocher : je n'ai pas d'adresse email
     * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
   * Catégorie Homme/Femme --> Masculin/Féminin
   * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
+  * Choix des créneaux :
+    * Calcul des associations auxquelles s'inscrire par critère de priorité :
+    # Maximum de sports
+    # Minimum d'associations
+    # Cout minimum
+    # Random si plusieurs choix (rare)
 
 
 ===Paiements===
