@@ -8,7 +8,7 @@
     * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
 
 
-* penser à enlever l'affichage écran du cookie de validation email à l'inscription !!!
+* penser à enlever l'affichage écran du cookie de validation email à l'inscription !!! *
 
 
 ===Urgences===
@@ -36,7 +36,7 @@
     * bouton pour dés/activer un compte (seulement par admin)
     * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
     * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation)
-    * affichage du certif
+    * <s>affichage du certif</s>
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
@@ -102,10 +102,15 @@
   * +choix assurance : j'ai lu ou non / j'accepte ou non
   * +droit à l'image oui/non
   * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
-  * Champs date validation cookie/gestionnaire
+  * +champs date de validation du cookie
   * Deux champs nom / tel pour personnes à contacter en cas d'urgence
   * <s>+ Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)</s>
-  * Vérification : case a cocher pour certain champs (doit être verifier) ex: numayantdroit/certificat med
+  * peu urgent : Compétiteur : vrai /faux (il suffit de gérer cette info via fonctions existantes (section/activité/supplément) --> documenter !)
+  * Case a cocher : je n'ai pas d'adresse email
+    * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc. 
+    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
+  * Catégorie Homme/Femme --> Masculin/Féminin
+  * Vérification par un gestionnaire : case a cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
     * LDAP utilisera cette case
     * Table de hash champ adherent < - > adherent + date
 
@@ -114,7 +119,7 @@
   * <s>conservation données en post</s>
   * peu urgent : captcha en confirmation
   * <s>identifiant : email</s>
-    * Demander 2 fois email
+    * peu urgent : Demander 2 fois email
   * <s>gestion de password</s>
     * <s>Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
@@ -131,21 +136,18 @@
       * envoi d'email de confirmation (cookie) sans facture
       * choix des sports (liste javascript)
       * affichage facture
+
   * Stocker dans un repertoire en modifiant le nom du fichier : id.ext		
-    * Certificat médical
+    * <s>Certificat médical</s>
     * <s>photo</s>
-    * Métadata des champs images:
+    * peu urgent : Métadata des champs images:
       * Permanent o/n
       * Date de purge
       * Age de purge
       * Extension du format par défaut
       * Taille de redimensionnement par défaut
       * Taille thumb
-  * Compétiteur : vrai /faux
-    * peu urgent car il suffit de gérer cette info via fonctions existantes (section/activité/supplément) : documenter !
-  * Case a cocher : je n'ai pas d'adresse email
-    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email de confirmation
-  * Catégorie Homme/Femme --> Masculin/Féminin
+
   * Adhesion: Pour un sport, calculer l'asso possible seulement si il y'a un supplément au niveau de la section au moins. Mais tout afficher (inscription illégitime) : "Impossible pour l'instant" 
   * Choix des créneaux :
     * Calcul des associations auxquelles s'inscrire par critère de priorité :
@@ -248,6 +250,7 @@
       * adhésion devenue possible : choisir une asso
     * *responsables :* obligation recevoir tous mails + alertes mais réglage possible des fréquences :
       * stats de taille de la base sql (prévenir risques explosions) : weekly
+      * liste des responsables qui ne sont pas adhérents de leur section : weekly
       * nouvelle adhésion impossible : immédiat
       * nouvelle adhésion (invitation à prendre contact) : immédiat
       * section désactivée : immédiat
