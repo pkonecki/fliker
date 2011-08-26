@@ -16,7 +16,7 @@ function newAsso($tab){
 	
 	// Asso
 	$set = "(";
-	$colonnes="(id,nom,description,url,cotisation)";
+	$colonnes="(id,nom,description,url)";
 	//id
 	$set.="'$id', ";
 	//nom

@@ -1,7 +1,5 @@
 <?php
 include("./includes/paths.php");
-
-
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -85,9 +83,17 @@ if ($_POST['action']==="submitted") {
 		die('Error: ' . mysql_error());
 	}
 	else {
-		print $header;
+		print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+		<html>
+		 <head>
+		  <title>::Fliker::Validation</title>
+		  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+		  <meta http-equiv="refresh" content="3;url=login.php" />
+		 </head>
+		 <body>
+		<h1>Validation</h1>';
 
-		print '<div>Votre inscription est validée!</div>';
+		print '<div>Votre inscription est validée! Vous allez être redirigé vers la page de login</div>';
 
 		print $footer;
 	}
@@ -105,33 +111,24 @@ else {
 	$result = mysql_query($query) or die(mysql_error());
 	if (mysql_num_rows($result))
 	while($row = mysql_fetch_array($result)){
-
 	  	if ($queryString == $row["activationkey"]){
-	  		
-	  		
-	  			print $header;
-			 	print "<div>Bravo! " . $row["prenom"] . ", votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription";
-			  	print '
-				<form name="f_password" id="f_password" action="validate.php" method="POST">
-				<table border=0>
-			  	<tr><td>Entrez un mot de passe : </td><td><input name="password" type="password" id="password" size="25"></td></tr>
-			  	<tr><td>Vérifiez votre mot de passe: </td><td><input name="password_confirm" type="password" id="password_confirm" size="25"></td></tr>
-			  	<input type="hidden" name="action" value="submitted" />
-			  	<input type="hidden" name="id" value="'.$row[id].'" />
-			  	<tr><td colspan=2 ><input type="submit" value="Envoyer!"/></td></tr>
-			  	</table>
-				</form>
+  			print $header;
+		 	print "<div>Bravo! " . $row["prenom"] . ", votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription";
+		  	print '
+			<form name="f_password" id="f_password" action="validate.php" method="POST">
+			<table border=0>
+		  	<tr><td>Entrez un mot de passe : </td><td><input name="password" type="password" id="password" size="25"></td></tr>
+		  	<tr><td>Vérifiez votre mot de passe: </td><td><input name="password_confirm" type="password" id="password_confirm" size="25"></td></tr>
+		  	<input type="hidden" name="action" value="submitted" />
+		  	<input type="hidden" name="id" value="'.$row[id].'" />
+		  	<tr><td colspan=2 ><input type="submit" value="Envoyer!"/></td></tr>
+		  	</table>
+			</form>
 
-				';
-	     		print '</div>';
-	  			print $footer;
-	  		
-
-	  }
-
-
-
-
+			';
+     		print '</div>';
+  			print $footer;
+	  	}
 	}
 	else print 'La clef de validation n\'est pas bonne!';
 	include("closedb.php");

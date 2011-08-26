@@ -296,6 +296,10 @@ span.trombi {
 display:block;
 }
 
+div.conf_dial{
+	background:white;
+	border: 1px solid;
+}
 /*
 body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
 body { color: #333;  background-color: #fff; text-align: left; }

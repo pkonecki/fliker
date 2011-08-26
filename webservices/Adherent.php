@@ -156,7 +156,7 @@ function modifAdherent($tab){
 }
 
 function getAdherents(){
-	$query = "SELECT * FROM adherent ORDER BY nom ";
+	$query = "SELECT * FROM adherent WHERE active=1 ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -277,7 +277,7 @@ function getSolde($id_adh,$promo){
 		if(!isset($mycrens[$value['id_cre']])) unset($ads[$key]);
 	}
 	$adh = getAdherent($id_adh);
-	$tab = getFacture($ads,$adh['statut']);
+	$tab = getFacture($ads,$adh['statut'],$promo);
 	$p_sup = getPaiementsSup($id_adh);
 	$solde=0;
 	foreach($tab['assos'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
