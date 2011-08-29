@@ -89,14 +89,14 @@
 
 
 ===Adhérents===
-  * Catégorie Homme/Femme --> Masculin/Féminin
-  * -preinscription --> +date creation
-  * +adresse professionnelle (cf customisation locale PSUC)
+  * <s>Catégorie Homme/Femme --> Masculin/Féminin</s>
+  * <s>-preinscription --> +date creation</s>
+  * <s>+adresse professionnelle (cf customisation locale PSUC)</s>
   * +champ exemple dans champs_adherent
-  * +choix assurance : j'ai lu ou non / j'accepte ou non
-  * +droit à l'image oui/non
+  * <s>+choix assurance : j'ai lu ou non / j'accepte ou non</s>
+  * <s>+droit à l'image oui/non</s>
   * +champs date de validation du cookie
-  * Deux champs nom / tel pour personnes à contacter en cas d'urgence
+  * <s>Deux champs nom / tel pour personnes à contacter en cas d'urgence</s>
   * Case a cocher : je n'ai pas d'adresse email
     * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc. 
     * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
