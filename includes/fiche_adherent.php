@@ -106,7 +106,7 @@ print $script;
 					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='tinyint')
-					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
+					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'  '.($adh[$row['nom']]==1 ? "checked" : "").'></td></tr>';
 				else
 				if($row[type]==='file')
 					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=file name='.$row[nom].' '.$format.'  ></td></tr>';
@@ -149,7 +149,7 @@ print $script;
 						print '<TD>'.$row[description].'</TD><TD>'.$adh[$row[nom]].'</TD>';
 
 					if($row[type]==="tinyint"){
-						if ($adh[$row[nom]]==="on")
+						if ($adh[$row[nom]]==1)
 							print '<TD>'.$row[description].'</TD><TD>Oui</TD>';
 						else
 							print '<TD>'.$row[description].'</TD><TD>Non</TD>';
