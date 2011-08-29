@@ -42,7 +42,7 @@ function newAdherent($tab){
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
 	print $activationKey;
-	$colonnes .= "pre_inscription,last_modif,activationkey,";
+	$colonnes .= "date_creation,last_modif,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
 
 
@@ -58,7 +58,7 @@ function newAdherent($tab){
 	//send mail
 	$to      = $tab[email];
 	$subject = " Votre inscription à l'ASESCO";
-	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant: \rhttp://fliker.dyndns.org/validate.php?$activationKey\r\r Si c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
+	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant: \r".getParam('url_site')."validate.php?$activationKey\r\r Si c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
 	$headers = 'From: noreply@fliker.dyndns.org' . "\r\n" .
 
     'Reply-To: bureau@asesco.fr' . "\r\n" .
@@ -123,7 +123,7 @@ function modifAdherent($tab){
 				$set .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
 			else
 			if($row[type]==='tinyint'){
-				if ($tab[$row[nom]]==='on') $values .= "1,";
+				if (isset($tab[$row[nom]])) $set .= "1,";
 				else $set .= "0,";
 			}
 			if($row[type]==='file'){
