@@ -23,7 +23,7 @@
     * <s>gestion des promos pour suppléments : ids différents et bouton pour recopier suppléments an dernier</s>
     * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
   * RECHERCHE :
-    * bouton pour n'afficher que les "responsables" (ass/sec/act/cre)
+    * <s>bouton pour n'afficher que les "responsables" (ass/sec/act/cre)</s>
     * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
     * si aucun sport coché alors afficher les adhérents actifs mais sans adhésion pour promo en cours (uniquement pour resp asso)
     * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément)
