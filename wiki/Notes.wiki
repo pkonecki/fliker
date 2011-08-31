@@ -10,6 +10,8 @@
 
 * penser à enlever l'affichage écran du cookie de validation email à l'inscription !!! *
 
+* purger du svn les versions précédentes du fichier sql (contenant des logins/pass...) ainsi que le fichier de conf contenant les access/db
+
 
 ===Urgences===
   * PAIEMENTS:
@@ -18,6 +20,8 @@
       * proposer le 1er n° libre + textbox pour saisir un autre choix
       * ne pas créer un numéro si il existe déjà
       * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)
+    * id_asso/num_carte --> table (plusieurs assos pour un adherent)
+      * <s>Faire table de hash entre adh et asso</s>
   * PROMOS :
     * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
   * RECHERCHE :
@@ -33,6 +37,10 @@
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
+    * envoi d'emails (cookie + rech) :
+      * subject=[NOM_ASSO]blabla
+      * mettre en to ou cc ou bcc le bureau_as pour copie/archiv
+      * ??? changer en bulks bcc (max=200) ???
     * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
     * bouton "je suis un gros boulet" --> rediriger vers "RT"
     * Table types de suppléments (cotiz, location, caution, supplément)
@@ -45,7 +53,7 @@
 ===Config/Install du logiciel===
   * <s>Fichier de config avec params connexion sql</s>
   * Mettre url base site dans table "admin" (ou fichier conf ?)
-  * Script d'init pour exécuter un sql (init db) + créer compte admin
+  * Script d'init pour exécuter un sql (init db avec préfixe) + créer compte admin
 
 
 ===Login/Logout===
@@ -105,8 +113,6 @@
   * Vérification par un gestionnaire : case a cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
     * LDAP utilisera cette case
     * Table de hash champ adherent < - > adherent + date
-  * id_asso/num_carte --> table (plusieurs assos pour un adherent)
-    * <s>Faire table de hash entre adh et asso</s>
   * <s>modularité --> deux tables : data + description des data </s>
   * <s>vérification : langage simplifié de format (à determiner)</s>
   * Séparer données login/données perso? Customisation supplémentaire assos locales	
