@@ -289,6 +289,10 @@ text-decoration:underline;
 tr.odd {
 background: #f1f1f1;
 }
+tr.red{
+font-weight:bold;
+color: red;	
+}
 tbody th, tbody td {
 padding:5px;
 }

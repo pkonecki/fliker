@@ -59,9 +59,9 @@ function newAdherent($tab){
 	$to      = $tab[email];
 	$subject = " Votre inscription à l'ASESCO";
 	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant: \r".getParam('url_site')."validate.php?$activationKey\r\r Si c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
-	$headers = 'From: noreply@fliker.dyndns.org' . "\r\n" .
+	$headers = 'From: '.getParam('admin_email') . "\r\n" .
 
-    'Reply-To: bureau@asesco.fr' . "\r\n" .
+    'Reply-To: '.getParam('contact_email') . "\r\n" .
 
     'X-Mailer: PHP/' . phpversion();
 	mail($to, $subject, $message, $headers);
@@ -286,4 +286,24 @@ function getSolde($id_adh,$promo){
 	foreach($tab['cres'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
 	return -$solde;
 }
+function setNumCarte($num,$adh){
+	$q="UPDATE adherent SET numcarte=$num WHERE id=$adh";
+	include("opendb.php");
+	$results = mysql_query($q);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+}
+
+function getMaxNumCarte(){
+	$query= "SELECT MAX(numcarte) max FROM adherent ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	$ret = mysql_result($results,0,"max");
+	include("closedb.php");
+	$ret++;
+	return $ret;
+}
+
 ?>

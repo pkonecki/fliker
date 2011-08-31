@@ -36,6 +36,7 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.multiselect.filter.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.checkboxtree.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.confirm.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
  </head>
  <body>
 <div id="top">
@@ -77,6 +78,9 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 		break;
 		case 9:
 			include("fiche_admin.php");
+		break;
+		case 10:
+			include("action.php");
 		break;
 	}
 	print '</div>';

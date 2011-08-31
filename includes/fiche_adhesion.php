@@ -116,6 +116,9 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		}
 
 	}
+	if($_POST['action']==='setnumcarte'){
+		setNumCarte($_POST['numcarte'],$id_adh);
+	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		print '<ul id="submenu"><li><a href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a></li><li><a class="selected" href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></li></ul>';
 		//Selection Promo
@@ -315,7 +318,14 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			print "</table></td>".($resp_asso ? "<td></td>" : "")."</tr>";
 		}
 		print "</table>";
-
+		//Numéro de carte
+		if ($resp_asso && !$self) print "<h2>Changer le numéro de carte</h2><FORM id=\"f_numcarte\" action=\"index.php?page=7&adh=$id_adh&asso=$current_asso\" method=\"POST\"  >
+		 		<input type=\"hidden\" name=\"action\" value=\"setnumcarte\" /> 
+				<dt>Numéro actuel:<input type=\"text\" value=\"{$adh['numcarte']}\" disabled />
+				<dt>Nouveau Numéro:<input type=\"text\" name=\"numcarte\" id=\"numcarte\"  class=\"numcarte\" value=\"".getMaxNumCarte()."\" >
+				<input type=\"submit\" >
+				</FORM>
+				"; 
 	}
 	else {
 		print "<p>Vous n'êtes pas connecté</p>";
@@ -372,5 +382,42 @@ $(function() {
 	$( ".datepicker" ).datepicker({ 
 		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
 	});
+});
+$(document).ready(function() {
+		  	$.extend($.validator.messages, {
+		        required: "Ce champs est requis",
+		        number: "Veuillez entrer un numéro correct"
+
+    		});
+
+			$("#f_numcarte").validate({
+
+			rules : {
+				numcarte: {
+	                required: true,
+					number: true,
+	                remote: "includes/numcarte.php"
+            	}
+
+			},
+			messages: {
+				numcarte: {
+					required: "Ce champs est requis",
+					number: "Veuillez entrer un numéro correct",
+					remote: "Le numéro est déjà utilisé"
+					}
+			},
+			errorPlacement: function(error, element) {
+	            if ( element.is(":radio") )
+	                error.appendTo( element.parent() );
+	          	else
+                	error.appendTo( element.parent() );
+        	},
+        	success: function(label) {
+            	// set   as text for IE
+            	label.html(" ").addClass("checked");
+	        }
+
+			});
 });
 </script>
