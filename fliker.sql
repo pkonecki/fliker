@@ -22,10 +22,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `activite`
+-- Structure de la table `fliker_activite`
 --
 
-CREATE TABLE IF NOT EXISTS `activite` (
+CREATE TABLE IF NOT EXISTS `fliker_activite` (
   `id` int(16) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
@@ -36,10 +36,10 @@ CREATE TABLE IF NOT EXISTS `activite` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `activite`
+-- Contenu de la table `fliker_activite`
 --
 
-INSERT INTO `activite` (`id`, `nom`, `description`, `url`, `id_sec`) VALUES
+INSERT INTO `fliker_activite` (`id`, `nom`, `description`, `url`, `id_sec`) VALUES
 (5, 'Kung Fu', 'Gigalol', 'http://kungfu.com', 3),
 (6, 'Tai Chi', '.....', 'http://taichi.com', 3),
 (7, 'Baby Foot', '', 'http://somurl.com', 4);
@@ -47,10 +47,10 @@ INSERT INTO `activite` (`id`, `nom`, `description`, `url`, `id_sec`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `adherent`
+-- Structure de la table `fliker_adherent`
 --
 
-CREATE TABLE IF NOT EXISTS `adherent` (
+CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `privilege` int(1) NOT NULL DEFAULT '0',
   `numcarte` varchar(255) NOT NULL,
@@ -84,10 +84,10 @@ CREATE TABLE IF NOT EXISTS `adherent` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
 
 --
--- Contenu de la table `adherent`
+-- Contenu de la table `fliker_adherent`
 --
 
-INSERT INTO `adherent` (`id`, `privilege`, `numcarte`, `numayantdroit`, `categorie`, `id_statut`, `prenom`, `nom`, `naissance`, `photo`, `certmed`, `tel1`, `tel2`, `email`, `adresse1`, `adresse2`, `code_postal`, `adresse_pro`, `last_modif`, `charte`, `assurance`, `droit_image`, `date_creation`, `contact_urgence`, `contact_urgence_tel`, `active`, `activationkey`, `password`) VALUES
+INSERT INTO `fliker_adherent` (`id`, `privilege`, `numcarte`, `numayantdroit`, `categorie`, `id_statut`, `prenom`, `nom`, `naissance`, `photo`, `certmed`, `tel1`, `tel2`, `email`, `adresse1`, `adresse2`, `code_postal`, `adresse_pro`, `last_modif`, `charte`, `assurance`, `droit_image`, `date_creation`, `contact_urgence`, `contact_urgence_tel`, `active`, `activationkey`, `password`) VALUES
 (28, 1, '', '2030322269', 'M', 13, 'Pierre-Olivier', 'Konecki', '1987-07-08', 1, '1', '0672536844', '979878968', 'pkonecki@gmail.com', '5 Place de la Muette', '', '78990', 'PROUT', '2011-08-29 10:37:55', 1, 1, 1, '2011-05-14 15:04:08', 'pmarty', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
 (34, 0, '97987', '65465464', 'M', 5, 'Jackie', 'Chan', '1971-06-09', 1, '0', '3646456465', '6546546546', 'jackie.chan@kungfu.com', '2 rue du Soleil Levant', '', '91440', '', '2011-08-09 11:53:43', 1, 0, 0, '2011-06-05 21:00:19', 'Bruce Lee', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
 (35, 0, '', '11', 'M', 3, 'Zinédine', 'Zidane', '1914-06-11', 1, '', '01238934', '9374934', 'zinedine@football.com', '3 rue du Ballon Rond', '', '75001', '', '2011-06-13 17:16:55', 1, 0, 0, '2011-06-06 09:17:16', 'Fabien Barthez', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
@@ -100,15 +100,15 @@ INSERT INTO `adherent` (`id`, `privilege`, `numcarte`, `numayantdroit`, `categor
 -- --------------------------------------------------------
 
 --
--- Structure de la table `adhesion`
+-- Structure de la table `fliker_adhesion`
 --
 
-CREATE TABLE IF NOT EXISTS `adhesion` (
+CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
   `id_adh` int(16) NOT NULL,
   `id_cre` int(16) NOT NULL,
-  `statut` int(4) NOT NULL,
+  `fliker_statut` int(4) NOT NULL,
   `promo` int(4) NOT NULL,
   `id_asso` int(16) NOT NULL,
   PRIMARY KEY (`id`),
@@ -118,10 +118,10 @@ CREATE TABLE IF NOT EXISTS `adhesion` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 --
--- Contenu de la table `adhesion`
+-- Contenu de la table `fliker_adhesion`
 --
 
-INSERT INTO `adhesion` (`id`, `date`, `id_adh`, `id_cre`, `statut`, `promo`, `id_asso`) VALUES
+INSERT INTO `fliker_adhesion` (`id`, `date`, `id_adh`, `id_cre`, `fliker_statut`, `promo`, `id_asso`) VALUES
 (16, '2011-08-10 09:29:09', 28, 8, 0, 2011, 1),
 (17, '2011-08-10 09:29:09', 28, 13, 1, 2011, 2),
 (18, '2011-08-10 09:29:56', 34, 9, 0, 2011, 2),
@@ -143,10 +143,10 @@ INSERT INTO `adhesion` (`id`, `date`, `id_adh`, `id_cre`, `statut`, `promo`, `id
 -- --------------------------------------------------------
 
 --
--- Structure de la table `association`
+-- Structure de la table `fliker_association`
 --
 
-CREATE TABLE IF NOT EXISTS `association` (
+CREATE TABLE IF NOT EXISTS `fliker_association` (
   `id` int(16) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
@@ -155,20 +155,20 @@ CREATE TABLE IF NOT EXISTS `association` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `association`
+-- Contenu de la table `fliker_association`
 --
 
-INSERT INTO `association` (`id`, `nom`, `description`, `url`) VALUES
+INSERT INTO `fliker_association` (`id`, `nom`, `description`, `url`) VALUES
 (1, 'Asesco', 'Association des étudiants u-psud', 'http://www.asesco.u-psud.fr/'),
 (2, 'PSUC', 'Association du personnel', 'PSUC');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `asso_section`
+-- Structure de la table `fliker_asso_section`
 --
 
-CREATE TABLE IF NOT EXISTS `asso_section` (
+CREATE TABLE IF NOT EXISTS `fliker_asso_section` (
   `id_asso` int(16) NOT NULL,
   `id_sec` int(16) NOT NULL,
   KEY `id_asso` (`id_asso`,`id_sec`),
@@ -176,10 +176,10 @@ CREATE TABLE IF NOT EXISTS `asso_section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `asso_section`
+-- Contenu de la table `fliker_asso_section`
 --
 
-INSERT INTO `asso_section` (`id_asso`, `id_sec`) VALUES
+INSERT INTO `fliker_asso_section` (`id_asso`, `id_sec`) VALUES
 (1, 3),
 (2, 3),
 (2, 4);
@@ -187,10 +187,10 @@ INSERT INTO `asso_section` (`id_asso`, `id_sec`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `champs_adherent`
+-- Structure de la table `fliker_champs_adherent`
 --
 
-CREATE TABLE IF NOT EXISTS `champs_adherent` (
+CREATE TABLE IF NOT EXISTS `fliker_champs_adherent` (
   `nom` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -206,10 +206,10 @@ CREATE TABLE IF NOT EXISTS `champs_adherent` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `champs_adherent`
+-- Contenu de la table `fliker_champs_adherent`
 --
 
-INSERT INTO `champs_adherent` (`nom`, `type`, `description`, `inscription`, `user_editable`, `user_viewable`, `search_simple`, `search_trombi`, `format`, `ordre`, `required`) VALUES
+INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `inscription`, `user_editable`, `user_viewable`, `search_simple`, `search_trombi`, `format`, `ordre`, `required`) VALUES
 ('adresse1', 'varchar', 'Adresse', 1, 1, 1, 0, 0, 'def', 9, 1),
 ('adresse2', 'varchar', 'Complément Adresse', 1, 1, 1, 0, 0, 'def', 10, 0),
 ('adresse_pro', 'varchar', 'Adresse Professionnelle', 1, 1, 1, 0, 0, 'def', 25, 0),
@@ -239,20 +239,20 @@ INSERT INTO `champs_adherent` (`nom`, `type`, `description`, `inscription`, `use
 -- --------------------------------------------------------
 
 --
--- Structure de la table `config`
+-- Structure de la table `fliker_config`
 --
 
-CREATE TABLE IF NOT EXISTS `config` (
+CREATE TABLE IF NOT EXISTS `fliker_config` (
   `id` varchar(255) NOT NULL,
   `valeur` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `config`
+-- Contenu de la table `fliker_config`
 --
 
-INSERT INTO `config` (`id`, `valeur`) VALUES
+INSERT INTO `fliker_config` (`id`, `valeur`) VALUES
 ('admin_email', 'webmaster-asesco.asso@u-psud.fr'),
 ('contact_email', 'bureau-asesco.asso@u-psud.fr'),
 ('currency', '€'),
@@ -263,10 +263,10 @@ INSERT INTO `config` (`id`, `valeur`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `creneau`
+-- Structure de la table `fliker_creneau`
 --
 
-CREATE TABLE IF NOT EXISTS `creneau` (
+CREATE TABLE IF NOT EXISTS `fliker_creneau` (
   `id` int(16) NOT NULL,
   `jour` varchar(255) NOT NULL,
   `debut` time NOT NULL,
@@ -278,10 +278,10 @@ CREATE TABLE IF NOT EXISTS `creneau` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `creneau`
+-- Contenu de la table `fliker_creneau`
 --
 
-INSERT INTO `creneau` (`id`, `jour`, `debut`, `fin`, `lieu`, `id_act`) VALUES
+INSERT INTO `fliker_creneau` (`id`, `jour`, `debut`, `fin`, `lieu`, `id_act`) VALUES
 (8, 'Lundi', '15:00:00', '16:00:00', 'Pagode de la nuit enchanté du matin', 6),
 (9, 'Jeudi', '17:00:00', '20:00:00', 'Pagode du soleil levant', 5),
 (10, 'Vendredi', '19:00:00', '20:00:00', 'Pagode du soleil levant', 5),
@@ -292,19 +292,19 @@ INSERT INTO `creneau` (`id`, `jour`, `debut`, `fin`, `lieu`, `id_act`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `entite`
+-- Structure de la table `fliker_entite`
 --
 
-CREATE TABLE IF NOT EXISTS `entite` (
+CREATE TABLE IF NOT EXISTS `fliker_entite` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
--- Contenu de la table `entite`
+-- Contenu de la table `fliker_entite`
 --
 
-INSERT INTO `entite` (`id`) VALUES
+INSERT INTO `fliker_entite` (`id`) VALUES
 (1),
 (2),
 (3),
@@ -329,10 +329,10 @@ INSERT INTO `entite` (`id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `paiement`
+-- Structure de la table `fliker_paiement`
 --
 
-CREATE TABLE IF NOT EXISTS `paiement` (
+CREATE TABLE IF NOT EXISTS `fliker_paiement` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
   `date_t` date NOT NULL,
@@ -348,10 +348,10 @@ CREATE TABLE IF NOT EXISTS `paiement` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
--- Contenu de la table `paiement`
+-- Contenu de la table `fliker_paiement`
 --
 
-INSERT INTO `paiement` (`id`, `date`, `date_t`, `id_adh`, `type`, `num`, `remarque`, `promo`, `recorded_by`) VALUES
+INSERT INTO `fliker_paiement` (`id`, `date`, `date_t`, `id_adh`, `type`, `num`, `remarque`, `promo`, `recorded_by`) VALUES
 (1, '2011-01-03 19:53:02', '0000-00-00', 36, 'Cheque', '54643065503', 'Cheque en bois', 2011, 'Jean Robert'),
 (9, '2011-08-09 22:43:08', '0000-00-00', 36, 'Cheque', '9998', 'Cheque du 20 Aout', 2011, 'Daniel Auteuil'),
 (10, '2011-08-17 10:39:53', '0000-00-00', 36, 'Cheque', '98797889', 'Blahbalhba', 2011, 'Mac Gyver'),
@@ -362,10 +362,10 @@ INSERT INTO `paiement` (`id`, `date`, `date_t`, `id_adh`, `type`, `num`, `remarq
 -- --------------------------------------------------------
 
 --
--- Structure de la table `paiement_sup`
+-- Structure de la table `fliker_paiement_sup`
 --
 
-CREATE TABLE IF NOT EXISTS `paiement_sup` (
+CREATE TABLE IF NOT EXISTS `fliker_paiement_sup` (
   `id_paiement` int(16) NOT NULL,
   `id_sup` int(16) NOT NULL,
   `valeur` double NOT NULL,
@@ -374,10 +374,10 @@ CREATE TABLE IF NOT EXISTS `paiement_sup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `paiement_sup`
+-- Contenu de la table `fliker_paiement_sup`
 --
 
-INSERT INTO `paiement_sup` (`id_paiement`, `id_sup`, `valeur`) VALUES
+INSERT INTO `fliker_paiement_sup` (`id_paiement`, `id_sup`, `valeur`) VALUES
 (1, 42, 50),
 (1, 46, 2),
 (9, 44, 100),
@@ -403,10 +403,10 @@ INSERT INTO `paiement_sup` (`id_paiement`, `id_sup`, `valeur`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `presence`
+-- Structure de la table `fliker_presence`
 --
 
-CREATE TABLE IF NOT EXISTS `presence` (
+CREATE TABLE IF NOT EXISTS `fliker_presence` (
   `id_adh` int(16) NOT NULL,
   `id_cre` int(16) NOT NULL,
   `week` int(2) NOT NULL,
@@ -416,10 +416,10 @@ CREATE TABLE IF NOT EXISTS `presence` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `presence`
+-- Contenu de la table `fliker_presence`
 --
 
-INSERT INTO `presence` (`id_adh`, `id_cre`, `week`, `promo`) VALUES
+INSERT INTO `fliker_presence` (`id_adh`, `id_cre`, `week`, `promo`) VALUES
 (28, 12, 23, 2011),
 (34, 10, 33, 2011),
 (36, 8, 33, 2011),
@@ -506,10 +506,10 @@ INSERT INTO `presence` (`id_adh`, `id_cre`, `week`, `promo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resp_act`
+-- Structure de la table `fliker_resp_act`
 --
 
-CREATE TABLE IF NOT EXISTS `resp_act` (
+CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
   `id_act` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   PRIMARY KEY (`id_act`,`id_adh`),
@@ -517,20 +517,20 @@ CREATE TABLE IF NOT EXISTS `resp_act` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `resp_act`
+-- Contenu de la table `fliker_resp_act`
 --
 
-INSERT INTO `resp_act` (`id_act`, `id_adh`) VALUES
+INSERT INTO `fliker_resp_act` (`id_act`, `id_adh`) VALUES
 (6, 37),
 (6, 38);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resp_asso`
+-- Structure de la table `fliker_resp_asso`
 --
 
-CREATE TABLE IF NOT EXISTS `resp_asso` (
+CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
   `id_asso` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   PRIMARY KEY (`id_asso`,`id_adh`),
@@ -538,20 +538,20 @@ CREATE TABLE IF NOT EXISTS `resp_asso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `resp_asso`
+-- Contenu de la table `fliker_resp_asso`
 --
 
-INSERT INTO `resp_asso` (`id_asso`, `id_adh`) VALUES
+INSERT INTO `fliker_resp_asso` (`id_asso`, `id_adh`) VALUES
 (1, 38),
 (2, 38);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resp_cren`
+-- Structure de la table `fliker_resp_cren`
 --
 
-CREATE TABLE IF NOT EXISTS `resp_cren` (
+CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
   `id_cre` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   PRIMARY KEY (`id_cre`,`id_adh`),
@@ -559,20 +559,20 @@ CREATE TABLE IF NOT EXISTS `resp_cren` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `resp_cren`
+-- Contenu de la table `fliker_resp_cren`
 --
 
-INSERT INTO `resp_cren` (`id_cre`, `id_adh`) VALUES
+INSERT INTO `fliker_resp_cren` (`id_cre`, `id_adh`) VALUES
 (13, 35),
 (8, 38);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `resp_section`
+-- Structure de la table `fliker_resp_section`
 --
 
-CREATE TABLE IF NOT EXISTS `resp_section` (
+CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   `id_sec` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   PRIMARY KEY (`id_sec`,`id_adh`),
@@ -580,19 +580,19 @@ CREATE TABLE IF NOT EXISTS `resp_section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `resp_section`
+-- Contenu de la table `fliker_resp_section`
 --
 
-INSERT INTO `resp_section` (`id_sec`, `id_adh`) VALUES
+INSERT INTO `fliker_resp_section` (`id_sec`, `id_adh`) VALUES
 (3, 34);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `section`
+-- Structure de la table `fliker_section`
 --
 
-CREATE TABLE IF NOT EXISTS `section` (
+CREATE TABLE IF NOT EXISTS `fliker_section` (
   `id` int(16) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `url` varchar(1024) NOT NULL,
@@ -602,30 +602,30 @@ CREATE TABLE IF NOT EXISTS `section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `section`
+-- Contenu de la table `fliker_section`
 --
 
-INSERT INTO `section` (`id`, `nom`, `url`, `description`, `logo`) VALUES
+INSERT INTO `fliker_section` (`id`, `nom`, `url`, `description`, `logo`) VALUES
 (3, 'Arts Martiaux', 'http://am.com', 'Blablablalalba', ''),
 (4, 'Sports Collectifs', 'http://somurl.com', 'Foot, Basket toussa', '');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `statut`
+-- Structure de la table `fliker_statut`
 --
 
-CREATE TABLE IF NOT EXISTS `statut` (
+CREATE TABLE IF NOT EXISTS `fliker_statut` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
--- Contenu de la table `statut`
+-- Contenu de la table `fliker_statut`
 --
 
-INSERT INTO `statut` (`id`, `nom`) VALUES
+INSERT INTO `fliker_statut` (`id`, `nom`) VALUES
 (1, 'étudiant IUT Cachan'),
 (2, 'étudiant IUT Orsay'),
 (3, 'étudiant IUT Sceaux'),
@@ -654,10 +654,10 @@ INSERT INTO `statut` (`id`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `sup`
+-- Structure de la table `fliker_sup`
 --
 
-CREATE TABLE IF NOT EXISTS `sup` (
+CREATE TABLE IF NOT EXISTS `fliker_sup` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `promo` int(4) NOT NULL,
   `type` varchar(255) NOT NULL,
@@ -672,10 +672,10 @@ CREATE TABLE IF NOT EXISTS `sup` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
 
 --
--- Contenu de la table `sup`
+-- Contenu de la table `fliker_sup`
 --
 
-INSERT INTO `sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso_adh`, `id_asso_paie`) VALUES
+INSERT INTO `fliker_sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso_adh`, `id_asso_paie`) VALUES
 (35, 2011, 'Sup Cre', 7, NULL, 1, 1),
 (36, 2011, 'Cotisation', 1000, 13, NULL, 1),
 (38, 2011, 'TEst', 10, NULL, 1, 1),
@@ -703,10 +703,10 @@ INSERT INTO `sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso_adh`, 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `sup_fk`
+-- Structure de la table `fliker_sup_fk`
 --
 
-CREATE TABLE IF NOT EXISTS `sup_fk` (
+CREATE TABLE IF NOT EXISTS `fliker_sup_fk` (
   `id_ent` int(16) NOT NULL,
   `id_sup` int(16) NOT NULL,
   PRIMARY KEY (`id_ent`,`id_sup`),
@@ -716,10 +716,10 @@ CREATE TABLE IF NOT EXISTS `sup_fk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `sup_fk`
+-- Contenu de la table `fliker_sup_fk`
 --
 
-INSERT INTO `sup_fk` (`id_ent`, `id_sup`) VALUES
+INSERT INTO `fliker_sup_fk` (`id_ent`, `id_sup`) VALUES
 (1, 36),
 (1, 43),
 (1, 47),
@@ -749,111 +749,111 @@ INSERT INTO `sup_fk` (`id_ent`, `id_sup`) VALUES
 --
 
 --
--- Contraintes pour la table `activite`
+-- Contraintes pour la table `fliker_activite`
 --
-ALTER TABLE `activite`
-  ADD CONSTRAINT `activite_ibfk_2` FOREIGN KEY (`id`) REFERENCES `entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `activite_ibfk_3` FOREIGN KEY (`id_sec`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_activite`
+  ADD CONSTRAINT `activite_ibfk_2` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `activite_ibfk_3` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `adherent`
+-- Contraintes pour la table `fliker_adherent`
 --
-ALTER TABLE `adherent`
-  ADD CONSTRAINT `adherent_ibfk_1` FOREIGN KEY (`id_statut`) REFERENCES `statut` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_adherent`
+  ADD CONSTRAINT `adherent_ibfk_1` FOREIGN KEY (`id_statut`) REFERENCES `fliker_statut` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `adhesion`
+-- Contraintes pour la table `fliker_adhesion`
 --
-ALTER TABLE `adhesion`
-  ADD CONSTRAINT `adhesion_ibfk_3` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adhesion_ibfk_4` FOREIGN KEY (`id_cre`) REFERENCES `creneau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `adhesion_ibfk_5` FOREIGN KEY (`id_asso`) REFERENCES `association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_adhesion`
+  ADD CONSTRAINT `adhesion_ibfk_3` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `adhesion_ibfk_4` FOREIGN KEY (`id_cre`) REFERENCES `fliker_creneau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `adhesion_ibfk_5` FOREIGN KEY (`id_asso`) REFERENCES `fliker_association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `association`
+-- Contraintes pour la table `fliker_association`
 --
-ALTER TABLE `association`
-  ADD CONSTRAINT `association_ibfk_1` FOREIGN KEY (`id`) REFERENCES `entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_association`
+  ADD CONSTRAINT `association_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `asso_section`
+-- Contraintes pour la table `fliker_asso_section`
 --
-ALTER TABLE `asso_section`
-  ADD CONSTRAINT `asso_section_ibfk_1` FOREIGN KEY (`id_asso`) REFERENCES `association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `asso_section_ibfk_2` FOREIGN KEY (`id_sec`) REFERENCES `section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_asso_section`
+  ADD CONSTRAINT `asso_section_ibfk_1` FOREIGN KEY (`id_asso`) REFERENCES `fliker_association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `asso_section_ibfk_2` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `creneau`
+-- Contraintes pour la table `fliker_creneau`
 --
-ALTER TABLE `creneau`
-  ADD CONSTRAINT `creneau_ibfk_2` FOREIGN KEY (`id`) REFERENCES `entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `creneau_ibfk_3` FOREIGN KEY (`id_act`) REFERENCES `activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_creneau`
+  ADD CONSTRAINT `creneau_ibfk_2` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `creneau_ibfk_3` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `paiement`
+-- Contraintes pour la table `fliker_paiement`
 --
-ALTER TABLE `paiement`
-  ADD CONSTRAINT `paiement_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_paiement`
+  ADD CONSTRAINT `paiement_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `paiement_sup`
+-- Contraintes pour la table `fliker_paiement_sup`
 --
-ALTER TABLE `paiement_sup`
-  ADD CONSTRAINT `paiement_sup_ibfk_1` FOREIGN KEY (`id_paiement`) REFERENCES `paiement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `paiement_sup_ibfk_2` FOREIGN KEY (`id_sup`) REFERENCES `sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_paiement_sup`
+  ADD CONSTRAINT `paiement_sup_ibfk_1` FOREIGN KEY (`id_paiement`) REFERENCES `fliker_paiement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `paiement_sup_ibfk_2` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `presence`
+-- Contraintes pour la table `fliker_presence`
 --
-ALTER TABLE `presence`
-  ADD CONSTRAINT `presence_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `presence_ibfk_2` FOREIGN KEY (`id_cre`) REFERENCES `creneau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_presence`
+  ADD CONSTRAINT `presence_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `presence_ibfk_2` FOREIGN KEY (`id_cre`) REFERENCES `fliker_creneau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `resp_act`
+-- Contraintes pour la table `fliker_resp_act`
 --
-ALTER TABLE `resp_act`
-  ADD CONSTRAINT `resp_act_ibfk_1` FOREIGN KEY (`id_act`) REFERENCES `activite` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `resp_act_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_resp_act`
+  ADD CONSTRAINT `resp_act_ibfk_1` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `resp_act_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `resp_asso`
+-- Contraintes pour la table `fliker_resp_asso`
 --
-ALTER TABLE `resp_asso`
-  ADD CONSTRAINT `resp_asso_ibfk_1` FOREIGN KEY (`id_asso`) REFERENCES `association` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `resp_asso_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_resp_asso`
+  ADD CONSTRAINT `resp_asso_ibfk_1` FOREIGN KEY (`id_asso`) REFERENCES `fliker_association` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `resp_asso_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `resp_cren`
+-- Contraintes pour la table `fliker_resp_cren`
 --
-ALTER TABLE `resp_cren`
-  ADD CONSTRAINT `resp_cren_ibfk_1` FOREIGN KEY (`id_cre`) REFERENCES `creneau` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `resp_cren_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_resp_cren`
+  ADD CONSTRAINT `resp_cren_ibfk_1` FOREIGN KEY (`id_cre`) REFERENCES `fliker_creneau` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `resp_cren_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `resp_section`
+-- Contraintes pour la table `fliker_resp_section`
 --
-ALTER TABLE `resp_section`
-  ADD CONSTRAINT `resp_section_ibfk_1` FOREIGN KEY (`id_sec`) REFERENCES `section` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `resp_section_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `fliker_resp_section`
+  ADD CONSTRAINT `resp_section_ibfk_1` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `resp_section_ibfk_2` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `section`
+-- Contraintes pour la table `fliker_section`
 --
-ALTER TABLE `section`
-  ADD CONSTRAINT `section_ibfk_1` FOREIGN KEY (`id`) REFERENCES `entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_section`
+  ADD CONSTRAINT `section_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `sup`
+-- Contraintes pour la table `fliker_sup`
 --
-ALTER TABLE `sup`
-  ADD CONSTRAINT `sup_ibfk_1` FOREIGN KEY (`id_statut`) REFERENCES `statut` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `sup_ibfk_2` FOREIGN KEY (`id_asso_adh`) REFERENCES `association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `sup_ibfk_3` FOREIGN KEY (`id_asso_paie`) REFERENCES `association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_sup`
+  ADD CONSTRAINT `sup_ibfk_1` FOREIGN KEY (`id_statut`) REFERENCES `fliker_statut` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sup_ibfk_2` FOREIGN KEY (`id_asso_adh`) REFERENCES `fliker_association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sup_ibfk_3` FOREIGN KEY (`id_asso_paie`) REFERENCES `fliker_association` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `sup_fk`
+-- Contraintes pour la table `fliker_sup_fk`
 --
-ALTER TABLE `sup_fk`
-  ADD CONSTRAINT `sup_fk_ibfk_1` FOREIGN KEY (`id_sup`) REFERENCES `sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `sup_fk_ibfk_2` FOREIGN KEY (`id_ent`) REFERENCES `entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `fliker_sup_fk`
+  ADD CONSTRAINT `sup_fk_ibfk_1` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `sup_fk_ibfk_2` FOREIGN KEY (`id_ent`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
