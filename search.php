@@ -14,13 +14,13 @@ else {
 		}
 
 	}
-	$query="SELECT * FROM resp_act  WHERE id_adh='".$_SESSION[uid]."'
+	$query="SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION[uid]."'
 	UNION
-	SELECT * FROM resp_cren  WHERE id_adh='".$_SESSION[uid]."'
+	SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION[uid]."'
  	UNION
- 	SELECT * FROM resp_section  WHERE id_adh='".$_SESSION[uid]."'
+ 	SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION[uid]."'
  	UNION
-	SELECT * FROM resp_asso  WHERE id_adh='".$_SESSION[uid]."' ";
+	SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION[uid]."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	include("closedb.php");
@@ -178,7 +178,7 @@ function multiselected($post,$val){
 
 	if($_POST['action']==="submitted"){
 	//SQL
-	$sql = "SELECT DISTINCT ADR.* FROM adherent ADR WHERE true ";
+	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true ";
 	for($i = 0; $i < $_POST['field_count']; $i++){
 
 		$n=$i+1;
@@ -231,14 +231,14 @@ function multiselected($post,$val){
 	}
 	$in.=" ) ";
 	if ($i==0 && $resp_asso) {
-		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
+		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
 	} else{
 	$sql.="AND ( false ";
-	if (!isset($_POST['exclure_adhs'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
+	if (!isset($_POST['exclure_adhs'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
 	if (isset($_POST['responsable_asso']) || isset($_POST['responsable'])){	
 		$sql.="OR (ADR.id IN (
 			SELECT  ADH.id id_adh
-			FROM activite AC, creneau CR, section S, association A, asso_section HS , adherent ADH
+			FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adherent ADH
 			WHERE CR.id_act=AC.id
 			AND AC.id_sec=S.id
 			AND A.id=HS.id_asso
@@ -246,14 +246,14 @@ function multiselected($post,$val){
 			AND CR.id IN $in
 			AND (";
 		if (isset($_POST['responsable_asso'])) {
-				$sql.= "A.id IN (SELECT id_asso FROM resp_asso RA WHERE RA.id_adh=ADH.id)";
+				$sql.= "A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_adh=ADH.id)";
 				if (isset($_POST['responsable']))$sql.=" OR ";		
 		}
-		if (isset($_POST['responsable']))  $sql.= "S.id IN (SELECT id_sec FROM resp_section RA WHERE RA.id_adh=ADH.id )
+		if (isset($_POST['responsable']))  $sql.= "S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_adh=ADH.id )
 				OR
-				AC.id IN (SELECT id_act FROM resp_act RA WHERE RA.id_adh=ADH.id )
+				AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_adh=ADH.id )
 				OR
-				CR.id IN (SELECT id_cre FROM resp_cren RA WHERE RA.id_adh=ADH.id )
+				CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_adh=ADH.id )
 				";
 		$sql.=")
 			 ) )";

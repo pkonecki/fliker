@@ -1,7 +1,9 @@
 <?php
 session_start();
 define('_VALID_INCLUDE', TRUE);
-include("./includes/paths.php");
+$prefix_db="fliker_";
+$GLOBALS['prefix_db']="fliker_";
+include_once("./includes/paths.php");
 include_once("Adherent.php");
 include_once("Activite.php");
 include_once('Creneau.php');

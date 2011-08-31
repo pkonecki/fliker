@@ -2,7 +2,7 @@
 
 function getSelect($table){
 	include("opendb.php");
-	$query = "SELECT id,nom FROM $table ORDER BY nom";
+	$query = "SELECT id,nom FROM {$GLOBALS['prefix_db']}$table ORDER BY nom";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$tab = array();

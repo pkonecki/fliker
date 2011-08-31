@@ -9,7 +9,7 @@
 
 function getMyPaiements($userid){
 	$query="SELECT  P.*
-		FROM paiement P
+		FROM {$GLOBALS['prefix_db']}paiement P
 		WHERE P.id_adh=$userid
 		ORDER BY P.date DESC
 		";
@@ -20,7 +20,7 @@ function getMyPaiements($userid){
 	while($row = mysql_fetch_array($results)){
 		$tab[$row['id']] = $row;
 		$q2="SELECT PS.id_paiement id_paiement, PS.id_sup id_sup, PS.valeur valeur_paiement, S.valeur valeur_sup, S.type type_sup, S.id_asso_paie
-			FROM paiement_sup PS,sup S
+			FROM {$GLOBALS['prefix_db']}paiement_sup PS, {$GLOBALS['prefix_db']}sup S
 			WHERE PS.id_sup=S.id
 			AND id_paiement={$row['id']} ";
 		$r2=mysql_query($q2);
@@ -34,12 +34,12 @@ function getMyPaiements($userid){
 }
 
 function addPaiement($tab){
-	$query= "INSERT INTO paiement (id_adh,type,num,remarque,promo,date,date_t,recorded_by)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."','{$tab['date_t']}' ,'{$tab['recorded_by']}' )";
+	$query= "INSERT INTO {$GLOBALS['prefix_db']}paiement (id_adh,type,num,remarque,promo,date,date_t,recorded_by)  VALUES ('{$tab['id_adh']}', '{$tab['type']}', '{$tab['num']}' ,'{$tab['remarque']}' ,'{$tab['promo']}' ,'".date( 'Y-m-d H:i:s')."','{$tab['date_t']}' ,'{$tab['recorded_by']}' )";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$id_p=mysql_insert_id();
-	$q2 = "INSERT INTO paiement_sup (id_paiement,id_sup,valeur) VALUES ";
+	$q2 = "INSERT INTO {$GLOBALS['prefix_db']}paiement_sup (id_paiement,id_sup,valeur) VALUES ";
 	foreach($tab['sup'] as $id_sup => $valeur){
 		$q2 .= "('$id_p', '$id_sup','$valeur' ),";
 	}
@@ -51,7 +51,7 @@ function addPaiement($tab){
 
 function delPaiement($id){
 
-	$query = "DELETE FROM paiement WHERE id='$id'";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}paiement WHERE id='$id'";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -60,7 +60,9 @@ function delPaiement($id){
 }
 
 function getPaiementsSup($id_adh){
-	$query = "SELECT SUM(PS.valeur) total,PS.id_sup FROM paiement P, paiement_sup PS WHERE P.id=PS.id_paiement AND P.id_adh=$id_adh GROUP BY PS.id_sup";
+	$query = "SELECT SUM(PS.valeur) total,PS.id_sup 
+	FROM {$GLOBALS['prefix_db']}paiement P, {$GLOBALS['prefix_db']}paiement_sup PS 
+	WHERE P.id=PS.id_paiement AND P.id_adh=$id_adh GROUP BY PS.id_sup";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
