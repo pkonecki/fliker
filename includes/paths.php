@@ -55,7 +55,7 @@ $webservices=$GLOBALS['root']."/webservices";
 $includes=$GLOBALS['root']."/includes";
 $inscription=$GLOBALS['root']."/inscription";
 $photos=$GLOBALS['root']."/photo";
-
+$prefix_db="fliker_";
 add_include_path($webservices);
 add_include_path($includes);
 add_include_path($inscription);
