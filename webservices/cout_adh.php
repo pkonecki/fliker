@@ -9,20 +9,20 @@ foreach($_GET as $key => $asso ){
 	}
 }
 $tout ="SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
-					FROM activite AC, creneau CR, section S, association A, asso_section HS
+					FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 					WHERE CR.id_act=AC.id
 					AND AC.id_sec=S.id
 					AND A.id=HS.id_asso
 					AND HS.id_sec=S.id 
 					AND ($where)
 					ORDER BY nom_sec";
-$assos = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso FROM ($tout) AS S1 ,sup 
+$assos = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
 			WHERE sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut=$id_statut_adh";
-$secs = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_sec FROM ($tout) AS S1 ,sup,sup_fk 
+$secs = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_sec FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 			WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_sec=sup_fk.id_ent AND sup_fk.id_sup=sup.id";
-$acts = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_act FROM ($tout) AS S1 ,sup,sup_fk 
+$acts = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_act FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 			WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_act=sup_fk.id_ent AND sup_fk.id_sup=sup.id";
-$cres = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_cre FROM ($tout) AS S1 ,sup,sup_fk 
+$cres = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_cre FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk 
 			WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_cre=sup_fk.id_ent AND sup_fk.id_sup=sup.id";
 
 $t_assos = "SELECT SUM(A.valeur) t_assos FROM ($assos) AS A ";

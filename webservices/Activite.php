@@ -5,7 +5,7 @@ function newActivite($tab){
 	require_once("saveImage.php");
 	//Nouvelle entité
 	include("opendb.php");
-	$q1 = "INSERT INTO entite VALUES ()";
+	$q1 = "INSERT INTO {$GLOBALS['prefix_db']}entite VALUES ()";
 	$r1 = mysql_query($q1);
 	if (!$r1){ 
 		echo mysql_error();
@@ -26,7 +26,7 @@ function newActivite($tab){
 	$set.="'".mysql_real_escape_string($tab['id_sec'])."', ";
 	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
-	$query = "INSERT INTO activite ".$colonnes." VALUES ".$set." ";
+	$query = "INSERT INTO {$GLOBALS['prefix_db']}activite ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results){ 
@@ -41,7 +41,7 @@ function newActivite($tab){
 function delActivite($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM entite WHERE id=".$id."";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}entite WHERE id=".$id."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -53,22 +53,22 @@ function getActivites($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
 			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
-						FROM activite AC, section S, association A, asso_section HS
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id";
 		} else {
 			if (!empty($userid)) {
 				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
-						FROM activite AC, section S, association A, asso_section HS
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '".$userid."')
-							OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '".$userid."')
-							OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '".$userid."')
+							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '".$userid."')
+							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '".$userid."')
+							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '".$userid."')
 							)";
 			}
 			else return;
@@ -89,7 +89,7 @@ function getActivites($userid){
 function getActivitesBySection($sectionid){
 	if(!empty($_SESSION['user'])){
 			if (!empty($sectionid)) {
-				$query = "SELECT * FROM `activite` A WHERE A.id_sec= ".$sectionid." ";
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}activite A WHERE A.id_sec= ".$sectionid." ";
 			}
 			else return;
 		
@@ -121,7 +121,7 @@ function modifActivite($tab){
 	if(!empty($tab['url'])) $set.="url='".mysql_real_escape_string($tab['url'])."', ";
 	if ($set==="") return;
 	$set=substr($set,0,-2);
-	$query = "UPDATE activite SET ".$set." WHERE id=".$tab['id']."";
+	$query = "UPDATE {$GLOBALS['prefix_db']}activite SET ".$set." WHERE id=".$tab['id']."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -131,7 +131,7 @@ function modifActivite($tab){
 
 function ajoutResponsableAct($id_act,$id_adh){
 	include("opendb.php");
-	$query = "INSERT into resp_act(id_act,id_adh) VALUES ('$id_act.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh) VALUES ('$id_act.','$id_adh')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -139,7 +139,7 @@ function ajoutResponsableAct($id_act,$id_adh){
 }
 function delRespActivite($id_act,$id_adh){
 	include("opendb.php");
-	$query = "DELETE FROM resp_act WHERE id_act='$id_act' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act='$id_act' AND id_adh='$id_adh' ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -147,7 +147,7 @@ function delRespActivite($id_act,$id_adh){
 
 function getResponsablesAct($id_act){
 
-	$query = "SELECT * FROM `adherent` A ,resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

@@ -1,6 +1,6 @@
 <?php
 function getAdhesions($uid,$promo){
-	$query = "SELECT * FROM adhesion where id_adh=$uid AND promo=$promo ORDER BY date DESC";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adhesion where id_adh=$uid AND promo=$promo ORDER BY date DESC";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -23,7 +23,7 @@ function getMyAdhesions($id_adh,$promo){
 }
 
 function newAdhesions($tab,$id_adh){
-	$query= "INSERT INTO adhesion (id_adh,id_cre,id_asso,date,promo)  VALUES ";
+	$query= "INSERT INTO {$GLOBALS['prefix_db']}adhesion (id_adh,id_cre,id_asso,date,promo)  VALUES ";
 	foreach($tab as $cre => $asso){
 		 $query .="('$id_adh', '$cre', '$asso' ,'".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}' ),";
 	}
@@ -37,7 +37,7 @@ function newAdhesions($tab,$id_adh){
 function delAdhesion($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "UPDATE adhesion SET statut=1 WHERE id=$id ";
+	$query = "UPDATE {$GLOBALS['prefix_db']}adhesion SET statut=1 WHERE id=$id ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
@@ -47,7 +47,7 @@ function delAdhesion($id){
 function actAdhesion($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "UPDATE adhesion SET statut=0 WHERE id=$id ";
+	$query = "UPDATE {$GLOBALS['prefix_db']}adhesion SET statut=0 WHERE id=$id ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");

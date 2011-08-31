@@ -51,7 +51,7 @@ function newAdherent($tab){
 	$values = substr($values,0,-1);
 	$colonnes .=")";
 	$values .=")";
-	$query = "INSERT INTO adherent ".$colonnes." VALUES ".$values;
+	$query = "INSERT INTO {$GLOBALS['prefix_db']}adherent ".$colonnes." VALUES ".$values;
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -76,7 +76,7 @@ function getAdherent($user){
 	$tab = getChampsAdherents();
 	include("opendb.php");
 
-	$query = "SELECT * FROM `adherent` WHERE `id` = '".$user."'";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `id` = '".$user."'";
 
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -96,7 +96,7 @@ function getAdherent($user){
 function getChampsAdherents(){
 
 	include("opendb.php");
-	$query = "SELECT * FROM champs_adherent ORDER BY ordre ASC";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}champs_adherent ORDER BY ordre ASC";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$champs = array();
@@ -145,7 +145,7 @@ function modifAdherent($tab){
 
 	$set .="last_modif='".date( 'Y-m-d H:i:s')."'";
 
-	$query = "UPDATE adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
+	$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -156,7 +156,7 @@ function modifAdherent($tab){
 }
 
 function getAdherents(){
-	$query = "SELECT * FROM adherent WHERE active=1 ORDER BY nom ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE active=1 ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -169,7 +169,7 @@ function getAdherents(){
 }
 
 function getAdherentsByCreneau($id_cre,$promo){
-	$query = "SELECT ADH.* FROM adherent ADH, adhesion AD WHERE AD.id_adh=ADH.id  AND AD.id_cre=$id_cre AND AD.promo=$promo ORDER BY nom ";
+	$query = "SELECT ADH.* FROM {$GLOBALS['prefix_db']}adherent ADH, {$GLOBALS['prefix_db']}adhesion AD WHERE AD.id_adh=ADH.id  AND AD.id_cre=$id_cre AND AD.promo=$promo ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -182,7 +182,7 @@ function getAdherentsByCreneau($id_cre,$promo){
 }
 
 function getStatuts(){
-	$query = "SELECT * FROM statut ORDER BY nom ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}statut ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -199,7 +199,7 @@ function getStatuts(){
 
 
 function getAssos(){
-	$query = "SELECT * FROM association ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -213,7 +213,7 @@ function getAssos(){
 
 function getMyAdherents($userid){
 	$query="SELECT  ADH.id 
-		FROM activite AC, creneau CR, section S, association A, asso_section HS , adhesion AD, adherent ADH
+		FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adhesion AD, {$GLOBALS['prefix_db']}adherent ADH
 		WHERE CR.id_act=AC.id
 		AND AC.id_sec=S.id
 		AND A.id=HS.id_asso
@@ -223,21 +223,21 @@ function getMyAdherents($userid){
 			OR
 			(
 				ADH.id IN
-				(SELECT id_adh FROM resp_asso WHERE resp_asso.id_asso IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid'))
+				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_asso IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid'))
 				OR ADH.id IN
-				(SELECT id_adh FROM resp_section WHERE resp_section.id_sec IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid'))
+				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_sec IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid'))
 				OR ADH.id IN
-				(SELECT id_adh FROM resp_act WHERE resp_act.id_act IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid'))
+				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_act IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid'))
 				OR ADH.id IN
-				(SELECT id_adh FROM resp_cren WHERE resp_cren.id_cre IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid'))
+				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_cre IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid'))
 			)
 		)
 		AND
 		(
-			S.id IN (SELECT id_sec FROM resp_section WHERE id_adh = '$userid')
-			OR AC.id IN (SELECT id_act FROM resp_act WHERE id_adh = '$userid')
-			OR CR.id IN (SELECT id_cre FROM resp_cren WHERE id_adh = '$userid')
-			OR A.id IN (SELECT id_asso FROM resp_asso WHERE id_adh = '$userid')
+			S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
+			OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid')
+			OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid')
+			OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
 		)
 		";
 		
@@ -254,9 +254,9 @@ function getMyAdherents($userid){
 
 function getMyAssos($userid){
 	if($userid==-1) $query="SELECT  A.*
-		FROM association A";
+		FROM {$GLOBALS['prefix_db']}association A";
 	else $query="SELECT  A.*
-		FROM association A, resp_asso RS
+		FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
 		WHERE A.id=RS.id_asso AND RS.id_adh=$userid
 		";
 	include("opendb.php");
@@ -287,7 +287,7 @@ function getSolde($id_adh,$promo){
 	return -$solde;
 }
 function setNumCarte($num,$adh){
-	$q="UPDATE adherent SET numcarte=$num WHERE id=$adh";
+	$q="UPDATE {$GLOBALS['prefix_db']}adherent SET numcarte=$num WHERE id=$adh";
 	include("opendb.php");
 	$results = mysql_query($q);
 	if (!$results) echo mysql_error();
@@ -295,7 +295,7 @@ function setNumCarte($num,$adh){
 }
 
 function getMaxNumCarte(){
-	$query= "SELECT MAX(numcarte) max FROM adherent ";
+	$query= "SELECT MAX(numcarte) max FROM {$GLOBALS['prefix_db']}adherent ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

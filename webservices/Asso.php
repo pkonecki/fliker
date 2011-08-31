@@ -6,7 +6,7 @@ function newAsso($tab){
 	if(empty($tab['nom'])) die();
 	include("opendb.php");
 	//Nouvelle entité
-	$q1 = "INSERT INTO entite VALUES ()";
+	$q1 = "INSERT INTO {$GLOBALS['prefix_db']}entite VALUES ()";
 	$r1 = mysql_query($q1);
 	if (!$r1){ 
 		echo mysql_error();
@@ -25,7 +25,7 @@ function newAsso($tab){
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
 	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
-	$query = "INSERT INTO association ".$colonnes." VALUES ".$set." ";
+	$query = "INSERT INTO {$GLOBALS['prefix_db']}association ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results){ 
@@ -40,7 +40,7 @@ function newAsso($tab){
 function delAsso($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "DELETE FROM entite WHERE id=".$id."";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}entite WHERE id=".$id."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -51,10 +51,10 @@ function delAsso($id){
 function getAssociations($userid){
 	if(!empty($_SESSION['user'])){
 		if($_SESSION['privilege']==="1"){
-			$query = "SELECT * FROM association ";
+			$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ";
 		} else {
 			if (!empty($userid)) {
-				$query = "SELECT * FROM association A, resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id";
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id";
 			}
 			else return;
 		}
@@ -87,7 +87,7 @@ function modifAsso($tab){
 	if(!empty($tab['url'])) $set.="url='".mysql_real_escape_string($tab['url'])."', ";
 	if ($set==="") return;
 	$set=substr($set,0,-2);
-	$query = "UPDATE association SET ".$set." WHERE id=".$tab['id']."";
+	$query = "UPDATE {$GLOBALS['prefix_db']}association SET ".$set." WHERE id=".$tab['id']."";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -97,7 +97,7 @@ function modifAsso($tab){
 
 function ajoutResponsableAsso($id_asso,$id_adh){
 	include("opendb.php");
-	$query = "INSERT into resp_asso(id_asso,id_adh) VALUES ('$id_asso.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_asso(id_asso,id_adh) VALUES ('$id_asso.','$id_adh')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -105,7 +105,7 @@ function ajoutResponsableAsso($id_asso,$id_adh){
 }
 function delRespAsso($id_asso,$id_adh){
 	include("opendb.php");
-	$query = "DELETE FROM resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -113,7 +113,7 @@ function delRespAsso($id_asso,$id_adh){
 
 function getResponsablesAsso($id_asso){
 
-	$query = "SELECT * FROM adherent A ,resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -128,7 +128,7 @@ function getResponsablesAsso($id_asso){
 }
 
 function getAllAssociations(){
-	$query = "SELECT * FROM association A";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

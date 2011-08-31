@@ -1,7 +1,9 @@
 <?php
 
 function getParam($id){
-	$query= "SELECT valeur FROM config WHERE id='$id' ";
+
+
+	$query= "SELECT valeur FROM {$GLOBALS['prefix_db']}config WHERE id='$id' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -11,7 +13,7 @@ function getParam($id){
 	return $ret;
 }
 function getParams(){
-	$query="SELECT * FROM config";
+	$query="SELECT * FROM {$GLOBALS['prefix_db']}config";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -24,7 +26,7 @@ function getParams(){
 }
 
 function setParam($id,$value){
-	$query= "UPDATE config SET valeur='$value' WHERE id='$id' ";
+	$query= "UPDATE {$GLOBALS['prefix_db']}config SET valeur='$value' WHERE id='$id' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -33,8 +35,8 @@ function setParam($id,$value){
 
 function modifPresence($adh,$cre,$week,$promo,$present){
 	include("opendb.php");
-	if($present) $query="INSERT INTO presence(id_adh,id_cre,week,promo) VALUES ($adh,$cre,$week,$promo)";
-	else $query="DELETE FROM presence WHERE id_adh=$adh AND id_cre=$cre AND week=$week AND promo=$promo";
+	if($present) $query="INSERT INTO {$GLOBALS['prefix_db']}presence(id_adh,id_cre,week,promo) VALUES ($adh,$cre,$week,$promo)";
+	else $query="DELETE FROM {$GLOBALS['prefix_db']}presence WHERE id_adh=$adh AND id_cre=$cre AND week=$week AND promo=$promo";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
@@ -42,7 +44,7 @@ function modifPresence($adh,$cre,$week,$promo,$present){
 
 function etaitPresent($adh,$cre,$week,$promo){
 	
-	$query="SELECT * FROM presence WHERE id_adh=$adh AND id_cre=$cre AND week=$week AND promo=$promo";
+	$query="SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE id_adh=$adh AND id_cre=$cre AND week=$week AND promo=$promo";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
