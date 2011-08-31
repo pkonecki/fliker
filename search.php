@@ -3,6 +3,17 @@ if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 }
 else {
+	if($_SESSION['privilege']==1){
+		$admin=true;
+		$id_adh=$_GET['adh'];
+		$resp_asso=true;
+	}
+	else {
+		if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
+			$resp_asso=true;
+		}
+
+	}
 	$query="SELECT * FROM resp_act  WHERE id_adh='".$_SESSION[uid]."'
 	UNION
 	SELECT * FROM resp_cren  WHERE id_adh='".$_SESSION[uid]."'
@@ -70,7 +81,9 @@ function multiselected($post,$val){
 		</select>
 	</div>
 	<div id="responsable">
-		<input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Seulement responsable</input>
+		<dt><input type="checkbox" '.checked('exclure_adhs','1').' name="exclure_adhs" value="1">Exclure les simples adhérents</input></dt>
+		<dt><input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Inclure responsables des sections (comité directeur)</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure responsables d\'association (bureau)</input></dt>
 	</div>
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
@@ -115,7 +128,7 @@ function multiselected($post,$val){
 </fieldset>
 <fieldset class="selects"><legend>Sélection des créneaux</legend>
 	<ul id="tree_root">
-		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Sections</label>
+		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Tout</label>
 			<ul id="sections"  >
 	';
 	$creneaux=getCreneaux($_SESSION['uid']);
@@ -204,36 +217,50 @@ function multiselected($post,$val){
 
 	}
 	$in="('0'";
+	$i=0;
 	foreach($tab as $section){
 		foreach($section[activites] as $activite){
 			foreach($activite[creneaux] as $creneau){
-				 if(!empty($_POST['cre'.$creneau[id]])) $in.=",'".$creneau[id]."' ";
+				
+				if(!empty($_POST['cre'.$creneau[id]])){
+				 	$in.=",'".$creneau[id]."' ";
+					$i++;
+				}
 			}
 		}
 	}
 	$in.=" ) ";
+	if ($i==0 && $resp_asso) {
+		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
+	} else{
 	$sql.="AND ( false ";
-	if (isset($_POST['responsable'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
-	$sql.="OR (ADR.id IN (
-		SELECT  ADH.id 
-		FROM activite AC, creneau CR, section S, association A, asso_section HS , adherent ADH
-		WHERE CR.id_act=AC.id
-		AND AC.id_sec=S.id
-		AND A.id=HS.id_asso
-		AND HS.id_sec=S.id
-		AND CR.id IN $in
-		AND (
-			A.id IN (SELECT id_asso FROM resp_asso RA WHERE RA.id_adh=ADH.id )
-			OR
-			S.id IN (SELECT id_sec FROM resp_section RA WHERE RA.id_adh=ADH.id )
-			OR
-			AC.id IN (SELECT id_act FROM resp_act RA WHERE RA.id_adh=ADH.id )
-			OR
-			CR.id IN (SELECT id_cre FROM resp_cren RA WHERE RA.id_adh=ADH.id )
-			)
-		 ) )";
+	if (!isset($_POST['exclure_adhs'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
+	if (isset($_POST['responsable_asso']) || isset($_POST['responsable'])){	
+		$sql.="OR (ADR.id IN (
+			SELECT  ADH.id id_adh
+			FROM activite AC, creneau CR, section S, association A, asso_section HS , adherent ADH
+			WHERE CR.id_act=AC.id
+			AND AC.id_sec=S.id
+			AND A.id=HS.id_asso
+			AND HS.id_sec=S.id
+			AND CR.id IN $in
+			AND (";
+		if (isset($_POST['responsable_asso'])) {
+				$sql.= "A.id IN (SELECT id_asso FROM resp_asso RA WHERE RA.id_adh=ADH.id)";
+				if (isset($_POST['responsable']))$sql.=" OR ";		
+		}
+		if (isset($_POST['responsable']))  $sql.= "S.id IN (SELECT id_sec FROM resp_section RA WHERE RA.id_adh=ADH.id )
+				OR
+				AC.id IN (SELECT id_act FROM resp_act RA WHERE RA.id_adh=ADH.id )
+				OR
+				CR.id IN (SELECT id_cre FROM resp_cren RA WHERE RA.id_adh=ADH.id )
+				";
+		$sql.=")
+			 ) )";
+	}	
 	
 	$sql.=" ) ORDER BY ADR.nom";
+	}
 	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
@@ -245,8 +272,8 @@ function multiselected($post,$val){
 
 	switch($_POST['affichage']){
 		case 1: //Simple
-			print '<table class="search_results" >';
-			print '<thead><tr><th>Fiche</th><th>Solde</th>';
+			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
+			print '<thead><tr><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
 		
 				if ($champ[search_simple]==1) {
@@ -269,7 +296,8 @@ function multiselected($post,$val){
 			print '<tbody>';
 			$i = 0;
 			while($row = mysql_fetch_array($results)){
-				
+				if($row['active']==='0') $active=' red';
+				else $active='';
 				$stop = false;
 				switch ($_POST['select_solde']){
 					case 1:
@@ -290,9 +318,9 @@ function multiselected($post,$val){
 				}
 				if($stop) continue;
 				$i++;
-				if($i % 2 == 0) print '<tr>';
-				else print '<tr class="odd">';
-				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				if($i % 2 == 0) print '<tr class="'.$active.'">';
+				else print '<tr class="odd '.$active.'">';
+				print '<td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
 					
 					if ($champ[search_simple]==1){
@@ -316,9 +344,13 @@ function multiselected($post,$val){
 			}
 			print '</tbody>';
 			print '</table>';
+			print '<SELECT name="action" >
+					<OPTION value="sendmail">Envoyer Email</OPTION>
+					</SELECT>';
+			print '<input type="submit" value="GO"></input></FORM>';
 		break;
 		case 2: //Complet			
-			print '<table class="search_results" >';
+			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
 		
@@ -361,10 +393,12 @@ function multiselected($post,$val){
 					break;
 				}
 				if($stop) continue;
+				if($row['active']==='0') $active=' red';
+				else $active='';
 				$i++;
-				if($i % 2 == 0) print '<tr>';
-				else print '<tr class="odd">';
-				print '<td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				if($i % 2 == 0) print '<tr class="'.$active.'">';
+				else print '<tr class="odd '.$active.'">';
+				print '<td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
 					
 					if ($champ[user_viewable]==1){
@@ -388,6 +422,10 @@ function multiselected($post,$val){
 			}
 			print '</tbody>';
 			print '</table>';
+			print '<SELECT name="action" >
+					<OPTION value="sendmail" > Envoyer Email</OPTION>
+					</SELECT>';
+			print '<input type="submit">Email</input></FORM>';
 		break;
 		case 3: //Trombino
 			$i=0;
