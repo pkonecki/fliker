@@ -19,6 +19,7 @@
     * login : l'email que vous entré n'existe pas
     * login : Le mot de passe que vous avez entré est erroné!
     * 
+  * afficher systématiquement nom section - nom activité - nom créneau
   * custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)
   * custom texte pour chaque page affichée (ex description "impossible")
   * interlignes entre tableaux (adhesions) : dans CSS !
