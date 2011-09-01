@@ -40,6 +40,7 @@ if(isset($_GET['promo'])) {
 
 $adh = getAdherent($id_adh);
 $creneaux=getAllCreneaux();
+$id_statut_adh=$adh['statut'];
 if ($_POST['action'] == 'nouvelle' && $self) {
 	print '<h2>Choisissez vos activités</h2>';
 	print '<FORM action="index.php?page=7" method="POST">
@@ -73,7 +74,6 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 
 	print '<FORM action="index.php?page=7" method="POST">
 	<input type="hidden" name="action" value="submitted" />';
-	$id_statut_adh=$adh['statut'];
 	print '<TABLE>';
 	$assos_cre=getAssosCreneaux();
 	foreach($_POST['cre'] as $cre){
@@ -84,7 +84,11 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
 			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
 		}
-		else print "Impossible";
+		else{ 
+			
+			print "<LABEL FOR=\"asso_cre_$cre\">Impossible</LABEL>
+			<input type=\"radio\" value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
+		}
 		print '</tr>';
 	}
 	print "<tr><td>Total</td><td id=\"total\">0</td></tr>";
@@ -144,6 +148,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		$crens=getAllCreneaux();
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
+		$assos_cre=getAssosCreneaux();
 		print "<h2>Adhésions de {$adh['prenom']} {$adh['nom']}</h2>";
 		print '<TABLE>';
 		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th><th>Association</th>';
@@ -159,18 +164,26 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			switch($value['statut']) {
 				case 0: 
 				print "Active";
+				print "</td>";
+				print "<td>{$value['promo']}</td>";
+				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 				break;
 				case 1:
 				print "Résiliée";
+				print "</td>";
+				print "<td>{$value['promo']}</td>";
+				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 				break;
 				case 2:
 				print "Impossible";
+				print "</td>";
+				print "<td>{$value['promo']}</td>";
+				print "<td>";
+					if(isset($assos_cre[$id_statut_adh][$value['id_cre']])) print "Choisir asso";
+				print "</td>";
 				break;
 			}
-			
-			print "</td>";
-			print "<td>{$value['promo']}</td>";
-			print "<td>{$assos[$value['id_asso']]['nom']}</td>";
+		
 			if ($self){
 				print "<td><a href=\"".getParam("url_resiliation")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
 			} else
