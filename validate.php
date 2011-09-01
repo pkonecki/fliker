@@ -78,7 +78,7 @@ if ($_POST['action']==="submitted") {
 	include("opendb.php");
 	$password =$_POST['password'];
 	$id = $_POST['id'];
-	$sql="UPDATE adherent SET password = MD5('$password'), activationkey = '', active=1 WHERE id = '$id'";
+	$sql="UPDATE {$GLOBALS['prefix_db']}adherent SET password = MD5('$password'), activationkey = '', active=1 WHERE id = '$id'";
 	if (!mysql_query($sql)){
 		die('Error: ' . mysql_error());
 	}
@@ -106,7 +106,7 @@ else {
 		print('Il n\'y a pas de clef de validation');
 	}
 	else {
-	$query = "SELECT * FROM adherent where activationkey='$queryString' ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent where activationkey='$queryString' ";
 	include("opendb.php");
 	$result = mysql_query($query) or die(mysql_error());
 	if (mysql_num_rows($result))
