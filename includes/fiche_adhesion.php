@@ -72,8 +72,14 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 } else
 if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 
-	print '<FORM action="index.php?page=7" method="POST">
-	<input type="hidden" name="action" value="submitted" />';
+	print '<FORM action="index.php?page=7" method="POST">';
+	if (!isset($_POST['update'])) {
+		print '<input type="hidden" name="action" value="submitted" />';
+	}
+	else {
+		print  '<input type="hidden" name="id_ads" value="'.$_POST['id_ads'].'" />
+		<input type="hidden" name="action" value="submitted_update" />';
+	}
 	print '<TABLE>';
 	$assos_cre=getAssosCreneaux();
 	foreach($_POST['cre'] as $cre){
@@ -100,6 +106,11 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 	if ($_POST['action'] == 'submitted' && $self){
 
 		if(!empty($_POST['asso_cre']) ) newAdhesions($_POST['asso_cre'],$id_adh);
+
+	}
+	if ($_POST['action'] == 'submitted_update' && $self){
+
+		if(!empty($_POST['asso_cre']) ) updateAdhesions($_POST['asso_cre'],$_POST['id_ads']);
 
 	}
 	if ($_POST['action'] === 'suppression_ads'){
@@ -179,7 +190,16 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 				print "</td>";
 				print "<td>{$value['promo']}</td>";
 				print "<td>";
-					if(isset($assos_cre[$id_statut_adh][$value['id_cre']])) print "Choisir asso";
+					if(isset($assos_cre[$id_statut_adh][$value['id_cre']])) {
+					print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">';
+					print '<input type="hidden" name="action" value="select_assos" />';
+					print '<input type="hidden" name="update" value="true" />';
+					print '<input type="hidden" name="id_ads" value="'.$key.'" />';
+					print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
+					print '<input type="submit" value="Choisir asso" >';
+					print '</FORM>';
+					
+					}
 				print "</td>";
 				break;
 			}
