@@ -24,13 +24,25 @@ function getMyAdhesions($id_adh,$promo){
 
 function newAdhesions($tab,$id_adh){
 	$query= "INSERT INTO {$GLOBALS['prefix_db']}adhesion (id_adh,id_cre,id_asso,date,promo)  VALUES ";
+	$query2= "INSERT INTO {$GLOBALS['prefix_db']}adhesion (id_adh,id_cre,date,promo,statut)  VALUES ";
+	$n=0;
+	$i=0;
 	foreach($tab as $cre => $asso){
-		 $query .="('$id_adh', '$cre', '$asso' ,'".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}' ),";
+		 if (!empty($asso)) {$query .="('$id_adh', '$cre', '$asso' ,'".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}' ),"; $n++;}
+		else {$query2 .="('$id_adh', '$cre','".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}', 2 ),"; $i++;}
 	}
 	$query = substr($query,0,-1);
+	$query2 = substr($query2,0,-1);
+	
 	include("opendb.php");
+	if ($n>0){
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
+	}
+	if ($i>0){
+	$results = mysql_query($query2);
+	if (!$results) echo mysql_error();
+	}
 	include("closedb.php");
 }
 

@@ -147,7 +147,7 @@ function delRespActivite($id_act,$id_adh){
 
 function getResponsablesAct($id_act){
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

@@ -33,7 +33,7 @@ if($_POST['submit']){
 		//if the were continue checking
 
 		//select all rows from the table where the username matches the one entered by the user
-		$res = mysql_query("SELECT * FROM `adherent` WHERE `email` = '".$username."'");
+		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `email` = '".$username."'");
 		$num = mysql_num_rows($res);
 
 		//check if there was not a match
@@ -44,7 +44,7 @@ if($_POST['submit']){
 			//if there was a match continue checking
 
 			//select all rows where the username and password match the ones submitted by the user
-			$res = mysql_query("SELECT * FROM `adherent` WHERE `email` = '".$username."' AND `password` = MD5('".$password."')");
+			$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `email` = '".$username."' AND `password` = MD5('".$password."')");
 			$num = mysql_num_rows($res);
 
 			//check if there was not a match
