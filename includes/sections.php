@@ -1,7 +1,7 @@
 <?php 
 include("paths.php");
 
-$query="SELECT id,nom FROM section";
+$query="SELECT id,nom FROM {$GLOBALS['prefix_db']}section";
 include("opendb.php");
 $results = mysql_query($query);
 	if (!$results){ 

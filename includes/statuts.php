@@ -1,7 +1,7 @@
 <?php 
 include("paths.php");
 
-$query="SELECT id,nom FROM statut ORDER BY nom";
+$query="SELECT id,nom FROM {$GLOBALS['prefix_db']}statut ORDER BY nom";
 include("opendb.php");
 $results = mysql_query($query);
 	if (!$results){ 
