@@ -46,6 +46,17 @@ function newAdhesions($tab,$id_adh){
 	include("closedb.php");
 }
 
+function updateAdhesions($tab,$id_ads){
+
+	foreach($tab as $cre => $asso) if (!empty($asso)){
+		$query= "UPDATE {$GLOBALS['prefix_db']}adhesion SET statut=0,id_asso=$asso WHERE id=$id_ads ";
+		include("opendb.php");
+		$results = mysql_query($query);
+		if (!$results) echo mysql_error();
+		include("closedb.php");
+	}	
+	
+}
 function delAdhesion($id){
 	include("opendb.php");
 	if(!isset($id)) return;
