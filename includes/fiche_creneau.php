@@ -167,6 +167,7 @@ else {
 
 		} else {
 			print '<h2>Fiche Créneau</h2>';
+			print "<div class=\"tip\">".getParam('text_creneau')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Activité : </td><td>'.$tab[$_GET['creneau']]['nom_act'].'</td></tr>';
 			print '<tr><td class="label">Jour : </td><td>'.$tab[$_GET['creneau']]['jour_cre'].'</td></tr>';

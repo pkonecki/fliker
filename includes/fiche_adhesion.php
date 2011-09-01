@@ -71,7 +71,7 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 	print '<INPUT type="submit" value="Suite"></FORM>';
 } else
 if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
-
+	print "<span class=\"tip\">".getParam('text_select_asso')."</span>";
 	print '<FORM action="index.php?page=7" method="POST">';
 	if (!isset($_POST['update'])) {
 		print '<input type="hidden" name="action" value="submitted" />';
@@ -93,12 +93,12 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		else{ 
 			
 			print "<LABEL FOR=\"asso_cre_$cre\">Impossible</LABEL>
-			<input type=\"radio\" value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
+			<input type=\"radio\" selected value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
 		}
 		print '</tr>';
 	}
 	print "<tr><td>Total</td><td id=\"total\">0</td></tr>";
-	print "<span hidden id=id_statut_adh>$id_statut_adh</span>";
+	print "<span style=\"display:none;\" id=\"id_statut_adh\">$id_statut_adh</span>";
 	print '</TABLE>
 	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>';
 }
@@ -160,6 +160,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
 		$assos_cre=getAssosCreneaux();
+		print "<div class=\"tip\">".getParam('text_adhesion')."</div>";
 		print "<h2>Adhésions de {$adh['prenom']} {$adh['nom']}</h2>";
 		print '<TABLE>';
 		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th><th>Association</th>';

@@ -141,6 +141,7 @@ print $script;
 			$tab = getChampsAdherents();
 			print '<div id="fiche">';
 			print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
+			print "<div class=\"tip\">".getParam('text_adherent')."</div>";
 			print '<TABLE BORDER="0">';
 			foreach($tab as $row){
 				if($row[user_viewable]==1){

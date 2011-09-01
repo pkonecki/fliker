@@ -17,7 +17,7 @@ switch($_POST['action']){
 		$i++;
 		print "$i-";
 		flush();
-		//mail($email, $subject, $message, $headers);
+		mail($email, $subject, $message, $headers);
 	}
 	print "OK (Vous pouvez continuer à naviguer)";
 	

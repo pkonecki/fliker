@@ -11,7 +11,7 @@ if($_POST['action']==="addpresence"){
 	//print_r_html($_POST);
 	modifPresence($_POST['id_adh'],$_POST['id_cre'],$_POST['week'],$promo,isset($_POST['present']));
 }
-
+print "<div class=\"tip\">".getParam('text_presence')."</div>";
 $output= "<p>Promo:<SELECT id=\"promo\" >";
 $output.= "<OPTION value=$current_promo ".($_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
 for ($i=1; $i<=10; $i++ ){

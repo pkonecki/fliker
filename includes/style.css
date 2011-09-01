@@ -107,7 +107,13 @@ strong, b { font-weight: bold; }
 .content ol, .content ul, .content li { font-size: 1.0em; line-height: 1.3em; margin: 0.2em 0 0.1em 1.5em; }
 .content ol.terms li { margin-bottom: 1em; }
 
+#content h2,h3{
+	padding-top: 1em;
+}
 
+.tip {
+	border:1px black;
+}
 
 label { font-weight: bold; }
 #reminders label { font-weight: normal; }
@@ -296,8 +302,13 @@ color: red;
 tbody th, tbody td {
 padding:5px;
 }
+td.trombi{
+	text-align:center;
+
+}
 span.trombi {
 display:block;
+
 }
 
 div.conf_dial{
