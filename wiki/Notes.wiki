@@ -14,6 +14,10 @@
 
 
 ===Urgences===
+  * custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)
+  * custom texte pour chaque page affichée (ex description "impossible")
+  * interlignes entre tableaux (adhesions) : dans CSS !
+  * bug check n° tel
   * PAIEMENTS:
     * Numéro de carte asesco:
       * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
