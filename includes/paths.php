@@ -1,4 +1,11 @@
 <?php
+
+$GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
+$GLOBALS['prefix_db']="fliker_";
+
+
+
+
 function add_include_path ($path){
     foreach (func_get_args() AS $path)    {
         if (!file_exists($path) OR (file_exists($path) && filetype($path) !== 'dir'))        {
@@ -50,12 +57,11 @@ print_r($arr);
 print '<pre>';
 }
 
-$GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
+
+
 $webservices=$GLOBALS['root']."/webservices";
 $includes=$GLOBALS['root']."/includes";
 $inscription=$GLOBALS['root']."/inscription";
-$photos=$GLOBALS['root']."/photo";
-$GLOBALS['prefix_db']="fliker_";
 
 add_include_path($webservices);
 add_include_path($includes);

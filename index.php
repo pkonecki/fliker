@@ -40,9 +40,11 @@ setlocale(LC_ALL, 'fr_FR');
  </head>
  <body>
 <div id="top">
-<h1 id="title">Fliker</h1>
-<?php
 
+<?php
+print '<span id="title">';
+print getParam('text_top');
+print '</span>';
 if(!(strcmp($_SESSION['user'],"") == 0)) include("menu.php");
 include("userdiv.php");
 print '</div>';

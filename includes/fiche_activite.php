@@ -142,6 +142,7 @@ else{
 
 		} else {
 			print '<h2>Fiche Activité</h2>';
+			print "<div class=\"tip\">".getParam('text_activite')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['act']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['act']]['description'].'</td></tr>';

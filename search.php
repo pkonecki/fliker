@@ -39,7 +39,7 @@ else {
 <img src="images/downarrow.gif" class="inline" id="toggle_f_search" ></img>
 </div>
 <?php
-
+print "<span class=\"tip\">".getParam('text_search')."</span>";
 function selected($post,$val){
 	if ($_POST[$post]===$val) {
 		return "selected";
@@ -74,10 +74,10 @@ function multiselected($post,$val){
 	<div id="solde">
 		<label for="select_solde">Solde est</label>
 		<select id="select_solde" name="select_solde">
-			<option '.selected('select_solde','1').' label="Indiff&eacute;rent" value="1">Indiff&eacute;rrent</option>
-			<option '.selected('select_solde','2').' label="Positif" value="2">Positif</option>
-			<option '.selected('select_solde','3').' label="N&eacute;gatif" value="3">N&eacute;gatif</option>
-			<option '.selected('select_solde','4').' label="Nul" value="4">Nul</option>
+			<option '.selected('select_solde','1').' value="1">Indiff&eacute;rent</option>
+			<option '.selected('select_solde','2').' value="2">Positif</option>
+			<option '.selected('select_solde','3').' value="3">N&eacute;gatif</option>
+			<option '.selected('select_solde','4').' value="4">Nul</option>
 		</select>
 	</div>
 	<div id="responsable">
@@ -425,7 +425,7 @@ function multiselected($post,$val){
 			print '<SELECT name="action" >
 					<OPTION value="sendmail" > Envoyer Email</OPTION>
 					</SELECT>';
-			print '<input type="submit">Email</input></FORM>';
+			print '<input type="submit" value="Go"></FORM>';
 		break;
 		case 3: //Trombino
 			$i=0;
@@ -453,18 +453,18 @@ function multiselected($post,$val){
 				
 				if($i % 5 == 0) print '<tr>';
 				$i++;
-				print '<td>';
+				print '<td class="trombi" valign="top">';
 				foreach($tab as $champ){
 					
 					if ($champ[search_trombi]==1){
 						if($champ[type]==='varchar')
-							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+							print "<span class=\"trombi\">".(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
 						if($champ[type]==='date')
-							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
 						if($champ[type]==='tinyint')
-							print '<span class="trombi">'.$row[$champ['nom']].'</span>';
+							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
 						if($champ[type]==='file'){
 							$_SESSION['auth_thumb']='true';

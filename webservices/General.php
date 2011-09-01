@@ -26,8 +26,10 @@ function getParams(){
 }
 
 function setParam($id,$value){
-	$query= "UPDATE {$GLOBALS['prefix_db']}config SET valeur='$value' WHERE id='$id' ";
 	include("opendb.php");
+	$value=mysql_real_escape_string(html_entity_decode($value));
+	$query= "UPDATE {$GLOBALS['prefix_db']}config SET valeur='$value' WHERE id='$id' ";
+
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");

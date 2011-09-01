@@ -112,6 +112,7 @@ else {
 
 		} else {
 			print '<h2>Fiche Association</h2>';
+			print "<div class=\"tip\">".getParam('text_asso')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['asso']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['asso']]['description'].'</td></tr>';
