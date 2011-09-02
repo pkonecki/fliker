@@ -192,9 +192,60 @@ legend {
   color: #0060BF;
   margin-left: 19px;
 }
+/*f_adherent_modif*/
 
+#f_adherent_modif table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  empty-cells: show;
+}
 
+#f_adherent_modif .label {
+  padding-top: 2px;
+  padding-right: 8px;
+  vertical-align: top;
+  text-align: right;
+  width: 125px;
+  white-space: nowrap;
+}
 
+#f_adherent_modif .field {
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+#f_adherent_modif .status {
+  padding-top: 2px;
+  padding-left: 8px;
+  vertical-align: top;
+  width: 246px;
+  white-space: nowrap;
+}
+
+#f_adherent_modif .textfield {
+  width: 150px;
+}
+
+#f_adherent_modif label.error {
+  background:url("../images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+  padding-bottom: 2px;
+  font-weight: bold;
+  color: #EA5200;
+}
+
+#f_adherent_modif label.checked {
+  background:url("../images/checked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+  padding-bottom: 2px;
+  font-weight: bold;
+}
+
+#f_adherent_modif .success_msg {
+  font-weight: bold;
+  color: #0060BF;
+  margin-left: 19px;
+}
 
 
 

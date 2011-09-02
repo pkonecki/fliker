@@ -32,8 +32,6 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.js"></script>
   <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.timepicker.js"></script>
-  <script type="text/javascript" src="./includes/js/jquery.multiselect.min.js"></script>
-  <script type="text/javascript" src="./includes/js/jquery.multiselect.filter.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.checkboxtree.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.confirm.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
@@ -94,12 +92,6 @@ $die_footer="</div></body></html>";
 ?>
 </body></html>
 <script type="text/javascript">
-$(".filterselect").multiselect({
-   multiple: false,
-   header: "Choisissez un",
-   noneSelectedText: "Choisissez un",
-   selectedList: 1
-}).multiselectfilter();
 $('.confirm').confirm({
   timeout:3000,
   msg:'Etes-vous sur?',
@@ -128,6 +120,8 @@ $.extend({
   }
 });
 $(document).ready(function() {
+	
+
 
 		  	$.extend($.validator.messages, {
 		        required: "Ce champs est requis",
@@ -197,8 +191,15 @@ $(document).ready(function() {
         		},
 				success: function(label) {
 					// set   as text for IE
-					label.html(" ").addClass("checked");
+					label.html("&nbsp;").addClass("checked");
+
 				}
 			});
 });
+$(function() {
+	$( "#datepicker" ).datepicker({ 
+		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
+	});
+});
+
 </script>
