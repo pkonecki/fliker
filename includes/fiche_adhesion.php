@@ -93,7 +93,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		else{ 
 			
 			print "<LABEL FOR=\"asso_cre_$cre\">Impossible</LABEL>
-			<input type=\"radio\" selected value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
+			<input type=\"radio\" checked value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
 		}
 		print '</tr>';
 	}
@@ -168,7 +168,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		foreach($ads as $key => $value) if(is_numeric($key) && ($self || $value['id_asso']==$current_asso || isset($mycrens[$value['id_cre']]))){
 			print '<tr>';
 			print "<td>{$value['date']}</td>";
-			print "<td>{$crens[$value['id_cre']]['nom_act']}</td>";
+			print "<td>{$crens[$value['id_cre']]['nom_sec']} - {$crens[$value['id_cre']]['nom_act']}</td>";
 			print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
 			print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']}</td>";
 			print "<td>";
@@ -187,21 +187,27 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 				break;
 				case 2:
-				print "Impossible";
-				print "</td>";
-				print "<td>{$value['promo']}</td>";
-				print "<td>";
+			
 					if(isset($assos_cre[$id_statut_adh][$value['id_cre']])) {
-					print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">';
-					print '<input type="hidden" name="action" value="select_assos" />';
-					print '<input type="hidden" name="update" value="true" />';
-					print '<input type="hidden" name="id_ads" value="'.$key.'" />';
-					print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
-					print '<input type="submit" value="Choisir asso" >';
-					print '</FORM>';
-					
+						print "Possible";
+						print "</td>";
+						print "<td>{$value['promo']}</td>";
+						print "<td>";
+						print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">';
+						print '<input type="hidden" name="action" value="select_assos" />';
+						print '<input type="hidden" name="update" value="true" />';
+						print '<input type="hidden" name="id_ads" value="'.$key.'" />';
+						print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
+						print '<input type="submit" value="Choisir asso" >';
+						print '</FORM>';
+						print "</td>";
+					} else {
+						print "Impossible";
+						print "</td>";
+						print "<td>{$value['promo']}</td>";
+						print "<td>";
+						print "</td>";
 					}
-				print "</td>";
 				break;
 			}
 		

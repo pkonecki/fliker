@@ -161,7 +161,7 @@ else {
 			print '<ul>';
 
 			foreach($tab as $creneau){
-				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
+				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
 			}
 			print '</ul>';
 
@@ -169,7 +169,7 @@ else {
 			print '<h2>Fiche Créneau</h2>';
 			print "<div class=\"tip\">".getParam('text_creneau')."</div>";
 			print '<table>';
-			print '<tr><td class="label">Activité : </td><td>'.$tab[$_GET['creneau']]['nom_act'].'</td></tr>';
+			print '<tr><td class="label">Activité : </td><td>'.$tab[$_GET['creneau']]['nom_sec']." - ".$tab[$_GET['creneau']]['nom_act'].'</td></tr>';
 			print '<tr><td class="label">Jour : </td><td>'.$tab[$_GET['creneau']]['jour_cre'].'</td></tr>';
 			print '<tr><td class="label">Debut : </td><td>'.$tab[$_GET['creneau']]['debut_cre'].'</td></tr>';
 			print '<tr><td class="label">Fin : </td><td>'.$tab[$_GET['creneau']]['fin_cre'].'</td></tr>';
