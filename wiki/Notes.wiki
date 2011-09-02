@@ -8,13 +8,14 @@
     * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
 
 
-* penser à enlever l'affichage écran du cookie de validation email à l'inscription !!! *
-
 * purger du svn les versions précédentes du fichier sql (contenant des logins/pass...) ainsi que le fichier de conf contenant les access/db
 
 
 ===Urgences===
   * <s>"impossible" selecté par défaut</s>
+  * envoi email : cadre + grand ;)
+  * envoi email + email cookie : forcer subject = [ASESCO]...
+  * activer envoi email cookie + enlever l'affichage écran du cookie
   * formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux
   * formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent :(
   * fiche adhesion : on peut pas changer la promo du paiement ?
@@ -26,6 +27,7 @@
     * login : Le mot de passe que vous avez entré est erroné!
     * validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
     * validate : ok ... vous allez etre redirigés
+    * envoi email : patienter / continuer 
   * <s>afficher systématiquement nom section - nom activité - nom créneau</s>
   * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
