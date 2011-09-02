@@ -14,11 +14,17 @@
 
 
 ===Urgences===
-  * <s>"impossible" select par défaut</s>
+  * <s>"impossible" selecté par défaut</s>
+  * formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux
+  * fiche adhesion : on peut pas changer la promo du paiement ?
+  * fiche adhesion on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)
+  * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
+  * n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
   * déplacer en table custom :
     * login : l'email que vous entré n'existe pas
     * login : Le mot de passe que vous avez entré est erroné!
-    * 
+    * validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
+    * validate : ok ... vous allez etre redirigés
   * <s>afficher systématiquement nom section - nom activité - nom créneau</s>
   * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
@@ -125,7 +131,7 @@
     * Table de hash champ adherent < - > adherent + date
   * <s>modularité --> deux tables : data + description des data </s>
   * <s>vérification : langage simplifié de format (à determiner)</s>
-  * Séparer données login/données perso? Customisation supplémentaire assos locales	
+  * Séparer données login/données perso? Customisation supplémentaire assos locales
 
 
 ===Inscriptions===
@@ -166,6 +172,7 @@
       * Extension du format par défaut
       * Taille de redimensionnement par défaut
       * Taille thumb
+  * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
 
 
 ===Paiements===
