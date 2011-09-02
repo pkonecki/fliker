@@ -16,6 +16,7 @@
 ===Urgences===
   * <s>"impossible" selecté par défaut</s>
   * formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux
+  * formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent :(
   * fiche adhesion : on peut pas changer la promo du paiement ?
   * fiche adhesion on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
