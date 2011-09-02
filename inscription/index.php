@@ -95,13 +95,13 @@ $dest_dossier = "../photos";
 		print '<table border=0>';
 		foreach($tab as $row){
 			if($row['inscription']==1){
-				$format ="class=\"$row[format]\"";
-				if ($row['required']==1) $format ="class=\"required\"";
+				$format =$row['format'];
+				if ($row['required']==1) $format ="class=\"{$format}_req\"";
 				if($row['format'] === "categorie"){
 					print '<tr ><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td>
 						<td>
-						<INPUT type=radio name='.$row['nom'].' class="'.$row['format'].'" value="M">Masculin
-						<INPUT type=radio name='.$row['nom'].' class="'.$row['format'].'" value="F">Féminin
+						<INPUT type=radio name='.$row['nom'].' '.$format.' value="M">Masculin
+						<INPUT type=radio name='.$row['nom'].' '.$format.' value="F">Féminin
 						</td>
 						</tr>
 						</div>';
@@ -111,7 +111,7 @@ $dest_dossier = "../photos";
 					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><INPUT type=text name="'.$row['nom'].'" id="'.$row['nom'].'" '.$format.' ></td></tr>';
 				else
 				if($row['type']==='date')
-					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><INPUT type=text readonly name="'.$row['nom'].'" id ="datepicker" '.$format.' ></td></tr>';
+					print '<tr><td class="label"><LABEL for ="datepicker" >'.$row['description'].'</LABEL> : </td><td><INPUT type=text readonly name="'.$row['nom'].'" id ="datepicker" '.$format.' ></td></tr>';
 				else
 				if($row['type']==='tinyint')
 					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><INPUT type=checkbox name='.$row['nom'].' '.$format.'></td></tr>';
@@ -163,42 +163,74 @@ $(document).ready(function() {
 
 		  	$.extend($.validator.messages, {
 		        required: "Ce champs est requis",
-		        number: "Veuillez entrer un numéro correct"
+		        number: "Veuillez entrer un numéro correct",
+				minlength: "Veuillez entrer au moins {0} caractères",
+				maxlength: "Veuillez ne pas entrer plus de {0} caractères",
+				email_req :{
+					remote: "Cet email existe déjà"
+				}
 
     		});
-
+			$.validator.addClassRules({
+				number_req: {
+					required: true,
+					number: true
+				},
+				def_req: {
+					required: true,
+				},
+				def: {
+				},
+				date:{
+					
+				},
+				date_req:{
+					required:true,
+					date:true
+				},
+				email: {
+					email: true,
+					remote: "emails.php"
+				},
+				email_req: {
+					required: true,
+					email: true,
+					remote: "emails.php"
+				},
+				categorie_req: {
+					required : true
+				},
+				telephone: {
+					number: true,
+					minlength:10,
+					maxlength:10
+				},
+				telephone_req: {
+					required: true,
+					number: true,
+					minlength:10,
+					maxlength:10
+				}
+			});
 			$("#f_inscription").validate({
-
-			rules : {
-				email: {
-	                required: true,
-	                email: true,
-	                remote: "emails.php"
-            	},
-            	categorie: "required"
-
-			},
-			messages: {
-				email: {
-					required: "Ce champs est requis",
-					email: "Entrez une adresse email valide",
-					remote: "L\'adresse email est déjà utilisée"
+				messages: {
+        			email: {
+						required: "Ce champs est requis",
+						email: "Entrez une adresse email valide",
+						remote: "L\'adresse email est déjà utilisée"
 					},
-				categorie : "Ce champs est requis"
-
-
-			},
-			errorPlacement: function(error, element) {
-	            if ( element.is(":radio") )
-	                error.appendTo( element.parent() );
-	          	else
-                	error.appendTo( element.parent() );
-        	},
-        	success: function(label) {
-            	// set   as text for IE
-            	label.html(" ").addClass("checked");
-	        }
-
+					categorie : "Ce champs est requis"
+				},
+				errorPlacement: function(error, element) {
+	            	if ( element.is(":radio") )
+	                	error.appendTo( element.parent() );
+	          		else
+                		error.appendTo( element.parent() );
+        		},
+				success: function(label) {
+					// set   as text for IE
+					label.html(" ").addClass("checked");
+				}
 			});
 });
 $(function() {

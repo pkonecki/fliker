@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Mer 31 Août 2011 à 16:01
+-- Généré le : Ven 02 Septembre 2011 à 15:55
 -- Version du serveur: 5.1.44
 -- Version de PHP: 5.3.1
 
@@ -108,20 +108,20 @@ CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   `date` datetime NOT NULL,
   `id_adh` int(16) NOT NULL,
   `id_cre` int(16) NOT NULL,
-  `fliker_statut` int(4) NOT NULL,
+  `statut` int(4) NOT NULL,
   `promo` int(4) NOT NULL,
-  `id_asso` int(16) NOT NULL,
+  `id_asso` int(16) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_adh` (`id_adh`),
   KEY `id_cre` (`id_cre`),
   KEY `id_asso` (`id_asso`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
 
 --
 -- Contenu de la table `fliker_adhesion`
 --
 
-INSERT INTO `fliker_adhesion` (`id`, `date`, `id_adh`, `id_cre`, `fliker_statut`, `promo`, `id_asso`) VALUES
+INSERT INTO `fliker_adhesion` (`id`, `date`, `id_adh`, `id_cre`, `statut`, `promo`, `id_asso`) VALUES
 (16, '2011-08-10 09:29:09', 28, 8, 0, 2011, 1),
 (17, '2011-08-10 09:29:09', 28, 13, 1, 2011, 2),
 (18, '2011-08-10 09:29:56', 34, 9, 0, 2011, 2),
@@ -138,7 +138,11 @@ INSERT INTO `fliker_adhesion` (`id`, `date`, `id_adh`, `id_cre`, `fliker_statut`
 (29, '2011-08-10 09:35:52', 37, 12, 0, 2011, 2),
 (30, '2011-08-10 09:37:59', 38, 8, 1, 2011, 1),
 (31, '2011-08-16 14:35:03', 28, 14, 0, 2011, 2),
-(32, '2011-08-26 09:45:07', 28, 9, 0, 2011, 1);
+(32, '2011-08-26 09:45:07', 28, 9, 0, 2011, 1),
+(39, '2011-09-01 14:01:25', 36, 13, 0, 2011, 2),
+(40, '2011-09-01 14:01:25', 36, 14, 2, 2011, NULL),
+(41, '2011-09-02 10:53:29', 34, 13, 0, 2011, 2),
+(42, '2011-09-02 10:53:29', 34, 14, 0, 2011, 2);
 
 -- --------------------------------------------------------
 
@@ -219,7 +223,7 @@ INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `inscription
 ('charte', 'tinyint', 'J''accepte la <a href="http://www.asesco.u-psud.fr/wiki/index.php?title=ASESCO:Charte" target=_blank>charte</a>', 1, 0, 1, 0, 0, 'def', 50, 1),
 ('code_postal', 'varchar', 'Code postal', 1, 1, 1, 0, 0, 'number', 11, 1),
 ('contact_urgence', 'varchar', 'Contact d''urgence (nom)', 1, 1, 1, 0, 0, 'def', 12, 1),
-('contact_urgence_tel', 'varchar', 'Contact d''urgence (tel)', 1, 1, 1, 0, 0, 'number', 20, 1),
+('contact_urgence_tel', 'varchar', 'Contact d''urgence (tel)', 1, 1, 1, 0, 0, 'telephone', 20, 1),
 ('droit_image', 'tinyint', 'Je cède mon droit à l''image', 1, 1, 1, 0, 0, 'def', 46, 0),
 ('email', 'varchar', 'Adresse email', 1, 0, 1, 1, 0, 'email', 8, 1),
 ('id', 'int', '', 0, 0, 0, 0, 0, 'def', 0, 0),
@@ -233,8 +237,8 @@ INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `inscription
 ('pre_inscription', 'datetime', '', 0, 0, 0, 0, 0, 'def', 0, 0),
 ('privilege', 'int', '', 0, 0, 0, 0, 0, 'def', 0, 0),
 ('statut', 'select', 'Votre statut', 1, 0, 1, 0, 0, 'def', 3, 1),
-('tel1', 'varchar', 'Télephone portable', 1, 1, 1, 1, 0, 'number', 6, 1),
-('tel2', 'varchar', 'Téléphone fixe', 1, 1, 1, 0, 0, 'number', 7, 0);
+('tel1', 'varchar', 'Télephone portable', 1, 1, 1, 1, 0, 'telephone', 6, 1),
+('tel2', 'varchar', 'Téléphone fixe', 1, 1, 1, 0, 0, 'telephone', 7, 0);
 
 -- --------------------------------------------------------
 
@@ -257,6 +261,16 @@ INSERT INTO `fliker_config` (`id`, `valeur`) VALUES
 ('contact_email', 'bureau-asesco.asso@u-psud.fr'),
 ('currency', '€'),
 ('promo', '2011'),
+('text_activite', 'Fiche d''activité'),
+('text_adherent', 'Fiche d''adhérent'),
+('text_adhesion', 'Fiche d''adhesion'),
+('text_asso', 'Fiche d''asso'),
+('text_creneau', 'FIche de créneau'),
+('text_presence', 'Fiche de présence'),
+('text_search', 'Formulaire de recherche'),
+('text_section', 'Fiche de section'),
+('text_select_asso', 'Veuillez selectionner vos associations pour chacun des créneaux'),
+('text_top', '<h1>Pouet</h1>'),
 ('url_resiliation', 'http://www.asesco.u-psud.fr/wiki/index.php?title=ASESCO:Contacts'),
 ('url_site', 'http://fliker.dyndns.org/');
 
@@ -501,7 +515,10 @@ INSERT INTO `fliker_presence` (`id_adh`, `id_cre`, `week`, `promo`) VALUES
 (28, 9, 10, 2011),
 (28, 9, 11, 2011),
 (28, 9, 12, 2011),
-(28, 9, 13, 2011);
+(28, 9, 13, 2011),
+(28, 9, 45, 2011),
+(28, 9, 48, 2011),
+(28, 9, 41, 2011);
 
 -- --------------------------------------------------------
 
@@ -669,7 +686,7 @@ CREATE TABLE IF NOT EXISTS `fliker_sup` (
   KEY `id_statut` (`id_statut`),
   KEY `id_asso_adh` (`id_asso_adh`),
   KEY `id_asso_paie` (`id_asso_paie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=70 ;
 
 --
 -- Contenu de la table `fliker_sup`
@@ -688,7 +705,6 @@ INSERT INTO `fliker_sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso
 (45, 2011, 'Sup Psuc', 100, NULL, 2, 2),
 (46, 2011, 'Test', 2, NULL, 2, 2),
 (47, 2011, 'Cotisation', 24, 6, NULL, 1),
-(48, 2011, 'Cotisation', 2, 5, NULL, 2),
 (49, 2011, 'Cotisation', 12, 3, NULL, 2),
 (50, 2011, 'Cotisation', 12, 3, NULL, 1),
 (51, 2011, 'Cotisation', 63, 11, NULL, 2),
@@ -698,7 +714,10 @@ INSERT INTO `fliker_sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso
 (60, 2010, 'dsfdsfkl', 987987, NULL, 1, 1),
 (61, 2010, '97838', 9802, NULL, 1, 2),
 (64, 2010, '798798', 97979, NULL, 1, 2),
-(65, 2010, '97897', 9798798, NULL, 1, 2);
+(65, 2010, '97897', 9798798, NULL, 1, 2),
+(66, 2011, 'Test', 9879, NULL, 1, 1),
+(67, 2011, 'Cotisation', 234, 6, NULL, 2),
+(69, 2011, 'Cotisation', 8777, 5, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -728,9 +747,10 @@ INSERT INTO `fliker_sup_fk` (`id_ent`, `id_sup`) VALUES
 (1, 53),
 (1, 56),
 (2, 40),
-(2, 48),
 (2, 49),
 (2, 51),
+(2, 67),
+(2, 69),
 (3, 42),
 (3, 44),
 (3, 60),
@@ -739,6 +759,7 @@ INSERT INTO `fliker_sup_fk` (`id_ent`, `id_sup`) VALUES
 (5, 38),
 (5, 64),
 (6, 41),
+(7, 66),
 (8, 35),
 (9, 39),
 (9, 46),

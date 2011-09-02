@@ -134,7 +134,7 @@ else{
 			print '<ul>';
 
 			foreach($tab as $act){
-				print '<li><a href=index.php?page=5&act='.$act['id'].'>'.$act['nom'].'</a></li>';
+				print '<li><a href=index.php?page=5&act='.$act['id'].'>'.$act['nom_sec'].' - '.$act['nom'].'</a></li>';
 
 			}
 			print '</ul>';
@@ -144,7 +144,7 @@ else{
 			print '<h2>Fiche Activité</h2>';
 			print "<div class=\"tip\">".getParam('text_activite')."</div>";
 			print '<table>';
-			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['act']]['nom'].'</td></tr>';
+			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['act']]['nom_sec'].' - '.$tab[$_GET['act']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['act']]['description'].'</td></tr>';
 			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['act']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
