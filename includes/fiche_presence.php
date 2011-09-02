@@ -22,7 +22,7 @@ $output.= "</SELECT></p>";
 
 $tab=getCreneaux($_SESSION['uid']);
 foreach($tab as $creneau){
-	$output.= '<div><h4 style="display:inline-block;">'.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</h4><img style="display:inline-block;" src="images/downarrow.gif" class="toggle" /></div>';
+	$output.= '<div><h4 style="display:inline-block;">'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</h4><img style="display:inline-block;" src="images/downarrow.gif" class="toggle" /></div>';
 	$cre = $creneau['id_cre'];
 	$adhs = getAdherentsByCreneau($cre,$promo);
 	switch ($creneau['jour_cre']){

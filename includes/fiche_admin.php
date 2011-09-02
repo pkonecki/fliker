@@ -19,6 +19,7 @@ if($_POST['action']==="setparam"){
 $params=getParams();
 $table_config="<table id=\"table_config\" >";
 foreach($params as $key => $value){
+	$value=htmlentities($value);
 	$table_config.="<FORM action=\"index.php?page=9\" method=\"POST\">
 					<tr><td>$key</td><td><input type=\"text\" name=\"valeur\" value=\"$value\"></input></td><td><input type=\"submit\" /></td></tr>
 					<input type=\"hidden\" name=\"action\" value=\"setparam\">

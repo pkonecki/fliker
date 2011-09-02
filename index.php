@@ -37,6 +37,7 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.checkboxtree.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.confirm.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.ui.datepicker-fr.js"></script>
  </head>
  <body>
 <div id="top">
@@ -125,5 +126,79 @@ $.extend({
   getUrlVar: function(name){
     return $.getUrlVars()[name];
   }
+});
+$(document).ready(function() {
+
+		  	$.extend($.validator.messages, {
+		        required: "Ce champs est requis",
+		        number: "Veuillez entrer un numéro correct",
+				minlength: "Veuillez entrer au moins {0} caractères",
+				maxlength: "Veuillez ne pas entrer plus de {0} caractères",
+				email_req :{
+					remote: "Cet email existe déjà"
+				}
+
+    		});
+			$.validator.addClassRules({
+				number_req: {
+					required: true,
+					number: true
+				},
+				def_req: {
+					required: true,
+				},
+				def: {
+				},
+				date:{
+					date:true,
+				},
+				date_req:{
+					required:true,
+					date:true
+				},
+				email: {
+					email: true,
+					remote: "emails.php"
+				},
+				email_req: {
+					required: true,
+					email: true,
+					remote: "emails.php"
+				},
+				categorie_req: {
+					required : true
+				},
+				telephone: {
+					number: true,
+					minlength:10,
+					maxlength:10
+				},
+				telephone_req: {
+					required: true,
+					number: true,
+					minlength:10,
+					maxlength:10
+				}
+			});
+			$("#f_adherent_modif").validate({
+				messages: {
+        			email: {
+						required: "Ce champs est requis",
+						email: "Entrez une adresse email valide",
+						remote: "L\'adresse email est déjà utilisée"
+					},
+					categorie : "Ce champs est requis"
+				},
+				errorPlacement: function(error, element) {
+	            	if ( element.is(":radio") )
+	                	error.appendTo( element.parent() );
+	          		else
+                		error.appendTo( element.parent() );
+        		},
+				success: function(label) {
+					// set   as text for IE
+					label.html(" ").addClass("checked");
+				}
+			});
 });
 </script>
