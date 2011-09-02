@@ -13,7 +13,8 @@
 
 ===Urgences===
   * <s>"impossible" selecté par défaut</s>
-  * envoi email : cadre + grand ;)
+  * envoi email : cadre + grand ou ajustable ;)
+  * recherche : bouton select all fonctionne pas
   * envoi email + email cookie : forcer subject = [ASESCO]...
   * activer envoi email cookie + enlever l'affichage écran du cookie
   * formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux
