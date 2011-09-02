@@ -45,6 +45,7 @@
     * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
   * RECHERCHE :
     * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément qui manque)
+    * bouton pour recherche "pas de certif" et "pas de photo"
   * ADHESIONS :
     * gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus </s>(ni les section désactivées) (ni rien du tout si mode standby)
