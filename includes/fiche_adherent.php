@@ -25,11 +25,6 @@ $adh = getAdherent($id_adh);
 print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a></li><li><a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></li></ul>';
 
 $dest_dossier = "../photos";
-$script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
-
-	';
-
-print $script;
 	if ($_POST['action'] == 'modification' && $edit) {
 		$tab = getChampsAdherents();
 		print '<FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
@@ -61,7 +56,7 @@ print $script;
 					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="'.$row[nom].'" '.$format.' value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='date')
-					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id ="datepicker" '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
+					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=text name="'.$row[nom].'" id="datepicker" '.$format.'  value="'.$adh[$row['nom']].'"></td></tr>';
 				else
 				if($row[type]==='tinyint')
 					print '<tr><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td><td><INPUT type=checkbox name='.$row[nom].' '.$format.'  '.($adh[$row['nom']]==1 ? "checked" : "").'></td></tr>';
@@ -143,5 +138,3 @@ print $script;
 
 
 ?>
-
-
