@@ -51,6 +51,7 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 	foreach($creneaux as $creneau){
 		$tab[$creneau[nom_act]][nom]=$creneau[nom_act];
 		$tab[$creneau[nom_act]][id]=$creneau[id_act];
+		$tab[$creneau[nom_act]][nom_sec]=$creneau[nom_sec];
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
 		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
@@ -59,12 +60,18 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 	$ads=getAdhesions($id_adh,$promo);
 
 	foreach($tab as $act){
-		print '<li><input type="checkbox" name="act'.$act[id].'"  value="'.$act[id].'"><label>'.$act[nom].'</label>';
-		print '<ul id="creneaux">';
+		$out= '<li><input type="checkbox" name="act'.$act[id].'"  value="'.$act[id].'"><label>'.$act[nom_sec].' - '.$act[nom].'</label>';
+		$out.= '<ul id="creneaux">';
+		$i=0;
 		foreach($act[creneaux] as $cre){
-			if (!isset($ads['cre'.$cre['id']]) ) print '<li><input type="checkbox" name="cre[]"  value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).' - '.substr($cre[fin],0,-3).'</label>';
+			
+			if (!isset($ads['cre'.$cre['id']]) ){
+				$out.= '<li><input type="checkbox" name="cre[]"  value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).' - '.substr($cre[fin],0,-3).'</label>';
+				$i++;
+			}
 		}
-		print '</ul>';
+		$out.= '</ul>';
+		if ($i>0) print $out;
 
 	}
 	print '</ul>';

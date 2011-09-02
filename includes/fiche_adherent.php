@@ -26,51 +26,8 @@ print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.$id
 
 $dest_dossier = "../photos";
 $script = '<script type="text/javascript" src="./includes/js/jquery.js"></script>
-	<script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
-	<script type="text/javascript" src="./includes/js/jquery.ui.datepicker-fr.js"></script>
 
-	<script>
-
-		  $(document).ready(function(){
-		  	$.extend($.validator.messages, {
-		        required: "Ce champs est requis",
-		        number: "Veuillez entrer un numéro correct"
-
-    		});
-
-			$("#f_adherent_modif").validate({
-
-			rules : {
-
-            	categorie: "required"
-
-			},
-			messages: {
-
-				categorie : "Ce champs est requis"
-
-
-			},
-			errorPlacement: function(error, element) {
-	            if ( element.is(":radio") )
-	                error.appendTo( element.parent() );
-	          	else
-                	error.appendTo( element.parent() );
-        	},
-        	success: function(label) {
-            	// set   as text for IE
-            	label.html(" ").addClass("checked");
-	        }
-
-			});
-		  });
-		  $(function() {
-			$( "#datepicker" ).datepicker({ changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  });
-
-	});
-
-	</script>';
+	';
 
 print $script;
 	if ($_POST['action'] == 'modification' && $edit) {
@@ -79,8 +36,9 @@ print $script;
 		print '<table border=0>';
 		foreach($tab as $row){
 			if($row[user_editable]==1){
-				$format ="class=\"$row[format]\"";
-				if ($row[required]==1) $format ="class=\"required\"";
+				$format =$row['format'];
+				if ($row[required]==1) $format ="class=\"{$format}_req\"";
+				else $format="class=\"$format\"";
 				if($row[format] === "categorie"){
 					if($adh[$row['nom']]==='M'){
 						$homme='checked';
@@ -92,8 +50,8 @@ print $script;
 					}
 					print '<tr ><td class="label"><LABEL for ='.$row[nom].' >'.$row[description].'</LABEL> : </td>
 						<td>
-						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="M" '.$homme.' >Masculin
-						<INPUT type=radio name='.$row[nom].' class="'.$row[format].'" value="F" '.$femme.' >Féminin
+						<INPUT type=radio name='.$row[nom].' '.$format.' value="M" '.$homme.' >Masculin
+						<INPUT type=radio name='.$row[nom].' '.$format.' value="F" '.$femme.' >Féminin
 						</td>
 						</tr>
 						</div>';
@@ -185,3 +143,5 @@ print $script;
 
 
 ?>
+
+

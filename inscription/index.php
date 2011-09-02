@@ -97,6 +97,7 @@ $dest_dossier = "../photos";
 			if($row['inscription']==1){
 				$format =$row['format'];
 				if ($row['required']==1) $format ="class=\"{$format}_req\"";
+				else $format="class=\"$format\"";
 				if($row['format'] === "categorie"){
 					print '<tr ><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td>
 						<td>
@@ -182,7 +183,7 @@ $(document).ready(function() {
 				def: {
 				},
 				date:{
-					
+					date:true,
 				},
 				date_req:{
 					required:true,
@@ -229,7 +230,8 @@ $(document).ready(function() {
         		},
 				success: function(label) {
 					// set   as text for IE
-					label.html(" ").addClass("checked");
+					label.html("&nbsp;").addClass("checked");
+
 				}
 			});
 });
