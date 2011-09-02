@@ -24,7 +24,7 @@
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
   * bug check n° tel
-  *<s> PAIEMENTS:
+  * <s> PAIEMENTS:
     * Numéro de carte asesco:
       * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
       * proposer le 1er n° libre + textbox pour saisir un autre choix
