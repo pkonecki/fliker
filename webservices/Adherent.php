@@ -41,7 +41,7 @@ function newAdherent($tab){
 		}
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
-	print $activationKey;
+	//print $activationKey;
 	$colonnes .= "date_creation,last_modif,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
 
