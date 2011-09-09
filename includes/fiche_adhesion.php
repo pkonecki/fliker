@@ -30,7 +30,7 @@ else {
 	}
 
 }
-if(isset($_GET['promo'])) {
+if(!empty($_GET['promo'])) {
 	$promo=$_GET['promo'];
 } else {
 	$promo=$current_promo;

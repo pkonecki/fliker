@@ -22,6 +22,7 @@ $header = '
 $footer = '</body></html>';
 
 include("../includes/paths.php");
+include("General.php");
 include("Adherent.php");
 include("Select.php");
 include("saveImage.php");
