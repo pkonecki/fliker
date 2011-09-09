@@ -365,6 +365,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			print "</table></td>".($resp_asso ? "<td></td>" : "")."</tr>";
 		}
 		print "</table>";
+		$adh = getAdherent($id_adh);
 		//Numéro de carte
 		if ($resp_asso && !$self) print "<h2>Changer le numéro de carte</h2><FORM id=\"f_numcarte\" action=\"index.php?page=7&adh=$id_adh&asso=$current_asso\" method=\"POST\"  >
 		 		<input type=\"hidden\" name=\"action\" value=\"setnumcarte\" /> 

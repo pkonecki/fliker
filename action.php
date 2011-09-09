@@ -37,8 +37,8 @@ switch($_POST['action']){
 
 	print "</div>";
 	print '<table><FORM action="index.php?page=10" method=POST>
-			<tr><td>Sujet:<INPUT type="text" name="subject" /></td></tr>
-			<tr><td><TEXTAREA name="message">Entrez ici votre message</TEXTAREA> </td></tr>
+			<tr><td><INPUT type="text" name="subject" size="80" value="Sujet" /></td></tr>
+			<tr><td><TEXTAREA cols="80" rows="25" name="message">Entrez ici votre message</TEXTAREA> </td></tr>
 			';
 	foreach ($adhs as $adh) print "<input type=\"hidden\" name=\"to[]\" value=\"{$adh['email']}\"  />";
 	print '<input type="hidden" name="action" value="sendmail_confirm" >
