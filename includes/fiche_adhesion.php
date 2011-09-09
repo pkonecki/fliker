@@ -41,9 +41,9 @@ if(isset($_GET['promo'])) {
 $adh = getAdherent($id_adh);
 $creneaux=getAllCreneaux();
 $id_statut_adh=$adh['statut'];
-if ($_POST['action'] == 'nouvelle' && $self) {
+if ($_POST['action'] == 'nouvelle') {
 	print '<h2>Choisissez vos activités</h2>';
-	print '<FORM action="index.php?page=7" method="POST">
+	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
 	<input type="hidden" name="action" value="select_assos" />';
 	print '<ul id="tree_root">';
 
@@ -77,9 +77,9 @@ if ($_POST['action'] == 'nouvelle' && $self) {
 	print '</ul>';
 	print '<INPUT type="submit" value="Suite"></FORM>';
 } else
-if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
+if ($_POST['action'] == 'select_assos' && !empty($_POST['cre']) ) {
 	print "<span class=\"tip\">".getParam('text_select_asso')."</span>";
-	print '<FORM action="index.php?page=7" method="POST">';
+	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">';
 	if (!isset($_POST['update'])) {
 		print '<input type="hidden" name="action" value="submitted" />';
 	}
@@ -110,12 +110,12 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>';
 }
  else{
-	if ($_POST['action'] == 'submitted' && $self){
+	if ($_POST['action'] == 'submitted'){
 
 		if(!empty($_POST['asso_cre']) ) newAdhesions($_POST['asso_cre'],$id_adh);
 
 	}
-	if ($_POST['action'] == 'submitted_update' && $self){
+	if ($_POST['action'] == 'submitted_update'){
 
 		if(!empty($_POST['asso_cre']) ) updateAdhesions($_POST['asso_cre'],$_POST['id_ads']);
 
@@ -154,7 +154,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 		//Selection asso
 		if(count($assos_resp) > 1 ){
 			print "<p>Consulter en tant que responsable de: ";
-			foreach($assos_resp as $key => $asso) print "<a href=\"index.php?page=7&adh=$id_adh&asso=$key\">$asso</a> ";
+			foreach($assos_resp as $key => $asso) print "<a href=\"index.php?page=7&adh=$id_adh&asso=$key&promo={$_GET['promo']}\">$asso</a> ";
 			print "</p>";
 		}
 		//Adhésions
@@ -248,7 +248,7 @@ if ($_POST['action'] == 'select_assos' && $self && !empty($_POST['cre']) ) {
 			
 		}
 		print '</TABLE>';
-		if (($self || $resp_asso) && $promo == $current_promo) print '<FORM action="index.php?page=7" method="POST">
+		if (($self || $resp_asso) && $promo == $current_promo) print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
 		<input type="hidden" name="action" value="nouvelle" />
 		<INPUT type="submit" value="Nouvelle">
 		</FORM>';
