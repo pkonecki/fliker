@@ -91,7 +91,7 @@ if ($_POST['action'] == 'select_assos' && !empty($_POST['cre']) ) {
 	$assos_cre=getAssosCreneaux();
 	foreach($_POST['cre'] as $cre){
 		print '<tr>';
-		print '<td>'.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
+		print '<td>'.$creneaux[$cre]['nom_sec'].' - '.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
 		if(isset($assos_cre[$id_statut_adh][$cre]))
 		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso){
 			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
