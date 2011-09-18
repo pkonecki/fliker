@@ -49,13 +49,13 @@ if ($_POST['action'] == 'nouvelle') {
 
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau[nom_act]][nom]=$creneau[nom_act];
-		$tab[$creneau[nom_act]][id]=$creneau[id_act];
-		$tab[$creneau[nom_act]][nom_sec]=$creneau[nom_sec];
-		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
-		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
-		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
-		$tab[$creneau[nom_act]][creneaux][$creneau[id_cre]][fin]=$creneau[fin_cre];
+		$tab[$creneau[id_act]][nom]=$creneau[nom_act];
+		$tab[$creneau[id_act]][id]=$creneau[id_act];
+		$tab[$creneau[id_act]][nom_sec]=$creneau[nom_sec];
+		$tab[$creneau[id_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
+		$tab[$creneau[id_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
+		$tab[$creneau[id_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
+		$tab[$creneau[id_act]][creneaux][$creneau[id_cre]][fin]=$creneau[fin_cre];
 	}
 	$ads=getAdhesions($id_adh,$promo);
 
