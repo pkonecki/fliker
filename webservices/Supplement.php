@@ -74,10 +74,9 @@ function getAssosCreneaux(){
 	ORDER BY id_cre";
 
 	$query="SELECT  S1.id_statut_sup, S1.id_asso, S1.nom_asso, S2.id_cre 
-	FROM ($q1) AS S1, ($q2) AS S2, {$GLOBALS['prefix_db']}asso_section HS
+	FROM ($q1) AS S1, ($q2) AS S2
 	WHERE S1.id_asso = S2.id_asso_adh
-	AND HS.id_asso=S1.id_asso
-	AND HS.id_sec=S2.id_sec";
+";
 
 
 	include("opendb.php");

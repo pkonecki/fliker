@@ -134,13 +134,13 @@ function multiselected($post,$val){
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau[nom_sec]][nom]=$creneau[nom_sec];
-		$tab[$creneau[nom_sec]][id]=$creneau[id_sec];
-		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][nom]=$creneau[nom_act];
-		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][id]=$creneau[id_act];
-		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
-		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
-		$tab[$creneau[nom_sec]][activites][$creneau[nom_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
+		$tab[$creneau[id_sec]][nom]=$creneau[nom_sec];
+		$tab[$creneau[id_sec]][id]=$creneau[id_sec];
+		$tab[$creneau[id_sec]][activites][$creneau[id_act]][nom]=$creneau[nom_act];
+		$tab[$creneau[id_sec]][activites][$creneau[id_act]][id]=$creneau[id_act];
+		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
+		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
+		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
 	}
 
 	foreach($tab as $section){
