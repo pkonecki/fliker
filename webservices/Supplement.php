@@ -99,11 +99,9 @@ function getFacture($ads,$id_statut_adh,$promo){
 		
 	}
 	$tout ="SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
-						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
-						AND A.id=HS.id_asso
-						AND HS.id_sec=S.id 
 						AND ($where)
 						ORDER BY nom_sec";
 	$assos = "SELECT DISTINCT sup.id, sup.valeur as valeur, sup.id_asso_paie, sup.id_asso_adh, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
