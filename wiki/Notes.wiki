@@ -252,7 +252,7 @@
   * Adhésion
   * Fiche Adhérent
 
-	
+
 === Envoi d'Email===
   * bien gérer le from
     * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email prof sinon
@@ -314,6 +314,15 @@
     * nbr d'inscrits assidus mais pas à jour (par assos)
     * nbr touristes = pas assidus et pas à jour (par assos)
     * recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections = asso)
+
+
+===Feuille de Prof===
+  * ajouter description (table séparée ?) du prof :
+    * diplome (type, fédé, n°)
+    * n° insee et nationalité (pour les cotise ursaf et autres)
+    * dates d'embauches (prévoir en fait un contrat horaire par promo)
+    * taux horaire (+ type : salaire, vacation, gratification, indemnité km ...)
+  * relier au système de présences (et de votes/feedback ?)
 
 
 ===Table de Customisation / Admin===
