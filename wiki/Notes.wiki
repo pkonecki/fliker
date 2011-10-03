@@ -12,6 +12,7 @@
 
 
 ===Urgences===
+  * fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir
   * <s>"impossible" selecté par défaut</s>
   * <s>envoi email : cadre + grand ou ajustable ;)</s>
   * recherche : bouton select all fonctionne pas
@@ -49,7 +50,8 @@
     * bouton pour recherche "pas de certif" et "pas de photo"
   * ADHESIONS :
     * gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
-    * Ne pas afficher les créneaux <s>sans prof/responsables au dessus </s>(ni les section désactivées) (ni rien du tout si mode standby)
+    * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
+    * fonction pour vraiment supprimer un sport de la facture d'un adhérent
   * ADHERENTS :
     * bouton pour changer son passwd (seulement par adhérent)
     * bouton pour dés/activer un compte (seulement par admin)
@@ -64,6 +66,7 @@
       * ??? changer en bulks bcc (max=200) ???
     * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
     * bouton "je suis un gros boulet" --> rediriger vers "RT"
+    * forcer affichage des noms/prénoms au format "Nnnnn" (quelle que soit la casse saisie dans formulaire et stockée dans BD)
     * Table types de suppléments (cotiz, location, caution, supplément)
     * Table types de paiements (chèque/espèces/CB/paypal/dispense)
     * <s>Association destinataire table supplément</s>
