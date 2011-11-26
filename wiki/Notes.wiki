@@ -24,7 +24,7 @@
   * <s>formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux</s>
   * <s>formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent :(</s>
   * <s>fiche adhesion : on peut pas changer la promo du paiement ?</s>
-  * <s>fiche adhesion on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)</s>
+  * <s>fiche adhesion : on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)</s>
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
   * n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
   * déplacer en table custom :
@@ -48,6 +48,7 @@
       * <s>Faire table de hash entre adh et asso</s>
   * PROMOS :
     * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
+    * dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
   * RECHERCHE :
     * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément qui manque)
     * bouton pour recherche "pas de certif" et "pas de photo"
