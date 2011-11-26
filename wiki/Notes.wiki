@@ -12,11 +12,14 @@
 
 
 ===Urgences===
-  * fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir
+  * imageCreateFromPNG does not exist ...
+     * purger répertoires photo / certmeds des fichiers non-jpg !
+  * <s>fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir</s>
   * <s>"impossible" selecté par défaut</s>
   * <s>envoi email : cadre + grand ou ajustable ;)</s>
   * recherche : bouton select all fonctionne pas
   * envoi email + email cookie : forcer subject = [ASESCO]...
+     * vérifier si sender / reply-to = current logged-in user !?
   * <s>activer envoi email cookie + enlever l'affichage écran du cookie</s>
   * <s>formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux</s>
   * <s>formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent :(</s>
