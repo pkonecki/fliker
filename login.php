@@ -2,6 +2,8 @@
 session_start();
 include("./includes/paths.php");
 include("Adherent.php");
+include_once("General.php");
+
 $tab = getChampsAdherents();
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -13,10 +15,18 @@ $header = '
  <body>
 <h1>Connexion</h1> ';
 
+$headerr = '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>::Fliker::Connexion</title>
+  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  <meta http-equiv="refresh" content="6;url=login.php" />
+ </head>
+ <body>
+  <h1>Connexion</h1> ';
+
 $footer = '</body></html>';
-
-
-
 
 //If the user has submitted the form
 if($_POST['submit']){
@@ -28,7 +38,9 @@ if($_POST['submit']){
 	//Check if the username or password boxes were not filled in
 	if(!$username || !$password){
 		//if not display an error message
-		echo "<center>Vous devez rentrer votre <b>email</b> et votre <b>mot de passe</b>!</center>";
+	        print "$headerr";
+                print "<center>Vous devez entrer votre <b>email</b> et votre <b>mot de passe</b> !</center>";
+                print "$footer";
 	}else{
 		//if the were continue checking
 
@@ -39,7 +51,9 @@ if($_POST['submit']){
 		//check if there was not a match
 		if($num == 0){
 			//if not display an error message
-			echo "<center>L'<b>email</b> que vous avez entrer n'existe pas!</center>";
+	                print "$headerr";
+			echo "<center>L'<b>email</b> que vous avez entré n'existe pas !</center>";
+                        print "$footer";
 		}else{
 			//if there was a match continue checking
 
@@ -50,17 +64,21 @@ if($_POST['submit']){
 			//check if there was not a match
 			if($num == 0){
 				//if not display error message
-				echo "<center>Le <b>mot de passe</b> que vous avez entré est erroné!</center>";
+	                        print "$headerr";
+				echo "<center>Le <b>mot de passe</b> que vous avez entré est erroné !<br>Ou vous avez oublié d'activer votre compte ? (consultez votre boîte email !)</center>";
+                                print "$footer";
 			}else{
 				//if there was continue checking
 
 				//split all fields fom the correct row into an associative array
 				$row = mysql_fetch_assoc($res);
 
-				//check to see if the user has not activated their account yet
+				//check to see if the user has not activated his account yet
 				if($row['active'] != 1){
 					//if not display error message
-					echo "<center>Votre compte n'est pas <b>activé</b>!</center>";
+	                                print "$headerr";
+					echo "<center>Désolé, votre compte a été <b>désactivé</b> !<br>Prenez contact avec nos <a href=\"".getParam("url_resiliation")."\">administrateurs</a>.</center>";
+                                        print "$footer";
 				}else{
 					//if they have log them in
 
@@ -72,24 +90,22 @@ if($_POST['submit']){
 						if($champ['type']==='select') $_SESSION[$champ['nom']]=$row['id_'.$champ['nom']];
 						else
 						$_SESSION[$champ['nom']]=$row[$champ['nom']];
-
 					}
 
-
 					//show message
-					print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-							<html>
-							 <head>
-  								<title>::Fliker::Connexion</title>
-  								<link rel="stylesheet" type="text/css" href="./includes/style.css" />
-  								<meta http-equiv="refresh" content="3;url=index.php" />
-  								 </head>
- 								<body>';
-					echo "<center>Vous êtes connecté!</center></body></html>";
-
+					print '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>::Fliker::Connexion</title>
+  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  <meta http-equiv="refresh" content="3;url=index.php" />
+ </head>
+ <body>
+  <h1>Connexion</h1> ';
+					echo "<center>Vous êtes connecté !</center>";
+					print "$footer";
 					include("closedb.php");
-
-
 				}
 			}
 		}
@@ -102,11 +118,11 @@ else {
 				<div id="border">
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
-							<td>Email:</td>
+							<td>Email :</td>
 							<td><input type="text" name="username" /></td>
 						</tr>
 						<tr>
-							<td>Mot de passe:</td>
+							<td>Mot de passe :</td>
 							<td><input type="password" name="password" /></td>
 						</tr>
 						<tr>
@@ -121,7 +137,5 @@ else {
 			';
 }
 print $footer;
-
-
 
 ?>

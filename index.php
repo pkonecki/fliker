@@ -88,9 +88,9 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 } else print 'Vous n\'êtes pas connecté';
 $die_footer="</div></body></html>";
 
-
 ?>
 </body></html>
+
 <script type="text/javascript">
 $('.confirm').confirm({
   timeout:3000,

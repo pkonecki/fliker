@@ -102,6 +102,9 @@ $dest_dossier = "../photos";
 					if($row[type]==="varchar")
 						print '<TD>'.$row[description].'</TD><TD>'.$adh[$row[nom]].'</TD>';
 
+					if($row[type]==="date")
+						print '<TD>'.$row[description].'</TD><TD>'.$adh[$row[nom]].'</TD>';
+
 					if($row[type]==="tinyint"){
 						if ($adh[$row[nom]]==1)
 							print '<TD>'.$row[description].'</TD><TD>Oui</TD>';

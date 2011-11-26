@@ -7,7 +7,6 @@ function newAdherent($tab){
 	include("opendb.php");
 	foreach($champs as $row){
 		if($row[inscription]==1){
-
 			if($row[type]==='varchar'){
 				$colonnes .= $row[nom].",";
 				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
@@ -31,8 +30,6 @@ function newAdherent($tab){
 				} else {
 					$values .= "1,";
 				}
-
-
 			}
 			if($row[type]==='select'){
 				$colonnes .= 'id_'.$row[nom].",";
@@ -44,9 +41,6 @@ function newAdherent($tab){
 	//print $activationKey;
 	$colonnes .= "date_creation,last_modif,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
-
-
-
 	$colonnes = substr($colonnes,0,-1);
 	$values = substr($values,0,-1);
 	$colonnes .=")";
@@ -57,27 +51,20 @@ function newAdherent($tab){
 	if (!$results) echo mysql_error();
 	//send mail
 	$to      = $tab[email];
-	$subject = " Votre inscription à l'ASESCO";
-	$message = "Bienvenue à l'ASESCO!\r\rVous, ou quelqu'un utilisant votre adresse email, êtes inscrit au site internet de l'ASESCO. Vous pouvez valider votre inscription en cliquant sur le lien suivant: \r".getParam('url_site')."validate.php?$activationKey\r\r Si c'est une erreur, ignorez tout simplement cet email et nous ne conserveont pas votre adresse.\r\rCordialement, l'équipe de l'ASESCO";
+	$subject = "Votre inscription sportive";
+	$message = "Bienvenue !\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\r  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\r  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
 	$headers = 'From: '.getParam('admin_email') . "\r\n" .
-
-    'Reply-To: '.getParam('contact_email') . "\r\n" .
-
-    'X-Mailer: PHP/' . phpversion();
+	           'Reply-To: '.getParam('contact_email') . "\r\n" .
+	           'X-Mailer: PHP/' . phpversion();
 	mail($to, $subject, $message, $headers);
-
 	include("closedb.php");
-
 }
-
 
 function getAdherent($user){
 	$return = array();
 	$tab = getChampsAdherents();
 	include("opendb.php");
-
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `id` = '".$user."'";
-
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$row = mysql_fetch_assoc($results);
@@ -94,7 +81,6 @@ function getAdherent($user){
 }
 
 function getChampsAdherents(){
-
 	include("opendb.php");
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}champs_adherent ORDER BY ordre ASC";
 	$results = mysql_query($query);
@@ -132,27 +118,18 @@ function modifAdherent($tab){
 				} else {
 					$set .= "1,";
 					saveImage($tab['email'],$row[nom]);
-
 				}
-
-
 			} else
 			if($row[type]==='select')
 				$set .= "'".mysql_real_escape_string($tab['id_'.$row[nom]])."',";
-
 		}
 	}
-
 	$set .="last_modif='".date( 'Y-m-d H:i:s')."'";
-
 	$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
 	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
-
-
 	include("closedb.php");
-
 }
 
 function getAdherents(){
@@ -192,11 +169,7 @@ function getStatuts(){
 	}
 	include("closedb.php");
 	return $tab;
-
-
 }
-
-
 
 function getAssos(){
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ";
@@ -239,8 +212,7 @@ function getMyAdherents($userid){
 			OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid')
 			OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
 		)
-		";
-		
+		";		
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -286,6 +258,7 @@ function getSolde($id_adh,$promo){
 	foreach($tab['cres'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
 	return -$solde;
 }
+
 function setNumCarte($num,$adh){
 	$q="UPDATE {$GLOBALS['prefix_db']}adherent SET numcarte=$num WHERE id=$adh";
 	include("opendb.php");
