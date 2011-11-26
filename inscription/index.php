@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -11,10 +12,17 @@ $header = '
 	<script type="text/javascript" src="../includes/js/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="../includes/js/jquery-ui.js"></script>
 	<script type="text/javascript" src="../includes/js/jquery.ui.datepicker-fr.js"></script>
+ </head>
+ <body>
+<h1>Inscription</h1> ';
 
-	<script>
-
-		  	</script>
+$header2 = '
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ <head>
+  <title>::Fliker::Inscription</title>
+  <link rel="stylesheet" type="text/css" href="../includes/style.css" />
+  <meta http-equiv="refresh" content="30;url=../index.php" />
  </head>
  <body>
 <h1>Inscription</h1> ';
@@ -34,16 +42,18 @@ $dest_dossier = "../photos";
 		if(!(strcmp($_SESSION['uid'],"") == 0)){
 			session_start();
 
-
 		$_SESSION=$_POST;
 		$tab = getChampsAdherents();
 		print $header;
-		print "<h2>Recapitulatif</h2>";
+		print "<h2>Récapitulatif</h2>";
 		print '<TABLE BORDER="1">';
 		foreach($tab as $row){
 			if($row['inscription']==1){
 				print '<TR>';
 				if($row['type']==="varchar")
+					print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
+
+				if($row['type']==="date")
 					print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
 
 				if($row['type']==="tinyint"){
@@ -60,7 +70,6 @@ $dest_dossier = "../photos";
 					$tab=getSelect($row['nom']);
 					print '<TD>'.$row['description'].'</TD><TD>'.$tab[$_SESSION['id_'.$row['nom']]].'</TD>';
 				}
-
 			}
 			print '</TR>';
 		}
@@ -79,11 +88,11 @@ $dest_dossier = "../photos";
 			header("location: index.php") ;
 		}
 
-
 	} else if ($_POST['action'] == 'confirmed'){
 		newAdherent($_SESSION);
 		print $header;
-		print "<h2>Félicitations!</h2> Votre inscription a été enregistrée! Veuillez vérifier vos email pour valider votre inscription!";
+#		print $header2;
+		print "<h2>Félicitations !</h2><p>Votre pré-inscription a été enregistrée. Veuillez SVP cliquer sur le lien de validation dans l'email qui vient de vous être envoyé, afin d'activer votre compte.</p><p>(Vous pouvez fermer cette fenêtre.)</p>";
 		print $footer;
 		session_unset();
 		session_destroy();
@@ -123,8 +132,8 @@ $dest_dossier = "../photos";
 				else
 				if($row['type']==='select'){
 					$values = getSelect($row['nom']);
-					
 					print '<tr><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td><td><SELECT name="id_'.$row['nom'].'" id="id_'.$row['nom'].'" '.$format.'>';
+                                        print '<OPTION value="" selected>Sélectionnez SVP :</OPTION>';
 					foreach($values as $key => $value){
 						print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 					}
@@ -141,28 +150,18 @@ $dest_dossier = "../photos";
 		print $footer;
 	}
 
-
-
 ?>
 <script type="text/javascript">
 function populatectlStatuts() {
-   
     $.getJSON('../includes/statuts.php', function(data) {
 		  var items = [];
-		
 		  $.each(data, function(key, val) {
 		    $('#id_statut').append('<option value="' + val + '">' + key + '</option>');
 		  });
-		
-
     });
-
 }
 
 $(document).ready(function() {
-	
-
-
 		  	$.extend($.validator.messages, {
 		        required: "Ce champs est requis",
 		        number: "Veuillez entrer un numéro correct",
@@ -171,7 +170,6 @@ $(document).ready(function() {
 				email_req :{
 					remote: "Cet email existe déjà"
 				}
-
     		});
 			$.validator.addClassRules({
 				number_req: {
@@ -232,15 +230,14 @@ $(document).ready(function() {
 				success: function(label) {
 					// set   as text for IE
 					label.html("&nbsp;").addClass("checked");
-
 				}
 			});
 });
+
 $(function() {
 	$( "#datepicker" ).datepicker({ 
 		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
 	});
 });
-
 
 </script>

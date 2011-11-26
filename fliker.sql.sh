@@ -1,5 +1,8 @@
 #!/bin/bash
 
+## !! BUG !! need to check that no datafield has the same name than
+##           a table, otherwise the datafield will be prefixed as well :(
+
 SQLFILE=fliker.sql
 OUTFILE=fliker.out
 TMPFILE=fliker.tmp
