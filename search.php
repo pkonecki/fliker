@@ -12,7 +12,6 @@ else {
 		if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
 			$resp_asso=true;
 		}
-
 	}
 	$query="SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION[uid]."'
 	UNION
@@ -28,11 +27,7 @@ else {
 	else if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1'){
 		print 'Vous n\'avez pas accès à cette page.';
 	}
-	
 	else{
-
-
-
 ?>
 <div>
 <h2 class="inline">Recherche</h2>
@@ -40,6 +35,7 @@ else {
 </div>
 <?php
 print "<span class=\"tip\">".getParam('text_search')."</span>";
+
 function selected($post,$val){
 	if ($_POST[$post]===$val) {
 		return "selected";
@@ -60,9 +56,6 @@ function multiselected($post,$val){
 	}
 	return "";
 }
-
-
-
 
 	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
@@ -100,7 +93,6 @@ function multiselected($post,$val){
 	<input type="text" id="set1_text" name="set1_text" value="'.$_POST['set1_text'].'"/>
 	</div>
 	<div id="filters">';
-
 	for($i = 1; $i < $_POST['field_count']; $i++){
 		$n=$i+1;
 		$type="set".$n."_type";
@@ -121,10 +113,8 @@ function multiselected($post,$val){
 		<input type="text" id="set'.$n.'_text" name="set'.$n.'_text" value="'.$_POST[$text].'"/>
 		</div>';
 	}
-
 	print '</div>
 	<button type="button" id="add_field">Ajouter un champ</button>
-
 </fieldset>
 <fieldset class="selects"><legend>Sélection des créneaux</legend>
 	<ul id="tree_root">
@@ -142,7 +132,6 @@ function multiselected($post,$val){
 		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
 		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
 	}
-
 	foreach($tab as $section){
 		print '<li><input type="checkbox" name="section'.$section[id].'" '.checked('section'.$section[id],$section[id]).' value="'.$section[id].'"><label>'.$section[nom].'</label>';
 		print '<ul id="activites">';
@@ -156,7 +145,6 @@ function multiselected($post,$val){
 		}
 		print '</ul>';
 	}
-
 	print '</ul>';
 	$first = empty($_POST[affichage]);
 	$second = 'checked';
@@ -175,12 +163,10 @@ function multiselected($post,$val){
 	<button type="reset" id="reset">Reset</button>
 </fieldset>
 </form>';
-
 	if($_POST['action']==="submitted"){
 	//SQL
 	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true ";
 	for($i = 0; $i < $_POST['field_count']; $i++){
-
 		$n=$i+1;
 		$type="set".$n."_type";
 		$action="set".$n."_action";
@@ -199,8 +185,6 @@ function multiselected($post,$val){
 			case 4: //Catégorie
 					$sql.="AND ADR.categorie ";
 					break;
-
-
 		}
 		switch($_POST[$action]){
 			case 1: //Contient
@@ -213,8 +197,6 @@ function multiselected($post,$val){
 				$sql.="= '".$_POST[$text]."' ";;
 				break;
 		}
-
-
 	}
 	$in="('0'";
 	$i=0;
@@ -257,25 +239,21 @@ function multiselected($post,$val){
 				";
 		$sql.=")
 			 ) )";
-	}	
-	
+	}
 	$sql.=" ) ORDER BY ADR.nom";
 	}
 	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
-	
 	$results = mysql_query($sql);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
 	$num=mysql_num_rows($results);
-
 	switch($_POST['affichage']){
 		case 1: //Simple
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
-		
 				if ($champ[search_simple]==1) {
 					if($champ[type]==='varchar')
 					print '<th>'.$champ['description'].'</th>';
@@ -291,7 +269,6 @@ function multiselected($post,$val){
 					}
 				}
 			}
-			
 			print '</tr></thead>';
 			print '<tbody>';
 			$i = 0;
@@ -322,7 +299,6 @@ function multiselected($post,$val){
 				else print '<tr class="odd '.$active.'">';
 				print '<td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
-					
 					if ($champ[search_simple]==1){
 						if($champ[type]==='varchar')
 							print '<td>'.$row[$champ['nom']].'</td>';
@@ -353,7 +329,6 @@ function multiselected($post,$val){
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
-		
 				if ($champ[user_viewable]==1) {
 					if($champ[type]==='varchar')
 					print '<th>'.$champ['description'].'</th>';
@@ -369,7 +344,6 @@ function multiselected($post,$val){
 					}
 				}
 			}
-			
 			print '</tr></thead>';
 			print '<tbody>';
 			$i = 0;
@@ -400,7 +374,6 @@ function multiselected($post,$val){
 				else print '<tr class="odd '.$active.'">';
 				print '<td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
-					
 					if ($champ[user_viewable]==1){
 						if($champ[type]==='varchar')
 							print '<td>'.$row[$champ['nom']].'</td>';
@@ -450,12 +423,10 @@ function multiselected($post,$val){
 					break;
 				}
 				if($stop) continue;
-				
 				if($i % 5 == 0) print '<tr>';
 				$i++;
 				print '<td class="trombi" valign="top">';
 				foreach($tab as $champ){
-					
 					if ($champ[search_trombi]==1){
 						if($champ[type]==='varchar')
 							print "<span class=\"trombi\">".(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
@@ -478,19 +449,10 @@ function multiselected($post,$val){
 			}
 			print '</table>';
 		break;
-	}
-	
-	
-	
+	}	
 }
 
-
-
-
-
 ?>
-
-
 
 <script type="text/javascript">
 $('#add_field').click(function() {
@@ -504,16 +466,20 @@ $('#reset').click(function() {
 });
 $('#tree_root').checkboxTree({
       /* specify here your options */
+      initializeChecked: 'expanded', 
+      initializeUnchecked: 'collapsed',
       onCheck: {
-                ancestors: 'check',
-                descendants: 'check'
-            },
+                ancestors: 'checkIfFull', 
+                descendants: 'check',
+                node: 'expand'
+      },
       onUncheck: {
-                ancestors: 'uncheck'
-            }
+                  ancestors: 'uncheck',
+                  node: 'collapse'
+      }, 
 });
 $("#toggle_f_search").click(function () {
-      $("#f_search").slideToggle("slow");
+      $("#f_search").slideToggle("fast");
 });
 </script>
 
