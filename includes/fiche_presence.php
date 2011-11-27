@@ -14,6 +14,11 @@ $output = "<div class=\"tip\">".getParam('text_presence')."</div>";
 if(isset($_POST['cre'])) {
 	$cre = $_POST['cre'];
 	$adhs = getAdherentsByCreneau($cre,$promo);
+	if(isset($_POST['week'])) {
+	  $current_week=$_POST['week'];
+	} else {
+	  $current_week=date('W');
+	}
 	$creneau = $tab[$cre];
 	switch ($creneau['jour_cre']){
 		case "Lundi":
@@ -64,14 +69,14 @@ if(isset($_POST['cre'])) {
 		$date=$w_debut;
 		while ($date < $w_fin){
 			$week=strftime("%V",$date);
-			$output.= "<td>
+			$output.= "<td ".($week==$current_week ? 'bgcolor=lightgreen' : '')." >
 			<form class=\"auto\" action=\"index.php?page=8\" method=\"POST\">
 			<input type=\"hidden\" name=\"action\" value=\"addpresence\">
 			<input type=\"hidden\" name=\"id_adh\" value=\"$id_adh\">
 			<input type=\"hidden\" name=\"cre\" value=\"$cre\">
 			<input type=\"hidden\" name=\"week\" value=\"$week\">
 			<input type=\"hidden\" name=\"promo\" value=\"$promo\">
-			<input type=\"checkbox\" name=\"present\" ".((etaitPresent($id_adh,$cre,$week,$promo)) ? 'checked' : '')." />
+			<input type=\"checkbox\" name=\"present\" ".(etaitPresent($id_adh,$cre,$week,$promo) ? 'checked' : '')." />
 			</form>
 			</td>";
 			$date = strtotime("+1 week",$date);
