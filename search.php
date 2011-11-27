@@ -57,7 +57,6 @@ function multiselected($post,$val){
 	return "";
 }
 
-	//print_r($_POST);
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	//print '<button id="toggle_f_search">Toggle</button>';
 	print '<form id="f_search" method="post" action="index.php?page=2">
@@ -159,8 +158,8 @@ function multiselected($post,$val){
 	<input '.checked('affichage','3').' type="radio" name="affichage" value="3" >Trombino</input>
 </fieldset>
 <fieldset class="buttons">
-	<input type="submit" />
-	<button type="reset" id="reset">Reset</button>
+	<input type="submit" value="Chercher" />
+	<button type="reset" id="reset">Remettre à zéro</button>
 </fieldset>
 </form>';
 	if($_POST['action']==="submitted"){
@@ -188,7 +187,7 @@ function multiselected($post,$val){
 		}
 		switch($_POST[$action]){
 			case 1: //Contient
-					$sql.="LIKE '%".$_POST[$text]."%' ";
+				$sql.="LIKE '%".$_POST[$text]."%' ";
 				break;
 			case 2: //commence
 				$sql.="LIKE '".$_POST[$text]."%' ";
@@ -397,7 +396,7 @@ function multiselected($post,$val){
 			print '</table>';
 			print '<SELECT name="action" >
 					<OPTION value="sendmail" > Envoyer Email</OPTION>
-					</SELECT>';
+			       </SELECT>';
 			print '<input type="submit" value="Go"></FORM>';
 		break;
 		case 3: //Trombino
