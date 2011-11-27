@@ -469,20 +469,18 @@ $('#tree_root').checkboxTree({
       initializeChecked: 'expanded', 
       initializeUnchecked: 'collapsed',
       onCheck: {
-                ancestors: 'checkIfFull', 
                 descendants: 'check',
-                node: 'expand'
+	        node: 'expand',
       },
       onUncheck: {
                   ancestors: 'uncheck',
-                  node: 'collapse'
+	          node: 'collapse',
       }, 
 });
 $("#toggle_f_search").click(function () {
       $("#f_search").slideToggle("fast");
 });
 </script>
-
 
 <?php
 //fin else connexion
