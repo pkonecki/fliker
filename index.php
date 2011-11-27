@@ -21,7 +21,6 @@ setlocale(LC_ALL, 'fr_FR');
    "http://www.w3.org/TR/html4/strict.dtd">
 <html>
  <head>
-  <!-- meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" -->
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
@@ -94,7 +93,7 @@ $die_footer="</div></body></html>";
 <script type="text/javascript">
 $('.confirm').confirm({
   timeout:3000,
-  msg:'Etes-vous sur?',
+  msg:'Confirmez-vous cette action ?',
   wrapper:'<div class="conf_dial"></div>',
   buttons: {
 	ok:'Oui',
