@@ -327,7 +327,7 @@ function multiselected($post,$val){
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
-			print '<thead><tr><th>Fiche</th><th>Solde</th>';
+			print '<thead><tr><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
 				if ($champ[user_viewable]==1) {
 					if($champ[type]==='varchar')
