@@ -21,7 +21,7 @@ setlocale(LC_ALL, 'fr_FR');
    "http://www.w3.org/TR/html4/strict.dtd">
 <html>
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <!-- meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" -->
   <title>::Fliker::Accueil</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
