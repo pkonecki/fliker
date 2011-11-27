@@ -52,6 +52,7 @@
   * RECHERCHE :
     * bouton pour n'afficher que les "impossibles" (pour inciter bureau à activer un supplément qui manque)
     * bouton pour recherche "pas de certif" et "pas de photo"
+    * <s>ne développer que le search tree nécessaire par défaut (sinon trop long !)</s>
   * ADHESIONS :
     * gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
@@ -60,7 +61,8 @@
     * bouton pour changer son passwd (seulement par adhérent)
     * bouton pour dés/activer un compte (seulement par admin)
     * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
-    * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation)
+    * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
+    * bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
   * SECTION :
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
   * AUTRES :
