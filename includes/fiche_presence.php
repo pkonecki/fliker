@@ -10,20 +10,7 @@ if(isset($_POST['promo'])) {
 if($_POST['action']==="addpresence"){
 	modifPresence($_POST['id_adh'],$_POST['cre'],$_POST['week'],$promo,isset($_POST['present']));
 }
-print "<div class=\"tip\">".getParam('text_presence')."</div>";
-$output = "<form class=\"toggle\" action=\"index.php?page=8\" method=\"POST\" >";
-$output.= "<p>Promo :<SELECT id=\"promo\" name=\"promo\" >";
-$output.= "<OPTION value=\"$current_promo\" ".($_POST['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
-for ($i=1; $i<=10; $i++ ){
-	$p=$current_promo-$i;
-	$output.= "<OPTION value=\"$p\" ".($_POST['promo']==$p ? "selected" : "")." >$p</OPTION>";
-}
-$output.= "</SELECT></p>";
-foreach($tab as $creneau){
-	$cre = $creneau['id_cre'];
-	$output.= '<div><input '.($_POST['cre']==$cre ? "checked" : "").' type="radio" name="cre" value='.$cre.' ><h4 style="display:inline-block;">'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</h4></input></div>';
-}
-$output.= '<input type="submit" value="Ouvrir" /></form>';
+$output = "<div class=\"tip\">".getParam('text_presence')."</div>";
 if(isset($_POST['cre'])) {
 	$cre = $_POST['cre'];
 	$adhs = getAdherentsByCreneau($cre,$promo);
@@ -93,6 +80,19 @@ if(isset($_POST['cre'])) {
 	}
 	$output.= "</tr></table>";
 }
+$output.= "<form class=\"toggle\" action=\"index.php?page=8\" method=\"POST\" >";
+$output.= "<p>Promo :<SELECT id=\"promo\" name=\"promo\" >";
+$output.= "<OPTION value=\"$current_promo\" ".($_POST['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
+for ($i=1; $i<=10; $i++ ){
+	$p=$current_promo-$i;
+	$output.= "<OPTION value=\"$p\" ".($_POST['promo']==$p ? "selected" : "")." >$p</OPTION>";
+}
+$output.= "</SELECT></p>";
+foreach($tab as $creneau){
+	$cre = $creneau['id_cre'];
+	$output.= '<div><input '.($_POST['cre']==$cre ? "checked" : "").' type="radio" name="cre" value='.$cre.' ><h4 style="display:inline-block;">'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</h4></input></div>';
+}
+$output.= '<input type="submit" value="Ouvrir" /></form>';
 print $output;
 ?>
 <script type="text/javascript">
