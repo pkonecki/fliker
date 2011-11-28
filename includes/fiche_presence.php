@@ -48,7 +48,7 @@ if(isset($_POST['cre'])) {
 	$w_debut=strtotime("next Monday",$w_debut);
 	$w_fin=strtotime("06/30/{$promo}");
 	$date=$w_debut;
-	$output.= "<table><thead><tr><th>Jour<br>Mois</th>";
+	$output.= "<table><thead><tr><th></th><th>Jour<br>Mois</th>";
 	while ($date < $w_fin ){
 		$week=strftime("%V",$date);
 		$p=strftime("%G",$date);
@@ -58,14 +58,16 @@ if(isset($_POST['cre'])) {
 	}
 	$output.= "</tr></thead>";
 	$date=$w_debut;
-	$output.= "<tfoot><tr><td></td>";
+	$output.= "<tfoot><tr><td></td><td></td>";
 	while ($date < $w_fin ){
 		$output.= "<td></td>";
 		$date = strtotime("+1 week",$date);
 	}
 	$output.= "</tr></tfoot>";
+	$i = 0;
 	foreach($adhs as $id_adh => $row){
-		$output.= "<tr><th>{$row['prenom']} {$row['nom']}</th>";
+		$i++;
+		$output.= "<tr><th>{$i}</th><th>{$row['prenom']}<br>{$row['nom']}</th>";
 		$date=$w_debut;
 		while ($date < $w_fin){
 			$week=strftime("%V",$date);
