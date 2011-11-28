@@ -38,12 +38,13 @@
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
   * bug check n° tel
-  * <s> PAIEMENTS:
-    * Numéro de carte asesco:
+  * PAIEMENTS:
+    * <s>Numéro de carte asesco:
       * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
       * proposer le 1er n° libre + textbox pour saisir un autre choix
       * ne pas créer un numéro si il existe déjà
-      * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)</s>
+      * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)
+      </s>
     * id_asso/num_carte --> table (plusieurs assos pour un adherent)
       * <s>Faire table de hash entre adh et asso</s>
   * PROMOS :
@@ -58,7 +59,7 @@
     * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
     * fonction pour vraiment supprimer un sport de la facture d'un adhérent
   * ADHERENTS :
-    * bouton pour changer son passwd (seulement par adhérent)
+    * bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
     * bouton pour dés/activer un compte (seulement par admin)
     * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
     * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
@@ -81,9 +82,15 @@
 
 
 ===Config/Install du logiciel===
+  * Readme propre et un seul script wrapper
+  * Script init pour créer compte admin
+  * Internationalisation :
+    * <s>gestion du symbole monétaire</s>
+    * param de config pour choisir langue
+    * codage des strings affichées à l'écran dans des tables sql, indéxées par le param de locale ... (cf. wikipedia)
   * <s>Fichier de config avec params connexion sql</s>
-  * Mettre url base site dans table "admin" (ou fichier conf ?)
-  * Script d'init pour exécuter un sql (init db avec préfixe) + créer compte admin
+  * <s>Mettre url base site dans table "admin" (ou fichier conf ?)</s>
+  * <s>Script d'init pour exécuter un sql (init db avec préfixe)</s>
 
 
 ===Login/Logout===
@@ -92,8 +99,9 @@
 
 ===Notion de promo===
   * Page admin :
+    * booléen pour mode standby (inscriptions ok mais temporairement plus d'adhésions)
+    * stocker/modifier Bornes de la Promo courante (actuellement hardcodées = next Monday after 31/08 --> sem du 30/06)
     * <s>changer de promo courante (stocker dans table sql)</s>
-    * booléen mode standby (inscriptions ok mais pas d'adhesions)
   * <s>Champ promo dans table adhesions/paiements</s>
   * <s>Champ promo dans table présences</s>
   * <s>bouton changer promo pour affichage (paiements + adhésions + présence)</s>
@@ -101,64 +109,101 @@
 
 
 ===Changements UML===
-    * <s>Nouveau supplément_cotisation asso</s>
-    * <s>Supprimer champs cotisation dans asso</s>
-    * <s>Généraliser Responsables (idem suppléments)</s>
-    * <s>Supprimer lien id_prof adherent <> créneau</s>
-    * <s>généraliser supplément sections / activité / creneaux </s>
-    * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
+  * <s>Nouveau supplément_cotisation asso</s>
+  * <s>Supprimer champs cotisation dans asso</s>
+  * <s>Généraliser Responsables (idem suppléments)</s>
+  * <s>Supprimer lien id_prof adherent --> créneau</s>
+  * <s>généraliser supplément sections / activité / creneaux</s>
+  * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
 
 
 ===Associations===
+  * <s>Ajout/Modif/Suppression entité (nom/desc/logo/url)</s>
+    * ! suppression devrait être remonté au niveau/droit "admin" !
+  * <s>Ajout/Suppression Cotisation</s>
+  * <s>Ajout/Suppression Responsable</s>
+    * ! problème du plugin de scrollbox intelligente !
   * <s>Tables des statuts (etudiant/personel/exterieur ...)</s>
-  * <s>associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments déclarés</s>
+  * <s>associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments affichés</s>
 
 
 ===Sports===
   * Catégorie : table de catégories + table de hash activité/categorie
-    * Fonction de saisie/modif catégories d'activités pour responsables activités + admins etc... 
-  * <s>description</s>
-  * <s>logo</s>
+    * Fonction de saisie/modif catégories d'activités pour responsables activités + admins etc...
+  * <s>Section
+    * Ajout/Modif/Suppression entité (nom/desc/logo/url)
+    * Ajout/Suppression Supplément (type/val/par/pour)
+    * Ajout/Suppression Responsable
+    * rmq : association gestionnaire = asso sélectionnée pour création section !
+    </s>
+      * ! il manque un formulaire pour ajouter/supprimer une asso co-gestionnaire !
+  * <s>Activité
+    * Ajout/Modif/Suppression entité (nom/desc/logo/url)
+    * Ajout/Suppression Supplément (type/val/par/pour)
+    * Ajout/Suppression Responsable
+    </s>
+  * <s>Créneau
+    * Ajout/Modif/Suppression entité (jour/hdeb/hfin/lieu)
+    * Ajout/Suppression Supplément (type/val/par/pour)
+    * Ajout/Suppression Responsable
+    </s>
+  * ! imposer une liste fixe de types de suppléments !
 
 
 ===Adhérents===
+  * Case à cocher : je n'ai pas d'adresse email
+    * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc.
+    * autre possibilité : gérer par représentation (1 seul email parent pour plusieurs fiches ...)
+    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
+  * Vérification par un gestionnaire : case à cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
+    * LDAP utilisera cette case
+    * Table de hash champ_adherent à vérifier --> id_adherent + date_verif + id_verif
+  * +champs date de validation du cookie
+  * +champs date de dernière modif du droit à l'image
+  * +champ exemple dans champs_adherent
+  * Séparer données login/données perso ? --> Customisations supplémentaires assos locales
+  * ? créer nouvelle section/activité compète ? <s>Compétiteur (o/n)</s>
   * <s>Catégorie Homme/Femme --> Masculin/Féminin</s>
   * <s>-preinscription --> +date creation</s>
   * <s>+adresse professionnelle (cf customisation locale PSUC)</s>
   * <s>+choix assurance : j'ai lu ou non / j'accepte ou non</s>
-  * <s>+droit à l'image oui/non</s>
+  * <s>+droit à l'image (o/n)</s>
   * <s>Deux champs nom / tel pour personnes à contacter en cas d'urgence</s>
   * <s>affichage du certif</s>
   * <s>+signature valide quand adresse email validée</s>
   * <s>+numéro d'agent</s>(cf numayantdroit : numéro de carte étudiant/CNRS etc...)
   * <s>numcarte = numéro de carte asesco/PSUC etc...</s>
   * <s>+ Statut (exterieur/CNRS/UFR Science/Droit/Pharma/Medecine/STAPS/IUT Orsay/Cachan/Sceaux/Polytech'ParisSud/Supoptique/Supélec/X/INRIA/CEA/autres académique)</s>
-  * +champs date de validation du cookie
-  * +champs date de dernière modif du droit à l'image
-  * +champ exemple dans champs_adherent
-  * Case a cocher : je n'ai pas d'adresse email
-    * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc. 
-    * Possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
-  * Compétiteur : vrai /faux (il suffit de gérer cette info via fonctions existantes (section/activité/supplément) --> documenter !)
-  * Vérification par un gestionnaire : case a cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
-    * LDAP utilisera cette case
-    * Table de hash champ adherent < - > adherent + date
-  * <s>modularité --> deux tables : data + description des data </s>
-  * <s>vérification : langage simplifié de format (à determiner)</s>
-  * Séparer données login/données perso? Customisation supplémentaire assos locales
+  * <s>modularité --> deux tables : data + description des data</s>
+  * <s>vérification des saisies : langage simplifié de format et de obligatoire/facultatif</s>
+
+
+===Images===
+  * Stocker métadata des champs images:
+    * Permanent (o/n)
+      * si 'n' alors Age de purge
+    * Date de purge
+    * Extension du reformatage par défaut
+    * Taille du redimensionnement par défaut
+    * Taille du thumb
+  * <s>Stocker dans un repertoire en modifiant le nom du fichier : id.ext</s>
+    * <s>Certificat médical</s>
+    * <s>photo</s>
+  * <s>Protection des répertoires de stockage (index.htm ou .htaccess ou autre ...)</s>
 
 
 ===Inscriptions===
-  * captcha en confirmation
-  * <s>conservation données en post</s>
-  * <s>identifiant : email</s>
-    * Demander 2 fois email
+  * ? pas nécessaire ? <s>captcha en confirmation</s>
+  * ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
+  * <s>identifiant = email</s>
+    * ? pas nécessaire ? <s>Demander 2 fois email</s>
   * <s>gestion de password</s>
     * <s>Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
-    * <s>page séparée : oui</s>
-    * ? pas nécessaire ? liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire) ...
-    * encourager l'inscription chez d'autres assos (liste unique + popup d'info onmousehover)
+    * <s>faire page séparée</s>
+    * ? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
+    * <s>encourager l'inscription chez d'autres assos (liste unique</s> + popup d'info onmousehover)
+    * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
   * 2 Scénarii d'inscription :
     * recherche par critère (portail sport)
       * mémorisation des sports choisis
@@ -176,133 +221,112 @@
       * choix des sports (liste javascript) avec choix manuel asso (si suppléments existent pour le statut déclaré) ou "impossible" (mais conservé si pas de sup)
       * affichage facture
       </s>
-  * Stocker dans un repertoire en modifiant le nom du fichier : id.ext		
-    * <s>Certificat médical</s>
-    * <s>photo</s>
-    * Métadata des champs images:
-      * Permanent o/n
-      * Date de purge
-      * Age de purge
-      * Extension du format par défaut
-      * Taille de redimensionnement par défaut
-      * Taille thumb
-  * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
 
 
 ===Paiements===
-  * <s>Faire table de hash paiement < - > adhésion </s>
+  * <s>Faire table de hash paiement --> adhésion</s>
   * <s>affichage du Solde: prendre adhésions selon créneaux visibles par la personne qui regarde, puis selects paiements de ces adhésions et calcul diff</s>
   * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
   * <s>calcul auto total du paiement (pour comparaison avec val du chq)</s>
-  * <s>stocker/afficher : paiement enregistré par "nom"</s>
+  * <s>stocker/afficher : paiement enregistré par "nom" le "date" (différente de date du paiement)</s>
   * <s>gestion statut : active/résilié</s>/impossible
-  * <s>ajout champs "date de la transaction"</s>
 
 
 ===Présences===
-  * <s> Table de hash créneau < - > adhérent </s>
-    * <s> Afficher/Remplir présence --> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher </s>
-    * <s> Affichage / archivage selon promo </s>
-    * bouton pour Imprimer fiche de présence
-  * Evénements exceptionnels (stages, matchs...) : table spéciale ?
-  * Stocker dates vac et fériés pour supprimer colonnes présences ?
+  * Bouton pour Imprimer fiche de présence
+  * ? Stocker dates vac et fériés pour supprimer colonnes inutiles ?
+  * ? créer une nouvelle section ? <s>Evénements exceptionnels (stages, matchs...) : table spéciale</s>
+  * <s>Table de hash créneau --> adhérent</s>
+    * <s>Afficher/Remplir présence --> pour chaque créneau dont je suis responsable : tableau adhérents / semaines avec cases à cocher</s>
+    * <s>Affichage / archivage selon promo</s>
 
 
 ===Recherches===
-  * Recherche modulaire : 
-    * <s>Ajouter regles de recherche / et </s>/ou
-    * <s>Par defaut: nom,prénom,email,catégorie (détecter si vide) --> utiliser table des champs</s>
-    * Selection des colonnes à afficher <s>(au moins un menu partiel : résumé / complet / trombino ...)</s>
-  * Critères:
+  * Recherche modulaire :
+    * Sélection des colonnes à afficher <s>(au moins un menu partiel : résumé / complet / trombino ...)</s>
+    * Ajouter recherche par statut et/ou par asso
+      * afficher asso d'appartenance dans résultat
+    * Ajouter recherche de certmed/photo manquant
+    * Ajouter recherche de désactivé / impossible
+    * AJouter recherche d'encadrant non adhérent
+    * Ajouter recherche de paiement qui correspond plus à rien
+    * <s>Ajouter règles de recherche (et</s>/ou)
+    * <s>Par défaut: nom,prénom,email,catégorie (détecter si vide) --> utiliser table des champs</s>
+  * Critères :
     * <s>Nom, Prénom, Email, Catégorie (masculin/féminin)</s>
     * <s>Par créneau/activité/section/asso --> menu arbre</s>
       * <s>Décocher automatiquement si vide en dessous</s>
+      * <s>Développer arbre seulement si nécessaire</s>
     * <s>Check : Avec ou sans photo</s>
-    * <s>Radio: Complet/Normal/Trombino</s>
-    * <s>Select Solde a jour/pas a jour</s>
+    * <s>Radio : Complet/Normal/Trombino</s>
+    * <s>Select Solde (à jour/pas à jour)</s>
   * <s>Restreindre liste des sports en fonction du niveau (que les sports d'un prof)</s>	
-  * <s>bouton pour n'afficher que les "responsables" (ass/sec/act/cre)</s>
-  * <s>bouton pour n'afficher que les "àjour" ou "pas àjour" (statut paiement)</s>
+  * <s>boutons pour n'afficher que les "responsables" (ass/sec/act/cre)</s>
   * <s>si aucun sport coché alors afficher les adhérents actifs mais sans adhésion pour promo en cours (uniquement pour resp asso)</s>
-  * <s>comptes désactivés affichés en rouge ou avec un flag visible</s>
-  * Possibilité recherche restreinte (juste nom/prénom + case envoi email (mais email caché)) pour les simples pratiquants dans leur activité
+  * <s>comptes désactivés affichés en rouge</s>
 
 
-===Fonctions de saisie/modification===
-  * Gestion de privilèges descendante (Bureau peut attribuer droit prof)
-    * Notification email prof bureau en cas de modif de ses droits
-      * (BP) Préférences notification weekly/daily/a chaque fois/non
-    * Privilèges détectés par les tables de hash responsables
-      * Donne droit modification sur tout (sauf responsable) ce qui est  à son niveau et en dessous
-      * Donne droit a donner des droits (=designer un responsable) seulement sur ce qui est en dessous et dans la même association
-    * Administrateur : champ privilège à 1 dans table adhérent
-  * Ajout Enregistrement paiement --> bureau
-  * Table de hash asso/section (initialisée par création section) --> défini qui a le droit supprimer/modifier la section y compris les suppléments + donne le droit de recherche
-    * Les suppléments définissent un droit de recherche sur les sections/etc... aussi bien avec id_asso_paie que id_asso_adh
-  * Association 
-    * Ajout entité
-    * Ajout Supplément
-    * Ajout Responsable
-  * Section
-    * Ajout entité
-    * Ajout Supplément
-    * Ajout Responsable
-    * Ajout (mais pas suppression) d'association gestionnaire dans la table de hash
-  * Activité
-    * Ajout entité
-    * Ajout Supplément
-    * Ajout Responsable
-  * Créneau
-    * Ajout entité
-    * Ajout Supplément
-    * Ajout Responsable
-  * Paiement
-    * Ajout entité : par bureau de sup.id_asso_paie
-  * Adhésion
-  * Fiche Adhérent
+===Gestion des droits & privilèges===
+  * <s>Administrateur défini par champs privilège à 1 dans table adhérent --> full read/write access (toutes assos, etc.)
+  * Héritage descendant (admin peut donner droit bureau --> resps section --> resps activité --> resps créneau)
+    * Privilèges détectés grâce à tables de hash responsables
+      * Donne droit à modification sur tout (sauf responsable) ce qui est à son niveau et en dessous
+      * Donne droit à création/suppression seulement sur ce qui est en dessous (et dans la même association)
+      * Donne droit à donner des droits (= désigner un responsable) seulement sur ce qui est en dessous (et dans la même association)
+  * Paiements :
+    * seul un membre du BUREAU de l'asso qui perçoit peut enregistrer un paiement
+    * un tel membre NE PEUT PAS enregistrer un paiement pour lui-même ! (obligation contrôle croisé)
+  * Présences :
+    * coche/décoche possible pour n'importe quel resp ayant accès au créneau et pour n'importe quel pratiquant inscrit au créneau
+  * Recherches :
+    * un resp ne voit que les créneaux auxquels il a un droit d'accès
+    * il peut lister TOUS les pratiquants à ces créneaux (y compris si autre asso) ainsi qu'ouvrir leur fiche perso et envoyer email
+    * mais il ne verra QUE les adhésions/paiements liés à ces créneaux (y compris si autre asso)
+    * il peut peut ajouter/supprimer des adhésions à un inscrit
+    * un membre de bureau asso peut lister les sans-adhésion
+  </s>
+    * Possibilité pour simples pratiquants de recherche aussi MAIS restreinte : juste nom/prénom/case envoi email (adresse cachée) et seulement dans leur activité
+    * Possibilité pour membre de bureau (voir simple resp) asso d'ouvrir la fiche perso des sans-adhésion (et ajouterdes adhésion)
+    * Possibilité pour membre de bureau (only) de modifier fiche perso d'un adhérent (y compris champs habituellement protégés)
 
 
-=== Envoi d'Email===
-  * bien gérer le from
-    * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email prof sinon
-  * Bien gérer le to
+===Envoi d'Email===
+  * bien gérer le FROM: (ou REPLY-TO:)
+    * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email utilisateur/prof sinon
+  * Bien gérer le TO:
+    * Un email par personne en TO: (timer/répartition dans le temps) <b>OU</b> bulk-email en BCC: (limitation à 200 à u-psud)
     * Vérifier qu'on envoie pas l'email deux fois à une même personne
-    * Un email par personne ; question timer/repartition dans le temps
-    * Mettre les TO en BCC:
-  * Conserver un copie des mails envoyés ou au moins mettre le from en CC: 
+  * Conserver copie des mails envoyés ou au moins mettre le from en CC: 
   * Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
-  * Possibilité pour un adhérent de se mettre en "liste rouge" (seulement contre mails des autres adhérents)
 
 
 ===Alertes / Notifications===
-  * Interface pour customiser "mon espace" (réceptions immédiates ou "digests" daily/weekly ...) :
+  * Interface pour customiser les fréquences d'alertes (weekly/daily/immediately) :
     * *tous :*
       * compte désactivé : immédiat
       * changement email : immédiat (TO: ancien + nouveau email)
-    * *pratiquants :* peuvent refuser de recevoir mails des co-pratiquants mais obligation recevoir mails des resps + alertes :
-      * pas à jour ou pas certif : weekly (ou val réglée par resp)
-      * pas d'adhésion cette année : 6 mois (ou val réglée par resp)
-      * adhésion devenue possible : choisir une asso
-    * *responsables :* obligation recevoir tous mails + alertes mais réglage possible des fréquences :
-      * stats de taille de la base sql (prévenir risques explosions) : weekly
+    * *pratiquants :* --> peuvent refuser recevoir mails co-pratiquants mais obligation recevoir mails resps
+      * adhésion devenue possible : immédiat --> choisir une asso
+      * solde pas à jour : daily
+      * pas photo ou pas certif : weekly
+      * pas d'adhésion cette année : ?? monthly ??
+    * *responsables :* --> obligation recevoir tous mails
       * liste des responsables qui ne sont pas adhérents de leur section : weekly
+      * stats de taille de la base sql (prévenir risques explosions) : ? weekly ?
+      * liste des comptes jamais activés (à purger ?) : ? weekly ?
       * nouvelle adhésion impossible : immédiat
       * nouvelle adhésion (invitation à prendre contact) : immédiat
       * section désactivée : immédiat
-  * Interface pour déclencher manuellement ou cron (daily/weekly ...) les checks :
-    * /!\ Gens pas à jour (solde != 0 ou adhésions devenues possibles)
-    * /!\ Pas de certificats médical (surtout pour compétiteurs)
-    * /!\ Pas d'adhésion
-    * /!\ Pas de confirmation du cookie par email et/ou email invalide
-    * /!\ Adhésion impossible
-    * /!\ Paiement qui ne correspond plus à une facture (ex : statut du pratiquant a changé or paiement déjà fait => plus de correspondance paiement/supplément => admin doit detruire paiement et le resaisir)
+      * ajout ou retrait de droits : immédiat
+      * paiement qui ne correspond plus à une facture (ex : statut du pratiquant a changé ou paiement déjà fait --> plus de correspondance paiement/supplément) immédiat --> détruire paiement et resaisir
+  * ? Interface pour customiser "mon espace" (réceptions des mails d'info weekly/daily/immediately/never) ? (si never alors stockage des messages dans interface ?)
 
 
 ===plugin LDAP===
-  * booléen d'activation du check + params connexion dans table/config
-  * champs validation LDAP : 3 valeurs : faux/vrai/desactivé
+  * booléen d'activation du check + params connexion ldap dans table/config
+  * champs validation LDAP (cf. aussi plus haut) --> 3 valeurs : faux/vrai/desactivé
   * + réglage fréquence du check
-  * + notification associée vers responsable (et pratiquant ?)
+  * + notification associée vers responsable (et pratiquant) si échec : daily
 
 
 ===plugins paiements en ligne===
@@ -318,11 +342,14 @@
 
 
 ===Synoptiques/Statistiques===
-  * tableau promos / sections
-    * nbr d'inscrits à jour (par assos)
-    * nbr d'inscrits assidus mais pas à jour (par assos)
-    * nbr touristes = pas assidus et pas à jour (par assos)
-    * recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections = asso)
+  * tableau promos / sections (par assos)
+    * nbr d'inscrits à jour
+      * nbr H/F
+      * ? nbr compète ?
+      * détail par UFRs ...
+    * nbr d'inscrits assidus mais pas à jour
+    * nbr touristes = pas assidus et pas à jour
+  * tableau des recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections par asso)
 
 
 ===Feuille de Prof===
@@ -330,17 +357,11 @@
     * diplome (type, fédé, n°)
     * n° insee et nationalité (pour les cotise ursaf et autres)
     * dates d'embauches (prévoir en fait un contrat horaire par promo)
-    * taux horaire (+ type : salaire, vacation, gratification, indemnité km ...)
-  * relier au système de présences (et de votes/feedback ?)
+    * taux horaire (+ type : salaire, vacation, gratification, indemnité km ...) --> relier au système d'inventaire / dépenses ...
+  * relier au système de présences (--> faire votes/feedback/évaluation du prof ?)
 
 
-===Table de Customisation / Admin===
-  * ajouter des champs dans la fiche adhérent
-    * et gérer les descriptions + formats de saisie acceptés
-  * stocker/modifier Bornes de la Promo courante
-    * actuellement hardcodé = (next Monday after 31/08 --> sem du 30/06)
-  * interface pour créer des alertes
-  * internationalisation :
-    * <s>gestion du symbole monétaire</s>
-    * param de config pour choisir langue
-    * codage des strings affichées à l'écran dans des tables sql, indéxées par le param de locale ... (cf. wikipedia)
+===Gestion inter-fliker===
+  * réfléchir protocole d'échange de données pour permettre à plusieurs instances de travailler indépendamment (serveurs distincts)
+    * séparer les admins par asso si besoin
+    * redondance / sécurité des infos
