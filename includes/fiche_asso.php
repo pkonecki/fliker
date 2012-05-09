@@ -1,6 +1,6 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-session_start();
+/*session_start();*/
 if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 	die();
@@ -16,7 +16,7 @@ if(isset($_GET['promo'])) {
 } else {
 	$promo=$current_promo;
 }
-if ($_POST['action'] == 'modification') {
+if (isset($_POST['action']) && $_POST['action'] == 'modification') {
 	print '<h2>Fiche Association: Modification</h2>';
 	print '<FORM id="f_asso_modif" action="index.php?page=3&asso='.$_GET['asso'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -31,7 +31,7 @@ if ($_POST['action'] == 'modification') {
 	print '</FORM>';
 
 } else
-if ($_POST['action'] == 'new') {
+if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '<h2>Nouvelle Association</h2>';
 	print '<FORM id="f_asso_new" action="index.php?page=3" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -46,32 +46,32 @@ if ($_POST['action'] == 'new') {
 
 }
 else {
-	if ($_POST['action'] === 'submitted'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted'){
 		modifAsso($_POST);
 
 	}
-	if ($_POST['action'] === 'submitted_new'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new'){
 		newAsso($_POST);
 
 	}
-	if ($_POST['action'] === 'suppression'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression'){
 		delAsso($_POST['id']);
 
 	}
-	if ($_POST['action'] === 'suppression_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp'){
 		delRespAsso($_POST['id_asso'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'new_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_resp'){
 		ajoutResponsableAsso($_POST['id_asso'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'suppression_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup'){
 		delSup($_POST['id_sup']);
 	}
-	if ($_POST['action'] === 'new_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
 		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],$promo);
 	}
-	if ($_POST['action'] === 'copy_old_sups'){
+	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups'){
 		$sups = getSup("association",$_GET['asso'],$_POST['old_promo']);
 		foreach ($sups as $key => $value) {
 			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";
@@ -119,7 +119,11 @@ else {
 			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['asso']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
 			$photo="includes/thumb.php?folder=logo_asso&file=".$_GET['asso'].".jpg";
-			print '<tr><TD>'.$row[description].'</TD><TD><img src="'.$photo.'" ></TD></tr>';
+			if (isset($row['description']))
+				$tmp_stock = $row['description'];
+			else
+				$tmp_stock = "";
+			print '<tr><TD>'.$tmp_stock.'</TD><TD><img src="'.$photo.'" ></TD></tr>';
 			print '<tr>';
 			print '<td colspan="2"><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />
@@ -147,7 +151,6 @@ else {
 					<a href="index.php?page=4&section='.$section['id'].'">'.$section['nom'].'</a>
 					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
-
 			}
 			print '</ul>';
 			print '<td colspan=2><FORM action="index.php?page=4" method="POST">
@@ -232,7 +235,8 @@ else {
 		}
 
 	}
-	else {
+	else
+	{
 		print "<p>Vous n'êtes pas connecté</p>";
 	}
 }

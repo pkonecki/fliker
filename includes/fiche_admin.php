@@ -1,6 +1,6 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-session_start();
+/*session_start();*/
 if(!($_SESSION['privilege']==='1')){
 	print "Vous n'avez pas accès à cette page.";
 	print $die_footer;
@@ -12,7 +12,7 @@ if(isset($_GET['promo'])) {
 } else {
 	$promo=$current_promo;
 }
-if($_POST['action']==="setparam"){
+if(isset($_POST['action']) && $_POST['action']==="setparam"){
 	setParam($_POST['id'],htmlspecialchars($_POST['valeur']));
 }
 

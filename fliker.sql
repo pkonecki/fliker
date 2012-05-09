@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.3.9
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Ven 02 Septembre 2011 à 15:55
--- Version du serveur: 5.1.44
--- Version de PHP: 5.3.1
+-- Généré le : Mer 09 Mai 2012 à 09:55
+-- Version du serveur: 5.5.8
+-- Version de PHP: 5.3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de données: `fliker`
+-- Base de données: `asesco`
 --
 
 -- --------------------------------------------------------
@@ -34,15 +34,6 @@ CREATE TABLE IF NOT EXISTS `fliker_activite` (
   PRIMARY KEY (`id`),
   KEY `id_sec` (`id_sec`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_activite`
---
-
-INSERT INTO `fliker_activite` (`id`, `nom`, `description`, `url`, `id_sec`) VALUES
-(5, 'Kung Fu', 'Gigalol', 'http://kungfu.com', 3),
-(6, 'Tai Chi', '.....', 'http://taichi.com', 3),
-(7, 'Baby Foot', '', 'http://somurl.com', 4);
 
 -- --------------------------------------------------------
 
@@ -81,21 +72,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_statut` (`id_statut`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
-
---
--- Contenu de la table `fliker_adherent`
---
-
-INSERT INTO `fliker_adherent` (`id`, `privilege`, `numcarte`, `numayantdroit`, `categorie`, `id_statut`, `prenom`, `nom`, `naissance`, `photo`, `certmed`, `tel1`, `tel2`, `email`, `adresse1`, `adresse2`, `code_postal`, `adresse_pro`, `last_modif`, `charte`, `assurance`, `droit_image`, `date_creation`, `contact_urgence`, `contact_urgence_tel`, `active`, `activationkey`, `password`) VALUES
-(28, 1, '', '2030322269', 'M', 13, 'Pierre-Olivier', 'Konecki', '1987-07-08', 1, '1', '0672536844', '979878968', 'pkonecki@gmail.com', '5 Place de la Muette', '', '78990', 'PROUT', '2011-08-29 10:37:55', 1, 1, 1, '2011-05-14 15:04:08', 'pmarty', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(34, 0, '97987', '65465464', 'M', 5, 'Jackie', 'Chan', '1971-06-09', 1, '0', '3646456465', '6546546546', 'jackie.chan@kungfu.com', '2 rue du Soleil Levant', '', '91440', '', '2011-08-09 11:53:43', 1, 0, 0, '2011-06-05 21:00:19', 'Bruce Lee', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(35, 0, '', '11', 'M', 3, 'Zinédine', 'Zidane', '1914-06-11', 1, '', '01238934', '9374934', 'zinedine@football.com', '3 rue du Ballon Rond', '', '75001', '', '2011-06-13 17:16:55', 1, 0, 0, '2011-06-06 09:17:16', 'Fabien Barthez', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(36, 0, '', '97979878', 'F', 6, 'Aurore', 'Deberon', '1988-11-27', 1, '', '987979879', '98797979', 'aurore2127@gmail.com', '12 avenue du Belvédère', '', '91190', '', '2011-06-13 16:24:14', 1, 0, 0, '2011-06-10 11:42:50', 'kjdfdksjf', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(37, 0, '', '09809809', 'M', 13, 'John', 'Doe', '1987-07-08', 1, '', '09808098', '0980989', 'john.doe@mail.com', 'Nulle Part', '', '99999', '', '2011-06-16 18:27:40', 1, 0, 0, '2011-06-16 18:24:25', 'L''homme invisible', '', 0, '', '5d41402abc4b2a76b9719d911017c592'),
-(38, 0, '', '08098', 'M', 13, 'Man', 'Test', '2011-07-06', 1, '', '098098', '0980808', 'gros@bill.com', 'jhfsdk', '09098', '09808', '', '2011-07-07 21:15:29', 1, 0, 0, '2011-07-07 21:15:29', '098098', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(41, 1, '', '12345', 'M', 13, 'philippe', 'marty', '1973-02-18', 1, '', '0678912345', '0123456789', 'pmarty@geocities.com', '12 allée des 3 quarts', '', '91234', '', '2011-07-27 10:41:41', 1, 0, 0, '2011-07-27 10:41:41', 'moi', '', 1, '', '5d41402abc4b2a76b9719d911017c592'),
-(42, 0, '', '20303222', 'M', 13, 'LKDJGLSDFK', 'LDSKFJDSLK', '1986-06-26', 1, '1', '33672536844', '33672536844', 'meneo.tk@gmail.com', 'My Billing Address', 'Megaupload', '91440', '', '2011-08-26 08:52:42', 1, 0, 0, '2011-08-26 08:52:42', 'Maman 66666', '', 1, '', '5d41402abc4b2a76b9719d911017c592');
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=369 ;
 
 -- --------------------------------------------------------
 
@@ -115,34 +92,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   KEY `id_adh` (`id_adh`),
   KEY `id_cre` (`id_cre`),
   KEY `id_asso` (`id_asso`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=43 ;
-
---
--- Contenu de la table `fliker_adhesion`
---
-
-INSERT INTO `fliker_adhesion` (`id`, `date`, `id_adh`, `id_cre`, `statut`, `promo`, `id_asso`) VALUES
-(16, '2011-08-10 09:29:09', 28, 8, 0, 2011, 1),
-(17, '2011-08-10 09:29:09', 28, 13, 1, 2011, 2),
-(18, '2011-08-10 09:29:56', 34, 9, 0, 2011, 2),
-(19, '2011-08-10 09:29:56', 34, 10, 0, 2011, 2),
-(20, '2011-08-10 09:29:56', 34, 8, 0, 2011, 2),
-(21, '2011-08-10 09:29:56', 34, 12, 0, 2011, 2),
-(22, '2011-08-10 09:33:35', 35, 13, 0, 2011, 2),
-(23, '2011-08-10 09:33:35', 35, 14, 0, 2011, 2),
-(24, '2011-08-10 09:34:17', 36, 9, 0, 2011, 1),
-(25, '2011-08-10 09:34:17', 36, 10, 0, 2011, 1),
-(26, '2011-08-10 09:34:17', 36, 8, 0, 2011, 1),
-(27, '2011-08-10 09:34:17', 36, 12, 0, 2011, 1),
-(28, '2011-08-10 09:35:52', 37, 8, 0, 2011, 2),
-(29, '2011-08-10 09:35:52', 37, 12, 0, 2011, 2),
-(30, '2011-08-10 09:37:59', 38, 8, 1, 2011, 1),
-(31, '2011-08-16 14:35:03', 28, 14, 0, 2011, 2),
-(32, '2011-08-26 09:45:07', 28, 9, 0, 2011, 1),
-(39, '2011-09-01 14:01:25', 36, 13, 0, 2011, 2),
-(40, '2011-09-01 14:01:25', 36, 14, 2, 2011, NULL),
-(41, '2011-09-02 10:53:29', 34, 13, 0, 2011, 2),
-(42, '2011-09-02 10:53:29', 34, 14, 0, 2011, 2);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=589 ;
 
 -- --------------------------------------------------------
 
@@ -158,14 +108,6 @@ CREATE TABLE IF NOT EXISTS `fliker_association` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_association`
---
-
-INSERT INTO `fliker_association` (`id`, `nom`, `description`, `url`) VALUES
-(1, 'Asesco', 'Association des étudiants u-psud', 'http://www.asesco.u-psud.fr/'),
-(2, 'PSUC', 'Association du personnel', 'PSUC');
-
 -- --------------------------------------------------------
 
 --
@@ -178,15 +120,6 @@ CREATE TABLE IF NOT EXISTS `fliker_asso_section` (
   KEY `id_asso` (`id_asso`,`id_sec`),
   KEY `id_sec` (`id_sec`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_asso_section`
---
-
-INSERT INTO `fliker_asso_section` (`id_asso`, `id_sec`) VALUES
-(1, 3),
-(2, 3),
-(2, 4);
 
 -- --------------------------------------------------------
 
@@ -209,37 +142,6 @@ CREATE TABLE IF NOT EXISTS `fliker_champs_adherent` (
   PRIMARY KEY (`nom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_champs_adherent`
---
-
-INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `inscription`, `user_editable`, `user_viewable`, `search_simple`, `search_trombi`, `format`, `ordre`, `required`) VALUES
-('adresse1', 'varchar', 'Adresse', 1, 1, 1, 0, 0, 'def', 9, 1),
-('adresse2', 'varchar', 'Complément Adresse', 1, 1, 1, 0, 0, 'def', 10, 0),
-('adresse_pro', 'varchar', 'Adresse Professionnelle', 1, 1, 1, 0, 0, 'def', 25, 0),
-('assurance', 'tinyint', 'J''ai pris connaissance des conditions d''<a href="http://www.asesco.u-psud.fr/wiki/index.php?title=ASESCO:Charte" target="_blank" >assurance</a>', 1, 0, 1, 0, 0, 'def', 49, 1),
-('categorie', 'varchar', 'Catégorie', 1, 1, 1, 0, 0, 'categorie', 1, 1),
-('certmed', 'file', 'Certificat médical', 1, 1, 1, 0, 0, 'def', 60, 0),
-('charte', 'tinyint', 'J''accepte la <a href="http://www.asesco.u-psud.fr/wiki/index.php?title=ASESCO:Charte" target=_blank>charte</a>', 1, 0, 1, 0, 0, 'def', 50, 1),
-('code_postal', 'varchar', 'Code postal', 1, 1, 1, 0, 0, 'number', 11, 1),
-('contact_urgence', 'varchar', 'Contact d''urgence (nom)', 1, 1, 1, 0, 0, 'def', 12, 1),
-('contact_urgence_tel', 'varchar', 'Contact d''urgence (tel)', 1, 1, 1, 0, 0, 'telephone', 20, 1),
-('droit_image', 'tinyint', 'Je cède mon droit à l''image', 1, 1, 1, 0, 0, 'def', 46, 0),
-('email', 'varchar', 'Adresse email', 1, 0, 1, 1, 0, 'email', 8, 1),
-('id', 'int', '', 0, 0, 0, 0, 0, 'def', 0, 0),
-('last_modif', 'datetime', 'Dernière modification', 0, 0, 1, 0, 0, 'def', 0, 0),
-('naissance', 'date', 'Date de naissance', 1, 1, 1, 0, 0, 'date', 4, 1),
-('nom', 'varchar', 'Nom', 1, 1, 1, 1, 1, 'def', 2, 1),
-('numayantdroit', 'varchar', 'N° d''ayant droit (n° étudiant/n° agent)', 1, 1, 1, 0, 0, 'def', 5, 0),
-('numcarte', 'varchar', 'Numéro de carte Asesco', 0, 0, 1, 1, 1, '', 0, 0),
-('photo', 'file', 'Photo', 1, 1, 1, 1, 1, 'def', 55, 0),
-('prenom', 'varchar', 'Prénom', 1, 1, 1, 1, 1, 'def', 3, 1),
-('pre_inscription', 'datetime', '', 0, 0, 0, 0, 0, 'def', 0, 0),
-('privilege', 'int', '', 0, 0, 0, 0, 0, 'def', 0, 0),
-('statut', 'select', 'Votre statut', 1, 0, 1, 0, 0, 'def', 3, 1),
-('tel1', 'varchar', 'Télephone portable', 1, 1, 1, 1, 0, 'telephone', 6, 1),
-('tel2', 'varchar', 'Téléphone fixe', 1, 1, 1, 0, 0, 'telephone', 7, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -248,31 +150,9 @@ INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `inscription
 
 CREATE TABLE IF NOT EXISTS `fliker_config` (
   `id` varchar(255) NOT NULL,
-  `valeur` varchar(255) NOT NULL,
+  `valeur` varchar(1024) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_config`
---
-
-INSERT INTO `fliker_config` (`id`, `valeur`) VALUES
-('admin_email', 'webmaster-asesco.asso@u-psud.fr'),
-('contact_email', 'bureau-asesco.asso@u-psud.fr'),
-('currency', '€'),
-('promo', '2011'),
-('text_activite', 'Fiche d''activité'),
-('text_adherent', 'Fiche d''adhérent'),
-('text_adhesion', 'Fiche d''adhesion'),
-('text_asso', 'Fiche d''asso'),
-('text_creneau', 'FIche de créneau'),
-('text_presence', 'Fiche de présence'),
-('text_search', 'Formulaire de recherche'),
-('text_section', 'Fiche de section'),
-('text_select_asso', 'Veuillez selectionner vos associations pour chacun des créneaux'),
-('text_top', '<h1>Pouet</h1>'),
-('url_resiliation', 'http://www.asesco.u-psud.fr/wiki/index.php?title=ASESCO:Contacts'),
-('url_site', 'http://fliker.dyndns.org/');
 
 -- --------------------------------------------------------
 
@@ -291,18 +171,6 @@ CREATE TABLE IF NOT EXISTS `fliker_creneau` (
   KEY `id_act` (`id_act`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_creneau`
---
-
-INSERT INTO `fliker_creneau` (`id`, `jour`, `debut`, `fin`, `lieu`, `id_act`) VALUES
-(8, 'Lundi', '15:00:00', '16:00:00', 'Pagode de la nuit enchanté du matin', 6),
-(9, 'Jeudi', '17:00:00', '20:00:00', 'Pagode du soleil levant', 5),
-(10, 'Vendredi', '19:00:00', '20:00:00', 'Pagode du soleil levant', 5),
-(12, 'Mercredi', '19:00:00', '20:00:00', 'Temple Du Destin', 6),
-(13, 'Vendredi', '19:00:00', '20:00:00', 'L''Yvette', 7),
-(14, 'Jeudi', '19:00:00', '20:00:00', 'L''Yvette', 7);
-
 -- --------------------------------------------------------
 
 --
@@ -312,33 +180,7 @@ INSERT INTO `fliker_creneau` (`id`, `jour`, `debut`, `fin`, `lieu`, `id_act`) VA
 CREATE TABLE IF NOT EXISTS `fliker_entite` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
-
---
--- Contenu de la table `fliker_entite`
---
-
-INSERT INTO `fliker_entite` (`id`) VALUES
-(1),
-(2),
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10),
-(11),
-(12),
-(13),
-(14),
-(15),
-(16),
-(20),
-(21),
-(23),
-(24);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=128 ;
 
 -- --------------------------------------------------------
 
@@ -359,19 +201,7 @@ CREATE TABLE IF NOT EXISTS `fliker_paiement` (
   PRIMARY KEY (`id`),
   KEY `id_adh_2` (`id_adh`),
   KEY `recorded_by` (`recorded_by`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
-
---
--- Contenu de la table `fliker_paiement`
---
-
-INSERT INTO `fliker_paiement` (`id`, `date`, `date_t`, `id_adh`, `type`, `num`, `remarque`, `promo`, `recorded_by`) VALUES
-(1, '2011-01-03 19:53:02', '0000-00-00', 36, 'Cheque', '54643065503', 'Cheque en bois', 2011, 'Jean Robert'),
-(9, '2011-08-09 22:43:08', '0000-00-00', 36, 'Cheque', '9998', 'Cheque du 20 Aout', 2011, 'Daniel Auteuil'),
-(10, '2011-08-17 10:39:53', '0000-00-00', 36, 'Cheque', '98797889', 'Blahbalhba', 2011, 'Mac Gyver'),
-(12, '2011-08-23 17:11:11', '0000-00-00', 36, 'Cheque', '9879878', 'wesh', 2011, 'Johnny Cash'),
-(13, '2011-08-23 17:11:56', '0000-00-00', 35, 'Cheque', '9798', 'IOhidsh', 2011, 'Clark Kent'),
-(16, '2011-08-24 20:29:50', '2011-08-09', 38, 'Cheque', '0897', 'Blahbalhba', 2011, 'Konecki Pierre-Olivier');
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=273 ;
 
 -- --------------------------------------------------------
 
@@ -386,33 +216,6 @@ CREATE TABLE IF NOT EXISTS `fliker_paiement_sup` (
   KEY `id_paiment` (`id_paiement`,`id_sup`),
   KEY `id_adhesion` (`id_sup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_paiement_sup`
---
-
-INSERT INTO `fliker_paiement_sup` (`id_paiement`, `id_sup`, `valeur`) VALUES
-(1, 42, 50),
-(1, 46, 2),
-(9, 44, 100),
-(10, 47, 10),
-(10, 42, 0),
-(10, 38, 5),
-(10, 41, 7),
-(10, 39, 5),
-(10, 35, 7),
-(12, 47, 14),
-(12, 42, 50),
-(12, 38, 5),
-(12, 41, 6),
-(12, 39, 0),
-(12, 35, 0),
-(13, 49, 12),
-(13, 45, 100),
-(16, 36, 1000),
-(16, 42, 100),
-(16, 41, 13),
-(16, 35, 7);
 
 -- --------------------------------------------------------
 
@@ -429,97 +232,6 @@ CREATE TABLE IF NOT EXISTS `fliker_presence` (
   KEY `id_cre` (`id_cre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_presence`
---
-
-INSERT INTO `fliker_presence` (`id_adh`, `id_cre`, `week`, `promo`) VALUES
-(28, 12, 23, 2011),
-(34, 10, 33, 2011),
-(36, 8, 33, 2011),
-(34, 9, 32, 2011),
-(36, 10, 32, 2011),
-(34, 8, 32, 2011),
-(36, 9, 33, 2011),
-(36, 9, 10, 2011),
-(34, 9, 17, 2011),
-(34, 8, 16, 2011),
-(36, 8, 11, 2011),
-(34, 9, 13, 2011),
-(34, 9, 8, 2011),
-(34, 10, 10, 2011),
-(28, 13, 10, 2011),
-(34, 9, 38, 2011),
-(36, 9, 44, 2011),
-(34, 9, 48, 2011),
-(34, 10, 47, 2011),
-(36, 10, 42, 2011),
-(34, 10, 40, 2011),
-(36, 10, 3, 2011),
-(34, 10, 5, 2011),
-(36, 8, 45, 2011),
-(34, 8, 45, 2011),
-(37, 8, 45, 2011),
-(28, 8, 45, 2011),
-(38, 8, 45, 2011),
-(36, 8, 1, 2011),
-(28, 8, 9, 2011),
-(37, 8, 19, 2011),
-(28, 8, 22, 2011),
-(36, 8, 23, 2011),
-(34, 9, 45, 2011),
-(36, 9, 47, 2011),
-(36, 8, 52, 2011),
-(37, 8, 52, 2011),
-(37, 8, 1, 2011),
-(34, 8, 50, 2011),
-(38, 8, 52, 2011),
-(28, 8, 5, 2011),
-(36, 8, 6, 2011),
-(34, 8, 4, 2011),
-(37, 8, 49, 2011),
-(28, 8, 49, 2011),
-(34, 9, 43, 2011),
-(36, 9, 50, 2011),
-(36, 9, 2, 2011),
-(36, 9, 5, 2011),
-(34, 9, 5, 2011),
-(36, 9, 41, 2011),
-(36, 10, 49, 2011),
-(36, 10, 52, 2011),
-(36, 10, 7, 2011),
-(34, 9, 1, 2011),
-(36, 9, 52, 2011),
-(34, 10, 46, 2011),
-(36, 10, 45, 2011),
-(34, 10, 2, 2011),
-(36, 10, 12, 2011),
-(34, 10, 26, 2011),
-(36, 10, 23, 2011),
-(34, 10, 21, 2011),
-(34, 10, 20, 2011),
-(36, 10, 20, 2011),
-(34, 10, 19, 2011),
-(36, 10, 19, 2011),
-(34, 10, 18, 2011),
-(34, 10, 16, 2011),
-(34, 10, 14, 2011),
-(34, 10, 50, 2011),
-(34, 12, 51, 2011),
-(36, 12, 47, 2011),
-(28, 9, 3, 2011),
-(28, 9, 6, 2011),
-(28, 9, 7, 2011),
-(28, 9, 8, 2011),
-(28, 9, 9, 2011),
-(28, 9, 10, 2011),
-(28, 9, 11, 2011),
-(28, 9, 12, 2011),
-(28, 9, 13, 2011),
-(28, 9, 45, 2011),
-(28, 9, 48, 2011),
-(28, 9, 41, 2011);
-
 -- --------------------------------------------------------
 
 --
@@ -532,14 +244,6 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
   PRIMARY KEY (`id_act`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_resp_act`
---
-
-INSERT INTO `fliker_resp_act` (`id_act`, `id_adh`) VALUES
-(6, 37),
-(6, 38);
 
 -- --------------------------------------------------------
 
@@ -554,14 +258,6 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_resp_asso`
---
-
-INSERT INTO `fliker_resp_asso` (`id_asso`, `id_adh`) VALUES
-(1, 38),
-(2, 38);
-
 -- --------------------------------------------------------
 
 --
@@ -575,14 +271,6 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_resp_cren`
---
-
-INSERT INTO `fliker_resp_cren` (`id_cre`, `id_adh`) VALUES
-(13, 35),
-(8, 38);
-
 -- --------------------------------------------------------
 
 --
@@ -595,13 +283,6 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   PRIMARY KEY (`id_sec`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_resp_section`
---
-
-INSERT INTO `fliker_resp_section` (`id_sec`, `id_adh`) VALUES
-(3, 34);
 
 -- --------------------------------------------------------
 
@@ -618,14 +299,6 @@ CREATE TABLE IF NOT EXISTS `fliker_section` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `fliker_section`
---
-
-INSERT INTO `fliker_section` (`id`, `nom`, `url`, `description`, `logo`) VALUES
-(3, 'Arts Martiaux', 'http://am.com', 'Blablablalalba', ''),
-(4, 'Sports Collectifs', 'http://somurl.com', 'Foot, Basket toussa', '');
-
 -- --------------------------------------------------------
 
 --
@@ -637,36 +310,6 @@ CREATE TABLE IF NOT EXISTS `fliker_statut` (
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
-
---
--- Contenu de la table `fliker_statut`
---
-
-INSERT INTO `fliker_statut` (`id`, `nom`) VALUES
-(1, 'étudiant IUT Cachan'),
-(2, 'étudiant IUT Orsay'),
-(3, 'étudiant IUT Sceaux'),
-(4, 'étudiant Jean Monnet'),
-(5, 'étudiant Médecine'),
-(6, 'étudiant Pharmacie'),
-(7, 'étudiant Polytech PSud'),
-(8, 'étudiant Polytechnique'),
-(9, 'étudiant Sciences'),
-(10, 'étudiant STAPS'),
-(11, 'étudiant SupElec'),
-(12, 'étudiant SupOptique'),
-(13, 'étudiant autre'),
-(14, 'personnel CEA'),
-(15, 'personnel CNRS'),
-(16, 'personnel INRA'),
-(17, 'personnel INRIA'),
-(18, 'personnel INSERM'),
-(19, 'personnel Polytechnique'),
-(20, 'personnel Soleil'),
-(21, 'personnel SupElec'),
-(22, 'personnel SupOptique'),
-(23, 'personnel Univ PSud'),
-(24, 'extérieur');
 
 -- --------------------------------------------------------
 
@@ -686,38 +329,7 @@ CREATE TABLE IF NOT EXISTS `fliker_sup` (
   KEY `id_statut` (`id_statut`),
   KEY `id_asso_adh` (`id_asso_adh`),
   KEY `id_asso_paie` (`id_asso_paie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=70 ;
-
---
--- Contenu de la table `fliker_sup`
---
-
-INSERT INTO `fliker_sup` (`id`, `promo`, `type`, `valeur`, `id_statut`, `id_asso_adh`, `id_asso_paie`) VALUES
-(35, 2011, 'Sup Cre', 7, NULL, 1, 1),
-(36, 2011, 'Cotisation', 1000, 13, NULL, 1),
-(38, 2011, 'TEst', 10, NULL, 1, 1),
-(39, 2011, 'Test', 1, NULL, 1, 1),
-(40, 2011, 'Cotisation', 10, 13, NULL, 2),
-(41, 2011, 'Sup Act', 13, NULL, 1, 1),
-(42, 2011, 'Sup Sec', 100, NULL, 1, 1),
-(43, 2011, 'Cotisation', 23, 1, NULL, 1),
-(44, 2011, 'Sup Sec 2', 102, NULL, 2, 2),
-(45, 2011, 'Sup Psuc', 100, NULL, 2, 2),
-(46, 2011, 'Test', 2, NULL, 2, 2),
-(47, 2011, 'Cotisation', 24, 6, NULL, 1),
-(49, 2011, 'Cotisation', 12, 3, NULL, 2),
-(50, 2011, 'Cotisation', 12, 3, NULL, 1),
-(51, 2011, 'Cotisation', 63, 11, NULL, 2),
-(52, 2010, 'Cotisation', 100, 7, NULL, 1),
-(53, 2010, 'Cotisation', 93, 12, NULL, 1),
-(56, 2011, 'Cotisation', 100, 7, NULL, 1),
-(60, 2010, 'dsfdsfkl', 987987, NULL, 1, 1),
-(61, 2010, '97838', 9802, NULL, 1, 2),
-(64, 2010, '798798', 97979, NULL, 1, 2),
-(65, 2010, '97897', 9798798, NULL, 1, 2),
-(66, 2011, 'Test', 9879, NULL, 1, 1),
-(67, 2011, 'Cotisation', 234, 6, NULL, 2),
-(69, 2011, 'Cotisation', 8777, 5, NULL, 2);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=228 ;
 
 -- --------------------------------------------------------
 
@@ -733,37 +345,6 @@ CREATE TABLE IF NOT EXISTS `fliker_sup_fk` (
   KEY `id_sup` (`id_sup`),
   KEY `id_2` (`id_ent`,`id_sup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `fliker_sup_fk`
---
-
-INSERT INTO `fliker_sup_fk` (`id_ent`, `id_sup`) VALUES
-(1, 36),
-(1, 43),
-(1, 47),
-(1, 50),
-(1, 52),
-(1, 53),
-(1, 56),
-(2, 40),
-(2, 49),
-(2, 51),
-(2, 67),
-(2, 69),
-(3, 42),
-(3, 44),
-(3, 60),
-(3, 61),
-(4, 45),
-(5, 38),
-(5, 64),
-(6, 41),
-(7, 66),
-(8, 35),
-(9, 39),
-(9, 46),
-(9, 65);
 
 --
 -- Contraintes pour les tables exportées

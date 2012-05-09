@@ -70,10 +70,11 @@ function getAdherent($user){
 	$row = mysql_fetch_assoc($results);
 	foreach($tab as $champ){
 			if($champ['type']==='select'){
-				$return[$champ['nom']]=$row['id_'.$champ['nom']];
+				$return[$champ['nom']] = $row['id_'.$champ['nom']];
 			}
-			else {
-				$return[$champ['nom']]=$row[$champ['nom']];
+			else
+			{
+				$return[$champ['nom']] = $row[$champ['nom']];
 			}
 	}
 	include("closedb.php");
@@ -87,7 +88,7 @@ function getChampsAdherents(){
 	if (!$results) echo mysql_error();
 	$champs = array();
 	while($row = mysql_fetch_array($results)){
-		$champs[$row[nom]] = $row;
+		$champs[$row['nom']] = $row;
 	}
 	include("closedb.php");
 	return $champs;
