@@ -5,7 +5,7 @@
 $dbhost = "localhost";
 $dbuser = "root";
 $dbpass = "";
-$dbname = "fliker";
+$dbname = "asesco";
 
 /* VEUILLEZ EGALEMENT VOUS ASSURER
    QUE LE SERVEUR APACHE

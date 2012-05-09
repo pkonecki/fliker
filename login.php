@@ -29,7 +29,7 @@ $headerr = '
 $footer = '</body></html>';
 
 //If the user has submitted the form
-if($_POST['submit']){
+if(isset($_POST['submit'])){
 	include("opendb.php");
 	//protect the posted value then store them to variables
 	$username = protect($_POST['username']);
@@ -86,10 +86,12 @@ if($_POST['submit']){
 					$_SESSION['uid'] = $row['id'];
 					$_SESSION['user'] = $username;
 
-					foreach($tab as $champ){
-						if($champ['type']==='select') $_SESSION[$champ['nom']]=$row['id_'.$champ['nom']];
+					foreach($tab as $champ)
+					{
+						if($champ['type']==='select')
+							$_SESSION[$champ['nom']]=$row['id_'.$champ['nom']];
 						else
-						$_SESSION[$champ['nom']]=$row[$champ['nom']];
+							$_SESSION[$champ['nom']]=$row[$champ['nom']];
 					}
 
 					//show message

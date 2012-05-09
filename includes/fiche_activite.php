@@ -1,6 +1,6 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-session_start();
+/*session_start();*/
 getAdherent($_SESSION['user']);
 $tab=getActivites($_SESSION['uid']);
 if(isset($_GET['act']) && !isset($tab[$_GET['act']])){
@@ -12,7 +12,7 @@ if(isset($_GET['promo'])) {
 } else {
 	$promo=$current_promo;
 }
-if ($_POST['action'] == 'modification') {
+if (isset($_POST['action']) && $_POST['action'] == 'modification') {
 	print '<h2>Modifier Activité</h2>';
 	print '<FORM id="f_act_modif" action="index.php?page=5&act='.$_GET['act'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -26,7 +26,7 @@ if ($_POST['action'] == 'modification') {
 	print '</table>';
 	print '</FORM>';
 } else
-if ($_POST['action'] == 'new') {
+if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '<h2>Nouvelle Activité</h2>';
 	print '<FORM id="f_act_new" action="index.php?page=5" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -41,7 +41,7 @@ if ($_POST['action'] == 'new') {
 	print '</FORM>';
 
 } else
-if ($_POST['action'] == 'suppression_confirm') {
+if (isset($_POST['action']) && $_POST['action'] == 'suppression_confirm') {
 	print '<h2>Supprimer Activité?</h2>';
 	print '<FORM action="index.php?page=5" method="POST">
 			<input type="hidden" name="id" value="'.$_GET['act'].'" />
@@ -54,7 +54,7 @@ if ($_POST['action'] == 'suppression_confirm') {
 
 }
 
-else if ($_POST['action'] == 'suppression_resp_confirm') {
+else if (isset($_POST['action']) && $_POST['action'] == 'suppression_resp_confirm') {
 	print '<h2>Supprimer Responsable?</h2>';
 	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
@@ -67,7 +67,7 @@ else if ($_POST['action'] == 'suppression_resp_confirm') {
 			</FORM>';
 
 }
-else if ($_POST['action'] == 'suppression_sup_confirm') {
+else if (isset($_POST['action']) && $_POST['action'] == 'suppression_sup_confirm') {
 	print '<h2>Supprimer Supplément?</h2>';
 	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
@@ -81,31 +81,31 @@ else if ($_POST['action'] == 'suppression_sup_confirm') {
 
 }
 else{
-	if ($_POST['action'] === 'submitted'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted'){
 		modifActivite($_POST);
 
 	}
-	if ($_POST['action'] === 'submitted_new'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new'){
 		newActivite($_POST);
 
 	}
-	if ($_POST['action'] === 'suppression'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression'){
 		delActivite($_POST['id']);
 	}
-	if ($_POST['action'] === 'suppression_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp'){
 		delRespActivite($_POST['id_act'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'new_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_resp'){
 		ajoutResponsableAct($_POST['id_act'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'suppression_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup'){
 		delSup($_POST['id_sup']);
 	}
-	if ($_POST['action'] === 'new_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
 		addSup("activite",$_POST['id_act'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
-	if ($_POST['action'] === 'copy_old_sups'){
+	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups'){
 		$sups = getSup("activite",$_GET['act'],$_POST['old_promo']);
 		foreach ($sups as $key => $value) {
 			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";
@@ -149,7 +149,11 @@ else{
 			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['act']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
 			$photo="includes/thumb.php?folder=logo_act&file=".$_GET['act'].".jpg";
-			print '<tr><TD>'.$row['description'].'</TD><TD><img src="'.$photo.'" ></TD></tr>';
+			if (isset($row['description']))
+				$tmp_stock = $row['description'];
+			else
+				$tmp_stock = "";
+			print '<tr><TD>'.$tmp_stock.'</TD><TD><img src="'.$photo.'" ></TD></tr>';
 			print '<tr>';
 			print '<td colspan=2><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 					<input type="hidden" name="action" value="modification" />

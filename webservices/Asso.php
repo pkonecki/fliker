@@ -64,7 +64,7 @@ function getAssociations($userid){
 	if (!$results) echo mysql_error();
 	$tab = array();
 	while($row = mysql_fetch_array($results)){
-			$tab[$row[id]] = $row;
+			$tab[$row['id']] = $row;
 	}
 	include("closedb.php");
 	return $tab;
@@ -134,7 +134,7 @@ function getAllAssociations(){
 	if (!$results) echo mysql_error();
 	$tab = array();
 	while($row = mysql_fetch_array($results)){
-			$tab[$row[id]] = $row;
+			$tab[$row['id']] = $row;
 	}
 	include("closedb.php");
 	return $tab;

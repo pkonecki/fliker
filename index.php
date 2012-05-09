@@ -43,13 +43,15 @@ setlocale(LC_ALL, 'fr_FR');
 print '<span id="title">';
 print getParam('text_top');
 print '</span>';
-if(!(strcmp($_SESSION['user'],"") == 0)) include("menu.php");
+if(isset($_SESSION['user']))
+	include("menu.php");
 include("userdiv.php");
 print '</div>';
-if(!(strcmp($_SESSION['user'],"") == 0)){
-
+if(isset($_SESSION['user']))
+{
 	print '<div id="content">';
-	if(empty($_GET['page'])) $_GET['page']=1;
+	if(empty($_GET['page']))
+		$_GET['page']=1;
 
 	switch($_GET['page']){
 		case 1:
@@ -60,7 +62,7 @@ if(!(strcmp($_SESSION['user'],"") == 0)){
 			break;
 		case 3:
 			include("fiche_asso.php");
-		break;
+			break;
 		case 4:
 			include("fiche_section.php");
 		break;

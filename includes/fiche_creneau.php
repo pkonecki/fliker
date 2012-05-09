@@ -1,6 +1,6 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-session_start();
+/*session_start();*/
 
 
 function selected($post,$val,$tab){
@@ -20,7 +20,7 @@ if(isset($_GET['creneau']) && !isset($tab[$_GET['creneau']])){
 	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
-if ($_POST['action'] == 'modification') {
+if (isset($_POST['action']) && $_POST['action'] == 'modification') {
 	print '<h2>Modifier Créneau</h2>';
 	print '<FORM id="f_creneau_modif" action="index.php?page=6&creneau='.$_GET['creneau'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -44,7 +44,7 @@ if ($_POST['action'] == 'modification') {
 	print '</FORM>';
 
 } else
-if ($_POST['action'] == 'new') {
+if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '<h2>Nouveau Créneau</h2>';
 	print '<FORM id="f_creneau_new" action="index.php?page=6" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -68,7 +68,7 @@ if ($_POST['action'] == 'new') {
 	print '</FORM>';
 
 } else
-if ($_POST['action'] == 'suppression_confirm') {
+if (isset($_POST['action']) && $_POST['action'] == 'suppression_confirm') {
 	print '<h2>Supprimer le Créneau?</h2>';
 	print '<FORM action="index.php?page=6" method="POST">
 			<input type="hidden" name="id" value="'.$_GET['creneau'].'" />
@@ -80,7 +80,7 @@ if ($_POST['action'] == 'suppression_confirm') {
 			</FORM>';
 
 }
-else if ($_POST['action'] == 'suppression_resp_confirm') {
+else if (isset($_POST['action']) && $_POST['action'] == 'suppression_resp_confirm') {
 	print '<h2>Supprimer Responsable?</h2>';
 	print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<input type="hidden" name="id_cre" value="'.$_GET['creneau'].'" />
@@ -93,7 +93,7 @@ else if ($_POST['action'] == 'suppression_resp_confirm') {
 			</FORM>';
 
 }
-else if ($_POST['action'] == 'suppression_sup_confirm') {
+else if (isset($_POST['action']) && $_POST['action'] == 'suppression_sup_confirm') {
 	print '<h2>Supprimer Supplément?</h2>';
 	print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
 			<input type="hidden" name="id_cre" value="'.$_GET['creneau'].'" />
@@ -107,32 +107,32 @@ else if ($_POST['action'] == 'suppression_sup_confirm') {
 
 }
 else {
-	if ($_POST['action'] === 'submitted'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted'){
 		modifcreneau($_POST);
 
 	}
-	if ($_POST['action'] === 'submitted_new'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new'){
 		newcreneau($_POST);
 
 	}
-	if ($_POST['action'] === 'suppression'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression'){
 		delcreneau($_POST['id']);
 
 	}
-	if ($_POST['action'] === 'suppression_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp'){
 		delRespCre($_POST['id_cre'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'new_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_resp'){
 		ajoutResponsableCre($_POST['id_cre'],$_POST['id_resp']);
 	}
-	if ($_POST['action'] === 'suppression_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup'){
 		delSup($_POST['id_sup']);
 	}
-	if ($_POST['action'] === 'new_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_sup'){
 		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
 		addSup("creneau",$_POST['id_cre'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
 	}
-	if ($_POST['action'] === 'copy_old_sups'){
+	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups'){
 		$sups = getSup("creneau",$_GET['creneau'],$_POST['old_promo']);
 		foreach ($sups as $key => $value) {
 			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";

@@ -147,8 +147,12 @@ function getFacture($ads,$id_statut_adh,$promo){
 	$totaux = array();
 	$results = mysql_query($t_assos);
 	if (!$results) echo mysql_error();
-	while($row = mysql_fetch_array($results)){
-		$totaux[$row['id_asso_paie']] += $row['total'];
+	while($row = mysql_fetch_array($results))
+	{
+		if (empty($totaux) == false)
+			$totaux[$row['id_asso_paie']] += $row['total'];
+		else
+			$totaux[$row['id_asso_paie']] = $row['total'];
 	}
 	$results = mysql_query($t_secs);
 	if (!$results) echo mysql_error();

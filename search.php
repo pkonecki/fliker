@@ -1,11 +1,14 @@
-<?php session_start();
+<?php
 if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 }
 else {
 	if($_SESSION['privilege']==1){
 		$admin=true;
-		$id_adh=$_GET['adh'];
+		if (isset($_GET['adh']))
+			$id_adh=$_GET['adh'];
+		else
+			$id_adh = "";
 		$resp_asso=true;
 	}
 	else {
@@ -13,13 +16,13 @@ else {
 			$resp_asso=true;
 		}
 	}
-	$query="SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION[uid]."'
+	$query="SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
 	UNION
-	SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION[uid]."'
+	SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."'
  	UNION
- 	SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION[uid]."'
+ 	SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION['uid']."'
  	UNION
-	SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION[uid]."' ";
+	SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION['uid']."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	include("closedb.php");
@@ -37,14 +40,14 @@ else {
 print "<span class=\"tip\">".getParam('text_search')."</span>";
 
 function selected($post,$val){
-	if ($_POST[$post]===$val) {
+	if (isset($_POST[$post]) && $_POST[$post]===$val) {
 		return "selected";
 	}
 	else return "";
 }
 
 function checked($post,$val){
-	if ($_POST[$post]===$val) {
+	if (isset($_POST[$post]) && $_POST[$post]===$val) {
 		return "checked";
 	}
 	else return "";
@@ -58,6 +61,7 @@ function multiselected($post,$val){
 }
 
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
+	if (empty($_POST['set1_text'])) $_POST['set1_text']="";
 	//print '<button id="toggle_f_search">Toggle</button>';
 	print '<form id="f_search" method="post" action="index.php?page=2">
 <fieldset class="main"><legend>Critères Adhérent</legend>
@@ -123,29 +127,32 @@ function multiselected($post,$val){
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau[id_sec]][nom]=$creneau[nom_sec];
-		$tab[$creneau[id_sec]][id]=$creneau[id_sec];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][nom]=$creneau[nom_act];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][id]=$creneau[id_act];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][jour]=$creneau[jour_cre];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][id]=$creneau[id_cre];
-		$tab[$creneau[id_sec]][activites][$creneau[id_act]][creneaux][$creneau[id_cre]][debut]=$creneau[debut_cre];
+		$tab[$creneau['id_sec']]['nom']=$creneau['nom_sec'];
+		$tab[$creneau['id_sec']]['id']=$creneau['id_sec'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['nom']=$creneau['nom_act'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['id']=$creneau['id_act'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour']=$creneau['jour_cre'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id']=$creneau['id_cre'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut']=$creneau['debut_cre'];
 	}
 	foreach($tab as $section){
-		print '<li><input type="checkbox" name="section'.$section[id].'" '.checked('section'.$section[id],$section[id]).' value="'.$section[id].'"><label>'.$section[nom].'</label>';
+		print '<li><input type="checkbox" name="section'.$section['id'].'" '.checked('section'.$section['id'],$section['id']).' value="'.$section['id'].'"><label>'.$section['nom'].'</label>';
 		print '<ul id="activites">';
-		foreach($section[activites] as $act){
-			print '<li><input type="checkbox" name="act'.$act[id].'" '.checked('act'.$act[id],$act[id]).' value="'.$act[id].'"><label>'.$act[nom].'</label>';
+		foreach($section['activites'] as $act){
+			print '<li><input type="checkbox" name="act'.$act['id'].'" '.checked('act'.$act['id'],$act['id']).' value="'.$act['id'].'"><label>'.$act['nom'].'</label>';
 			print '<ul id="creneaux">';
-			foreach($act[creneaux] as $cre){
-				print '<li><input type="checkbox" name="cre'.$cre[id].'" '.checked('cre'.$cre[id],$cre[id]).' value="'.$cre[id].'"><label>'.$cre[jour].' - '.substr($cre[debut],0,-3).'</label>';
+			foreach($act['creneaux'] as $cre){
+				print '<li><input type="checkbox" name="cre'.$cre['id'].'" '.checked('cre'.$cre['id'],$cre['id']).' value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).'</label>';
 			}
 			print '</ul>';
 		}
 		print '</ul>';
 	}
 	print '</ul>';
-	$first = empty($_POST[affichage]);
+	if (isset($_POST['affichage']))
+		$first = empty($_POST['affichage']);
+	else
+		$first = true;
 	$second = 'checked';
 	$third = checked('affichage','1');
 	print '
@@ -162,7 +169,7 @@ function multiselected($post,$val){
 	<button type="reset" id="reset">Remettre à zéro</button>
 </fieldset>
 </form>';
-	if($_POST['action']==="submitted"){
+	if(isset($_POST['action']) && $_POST['action']==="submitted"){
 	//SQL
 	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true ";
 	for($i = 0; $i < $_POST['field_count']; $i++){
@@ -200,11 +207,11 @@ function multiselected($post,$val){
 	$in="('0'";
 	$i=0;
 	foreach($tab as $section){
-		foreach($section[activites] as $activite){
-			foreach($activite[creneaux] as $creneau){
+		foreach($section['activites'] as $activite){
+			foreach($activite['creneaux'] as $creneau){
 				
-				if(!empty($_POST['cre'.$creneau[id]])){
-				 	$in.=",'".$creneau[id]."' ";
+				if(!empty($_POST['cre'.$creneau['id']])){
+				 	$in.=",'".$creneau['id']."' ";
 					$i++;
 				}
 			}
@@ -253,17 +260,17 @@ function multiselected($post,$val){
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
-				if ($champ[search_simple]==1) {
-					if($champ[type]==='varchar')
+				if ($champ['search_simple']==1) {
+					if($champ['type']==='varchar')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='date')
+					if($champ['type']==='date')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='tinyint')
+					if($champ['type']==='tinyint')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='file' && $_POST['photos']==='photos'){
+					if($champ['type']==='file' && isset($_POST['photos']) && $_POST['photos']==='photos'){
 					print '<th>'.$champ['description'].'</th>';
 					}
 				}
@@ -298,17 +305,17 @@ function multiselected($post,$val){
 				else print '<tr class="odd '.$active.'">';
 				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
-					if ($champ[search_simple]==1){
-						if($champ[type]==='varchar')
+					if ($champ['search_simple']==1){
+						if($champ['type']==='varchar')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='date')
+						if($champ['type']==='date')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='tinyint')
+						if($champ['type']==='tinyint')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='file' && $_POST['photos']==='photos'){
+						if($champ['type']==='file' && isset( $_POST['photos']) && $_POST['photos']==='photos'){
 							$_SESSION['auth_thumb']='true';
 							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
@@ -328,17 +335,17 @@ function multiselected($post,$val){
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ){
-				if ($champ[user_viewable]==1) {
-					if($champ[type]==='varchar')
+				if ($champ['user_viewable']==1) {
+					if($champ['type']==='varchar')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='date')
+					if($champ['type']==='date')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='tinyint')
+					if($champ['type']==='tinyint')
 					print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ[type]==='file' && $_POST['photos']==='photos'){
+					if($champ['type']==='file' && $_POST['photos']==='photos'){
 					print '<th>'.$champ['description'].'</th>';
 					}
 				}
@@ -373,17 +380,17 @@ function multiselected($post,$val){
 				else print '<tr class="odd '.$active.'">';
 				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
-					if ($champ[user_viewable]==1){
-						if($champ[type]==='varchar')
+					if ($champ['user_viewable']==1){
+						if($champ['type']==='varchar')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='date')
+						if($champ['type']==='date')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='tinyint')
+						if($champ['type']==='tinyint')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ[type]==='file' && $_POST['photos']==='photos'){
+						if($champ['type']==='file' && $_POST['photos']==='photos'){
 							$_SESSION['auth_thumb']='true';
 							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
@@ -426,17 +433,17 @@ function multiselected($post,$val){
 				$i++;
 				print '<td class="trombi" valign="top">';
 				foreach($tab as $champ){
-					if ($champ[search_trombi]==1){
-						if($champ[type]==='varchar')
+					if ($champ['search_trombi']==1){
+						if($champ['type']==='varchar')
 							print "<span class=\"trombi\">".(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
-						if($champ[type]==='date')
+						if($champ['type']==='date')
 							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
-						if($champ[type]==='tinyint')
+						if($champ['type']==='tinyint')
 							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
 						else
-						if($champ[type]==='file'){
+						if($champ['type']==='file'){
 							$_SESSION['auth_thumb']='true';
 							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<span class="trombi"><img src="'.$photo.'" ></span>';
