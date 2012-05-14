@@ -105,7 +105,7 @@ function getFacture($ads,$id_statut_adh,$promo){
 						AND ($where)
 						ORDER BY nom_sec";
 	$assos = "SELECT DISTINCT sup.id, sup.valeur as valeur, sup.id_asso_paie, sup.id_asso_adh, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
-				WHERE sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut=$id_statut_adh AND sup.promo=$promo";
+				WHERE sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut='$id_statut_adh' AND sup.promo='$promo'";
 	$secs = "SELECT DISTINCT sup.id, sup.valeur as valeur, S1.id_asso, S1.id_sec, S1.nom_sec, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_sec=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
 	$acts = "SELECT DISTINCT sup.id, sup.valeur as valeur, S1.id_asso, S1.id_act, S1.nom_act, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
@@ -117,12 +117,11 @@ function getFacture($ads,$id_statut_adh,$promo){
 	$t_acts = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($acts) AS A GROUP BY A.id_asso_paie";
 	$t_cres = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($cres) AS A GROUP BY A.id_asso_paie";
 
-
 	include("opendb.php");
 	$results = mysql_query($assos);
 	if (!$results) echo mysql_error();
 	$tab_assos = array();
-	while($row = mysql_fetch_array($results)){
+	while($results != false && ($row = mysql_fetch_array($results))){
 		$tab_assos[$row['id']] = $row;
 	}
 	$results = mysql_query($secs);
@@ -147,22 +146,30 @@ function getFacture($ads,$id_statut_adh,$promo){
 	$totaux = array();
 	$results = mysql_query($t_assos);
 	if (!$results) echo mysql_error();
-	while($row = mysql_fetch_array($results))
+	while($results != false && ($row = mysql_fetch_array($results)))
 	{
-		if (empty($totaux) == false)
-			$totaux[$row['id_asso_paie']] += $row['total'];
-		else
+		if (empty($totaux[$row['id_asso_paie']]))
 			$totaux[$row['id_asso_paie']] = $row['total'];
+		else
+			$totaux[$row['id_asso_paie']] += $row['total'];
 	}
 	$results = mysql_query($t_secs);
 	if (!$results) echo mysql_error();
-	while($row = mysql_fetch_array($results)){
-		$totaux[$row['id_asso_paie']] += $row['total'];
+	while($row = mysql_fetch_array($results))
+	{
+		if (empty($totaux[$row['id_asso_paie']]))
+			$totaux[$row['id_asso_paie']] = $row['total'];
+		else
+			$totaux[$row['id_asso_paie']] += $row['total'];
 	}
 	$results = mysql_query($t_acts);
 	if (!$results) echo mysql_error();
-	while($row = mysql_fetch_array($results)){
-		$totaux[$row['id_asso_paie']] += $row['total'];
+	while($row = mysql_fetch_array($results))
+	{
+		if (empty($totaux[$row['id_asso_paie']]))
+			$totaux[$row['id_asso_paie']] = $row['total'];
+		else
+			$totaux[$row['id_asso_paie']] += $row['total'];
 	}
 	$results = mysql_query($t_cres);
 	if (!$results) echo mysql_error();

@@ -208,10 +208,10 @@ else {
 			$assos = getAssos();
 			//Selection Promo
 			print "<p>Promo:<SELECT id=\"promo\" >";
-			print "<OPTION value=$current_promo ".($_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
+			print "<OPTION value=$current_promo ".(isset($_GET['promo']) && $_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
 			for ($i=1; $i<=10; $i++ ){
 				$p=$current_promo-$i;
-				print "<OPTION value=\"$p\" ".($_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
+				print "<OPTION value=\"$p\" ".(isset($_GET['promo']) && $_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
 			}
 			print "</SELECT></p>";
 			print '<h3>Suppléments de la section</h3>';

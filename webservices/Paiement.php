@@ -68,8 +68,10 @@ function getPaiementsSup($id_adh){
 	if (!$results) echo mysql_error();
 	$totaux= array();
 	while($row = mysql_fetch_array($results)){
-
-		$totaux[$row['id_sup']] += $row['total'];
+		if (empty($totaux[$row['id_sup']]))
+			$totaux[$row['id_sup']] = $row['total'];
+		else
+			$totaux[$row['id_sup']] += $row['total'];
 	}
 	include("closedb.php");
 	return $totaux;
