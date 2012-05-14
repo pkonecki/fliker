@@ -122,7 +122,7 @@ $dest_dossier = "../photos";
 				print '</TR>';
 			}
 			print '</TABLE>';
-			if($edit) print '<FORM action="index.php?page=1" method="POST">
+			if(isset($edit)) print '<FORM action="index.php?page=1" method="POST">
 			<input type=\'hidden\' name=\'action\' value=\'modification\' />
 			<INPUT type=\'submit\' value=\'Modifier\'>
 			</FORM>

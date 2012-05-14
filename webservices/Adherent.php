@@ -6,34 +6,34 @@ function newAdherent($tab){
 	$values ="(";
 	include("opendb.php");
 	foreach($champs as $row){
-		if($row[inscription]==1){
-			if($row[type]==='varchar'){
-				$colonnes .= $row[nom].",";
-				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
+		if($row['inscription']==1){
+			if($row['type']==='varchar'){
+				$colonnes .= $row['nom'].",";
+				$values .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
 			}
 			else
-			if($row[type]==='date'){
-				$colonnes .= $row[nom].",";
-				$values .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
+			if($row['type']==='date'){
+				$colonnes .= $row['nom'].",";
+				$values .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
 			}
 			else
-			if($row[type]==='tinyint'){
-				$colonnes .= $row[nom].",";
-				if ($tab[$row[nom]]==='on') $values .= "1,";
+			if($row['type']==='tinyint'){
+				$colonnes .= $row['nom'].",";
+				if ($tab[$row['nom']]==='on') $values .= "1,";
 				else $values .= "0,";
 			}
 			else
-			if($row[type]==='file'){
-			$colonnes .= $row[nom].",";
-				if($tab[$row[nom]][name]===""){
+			if($row['type']==='file'){
+			$colonnes .= $row['nom'].",";
+				if($tab[$row['nom']]['name']===""){
 					$values .= "0,";
 				} else {
 					$values .= "1,";
 				}
 			}
-			if($row[type]==='select'){
-				$colonnes .= 'id_'.$row[nom].",";
-				$values .= "'".mysql_real_escape_string($tab['id_'.$row[nom]])."',";
+			if($row['type']==='select'){
+				$colonnes .= 'id_'.$row['nom'].",";
+				$values .= "'".mysql_real_escape_string($tab['id_'.$row['nom']])."',";
 			}
 		}
 	}
@@ -46,11 +46,11 @@ function newAdherent($tab){
 	$colonnes .=")";
 	$values .=")";
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}adherent ".$colonnes." VALUES ".$values;
-	//echo $query;
+	echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	//send mail
-	$to      = $tab[email];
+	$to      = $tab['email'];
 	$subject = "Votre inscription sportive";
 	$message = "Bienvenue !\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\r  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\r  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
 	$headers = 'From: '.getParam('admin_email') . "\r\n" .
@@ -246,17 +246,45 @@ function getMyAssos($userid){
 function getSolde($id_adh,$promo){
 	$mycrens=getCreneaux($_SESSION['uid']);
 	$ads= getAdhesions($id_adh,$promo);
-	foreach ($ads as $key => $value){
-		if(!isset($mycrens[$value['id_cre']])) unset($ads[$key]);
+	foreach ($ads as $key => $value)
+	{
+		if(!isset($mycrens[$value['id_cre']]))
+			unset($ads[$key]);
 	}
 	$adh = getAdherent($id_adh);
-	$tab = getFacture($ads,$adh['statut'],$promo);
+	if (!isset($adh['statut']))
+		$adh['statut'] = "";
+	$tab = getFacture($ads,$adh['statut'], $promo);
 	$p_sup = getPaiementsSup($id_adh);
 	$solde=0;
-	foreach($tab['assos'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
-	foreach($tab['secs'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];	
-	foreach($tab['acts'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];	
-	foreach($tab['cres'] as $row) $solde+=$row['valeur']-$p_sup[$row['id']];
+	foreach($tab['assos'] as $row)
+	{
+		if (empty($p_sup[$row['id']]))
+			$solde += $row['valeur'];
+		else
+			$solde += $row['valeur'] - $p_sup[$row['id']];
+	}
+	foreach($tab['secs'] as $row)
+	{
+		if (empty($p_sup[$row['id']]))
+			$solde += $row['valeur'];
+		else
+			$solde += $row['valeur'] - $p_sup[$row['id']];
+	}
+	foreach($tab['acts'] as $row)
+	{
+		if (empty($p_sup[$row['id']]))
+			$solde += $row['valeur'];
+		else
+			$solde += $row['valeur'] - $p_sup[$row['id']];
+	}
+	foreach($tab['cres'] as $row)
+	{
+		if (empty($p_sup[$row['id']]))
+			$solde += $row['valeur'];
+		else
+			$solde += $row['valeur'] - $p_sup[$row['id']];
+	}
 	return -$solde;
 }
 

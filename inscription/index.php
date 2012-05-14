@@ -173,16 +173,16 @@ $(document).ready(function() {
 					number: true
 				},
 				def_req: {
-					required: true,
+					required: true
 				},
 				def: {
 				},
 				date:{
-					date:true,
+					date: true
 				},
-				date_req:{
-					required:true,
-					date:true
+				date_req: {
+					required: true,
+					date: true
 				},
 				email: {
 					email: true,
@@ -231,8 +231,8 @@ $(document).ready(function() {
 });
 
 $(function() {
-	$( "#datepicker" ).datepicker({ 
-		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
+	$("#datepicker").datepicker({ 
+		changeYear: true, yearRange: "-100:+0", changeMonth: true, dateFormat: "yy-mm-dd"  
 	});
 });
 
