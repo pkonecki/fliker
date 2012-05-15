@@ -9,11 +9,11 @@
     * Semaine 20 : Fiche adherent
     * Semaine 21 : Formulaire de recherche
   * *Juin* :
-    * Semaine 22 : 
-    * Semaine 23 : 
+    * Semaine 22 : "
+    * Semaine 23 : "
     * Semaine 24 : 7 fonctions d'ajout/modification
-    * Semaine 25 : 
-    * Semaine 26 : 
+    * Semaine 25 : "
+    * Semaine 26 : "
   * *Juillet*:
     * Semaine 27 : Ajout Responsable/Suppléments (changement UML supplément)
     * Semaine 28 : Gestion Adhésions/Paiements + Présences
@@ -60,20 +60,20 @@
   * *Documentation* (phil)
 
 = Perspectives =
-  * *Intégration Fliker/Wiki (page d'accueil/login)*
+  * *Intégration Fliker/Wiki (page d'accueil/login)* (Phil)
     * Création dynamique du tableau des sports (wiki+printable) à partir base fliker
     * Couplage avec Paypal ?
-  * *Module d'inventaire et gestion financière (rec/dép) dans Fliker*
-  * *Système de tickets*
+  * *Module d'inventaire et gestion financière (rec/dép) dans Fliker* (A inventer ? Florian)
+  * *Système de tickets* (RT : Phil)
     * Couplage avec adresses emails asesco@u-psud
-  * *Système de reservation*
+  * *Système de reservation* (PhpMyResa : Florian)
     * Couplage avec inventaire
     * Production d'iCal
     * Affichage Agenda
     * Couplage avec base des créneaux sports dans fliker
   * *Forum ?*
-  * *Synchro comptes* : Wiki / Fliker / Tickets / Résa / Forum
+  * *Synchro comptes* : Wiki / Fliker / Tickets / Résa / Forum (Florian)
     * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
     * Couplage avec LDAP u-psud
-  * *Portail Sports*
+  * *Portail Sports* (Phil & Florian)
     * Couplage avec cartes multiservice étudiants et personnels ...
