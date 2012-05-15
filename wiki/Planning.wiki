@@ -60,7 +60,7 @@
   * *Documentation* (phil)
 
 = Perspectives =
-  * *Intégration Fliker/Wiki (page d'accueil/login)* (Phil)
+  * *Intégration Fliker/Wiki* (page d'accueil/login : Phil)
     * Création dynamique du tableau des sports (wiki+printable) à partir base fliker
     * Couplage avec Paypal ?
   * *Module d'inventaire et gestion financière (rec/dép) dans Fliker* (A inventer ? Florian)
@@ -72,7 +72,7 @@
     * Affichage Agenda
     * Couplage avec base des créneaux sports dans fliker
   * *Forum ?*
-  * *Synchro comptes* : Wiki / Fliker / Tickets / Résa / Forum (Florian)
+  * *Synchro comptes* (Wiki / Fliker / Tickets / Résa / Forum : Florian)
     * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
     * Couplage avec LDAP u-psud
   * *Portail Sports* (Phil & Florian)
