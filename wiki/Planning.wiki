@@ -1,6 +1,6 @@
 #summary Planning du développement
 
-=Planning=
+= Planning 2011 =
   * *Mars*: Reverse Engineering & Conception Tables MySQL
   * *Avril*: Spécification des fonctionnalités core (php/mysql)
   * *Mai* : Développement Fonctionnalités Core (PHP)
@@ -12,29 +12,55 @@
     * Semaine 22 : 
     * Semaine 23 : 
     * Semaine 24 : 7 fonctions d'ajout/modification
-    * Semaine 25 :
+    * Semaine 25 : 
     * Semaine 26 : 
-
   * *Juillet*:
-    * Semaine 27: Ajout Responsable/Suppléments (changement UML supplément)
-    * Semaine 28: Gestion Adhésions/Paiements + Présences
-    * Semaine 29: Vac   / Suite Adhésions/Paiements
-    * Semaine 30: Vac   / Suite Adhésions/Paiements
+    * Semaine 27 : Ajout Responsable/Suppléments (changement UML supplément)
+    * Semaine 28 : Gestion Adhésions/Paiements + Présences
+    * Semaine 29 : Vac   / Suite Adhésions/Paiements
+    * Semaine 30 : Vac   / Suite Adhésions/Paiements
   * *Aout*:
-    * Semaine 31: Vac   / Suite Adhésions/Paiements
-    * Semaine 32: Tests / Fin Adhésions/Paiements
-    * Semaine 33: Tests / Fin Présences
-    * Semaine 34: Tests / Monitoring, Notes
-    * Semaine 35: Tests / Fonctions de customisation
- 
-    * Documentation (phil)
+    * Semaine 31 : Vac   / Suite Adhésions/Paiements
+    * Semaine 32 : Tests / Fin Adhésions/Paiements
+    * Semaine 33 : Tests / Fin Présences
+    * Semaine 34 : Tests / Monitoring, Notes
+    * Semaine 35 : Tests / Fonctions de customisation
 
-=Perspectives=
+= Planning 2012 =
+  * *Avril* : Prise en main du code, Installation plateforme de développement
+  * *Mai* : Débugage Fonctionnalités Core (PHP)
+    * Semaine 18 : Amélioration fiche présence, Débug table sql
+    * Semaine 19 : Ajout stats présences, Débug popup calendrier
+    * Semaine 20 : Ajout module changement email/pass, Debug envoi email
+    * Semaine 21 : 
+    * Semaine 22 : 
+  * *Juin* :
+    * Semaine 23 : 
+    * Semaine 24 : 
+    * Semaine 25 : 
+    * Semaine 26 : 
+  * *Juillet*:
+    * Semaine 27 : 
+    * Semaine 28 : 
+    * Semaine 29 : 
+    * Semaine 30 : 
+    * Semaine 31 : 
+  * *Aout*:
+    * Semaine 32 : 
+    * Semaine 33 : 
+    * Semaine 34 : 
+    * Semaine 35 : 
 
-  * *Portail*
-  * *Forum*
+  * *Documentation* (phil)
+
+= Perspectives =
+  * *Intégration Fliker/Wiki (login)*
+  * *Module d'inventaire et gestion financière (rec/dép) dans Fliker*
+  * *Système de tickets*
   * *Système de reservation*
-  * *Affichage Agenda*
-  * *Production d'iCal*
-  * *Synchro comptes* : Forum / résa / wiki
-  * *Portail Sport*
+    * *Couplage inventaire*
+    * *Production d'iCal*
+    * *Affichage Agenda*
+  * *Forum ?*
+  * *Synchro comptes* : Wiki / Fliker / Tickets / Résa / Forum
+  * *Portail Sports*
