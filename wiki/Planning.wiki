@@ -41,23 +41,24 @@
     * Semaine 21 : Débug sécu fichiers php dans toute l'arborescence
     * Semaine 22 : Amélioration affichage des résultats de recherche (non-inscrits)
   * *Juin* :
-    * Semaine 23 : 
-    * Semaine 24 : 
-    * Semaine 25 : 
-    * Semaine 26 : 
+    * Semaine 23 : ...
+    * Semaine 24 : ...
+    * Semaine 25 : ...
+    * Semaine 26 : ...
   * *Juillet*:
-    * Semaine 27 : 
-    * Semaine 28 : 
-    * Semaine 29 : 
-    * Semaine 30 : 
-    * Semaine 31 : 
+    * Semaine 27 : ...
+    * Semaine 28 : ...
+    * Semaine 29 : ...
+    * Semaine 30 : ...
+    * Semaine 31 : ...
   * *Aout*:
-    * Semaine 32 : 
-    * Semaine 33 : 
-    * Semaine 34 : 
-    * Semaine 35 : 
+    * Semaine 32 : ... (+rap stage)
+    * Semaine 33 : ... (+rap stage)
+    * Semaine 34 : ... (+rap stage)
+    * Semaine 35 : ... (+rap stage)
 
-  * *Documentation* (phil)
+  * *Documentation*
+    * le rapport de stage pourrait éventuellement consister en cette documentation (= manuel de l'utilisateur) en indiquant en marge quel est ton apport par rapport à la version 1.0 ???
 
 = Perspectives =
   * *Intégration Fliker/Wiki* (page d'accueil/login : Phil)
