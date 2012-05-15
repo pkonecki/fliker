@@ -3,6 +3,7 @@
 
 ===Bugs à Fixer===
   * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
+  * suppression resp/asso/sec/act/cre : homogénéiser affichage de la confirmation (inline ou popup ?)
   * recherche : bouton select all fonctionne pas
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
   * n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
@@ -40,10 +41,10 @@
   * <s>Fichier de config avec params connexion sql</s>
   * <s>Script d'init pour exécuter un sql (init db avec préfixe)</s>
   * <s>purger du svn les versions précédentes du fichier sql (contenant des logins/pass...) ainsi que le fichier de conf contenant les access/db</s>
+  * <s>Mettre url base site dans table "admin" (ou fichier conf ?)</s>
 
 
 ===Page Admin===
-  * <s>Mettre url base site dans table "admin" (ou fichier conf ?)</s>
   * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
   * déplacer en table custom :
@@ -56,16 +57,16 @@
 
 ===Login/Logout===
   * bouton "j'ai oublié mon passwd" --> changer son pass dans chapitre "Adhérent"
-  * bouton "je suis un gros boulet" (oublié email et pass) --> rediriger vers "ticket"
+  * bouton "je suis un gros boulet" (oublié email et pass) --> rediriger vers "ticket" (cf. "url_resiliation" dans page admin)
   * <s>après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé</s>
 
 
 ===Notion de promo===
-  * bouton de purge en fin d'année : des certificats méd / des n° carte (?) / des fiches adhérents n'ayant JAMAIS eu de paiements
   * dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
   * Page admin :
     * booléen pour mode standby (inscriptions ok mais temporairement plus d'adhésions)
     * stocker/modifier Bornes de la Promo courante (actuellement hardcodées = next Monday after 31/08 --> sem du 30/06)
+    * bouton de purge en fin d'année : des certificats méd / des n° carte (?) / des fiches adhérents n'ayant JAMAIS eu de paiements
     * <s>changer de promo courante (stocker dans table sql)</s>
   * <s>Champ promo dans table adhesions/paiements</s>
   * <s>Champ promo dans table présences</s>
@@ -284,7 +285,8 @@
   * Bien gérer le SUBJECT:
     * forcer [NOM_ASSO] en début de sujet
   * Bien gérer le FROM: (ou REPLY-TO:)
-    * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email utilisateur/prof sinon
+    * "contact_email" (cf. page admin) si c'est un membre du bureau, "admin_email" si c'est l'admin, sinon adresse email de l'utilisateur loggé
+    * <s>éditer "contact_email" et "admin_email" depuis page admin</s>
   * Bien gérer le TO:
     * Vérifier qu'on envoie pas l'email deux fois à une même personne
     * ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
