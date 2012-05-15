@@ -78,3 +78,5 @@
     * Couplage avec LDAP u-psud
   * *Portail Sports* (Phil & Florian)
     * Couplage avec cartes multiservice étudiants et personnels ...
+  * *Portail Evenementiel* (plus tard ...)
+    * Couplage avec système billeterie en ligne (paypal ... ticketlib ...)
