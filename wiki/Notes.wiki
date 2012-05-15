@@ -2,13 +2,13 @@
 
 
 ===Bugs à Fixer===
+  * inscription : bug dans le check n° tel sous certains navigateurs
+  * listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
+  * recherche : bouton select all fonctionne pas
   * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
   * suppression resp/asso/sec/act/cre : homogénéiser affichage de la confirmation (inline ou popup ?)
-  * recherche : bouton select all fonctionne pas
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
   * n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
-  * listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
-  * inscription : bug dans le check n° tel sous certains navigateurs
   * modif fiche adherent : imageCreateFromPNG does not exist ...
      * ? purger répertoires photo / certmeds des fichiers non-jpg ?
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
