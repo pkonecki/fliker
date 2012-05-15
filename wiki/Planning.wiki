@@ -31,9 +31,15 @@
   * *Mai* : Débugage Fonctionnalités Core (PHP)
     * Semaine 18 : Amélioration fiche présence, Débug table sql
     * Semaine 19 : Ajout stats présences, Débug popup calendrier
-    * Semaine 20 : Ajout module changement email/pass, Debug envoi email
-    * Semaine 21 : 
-    * Semaine 22 : 
+    * Semaine 20 : Ajout module changement email/pass, Debug header envoi email
+      * que ce soit changement volontaire (modif fiche adherent)
+      * ou si pass perdu (clic "oublié mon pass")
+      * 1/ envoi d'un premier lien de validation à l'ancienne adresse email
+      * 2/ envoi d'un deuxième lien de validation à la nouvelle adresse
+      * 3/ formulaire de choix du nouveau pass (x2) et màj base sql
+      * rmq : si ancienne email déjà plus accessible alors clic de validation dans fiche de l'adhérent par admin ... (pas cliquable par adhérent lui-même mais visible pour renforcer le coté info/sécu)
+    * Semaine 21 : Débug sécu fichiers php dans toute l'arborescence
+    * Semaine 22 : Amélioration affichage des résultats de recherche (non-inscrits)
   * *Juin* :
     * Semaine 23 : 
     * Semaine 24 : 
@@ -54,13 +60,20 @@
   * *Documentation* (phil)
 
 = Perspectives =
-  * *Intégration Fliker/Wiki (login)*
+  * *Intégration Fliker/Wiki (page d'accueil/login)*
+    * Création dynamique du tableau des sports (wiki+printable) à partir base fliker
+    * Couplage avec Paypal ?
   * *Module d'inventaire et gestion financière (rec/dép) dans Fliker*
   * *Système de tickets*
+    * Couplage avec adresses emails asesco@u-psud
   * *Système de reservation*
-    * *Couplage inventaire*
-    * *Production d'iCal*
-    * *Affichage Agenda*
+    * Couplage avec inventaire
+    * Production d'iCal
+    * Affichage Agenda
+    * Couplage avec base des créneaux sports dans fliker
   * *Forum ?*
   * *Synchro comptes* : Wiki / Fliker / Tickets / Résa / Forum
+    * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
+    * Couplage avec LDAP u-psud
   * *Portail Sports*
+    * Couplage avec cartes multiservice étudiants et personnels ...
