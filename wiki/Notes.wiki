@@ -1,80 +1,24 @@
 = Notes =
 
-=== Documentation ===
-  * à faire ...
-  * schémas d'utilisation/fonctions pour chaque écran affiché
-    * ex : workflow de la procédure d'inscription, etc.
-  * au minimum lister toutes les fonctionalités et "politiques" codées (qui ne sont pas forcément dans cette liste wiki)
-    * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
 
-
-===Urgences===
-  * imageCreateFromPNG does not exist ...
-     * purger répertoires photo / certmeds des fichiers non-jpg !
-  * <s>fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir</s>
-  * <s>"impossible" selecté par défaut</s>
-  * <s>envoi email : cadre + grand ou ajustable ;)</s>
+===Bugs à Fixer===
+  * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
   * recherche : bouton select all fonctionne pas
-  * envoi email + email cookie : forcer subject = [ASESCO]...
-     * vérifier si sender / reply-to = current logged-in user !?
-  * <s>activer envoi email cookie + enlever l'affichage écran du cookie</s>
-  * <s>formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux</s>
-  * <s>formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent :(</s>
-  * <s>fiche adhesion : on peut pas changer la promo du paiement ?</s>
-  * <s>fiche adhesion : on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)</s>
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
   * n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
-  * déplacer en table custom :
-    * login : l'email que vous entré n'existe pas
-    * login : Le mot de passe que vous avez entré est erroné!
-    * validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
-    * validate : ok ... vous allez etre redirigés
-    * envoi email : patienter / continuer 
-  * <s>afficher systématiquement nom section - nom activité - nom créneau</s>
-  * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
-  * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
+  * listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
+  * inscription : bug dans le check n° tel sous certains navigateurs
+  * modif fiche adherent : imageCreateFromPNG does not exist ...
+     * ? purger répertoires photo / certmeds des fichiers non-jpg ?
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
-  * bug dans le check n° tel sous certains navigateurs
+  * <s>fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir</s>
+  * <s>fiche adhesion : on peut pas changer la promo du paiement</s>
+  * <s>fiche adhesion : on peut pas changer en même temps de promo et d'asso de visualisation (si on change asso, la promo revient à courant)</s>
+  * <s>formulaire nouvelle adhésion : si un responsable essaye d'ajouter une inscription à un autre adhérent, la liste des crenaux des dispos est calculée en fonction de ses adhesions à lui et pas de celle de l'autre adhérent</s>
+  * <s>formulaire nouvelle adhésion : ne pas afficher section/activités si déjà inscrit à tous les créneaux</s>
+  * <s>formulaire nouvelle adhésion : "impossible" selecté par défaut</s>
+  * <s>envoi email : cadre + grand ou ajustable</s>
   * <s>bug dans le check de la date sous certains navigateurs</s>
-  * PAIEMENTS:
-    * <s>Numéro de carte asesco:
-      * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
-      * proposer le 1er n° libre + textbox pour saisir un autre choix
-      * ne pas créer un numéro si il existe déjà
-      * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)
-      </s>
-    * id_asso/num_carte --> table (plusieurs assos pour un adherent)
-      * <s>Faire table de hash entre adh et asso</s>
-  * PROMOS :
-    * bouton de purge en fin d'année : des certificats méd / n° carte (?) / adhérents n'ayant JAMAIS eu de paiements
-    * dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
-
-  * AUTRES :
-    * envoi d'emails (cookie + rech) :
-      * subject=[NOM_ASSO]blabla
-      * mettre en to ou cc ou bcc le bureau_as pour copie/archiv
-      * ??? changer en bulks bcc (max=200) ???
-    * bouton "j'ai oublié mon passwd" --> renvoyer un cookie par email
-    * bouton "je suis un gros boulet" --> rediriger vers "RT"
-    * forcer affichage des noms/prénoms au format "Nnnnn" (quelle que soit la casse saisie dans formulaire et stockée dans BD)
-    * Table types de suppléments (cotiz, location, caution, supplément)
-    * Table types de paiements (chèque/espèces/CB/paypal/dispense)
-    * <s>Association destinataire table supplément</s>
-    * <s>Table mère pour asso/section/act/cre</s>
-    * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
-
-
-===Config/Install du logiciel===
-  * ? Readme propre et un seul script wrapper ?
-  * ? Script init pour créer compte admin ?
-  * ? Internationalisation ?
-    * <s>gestion du symbole monétaire</s>
-    * param de config pour choisir langue
-    * codage des strings affichées à l'écran dans des tables sql, indéxées par le param de locale ... (cf. wikipedia)
-  * <s>Fichier de config avec params connexion sql</s>
-  * <s>Mettre url base site dans table "admin" (ou fichier conf ?)</s>
-  * <s>Script d'init pour exécuter un sql (init db avec préfixe)</s>
-  * <s>purger du svn les versions précédentes du fichier sql (contenant des logins/pass...) ainsi que le fichier de conf contenant les access/db</s>
 
 
 ===Changements UML===
@@ -86,11 +30,39 @@
   * <s>question association gestionnaire (reverser le supplément à la bonne association)</s>
 
 
+===Config/Install du logiciel===
+  * ? Readme propre et un seul script wrapper ?
+  * ? Script init pour créer compte admin ?
+  * ? Internationalisation ?
+    * <s>gestion du symbole monétaire</s>
+    * param de config pour choisir langue
+    * codage des strings affichées à l'écran dans des tables sql, indéxées par le param de locale ... (cf. wikipedia)
+  * <s>Fichier de config avec params connexion sql</s>
+  * <s>Script d'init pour exécuter un sql (init db avec préfixe)</s>
+  * <s>purger du svn les versions précédentes du fichier sql (contenant des logins/pass...) ainsi que le fichier de conf contenant les access/db</s>
+
+
+===Page Admin===
+  * <s>Mettre url base site dans table "admin" (ou fichier conf ?)</s>
+  * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
+  * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
+  * déplacer en table custom :
+    * login : l'email que vous entré n'existe pas
+    * login : Le mot de passe que vous avez entré est erroné!
+    * validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
+    * validate : ok ... vous allez etre redirigés
+    * envoi email : patienter / continuer
+
+
 ===Login/Logout===
+  * bouton "j'ai oublié mon passwd" --> changer son pass dans chapitre "Adhérent"
+  * bouton "je suis un gros boulet" (oublié email et pass) --> rediriger vers "ticket"
   * <s>après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé</s>
 
 
 ===Notion de promo===
+  * bouton de purge en fin d'année : des certificats méd / des n° carte (?) / des fiches adhérents n'ayant JAMAIS eu de paiements
+  * dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
   * Page admin :
     * booléen pour mode standby (inscriptions ok mais temporairement plus d'adhésions)
     * stocker/modifier Bornes de la Promo courante (actuellement hardcodées = next Monday after 31/08 --> sem du 30/06)
@@ -102,20 +74,21 @@
 
 
 ===Associations===
+  * <s>Tables des statuts (etudiant/personnel/exterieur ...)</s>
+    * ! possibilité d'éditer les statuts possibles dans page admin !
   * <s>Ajout/Modif/Suppression entité (nom/desc/logo/url)</s>
-    * ! suppression devrait être remonté au niveau/droit "admin" !
-  * <s>Ajout/Suppression Cotisation</s>
+    * ? suppression devrait être remonté au niveau/droit "admin" ?
   * <s>Ajout/Suppression Responsable</s>
-    * ! problème du plugin de scrollbox intelligente !
-  * <s>Tables des statuts (etudiant/personel/exterieur ...)</s>
-  * <s>associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments affichés</s>
+  * <s>Ajout/Suppression Montant de Cotisation</s>
+  * <s>Associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments affichés</s>
+  * <s>Association destinataire dans table supplément</s>
+  * <s>Table mère pour asso/sec/act/cre</s>
+  * <s>Changer id_statut en id_asso_adh pour sec/act/cre</s>
 
 
 ===Sports===
-  * ! imposer une liste fixe de types de suppléments !
-  * ! créer la notion de supplément optionnel => dispensé par défaut mais rajoutable par prof ! (ex : lic féd)
   * Catégories de sports : table de catégories + table de hash activité/categorie
-    * Fonction de saisie/modif de catégories d'activités pour responsables activités + admins etc.
+    * Fonction de saisie/modif de catégories d'activités pour resps
   * Section
     * bouton pour désactiver une section : ne plus proposer dans la liste des nouvelles adhésions
     * formulaire pour ajouter/supprimer une asso co-gestionnaire
@@ -139,9 +112,44 @@
     </s>
 
 
+===Inscriptions===
+  * Gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
+  * Fonction pour vraiment supprimer un sport de la facture d'un adhérent
+  * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
+  * ? pas nécessaire ? <s>captcha en confirmation des formulaires</s>
+  * ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
+  * <s>identifiant = email</s>
+    * ? pas nécessaire ? <s>Demander 2 fois email</s>
+  * <s>gestion de password</s>
+    * <s>Mot de passe : à la vérification, encryption md5</s> + salt
+  * liste des sports:
+    * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
+    * ? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
+    * <s>faire page séparée</s>
+    * <s>encourager l'inscription chez d'autres assos (liste unique</s> + popup d'info onmousehover)
+  * 2 Scénarii d'inscription :
+    * recherche par critère (portail sport)
+      * mémorisation des sports choisis
+      * création d'une fiche adhérent
+      * choix de l'asso pour les sports choisis en fonction du statut nouvellement déclaré
+        * Calcul des associations auxquelles s'inscrire par critère de priorité :
+        # Maximum de sports
+        # Minimum d'associations
+        # Cout minimum
+        # Random si plusieurs choix (rare)
+      * envoi d'email de confirmation (cookie) avec facture
+    * <s>inscription directe
+      * création d'une fiche adhérent
+      * envoi d'email de confirmation (cookie) sans facture
+      * choix des sports (liste javascript) avec choix manuel asso (si suppléments existent pour le statut déclaré) ou "impossible" (mais conservé si pas de sup)
+      * affichage facture
+      </s>
+
+
 ===Adhérents===
+  * forcer écriture des noms/prénoms au format "Mmmmm" (quelle que soit la casse saisie dans formulaire)
   * bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
-  * bouton pour changer son email (par adhérent ou admin --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
+  * bouton pour changer son email (par adhérent ou resp --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
   * bouton pour dés/activer un compte (seulement par admin)
   * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
   * bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
@@ -186,41 +194,20 @@
   * <s>Protection des répertoires de stockage (index.htm ou .htaccess ou autre ...)</s>
 
 
-===Inscriptions===
-  * gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
-  * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
-  * fonction pour vraiment supprimer un sport de la facture d'un adhérent
-  * ? pas nécessaire ? <s>captcha en confirmation des formulaires</s>
-  * ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
-  * <s>identifiant = email</s>
-    * ? pas nécessaire ? <s>Demander 2 fois email</s>
-  * <s>gestion de password</s>
-    * <s>Mot de passe : à la vérification, encryption md5</s> + salt
-  * liste des sports:
-    * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
-    * ? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
-    * <s>faire page séparée</s>
-    * <s>encourager l'inscription chez d'autres assos (liste unique</s> + popup d'info onmousehover)
-  * 2 Scénarii d'inscription :
-    * recherche par critère (portail sport)
-      * mémorisation des sports choisis
-      * création d'une fiche adhérent
-      * choix de l'asso pour les sports choisis en fonction du statut nouvellement déclaré
-        * Calcul des associations auxquelles s'inscrire par critère de priorité :
-        # Maximum de sports
-        # Minimum d'associations
-        # Cout minimum
-        # Random si plusieurs choix (rare)
-      * envoi d'email de confirmation (cookie) avec facture
-    * <s>inscription directe
-      * création d'une fiche adhérent
-      * envoi d'email de confirmation (cookie) sans facture
-      * choix des sports (liste javascript) avec choix manuel asso (si suppléments existent pour le statut déclaré) ou "impossible" (mais conservé si pas de sup)
-      * affichage facture
-      </s>
-
-
 ===Paiements===
+  * ! Créer la notion de supplément optionnel => dispensé par défaut mais rajoutable par prof ! (ex : lic féd)
+  * Table types de suppléments (cotiz, location, caution, supplément)
+    * ! possibilité d'éditer les types possibles dans page admin !
+  * Table types de paiements (chèque/espèces/CB/paypal/dispense)
+    * ! possibilité d'éditer les types possibles dans page admin !
+  * id_asso/num_carte --> table (plusieurs assos pour un adherent)
+    * <s>Faire table de hash entre adh et asso</s>
+  * <s>Numéro de carte asesco:
+    * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
+    * proposer le 1er n° libre + textbox pour saisir un autre choix
+    * ne pas créer un numéro si il existe déjà
+    * possibilité de changer de numéro (carte perdue --> enregistrer l'ancien comme perdu et non-réallouable)
+    </s>
   * <s>Faire table de hash paiement --> adhésion</s>
   * <s>affichage du Solde: prendre adhésions selon créneaux visibles par la personne qui regarde, puis selects paiements de ces adhésions et calcul diff</s>
   * <s>affichage auto promo courante (si autre promo, utiliser menu déroulant en haut de page)</s>
@@ -267,37 +254,41 @@
 
 
 ===Gestion des droits & privilèges===
-  * <s>Administrateur défini par champs privilège à 1 dans table adhérent --> full read/write access (toutes assos, etc.)
-  * Héritage descendant (admin peut donner droit bureau --> resps section --> resps activité --> resps créneau)
-    * Privilèges détectés grâce à tables de hash responsables
-      * Donne droit à modification sur tout (sauf responsable) ce qui est à son niveau et en dessous
-      * Donne droit à création/suppression seulement sur ce qui est en dessous (et dans la même association)
-      * Donne droit à donner des droits (= désigner un responsable) seulement sur ce qui est en dessous (et dans la même association)
+  * <s>Administrateur défini par champs privilège à 1 dans table adhérent --> full read/write access (toutes assos, etc.)</s>
+  * <s>Héritage descendant (admin peut donner droit bureau --> resps section --> resps activité --> resps créneau)</s>
+  * <s>Privilèges détectés grâce à tables de hash responsables
+    * Donne droit à modification sur tout (sauf responsable) ce qui est à son niveau et en dessous
+    * Donne droit à création/suppression seulement sur ce qui est en dessous (et dans la même association)
+    * Donne droit à donner des droits (= désigner un responsable) seulement sur ce qui est en dessous (et dans la même association)
+    </s>
   * Paiements :
-    * seul un membre du BUREAU de l'asso qui perçoit peut enregistrer un paiement
+    * <s>seul un membre du BUREAU de l'asso qui perçoit peut enregistrer un paiement
     * un tel membre NE PEUT PAS enregistrer un paiement pour lui-même ! (obligation contrôle croisé)
+    </s>
   * Présences :
-    * coche/décoche possible pour n'importe quel resp ayant accès au créneau et pour n'importe quel pratiquant inscrit au créneau
+    * <s>coche/décoche possible pour n'importe quel resp ayant accès au créneau</s> (et pour n'importe quel pratiquant inscrit au créneau pour ses cases à lui ?)
   * Recherches :
-    * un resp ne voit que les créneaux auxquels il a un droit d'accès
+    * Possibilité pour simples pratiquants de recherche aussi MAIS restreinte : juste nom/prénom/case envoi email (adresse cachée) et seulement dans leur activité
+    * Possibilité pour membre de bureau (voir simple resp) asso d'ouvrir la fiche perso des sans-adhésion (et ajouter des adhésion)
+    * Possibilité pour membre de bureau (only) de modifier fiche perso d'un adhérent (y compris champs habituellement protégés)
+    * <s>un resp ne voit que les créneaux auxquels il a un droit d'accès
     * il peut lister TOUS les pratiquants à ces créneaux (y compris si autre asso) ainsi qu'ouvrir leur fiche perso et envoyer email
     * mais il ne verra QUE les adhésions/paiements liés à ces créneaux (y compris si autre asso)
     * il peut peut ajouter/supprimer des adhésions à un inscrit
     * un membre de bureau asso peut lister les sans-adhésion
-  </s>
-    * Possibilité pour simples pratiquants de recherche aussi MAIS restreinte : juste nom/prénom/case envoi email (adresse cachée) et seulement dans leur activité
-    * Possibilité pour membre de bureau (voir simple resp) asso d'ouvrir la fiche perso des sans-adhésion (et ajouterdes adhésion)
-    * Possibilité pour membre de bureau (only) de modifier fiche perso d'un adhérent (y compris champs habituellement protégés)
+    </s>
 
 
 ===Envoi d'Email===
   * Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
+  * Bien gérer le SUBJECT:
+    * forcer [NOM_ASSO] en début de sujet
   * Bien gérer le FROM: (ou REPLY-TO:)
     * Bureau-asesco.asso@u-psud.fr si c'est un membre du bureau, adresse email utilisateur/prof sinon
   * Bien gérer le TO:
     * Vérifier qu'on envoie pas l'email deux fois à une même personne
+    * ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
     * <s>Un email par personne en TO: (timer/répartition dans le temps)</s> <b>OU</b> bulk-email en BCC: (limitation à 200 à u-psud)
-  * ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
 
 
 ===Alertes / Notifications===
@@ -365,3 +356,10 @@
   * réfléchir protocole d'échange de données pour permettre à plusieurs instances de travailler indépendamment (serveurs distincts)
     * séparer les admins par asso si besoin
     * redondance / sécurité des infos
+
+
+=== Documentation ===
+  * schémas d'utilisation/fonctions pour chaque écran affiché
+    * ex : workflow de la procédure d'inscription, etc.
+  * au minimum lister toutes les fonctionalités et "politiques" codées (qui ne sont pas forcément dans cette liste wiki)
+    * ex : gestion des droits (un adhérent qui est aussi responsable ne peut s'auto-gérer et doit demander à un autre resp de valider sa fiche)
