@@ -1,5 +1,6 @@
 <?php
 session_start();
+define('_VALID_INCLUDE', TRUE);
 include("./includes/paths.php");
 include("Adherent.php");
 include_once("General.php");
@@ -12,8 +13,7 @@ $header = '
   <title>::Fliker::Connexion</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
  </head>
- <body>
-<h1>Connexion</h1> ';
+ <body>';
 
 $headerr = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -24,7 +24,7 @@ $headerr = '
   <meta http-equiv="refresh" content="6;url=login.php" />
  </head>
  <body>
-  <h1>Connexion</h1> ';
+  <h2>Connexion</h2> ';
 
 $footer = '</body></html>';
 
@@ -115,7 +115,13 @@ if(isset($_POST['submit'])){
 }
 else {
 	print $header;
-	print '
+	print '<div id="top">';
+	print '<span id="title">';
+	print getParam('text_top');
+	print '</span>';
+	include("userdiv.php");
+	print '</div>';
+	print '<h2>Connexion</h2> 
 			<form action="login.php" method="post">
 				<div id="border">
 					<table cellpadding="2" cellspacing="0" border="0">
@@ -131,7 +137,7 @@ else {
 							<td colspan="2" align="center"><input type="submit" name="submit" value="Connexion" /></td>
 						</tr>
 						<tr>
-							<td align="center" colspan="2"><a href="inscription/index.php">S\'inscrire</a> | <a href="forgot.php">Mot de passe oublié</a></td>
+							<td align="center" colspan="2"><a href="inscription/index.php">S\'inscrire</a> | <a href="forgot.php">Mot de passe oublié</a><br /><a href="forgot.php?forgot=email">Adresse email oublié</a></td>
 						</tr>
 					</table>
 				</div>

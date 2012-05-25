@@ -40,7 +40,6 @@ if ($modif_week < -100)
 $output = "<div class=\"tip\">".getParam('text_presence')."</div>";
 if(isset($_POST['cre'])) {
 	$cre = $_POST['cre'];
-	echo "Créneaux : $cre.";
 	$adhs = getAdherentsByCreneau($cre,$promo);
 	if(isset($_POST['week'])) {
 		$current_week=$_POST['week'];
@@ -215,20 +214,14 @@ else
 		$output.= "<OPTION value=\"$p\" ".(isset($_POST['promo']) && $_POST['promo']==$p ? "selected" : "")." >$p</OPTION>";
 	}
 	$output.= "</SELECT></p>";
-	$output .= "<table><tr><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Présence (en %)</th></tr>";
+	$output .= "<table><tr><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th></tr>";
+	$tab_regular = getAdherentsByPromo($promo);
 	foreach($tab as $creneau)
 	{
-		$query = "SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE promo=$promo";
-		include("opendb.php");
-		$results = mysql_query($query);
-		if (!$results) echo mysql_error();
 		$cre = $creneau['id_cre'];
 		$count_presence = 0;
 		$inc = 0;
-		while ($tmp_ressource[$inc] = mysql_fetch_array($results))
-			$inc++;
-		$inc = 0;
-		while ($tmp_array = $tmp_ressource[$inc])
+		while ($tmp_array = $tab_regular[$inc])
 		{
 			if ($tmp_array['id_cre'] == $cre)
 				$count_presence++;
@@ -238,7 +231,53 @@ else
 		$count_presence *= 100;
 		$count_presence /= ($tmp_value * 43);
 		$count_presence = round($count_presence);
-		$output.= '<tr><div><td><input type="radio" name="cre" value='.$cre.' ></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$tmp_value.'</td><td align=center>'.$count_presence.'</td></h4></input></div></tr>';
+		$i = 0;
+		$tmp_tab_adh = null;
+		$tmp_tab_value = null;
+		$count_value = 0;
+		$tab_week = null;
+		while ($tmp_array = $tab_regular[$i])
+		{
+			if ($tmp_array['id_cre'] == $cre)
+			{
+				$tab_week[$tmp_array['week']] = 1;
+				if (isset($tmp_tab_value[$tmp_array['id_adh']]))
+					$tmp_tab_value[$tmp_array['id_adh']]++;
+				else
+				{
+					$tmp_tab_adh[$count_value] = $tmp_array['id_adh'];
+					$tmp_tab_value[$tmp_array['id_adh']] = 1;
+					$count_value++;
+				}
+			}
+			$i++;
+		}
+		$i = 0;
+		$count_regular_adh = 0;
+		$tmp_string = 0;
+		$count_presence = 0;
+		while (isset($tmp_tab_adh[$i]))
+		{
+			if ($tmp_tab_value[$tmp_tab_adh[$i]] > 2)
+			{
+				$count_presence += $tmp_tab_value[$tmp_tab_adh[$i]];
+				$count_regular_adh++;
+			}
+			$i++;
+		}
+		$count_presence *= 100;
+		$number_week = 0;
+		$i = 0;
+		while ($i != 53)
+		{
+			if (isset($tab_week[$i]) && $tab_week[$i] == 1)
+				$number_week++;
+			$i++;
+		}
+		if ($count_regular_adh != 0)
+			$count_presence /= ($count_regular_adh * $number_week);
+		$count_presence = round($count_presence);
+		$output.= '<tr><div><td><input type="radio" name="cre" value='.$cre.' ></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td align=center>'.$tmp_value.'</td><td align=center>'.$count_regular_adh.'</td><td align=center>'.$count_presence.'</td></h4></input></div></tr>';
 	}
 	$output.= '</table><input type="submit" value="Ouvrir" /></form>';
 }

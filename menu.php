@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 $tot_asso=count(getAssociations($_SESSION['uid']));
 $tot_sec=count(getSections($_SESSION['uid']));
 $tot_act=count(getActivites($_SESSION['uid']));

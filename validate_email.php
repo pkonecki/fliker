@@ -60,16 +60,16 @@ $header = '
 	</script>
  </head>
  <body>
-<h1>Validation</h1> ';
+<h2>Validation</h2> ';
 
 $footer = '</body></html>';
 
 if (isset($_POST['action']) && $_POST['action']==="submitted") {
 
 	include("opendb.php");
-	$password = $_POST['password'];
+	$email = $_POST['email'];
 	$id = $_POST['id'];
-	$sql="UPDATE {$GLOBALS['prefix_db']}adherent SET password = MD5('$password'), activationkey = '', active=1 WHERE id = '$id'";
+	$sql="UPDATE {$GLOBALS['prefix_db']}adherent SET add_mail_temp = '$email' WHERE id = '$id'";
 	if (!mysql_query($sql)){
 		die('Error: ' . mysql_error());
 	}
@@ -82,49 +82,70 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 		  <meta http-equiv="refresh" content="3;url=login.php" />
 		 </head>
 		 <body>
-		<h1>Validation</h1>';
+		<h2>Validation</h2>';
 
-		print '<div>Votre compte est à présent activé ! Vous allez être redirigé vers la page de connexion ...</div>';
+		$to      = $email;
+		$subject = "Confirmation nouvel email Fliker";
+		$message = "Bonjour,\r\r Pour que le changement d\'addresse email se fasse veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+		$headers = 'From: '.getParam('admin_email') . "\r\n" .
+				'Reply-To: '.getParam('contact_email') . "\r\n" .
+				'X-Mailer: PHP/' . phpversion();
+		$return = mail($to, $subject, $message, $headers);
+		print '<p>Une demande de confirmation vient d\'être envoyé à l\'adresse '.$email.'. Une fois cette confirmation effectué le changement d\'adresse sera fait.</p>';
 
 		print $footer;
 	}
 	include("closedb.php");
 }
-else {
+else
+{
 
 	$queryString = $_SERVER['QUERY_STRING'];
-	if (empty($queryString)){
+	if (empty($queryString))
 		print('Il n\'y a pas de clef de validation !');
-	}
-	else {
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent where activationkey='$queryString' ";
-	include("opendb.php");
-	$result = mysql_query($query) or die(mysql_error());
-	if (mysql_num_rows($result))
-	while($row = mysql_fetch_array($result))
-	{
-	  	if ($queryString == $row["activationkey"]){
-  			print $header;
-		 	print "<div>Merci, " . $row["prenom"] . " !<p>Votre compte est presque activé. Votre \"identifiant\" sera votre adresse email.</p><p>Veuillez SVP définir le mot de passe qui sera associé à votre identifiant :</p>";
-		  	print '
-			<form name="f_password" id="f_password" action="validate.php" method="POST">
-			<table border=0>
-		  	<tr><td>Entrez un mot de passe : </td><td><input name="password" type="password" id="password" size="25"></td></tr>
-		  	<tr><td>Vérifiez ce mot de passe : </td><td><input name="password_confirm" type="password" id="password_confirm" size="25"></td></tr>
-		  	<input type="hidden" name="action" value="submitted" />
-		  	<input type="hidden" name="id" value="'.$row[id].'" />
-		  	<tr><td colspan=2 ><input type="submit" value="Envoyer"/></td></tr>
-			</table>
-			</form>
-
-			';
-     		print '</div>';
-  			print $footer;
-	  	}
-	}
 	else
-		print 'La clef de validation n\'existe pas ou a déjà été utilisée !';
-	include("closedb.php");
+	{
+		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent where activationkey='$queryString' ";
+		include("opendb.php");
+		$result = mysql_query($query) or die(mysql_error());
+		if (mysql_num_rows($result))
+		{
+			while($row = mysql_fetch_array($result))
+			{
+				if ($queryString == $row["activationkey"])
+				{
+					if ($row["add_mail_temp"] != null)
+					{
+						$query = "UPDATE {$GLOBALS['prefix_db']}presence SET add_mail_temp='' WHERE id=".$row['id']." ";
+						include("opendb.php");
+						$result = mysql_query($query);
+						if (!$results)
+							die(mysql_error());
+						print $header;
+						print '<p>Changement d\'adresse email effectué.</p>';
+						print $footer;
+					}
+					else
+					{
+						print $header;
+						print '
+						<form name="f_password" id="f_password" action="validate_email.php" method="POST">
+						<table border=0>
+						<tr><td>Entrez votre nouvelle adresse email : </td><td><input name="email" type="text"></td></tr>
+						<input type="hidden" name="action" value="submitted" />
+						<input type="hidden" name="id" value="'.$row[id].'" />
+						<tr><td colspan=2 ><input type="submit" value="Envoyer"/></td></tr>
+						</table>
+						</form>';
+						print '</div>';
+						print $footer;
+					}
+				}
+			}
+		}
+		else
+			print 'La clef de validation n\'existe pas ou a déjà été utilisée !';
+		include("closedb.php");
 	}
 }
 ?>

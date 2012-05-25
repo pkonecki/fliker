@@ -4,28 +4,35 @@ defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid'])
 {
 	$id_adh =$_SESSION['uid'];
-	$self=true;
+	$self = true;
 }
 else if($_SESSION['privilege']==1)
 {
-	$admin=true;
-	$id_adh=$_GET['adh'];
-	$resp_asso=true;
-	$assos_resp=getMyAssos(-1);
-	if(!isset($_GET['asso'])) $current_asso=key($assos_resp);
-	else $current_asso=$_GET['asso'];
+	$admin = true;
+	$id_adh = $_GET['adh'];
+	$resp_asso = true;
+	$assos_resp = getMyAssos(-1);
+	if(!isset($_GET['asso']))
+		$current_asso = key($assos_resp);
+	else
+		$current_asso = $_GET['asso'];
 }
 else
 {
-	if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
-		$resp_asso=true;
-		$assos_resp=getMyAssos($_SESSION['uid']);
-		if(!isset($_GET['asso'])) $current_asso=key($assos_resp);
-		else $current_asso=$_GET['asso'];
+	if(count(getMyAssos($_SESSION['uid'])) > 0 )
+	{
+		$resp_asso = true;
+		$assos_resp = getMyAssos($_SESSION['uid']);
+		if(!isset($_GET['asso']))
+			$current_asso = key($assos_resp);
+		else
+			$current_asso = $_GET['asso'];
 	}
 	$tab = getMyAdherents($_SESSION['uid']);
-	if (isset($tab[$_GET['adh']])) $id_adh=$_GET['adh'];
-	else {
+	if (isset($tab[$_GET['adh']]))
+		$id_adh=$_GET['adh'];
+	else
+	{
 		print 'Vous n\'avez pas accès à cette page';
 		print $die_footer;
 		die();
@@ -33,16 +40,16 @@ else
 }
 if(!empty($_GET['promo']))
 {
-	$promo=$_GET['promo'];
+	$promo = $_GET['promo'];
 }
 else
 {
-	$promo=$current_promo;
+	$promo = $current_promo;
 }
 $currency = getParam('currency');
 $adh = getAdherent($id_adh);
 $creneaux = getAllCreneaux();
-$id_statut_adh = $adh['id_statut'];
+$id_statut_adh = $adh['statut'];
 if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 	print '<h2>Choisissez vos activités</h2>';
 	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
@@ -192,7 +199,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 				break;
 				case 2:
-					if(isset($assos_cre[$id_statut_adh][$value['id_cre']])) {
+					if(isset($assos_cre[$id_statut_adh][$value['id_cre']]))
+					{
 						print "Possible";
 						print "</td>";
 						print "<td>{$value['promo']}</td>";
@@ -205,7 +213,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 						print '<input type="submit" value="Choisir asso" >';
 						print '</FORM>';
 						print "</td>";
-					} else {
+					}
+					else
+					{
 						print "Impossible";
 						print "</td>";
 						print "<td>{$value['promo']}</td>";
@@ -258,7 +268,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 		if (isset($resp_asso)) {
 			print "<th>Nouveau Paiement :</th>";
 		}
-		$tab = getFacture($ads,$adh['id_statut'],$promo);
+		$tab = getFacture($ads,$adh['statut'],$promo);
 		$p_sup = getPaiementsSup($id_adh);
 		foreach($tab['assos'] as $row){
 				print "<tr><td>Association {$assos[$row['id_asso_paie']]['nom']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td>
@@ -376,75 +386,75 @@ $('#tree_root').checkboxTree({
             }
     });
 $('.reset').click(function() {
-		$('#total').text("0");
-	});
+                $('#total').text("0");
+        });
 $(".radio_cre").click(function() {
-		var params = {};
-		$("input[type=radio]:checked.radio_cre").each(function(){
-			params["cre_"+$(this,'input[type=radio]:checked').attr('cre')] = $(this,'input[type=radio]:checked').val();
-		});
-		params['id_statut_adh'] = $('#id_statut_adh').text();
-		//alert($.param(params));
-		$.getJSON("webservices/cout_adh.php",
-				params,
-				function(data) {
-					$("#total").text(data['total']);
-				}
-		);
+                var params = {};
+                $("input[type=radio]:checked.radio_cre").each(function(){
+                        params["cre_"+$(this,'input[type=radio]:checked').attr('cre')] = $(this,'input[type=radio]:checked').val();
+                });
+                params['id_statut_adh'] = $('#id_statut_adh').text();
+                //alert($.param(params));
+                $.getJSON("webservices/cout_adh.php",
+                                params,
+                                function(data) {
+                                        $("#total").text(data['total']);
+                                }
+                );
 });
 $(".tot").change(function(){
-	total = 0.0;
-	$(".tot").each(function(){
-		if(!isNaN(parseFloat($(this).val()))){
-			total= total + parseFloat($(this).val());
-		}
-	});
-	$("#total").val(total);
+        total = 0.0;
+        $(".tot").each(function(){
+                if(!isNaN(parseFloat($(this).val()))){
+                        total= total + parseFloat($(this).val());
+                }
+        });
+        $("#total").val(total);
 });
 $(".toggle").click(function () {
       $(this).parent().parent().next().toggle();
       //alert($(this).parent().parent().next().html());
 });
 $('#promo').change( function (){
-	window.location.search = "page=7&adh="+$.getUrlVar('adh')+"&promo="+$(this).val();
+        window.location.search = "page=7&adh="+$.getUrlVar('adh')+"&promo="+$(this).val();
 });
 $(function() {
-	$( ".datepicker" ).datepicker({ 
-		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
-	});
+        $( ".datepicker" ).datepicker({ 
+                changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
+        });
 });
 $(document).ready(function() {
-		  	$.extend($.validator.messages, {
-		        required: "Ce champs est requis",
-		        number: "Veuillez entrer un numéro correct"
+                        $.extend($.validator.messages, {
+                        required: "Ce champs est requis",
+                        number: "Veuillez entrer un numéro correct"
 
-    		});
-			$("#f_numcarte").validate({
+                });
+                        $("#f_numcarte").validate({
 
-			rules : {
-				numcarte: {
-	                required: true,
-					number: true,
-	                remote: "includes/numcarte.php"
-            	}
-			},
-			messages: {
-				numcarte: {
-					required: "Ce champs est requis",
-					number: "Veuillez entrer un numéro correct",
-					remote: "Le numéro est déjà utilisé"
-					}
-			},
-			errorPlacement: function(error, element) {
-	            if ( element.is(":radio") )
-	                error.appendTo( element.parent() );
-	          	else
-                	error.appendTo( element.parent() );
-        	},
-        	success: function(label) {
-            	// set   as text for IE
-            	label.html(" ").addClass("checked");
-	        }
-			});
+                        rules : {
+                                numcarte: {
+                        required: true,
+                                        number: true,
+                        remote: "includes/numcarte.php"
+                }
+                        },
+                        messages: {
+                                numcarte: {
+                                        required: "Ce champs est requis",
+                                        number: "Veuillez entrer un numéro correct",
+                                        remote: "Le numéro est déjà utilisé"
+                                        }
+                        },
+                        errorPlacement: function(error, element) {
+                    if ( element.is(":radio") )
+                        error.appendTo( element.parent() );
+                        else
+                        error.appendTo( element.parent() );
+                },
+                success: function(label) {
+                // set   as text for IE
+                label.html(" ").addClass("checked");
+                }
+                        });
 });
 </script>

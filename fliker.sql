@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Mer 09 Mai 2012 à 09:55
+-- Généré le : Ven 25 Mai 2012 à 14:42
 -- Version du serveur: 5.5.8
 -- Version de PHP: 5.3.5
 
@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `activationkey` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
+  `add_mail_temp` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_statut` (`id_statut`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=369 ;
@@ -92,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   KEY `id_adh` (`id_adh`),
   KEY `id_cre` (`id_cre`),
   KEY `id_asso` (`id_asso`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=589 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=615 ;
 
 -- --------------------------------------------------------
 
@@ -227,9 +228,7 @@ CREATE TABLE IF NOT EXISTS `fliker_presence` (
   `id_adh` int(16) NOT NULL,
   `id_cre` int(16) NOT NULL,
   `week` int(2) NOT NULL,
-  `promo` int(4) NOT NULL,
-  KEY `id_adh` (`id_adh`),
-  KEY `id_cre` (`id_cre`)
+  `promo` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -403,13 +402,6 @@ ALTER TABLE `fliker_paiement`
 ALTER TABLE `fliker_paiement_sup`
   ADD CONSTRAINT `paiement_sup_ibfk_1` FOREIGN KEY (`id_paiement`) REFERENCES `fliker_paiement` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `paiement_sup_ibfk_2` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Contraintes pour la table `fliker_presence`
---
-ALTER TABLE `fliker_presence`
-  ADD CONSTRAINT `presence_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `presence_ibfk_2` FOREIGN KEY (`id_cre`) REFERENCES `fliker_creneau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `fliker_resp_act`

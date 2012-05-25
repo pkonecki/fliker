@@ -46,7 +46,7 @@ function newAdherent($tab){
 	$colonnes .=")";
 	$values .=")";
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}adherent ".$colonnes." VALUES ".$values;
-	echo $query;
+	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	//send mail
@@ -153,7 +153,21 @@ function getAdherentsByCreneau($id_cre,$promo){
 	if (!$results) echo mysql_error();
 	$tab = array();
 	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row;
+		$tab[$row['id']] = $row;
+	}
+	include("closedb.php");
+	return $tab;
+}
+
+function getAdherentsByPromo($promo){
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE promo=$promo";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	$i = 0;
+	while($tab[$i] = mysql_fetch_array($results)){
+		$i++;
 	}
 	include("closedb.php");
 	return $tab;

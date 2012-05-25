@@ -1,5 +1,6 @@
 <?php
-if((strcmp($_SESSION['user'],"") == 0)){
+if(!isset($_SESSION['user']))
+{
 	print "<p>Vous n'êtes pas connecté</p>";
 }
 else {
