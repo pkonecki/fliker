@@ -1,4 +1,5 @@
-<?php 
+<?php
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 include("paths.php");
 
 $query="SELECT id,nom FROM {$GLOBALS['prefix_db']}statut ORDER BY nom";

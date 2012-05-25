@@ -12,10 +12,13 @@ include_once('Adhesion.php');
 include_once('Supplement.php');
 include_once("Paiement.php");
 include_once("General.php");
+include_once("EspaceMembre.class.php");
 
+// Définition de la promo et de la localisation
 $current_promo=getParam('promo');
 $GLOBALS['current_promo']=$current_promo;
 setlocale(LC_ALL, 'fr_FR');
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
    "http://www.w3.org/TR/html4/strict.dtd">
@@ -36,23 +39,17 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.datepicker-fr.js"></script>
  </head>
- <body>
-<div id="top">
-
+ 
 <?php
-print '<span id="title">';
-print getParam('text_top');
-print '</span>';
-if(isset($_SESSION['user']))
-	include("menu.php");
-include("userdiv.php");
-print '</div>';
+print '<body>';
+$EspaceMembre = new EspaceMembre;
+$EspaceMembre->showMenu();
+
 if(isset($_SESSION['user']))
 {
 	print '<div id="content">';
 	if(empty($_GET['page']))
 		$_GET['page']=1;
-
 	switch($_GET['page']){
 		case 1:
 			include("fiche_adherent.php");
@@ -65,7 +62,7 @@ if(isset($_SESSION['user']))
 			break;
 		case 4:
 			include("fiche_section.php");
-		break;
+			break;
 		case 5:
 			include("fiche_activite.php");
 		break;
@@ -86,11 +83,11 @@ if(isset($_SESSION['user']))
 		break;
 	}
 	print '</div>';
-} else print 'Vous n\'êtes pas connecté';
-$die_footer="</div></body></html>";
-
+}
+else
+	print 'Vous n\'êtes pas connecté';
+print '</body></html>';
 ?>
-</body></html>
 
 <script type="text/javascript">
 $('.confirm').confirm({

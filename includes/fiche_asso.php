@@ -82,16 +82,16 @@ else {
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
 		print '<ul id="submenu">';
-		if($tot_asso > 0){
+		if(isset($tot_asso) && $tot_asso > 0){
 			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
 		}
-		if($tot_sec > 0){
+		if(isset($tot_sec) && $tot_sec > 0){
 			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
 		}
-		if($tot_act > 0){
+		if(isset($tot_act) && $tot_act > 0){
 			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
 		}
-		if($tot_cre > 0){
+		if(isset($tot_cre) && $tot_cre > 0){
 			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
 		}
 		print '</ul>';

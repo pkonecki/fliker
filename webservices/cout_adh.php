@@ -1,7 +1,15 @@
 <?PHP
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 include_once("../includes/paths.php");
 $where=" false ";
-$id_statut_adh=$_GET['id_statut_adh'];
+print 'avant';
+print $_GET['id_statut_adh'];
+print 'apres';
+die('FERMEEEEEEEEEEEEEEE');
+if (isset($_GET['id_statut_adh']))
+	$id_statut_adh=$_GET['id_statut_adh'];
+else
+	$id_statut_adh = null;
 foreach($_GET as $key => $asso ){
 	if(preg_match('/^cre_\d+/',$key)) {
 		$cre = preg_replace('/^cre_(\d+)/','$1',$key);
@@ -25,15 +33,20 @@ $acts = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_act FROM ($tout
 $cres = "SELECT DISTINCT sup.valeur as valeur, S1.id_asso, S1.id_cre FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk 
 			WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_cre=sup_fk.id_ent AND sup_fk.id_sup=sup.id";
 
-$t_assos = "SELECT SUM(A.valeur) t_assos FROM ($assos) AS A ";
+$t_assos ="SELECT SUM(A.valeur) t_assos FROM ($assos) AS A ";
 $t_secs = "SELECT SUM(A.valeur) t_secs FROM ($secs) AS A ";
 $t_acts = "SELECT SUM(A.valeur) t_acts FROM ($acts) AS A ";
 $t_cres = "SELECT SUM(A.valeur) t_cres FROM ($cres) AS A ";
 $total = "SELECT ( IFNULL(A.t_assos,0) + IFNULL(S.t_secs,0) + IFNULL(AC.t_acts,0) + IFNULL(C.t_cres,0) ) total  FROM ($t_assos) AS A, ($t_secs) AS S,($t_acts) AS AC, ($t_cres) AS C";
 include("opendb.php");
 $results = mysql_query($total);
-if (!$results) echo mysql_error();
-$ret = mysql_result($results,0,"total");
+if (!$results)
+{
+	echo mysql_error();
+	$ret = null;
+}
+else
+	$ret = mysql_result($results,0,"total");
 $resultat = array('total' => $ret);
 print(json_encode($resultat));
 include("closedb.php");

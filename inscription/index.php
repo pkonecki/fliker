@@ -12,20 +12,8 @@ $header = '
 	<script type="text/javascript" src="../includes/js/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="../includes/js/jquery-ui.js"></script>
 	<script type="text/javascript" src="../includes/js/jquery.ui.datepicker-fr.js"></script>
- </head>
- <body>
-<h1>Inscription</h1> ';
-
-$header2 = '
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
- <head>
-  <title>::Fliker::Inscription</title>
-  <link rel="stylesheet" type="text/css" href="../includes/style.css" />
-  <meta http-equiv="refresh" content="30;url=../index.php" />
- </head>
- <body>
-<h1>Inscription</h1> ';
+ 	</head>
+	<body>';
 
 $footer = '</body></html>';
 
@@ -37,17 +25,30 @@ include("saveImage.php");
 require("class.imageconverter.php");
 $dest_dossier = "../photos";
 
+print $header;
+print '<div id="top">';
+print '<span id="title">';
+print getParam('text_top');
+print '</span>';
+print '<div class=userdiv id=userdiv >';
+if(!isset($_SESSION['user']))
+	print '<a href="../login.php">Connexion</a> | <a href="./index.php">Inscription</a>';
+else 
+	print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="../logout.php">Déconnexion</a>';
+ print '</div>';
+print '</div>';
+print '<h2>Inscription</h2>';
 if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 {
 	if(!(strcmp($_SESSION['uid'],"") == 0)){
 		session_start();
 	$_SESSION=$_POST;
 	$tab = getChampsAdherents();
-	print $header;
 	print "<h2>Récapitulatif</h2>";
 	print '<TABLE BORDER="1">';
 	foreach($tab as $row){
-		if($row['inscription']==1){
+		if($row['inscription']==1)
+		{
 			print '<TR>';
 			if($row['type']==="varchar")
 				print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
@@ -60,11 +61,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 				else
 					print '<TD>'.$row['description'].'</TD><TD>Non</TD>';
 			}
-			if($row['type']==='file'){
+			if($row['type']==='file')
+			{
 				print '<TD>'.$row['description'].'</TD><TD>'.$_FILES[$row['nom']]['name'].'</TD>';
 				saveImage($_SESSION['email'],$row['nom']);
 			}
-			if($row['type']==="select"){
+			if($row['type']==="select")
+			{
 				$tab=getSelect($row['nom']);
 				print '<TD>'.$row['description'].'</TD><TD>'.$tab[$_SESSION['id_'.$row['nom']]].'</TD>';
 			}
@@ -85,18 +88,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 	else {
 		header("location: index.php") ;
 	}
-} else if (isset($_POST['action']) && $_POST['action'] == 'confirmed'){
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'confirmed')
+{
 	newAdherent($_SESSION);
-	print $header;
-#	print $header2;
 	print "<h2>Félicitations !</h2><p>Votre pré-inscription a été enregistrée. Veuillez SVP cliquer sur le lien de validation dans l'email qui vient de vous être envoyé, afin d'activer votre compte.</p><p>(Vous pouvez fermer cette fenêtre.)</p>";
 	print $footer;
 	session_unset();
 	session_destroy();
 }
-else {
-	/*session_start();*/
-	print $header;
+else
+{
 	$tab = getChampsAdherents();
 	print '<br/><FORM id="f_inscription" action="index.php" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -181,8 +183,7 @@ $(document).ready(function() {
 					date: true
 				},
 				date_req: {
-					required: true,
-					date: true
+					required: true
 				},
 				email: {
 					email: true,

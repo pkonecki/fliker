@@ -1,5 +1,5 @@
 <?php
-
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 switch($_POST['action']){
 	case "sendmail_confirm":
 	$headers = 'From: '.getParam('admin_email') . "\r\n" .
@@ -43,13 +43,6 @@ switch($_POST['action']){
 	foreach ($adhs as $adh) print "<input type=\"hidden\" name=\"to[]\" value=\"{$adh['email']}\"  />";
 	print '<input type="hidden" name="action" value="sendmail_confirm" >
 			<tr><td><input type="submit" ></td></tr></FORM>';
-	
-
-
-
-	
 	break;
 }
-
-
 ?>

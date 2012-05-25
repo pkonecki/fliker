@@ -1,4 +1,5 @@
 <?php
+defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 include("../includes/paths.php");
 include("opendb.php");
 if(mysql_num_rows(mysql_query("SELECT email FROM {$GLOBALS['prefix_db']}adherent WHERE email='".mysql_real_escape_string($_GET['email'])."'"))){
@@ -7,5 +8,4 @@ if(mysql_num_rows(mysql_query("SELECT email FROM {$GLOBALS['prefix_db']}adherent
 	echo "true";
 }
 include("closedb.php");
-
 ?>

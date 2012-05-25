@@ -16,18 +16,12 @@ $header = '
 $footer = '</body></html>';
 
 print $header;
-if(strcmp($_SESSION['uid'],"") == 0){
-			//if it doesn't display an error message
-			echo "<center>Vous devez être connecté pour vous déconnecter !</center>";
-}
-else{
-			//if it does continue checking
-
-			//destroy all sessions canceling the login session
-			session_destroy();
-
-			//display success message
-			echo "<center>Vous êtes bien déconnecté !</center>";
+if(!isset($_SESSION['uid']))
+	echo "<center>Vous devez être connecté pour vous déconnecter !</center>";
+else
+{
+	session_destroy();
+	echo "<center>Vous êtes bien déconnecté !</center>";
 }
 print $footer;
 
