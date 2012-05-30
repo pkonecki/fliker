@@ -6,24 +6,25 @@ $header = '
 <html>
  <head>
   <title>::Fliker::Inscription</title>
-  <link rel="stylesheet" type="text/css" href="../includes/style.css" />
-  <link rel="stylesheet" type="text/css" href="../includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
-	<script type="text/javascript" src="../includes/js/jquery.js"></script>
-	<script type="text/javascript" src="../includes/js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="../includes/js/jquery-ui.js"></script>
-	<script type="text/javascript" src="../includes/js/jquery.ui.datepicker-fr.js"></script>
+  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+	<script type="text/javascript" src="./includes/js/jquery.js"></script>
+	<script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
+	<script type="text/javascript" src="./includes/js/jquery.ui.datepicker-fr.js"></script>
  	</head>
 	<body>';
 
 $footer = '</body></html>';
 
-include("../includes/paths.php");
+define('_VALID_INCLUDE', TRUE);
+include("./includes/paths.php");
 include("General.php");
 include("Adherent.php");
 include("Select.php");
 include("saveImage.php");
 require("class.imageconverter.php");
-$dest_dossier = "../photos";
+$dest_dossier = "./photos";
 
 print $header;
 print '<div id="top">';
@@ -32,9 +33,9 @@ print getParam('text_top');
 print '</span>';
 print '<div class=userdiv id=userdiv >';
 if(!isset($_SESSION['user']))
-	print '<a href="../login.php">Connexion</a> | <a href="./index.php">Inscription</a>';
+	print '<a href="./login.php">Connexion</a> | <a href="./inscription.php">Inscription</a>';
 else 
-	print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="../logout.php">Déconnexion</a>';
+	print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="./logout.php">Déconnexion</a>';
  print '</div>';
 print '</div>';
 print '<h2>Inscription</h2>';
@@ -78,7 +79,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 	print '<button type="button" onclick="history.go(-1)">
 		Modifier
 	</button> ';
-	print '<FORM action="index.php" method="POST">
+	print '<FORM action="inscription.php" method="POST">
 	<input type=\'hidden\' name=\'action\' value=\'confirmed\' />
 	<INPUT type=\'submit\' value=\'Confirmer\'>
 	</FORM>
@@ -86,7 +87,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 	print $footer;
 	}
 	else {
-		header("location: index.php") ;
+		header("location: inscription.php") ;
 	}
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'confirmed')
@@ -100,7 +101,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'confirmed')
 else
 {
 	$tab = getChampsAdherents();
-	print '<br/><FORM id="f_inscription" action="index.php" enctype="multipart/form-data" method="POST">';
+	print '<br/><FORM id="f_inscription" action="inscription.php" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
 	foreach($tab as $row){
 		if($row['inscription']==1){
@@ -151,7 +152,7 @@ else
 ?>
 <script type="text/javascript">
 function populatectlStatuts() {
-    $.getJSON('../includes/statuts.php', function(data) {
+    $.getJSON('./includes/statuts.php', function(data) {
 		  var items = [];
 		  $.each(data, function(key, val) {
 		    $('#id_statut').append('<option value="' + val + '">' + key + '</option>');
