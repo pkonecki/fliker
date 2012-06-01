@@ -29,6 +29,3 @@ foreach($params as $key => $value){
 $table_config.="</table>";
 print $table_config;
 ?>
-<script type="text/javascript">
-
-</script>

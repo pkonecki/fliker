@@ -43,6 +43,8 @@ setlocale(LC_ALL, 'fr_FR');
 <?php
 print '<body>';
 $EspaceMembre = new EspaceMembre;
+if (isset($_GET['page']) && $_GET['page'] == "logout")
+	$EspaceMembre->logout();
 $EspaceMembre->showMenu();
 
 if(isset($_SESSION['user']))

@@ -4,6 +4,7 @@ define('_VALID_INCLUDE', TRUE);
 include("./includes/paths.php");
 include("Adherent.php");
 include_once("General.php");
+include_once("EspaceMembre.class.php");
 
 $tab = getChampsAdherents();
 $header = '
@@ -113,14 +114,11 @@ if(isset($_POST['submit'])){
 		}
 	}
 }
-else {
+else
+{
 	print $header;
-	print '<div id="top">';
-	print '<span id="title">';
-	print getParam('text_top');
-	print '</span>';
-	include("userdiv.php");
-	print '</div>';
+	$EspaceMembre = new EspaceMembre;
+	$EspaceMembre->showMenu();
 	print '<h2>Connexion</h2> 
 			<form action="login.php" method="post">
 				<div id="border">

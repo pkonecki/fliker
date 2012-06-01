@@ -1,10 +1,37 @@
 <?php
-if(!isset($_SESSION['user']))
+function selected($post,$val)
+{
+	if (isset($_POST[$post]) && $_POST[$post]===$val)
+		return "selected";
+	else
+		return "";
+}
+
+function checked($post,$val)
+{
+	if (isset($_POST[$post]) && $_POST[$post]===$val)
+		return "checked";
+	else
+		return "";
+}
+
+function multiselected($post,$val)
+{
+	for($i=0; $i < sizeof($_POST[$post]);$i++)
+	{
+		if($_POST[$post][$i]===$val)
+			return "selected";
+	}
+	return "";
+}
+if(!isset($_SESSION['user']))	// Si l'utilisateur est déconnecté
 {
 	print "<p>Vous n'êtes pas connecté</p>";
 }
-else {
-	if($_SESSION['privilege']==1){
+else	// Si l'utilisateur est connecté
+{
+	if($_SESSION['privilege']==1)	// Si l'utilisateur est administrateur
+	{
 		$admin=true;
 		if (isset($_GET['adh']))
 			$id_adh=$_GET['adh'];
@@ -12,7 +39,8 @@ else {
 			$id_adh = "";
 		$resp_asso=true;
 	}
-	else {
+	else
+	{
 		if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
 			$resp_asso=true;
 		}
@@ -40,32 +68,12 @@ else {
 <?php
 print "<span class=\"tip\">".getParam('text_search')."</span>";
 
-function selected($post,$val){
-	if (isset($_POST[$post]) && $_POST[$post]===$val) {
-		return "selected";
-	}
-	else return "";
-}
-
-function checked($post,$val){
-	if (isset($_POST[$post]) && $_POST[$post]===$val) {
-		return "checked";
-	}
-	else return "";
-}
-
-function multiselected($post,$val){
-	for($i=0; $i < sizeof($_POST[$post]);$i++){
-		if($_POST[$post][$i]===$val) return "selected";
-	}
-	return "";
-}
-
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	if (empty($_POST['set1_text'])) $_POST['set1_text']="";
 	//print '<button id="toggle_f_search">Toggle</button>';
+	
 	print '<form id="f_search" method="post" action="index.php?page=2">
-<fieldset class="main"><legend>Critères Adhérent</legend>
+	<fieldset class="main"><legend>Critères Adhérent</legend>
 	<input type="hidden" name="field_count" value="'.$_POST['field_count'].'" />
 	<input type="hidden" name="action" value="submitted" />
 	<div id="solde">
@@ -81,6 +89,57 @@ function multiselected($post,$val){
 		<dt><input type="checkbox" '.checked('exclure_adhs','1').' name="exclure_adhs" value="1">Exclure les simples adhérents</input></dt>
 		<dt><input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Inclure responsables des sections (comité directeur)</input></dt>
 		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure responsables d\'association (bureau)</input></dt>
+		<dt><input type="checkbox" '.checked('sans_certif','1').' name="sans_certif" value="1">Adhérents sans certif</input></dt>
+		<dt><input type="checkbox" '.checked('sans_photo','1').' name="sans_photo" value="1">Adhérents sans photo</input></dt>
+		<dt><input type="checkbox" '.checked('compte_inactif','1').' name="compte_inactif" value="1">Comptes désactivés</input></dt>
+	</div>
+	<div id ="choix_statut">
+		Filtre par type de statut :
+		<select id="choix_statut_type" name="choix_statut_type">
+			<option '.selected('choix_statut_type','0').' label="Aucun" value="0">Aucun</option>';
+	
+	// Création de la liste déroulante sur la liste des statuts
+	include("opendb.php");
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}statut";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$compteur = 0;
+	while ($stock_statut[$compteur] = mysql_fetch_array($results))
+		$compteur++;
+	include("closedb.php");
+	$compteur_statut = 0;
+	while ($compteur_statut != $compteur)
+	{
+		print '<option '.selected('choix_statut_type', $stock_statut[$compteur_statut]['id']).' label="'.$stock_statut[$compteur_statut]['nom'].'" value="'.$stock_statut[$compteur_statut]['id'].'">'.$stock_statut[$compteur_statut]['nom'].'</option>';
+		$compteur_statut++;
+	}
+	print '</select>
+	</div>
+	<div id ="choix_association">
+		Filtre par association :
+		<select id="choix_association_type" name="choix_association_type">
+			<option '.selected('choix_association_type','1').' label="Aucun" value="1">Aucun</option>';
+	
+	// Création de la liste déroulante sur le filtre des associations
+	include("opendb.php");
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$compteur = 0;
+	while ($stock_association[$compteur] = mysql_fetch_array($results))
+		$compteur++;
+	include("closedb.php");
+	$compteur_asso = 0;
+	while ($compteur_asso != $compteur)
+	{
+		$valeur = $compteur_asso + 2;
+		print '<option '.selected('choix_association_type', $valeur).' label="'.$stock_association[$compteur_asso]['nom'].'" value="'.$valeur.'">'.$stock_association[$compteur_asso]['nom'].'</option>';
+		$compteur_asso++;
+	}
+
+	print '</select>
 	</div>
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
@@ -97,13 +156,14 @@ function multiselected($post,$val){
 	<input type="text" id="set1_text" name="set1_text" value="'.$_POST['set1_text'].'"/>
 	</div>
 	<div id="filters">';
-	for($i = 1; $i < $_POST['field_count']; $i++){
+	for($i = 1; $i < $_POST['field_count']; $i++)
+	{
 		$n=$i+1;
 		$type="set".$n."_type";
 		$action="set".$n."_action";
 		$text="set".$n."_text";
 		print '<div id="set'.$n.'">
-	<select id="set'.$n.'_type" name="set'.$n.'_type">
+		<select id="set'.$n.'_type" name="set'.$n.'_type">
 		<option '.selected($type,'1').' label="Nom" value="1">Nom</option>
 		<option '.selected($type,'2').' label="Prénom" value="2">Prénom</option>
 		<option '.selected($type,'3').' label="Email" value="3">Email</option>
@@ -119,8 +179,8 @@ function multiselected($post,$val){
 	}
 	print '</div>
 	<button type="button" id="add_field">Ajouter un champ</button>
-</fieldset>
-<fieldset class="selects"><legend>Sélection des créneaux</legend>
+	</fieldset>
+	<fieldset class="selects"><legend>Sélection des créneaux</legend>
 	<ul id="tree_root">
 		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Tout</label>
 			<ul id="sections"  >
@@ -128,13 +188,13 @@ function multiselected($post,$val){
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau['id_sec']]['nom']=$creneau['nom_sec'];
-		$tab[$creneau['id_sec']]['id']=$creneau['id_sec'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['nom']=$creneau['nom_act'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['id']=$creneau['id_act'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour']=$creneau['jour_cre'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id']=$creneau['id_cre'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut']=$creneau['debut_cre'];
+		$tab[$creneau['id_sec']]['nom'] = $creneau['nom_sec'];
+		$tab[$creneau['id_sec']]['id'] = $creneau['id_sec'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['nom'] = $creneau['nom_act'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['id'] = $creneau['id_act'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour'] = $creneau['jour_cre'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id'] = $creneau['id_cre'];
+		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut'] = $creneau['debut_cre'];
 	}
 	foreach($tab as $section){
 		print '<li><input type="checkbox" name="section'.$section['id'].'" '.checked('section'.$section['id'],$section['id']).' value="'.$section['id'].'"><label>'.$section['nom'].'</label>';
@@ -158,28 +218,39 @@ function multiselected($post,$val){
 	$third = checked('affichage','1');
 	print '
 	</ul>
-</fieldset>
-<fieldset class="affichage"><legend>Affichage</legend>
+	</fieldset>
+	<fieldset class="affichage"><legend>Affichage</legend>
 	<input '.checked('photos','photos').' type="checkbox" name="photos" value="photos" >Avec Photos</input>
 	<input '.($first ? $second : $third ).' type="radio" name="affichage" value="1" >Simple</input>
 	<input '.checked('affichage','2').' type="radio" name="affichage" value="2" >Complet</input>
 	<input '.checked('affichage','3').' type="radio" name="affichage" value="3" >Trombino</input>
-</fieldset>
-<fieldset class="buttons">
+	</fieldset>
+	<fieldset class="buttons">
 	<input type="submit" value="Chercher" />
 	<button type="reset" id="reset">Remettre à zéro</button>
-</fieldset>
-</form>';
-	if(isset($_POST['action']) && $_POST['action']==="submitted"){
-	//SQL
+	</fieldset>
+	</form>';
+if(isset($_POST['action']) && $_POST['action']==="submitted")
+{
 	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true ";
-	for($i = 0; $i < $_POST['field_count']; $i++){
-		$n=$i+1;
+	if (isset($_POST['sans_certif']))	// Si case sans certif coché
+		$sql .= "AND certmed != 1 ";
+	if (isset($_POST['sans_photo']))	// Si case sans photo coché
+		$sql .= "AND photo != 1 ";
+	if (isset($_POST['compte_inactif']))	// Si case compte inactif coché
+		$sql .= "AND active = 0 ";
+	if (isset($_POST['choix_statut_type']) && $_POST['choix_statut_type'] != 0)		// Si filtre par statut sélectionné
+		$sql .= "AND id_statut = ".$_POST['choix_statut_type']." ";
+	for($i = 0; $i < $_POST['field_count']; $i++)
+	{
+		$n = $i + 1;
 		$type="set".$n."_type";
 		$action="set".$n."_action";
 		$text="set".$n."_text";
-		if(empty($_POST[$text])) continue;
-		switch($_POST[$type]){
+		if(empty($_POST[$text]))
+			continue;
+		switch($_POST[$type])
+		{
 			case 1: //Nom
 					$sql.="AND ADR.nom ";
 					break;
@@ -193,7 +264,8 @@ function multiselected($post,$val){
 					$sql.="AND ADR.categorie ";
 					break;
 		}
-		switch($_POST[$action]){
+		switch($_POST[$action])
+		{
 			case 1: //Contient
 				$sql.="LIKE '%".$_POST[$text]."%' ";
 				break;
@@ -219,35 +291,43 @@ function multiselected($post,$val){
 		}
 	}
 	$in.=" ) ";
-	if ($i==0 && $resp_asso) {
+	if ($i==0 && $resp_asso)
+	{
 		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
-	} else{
-	$sql.="AND ( false ";
-	if (!isset($_POST['exclure_adhs'])) $sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
-	if (isset($_POST['responsable_asso']) || isset($_POST['responsable'])){	
-		$sql.="OR (ADR.id IN (
-			SELECT  ADH.id id_adh
-			FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adherent ADH
-			WHERE CR.id_act=AC.id
-			AND AC.id_sec=S.id
-			AND A.id=HS.id_asso
-			AND HS.id_sec=S.id
-			AND CR.id IN $in
-			AND (";
-		if (isset($_POST['responsable_asso'])) {
-				$sql.= "A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_adh=ADH.id)";
-				if (isset($_POST['responsable']))$sql.=" OR ";		
-		}
-		if (isset($_POST['responsable']))  $sql.= "S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_adh=ADH.id )
-				OR
-				AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_adh=ADH.id )
-				OR
-				CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_adh=ADH.id )
-				";
-		$sql.=")
-			 ) )";
 	}
-	$sql.=" ) ORDER BY ADR.nom";
+	else
+	{
+		$sql.="AND ( false ";
+		if (!isset($_POST['exclure_adhs']))
+			$sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
+		if (isset($_POST['responsable_asso']) || isset($_POST['responsable']))
+		{	
+			$sql.="OR (ADR.id IN (
+				SELECT  ADH.id id_adh
+				FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adherent ADH
+				WHERE CR.id_act=AC.id
+				AND AC.id_sec=S.id
+				AND A.id=HS.id_asso
+				AND HS.id_sec=S.id
+				AND CR.id IN $in
+				AND (";
+			if (isset($_POST['responsable_asso']))
+			{
+				$sql.= "A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_adh=ADH.id)";
+				if (isset($_POST['responsable']))
+					$sql.=" OR ";		
+			}
+			if (isset($_POST['responsable'])) 
+				$sql.= "S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_adh=ADH.id )
+					OR
+					AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_adh=ADH.id )
+					OR
+					CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_adh=ADH.id )
+					";
+			$sql.=")
+				 ) )";
+		}
+		$sql.=" ) ORDER BY ADR.nom";
 	}
 	//print $sql;
 	$tab = getChampsAdherents();
@@ -255,57 +335,65 @@ function multiselected($post,$val){
 	$results = mysql_query($sql);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
-	$num=mysql_num_rows($results);
+	$num = mysql_num_rows($results);
 	switch($_POST['affichage']){
 		case 1: //Simple
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
-			foreach($tab as $champ){
-				if ($champ['search_simple']==1) {
+			foreach($tab as $champ)	// Tête du tableau d'affichage des résultats
+			{
+				if ($champ['search_simple']==1)
+				{
 					if($champ['type']==='varchar')
-					print '<th>'.$champ['description'].'</th>';
+						print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='date')
-					print '<th>'.$champ['description'].'</th>';
+						if($champ['type']==='date')
+							print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='tinyint')
-					print '<th>'.$champ['description'].'</th>';
+						if($champ['type']==='tinyint')
+							print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='file' && isset($_POST['photos']) && $_POST['photos']==='photos'){
-					print '<th>'.$champ['description'].'</th>';
-					}
+						if($champ['type']==='file' && isset($_POST['photos']) && $_POST['photos']==='photos')
+							print '<th>'.$champ['description'].'</th>';
 				}
 			}
 			print '</tr></thead>';
 			print '<tbody>';
 			$i = 0;
-			while($row = mysql_fetch_array($results)){
-				if($row['active']==='0') $active=' red';
-				else $active='';
+			while($row = mysql_fetch_array($results))
+			{
+				if($row['active']==='0')
+					$active=' red';
+				else
+					$active='';
 				$stop = false;
-				switch ($_POST['select_solde']){
-					case 1:
-					//indifférent
-					break;
-					case 2:
-					//positif
-					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
-					break;
-					case 3:
-					//négatif
-					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
-					break;
-					case 4:
-					//nul
-					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
-					break;
+				switch ($_POST['select_solde']) // Une ligne du tableau (adhérent)
+				{
+					case 1: //indifférent
+						break;
+					case 2: //positif
+						if(!(getSolde($row['id'],$current_promo)>0))
+							$stop = true;
+						break;
+					case 3: //négatif
+						if(!(getSolde($row['id'],$current_promo)<0))
+							$stop = true;
+						break;
+					case 4: //null
+						if(!(getSolde($row['id'],$current_promo)==0))
+							$stop = true;
+						break;
 				}
-				if($stop) continue;
+				if($stop)
+					continue;
 				$i++;
-				if($i % 2 == 0) print '<tr class="'.$active.'">';
-				else print '<tr class="odd '.$active.'">';
+				if($i % 2 == 0)
+					print '<tr class="'.$active.'">';
+				else
+					print '<tr class="odd '.$active.'">';
 				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
-				foreach($tab as $champ){
+				foreach($tab as $champ)
+				{
 					if ($champ['search_simple']==1){
 						if($champ['type']==='varchar')
 							print '<td>'.$row[$champ['nom']].'</td>';
@@ -335,43 +423,45 @@ function multiselected($post,$val){
 		case 2: //Complet			
 			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
 			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
-			foreach($tab as $champ){
-				if ($champ['user_viewable']==1) {
+			foreach($tab as $champ)
+			{
+				if ($champ['user_viewable']==1)
+				{
 					if($champ['type']==='varchar')
-					print '<th>'.$champ['description'].'</th>';
+						print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='date')
-					print '<th>'.$champ['description'].'</th>';
+						if($champ['type']==='date')
+							print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='tinyint')
-					print '<th>'.$champ['description'].'</th>';
+						if($champ['type']==='tinyint')
+							print '<th>'.$champ['description'].'</th>';
 					else
-					if($champ['type']==='file' && $_POST['photos']==='photos'){
-					print '<th>'.$champ['description'].'</th>';
-					}
+						if($champ['type']==='file' && isset($_POST['photos']) && $_POST['photos']==='photos')
+							print '<th>'.$champ['description'].'</th>';
 				}
 			}
 			print '</tr></thead>';
 			print '<tbody>';
 			$i = 0;
-			while($row = mysql_fetch_array($results)){
+			while($row = mysql_fetch_array($results))
+			{
 				$stop = false;
-				switch ($_POST['select_solde']){
-					case 1:
-					//indifférent
-					break;
-					case 2:
-					//positif
-					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
-					break;
-					case 3:
-					//négatif
-					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
-					break;
-					case 4:
-					//nul
-					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
-					break;
+				switch ($_POST['select_solde'])
+				{
+					case 1: //indifférent
+						break;
+					case 2: //positif
+						if(!(getSolde($row['id'],$current_promo)>0))
+							$stop=true;
+						break;
+					case 3: //négatif
+						if(!(getSolde($row['id'],$current_promo)<0))
+							$stop=true;
+						break;
+					case 4: //nul
+						if(!(getSolde($row['id'],$current_promo)==0))
+							$stop=true;
+						break;
 				}
 				if($stop) continue;
 				if($row['active']==='0') $active=' red';
@@ -391,7 +481,7 @@ function multiselected($post,$val){
 						if($champ['type']==='tinyint')
 							print '<td>'.$row[$champ['nom']].'</td>';
 						else
-						if($champ['type']==='file' && $_POST['photos']==='photos'){
+						if($champ['type']==='file' && isset($_POST['photos']) && $_POST['photos']==='photos'){
 							$_SESSION['auth_thumb']='true';
 							$photo="includes/thumb.php?folder=".$champ['nom']."&file=".$row['email'].".jpg";
 							print '<TD><img src="'.$photo.'" height="70"></TD>';
@@ -410,24 +500,25 @@ function multiselected($post,$val){
 		case 3: //Trombino
 			$i=0;
 			print '<table>';
-			while($row = mysql_fetch_array($results)){
+			while($row = mysql_fetch_array($results))
+			{
 				$stop = false;
-				switch ($_POST['select_solde']){
-					case 1:
-					//indifférent
-					break;
-					case 2:
-					//positif
-					if(!(getSolde($row['id'],$current_promo)>0)) $stop=true;
-					break;
-					case 3:
-					//négatif
-					if(!(getSolde($row['id'],$current_promo)<0)) $stop=true;
-					break;
-					case 4:
-					//nul
-					if(!(getSolde($row['id'],$current_promo)==0)) $stop=true;
-					break;
+				switch ($_POST['select_solde'])
+				{
+					case 1: //indifférent
+						break;
+					case 2: //positif
+						if(!(getSolde($row['id'],$current_promo)>0))
+							$stop=true;
+						break;
+					case 3: //négatif
+						if(!(getSolde($row['id'],$current_promo)<0))
+							$stop=true;
+						break;
+					case 4: //nul
+						if(!(getSolde($row['id'],$current_promo)==0))
+							$stop=true;
+						break;
 				}
 				if($stop) continue;
 				if($i % 5 == 0) print '<tr>';

@@ -24,20 +24,12 @@ include("Adherent.php");
 include("Select.php");
 include("saveImage.php");
 require("class.imageconverter.php");
+include_once("EspaceMembre.class.php");
 $dest_dossier = "./photos";
 
 print $header;
-print '<div id="top">';
-print '<span id="title">';
-print getParam('text_top');
-print '</span>';
-print '<div class=userdiv id=userdiv >';
-if(!isset($_SESSION['user']))
-	print '<a href="./login.php">Connexion</a> | <a href="./inscription.php">Inscription</a>';
-else 
-	print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="./logout.php">Déconnexion</a>';
- print '</div>';
-print '</div>';
+$EspaceMembre = new EspaceMembre;
+$EspaceMembre->showMenu();
 print '<h2>Inscription</h2>';
 if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 {
