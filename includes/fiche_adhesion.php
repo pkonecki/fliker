@@ -1,6 +1,7 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 /*session_start();*/
+$self = false;
 if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid'])
 {
 	$id_adh =$_SESSION['uid'];
@@ -160,7 +161,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 		//Selection asso
 		if(isset($assos_resp) && count($assos_resp) > 1 ){
 			print "<p>Consulter en tant que responsable de: ";
-			foreach($assos_resp as $key => $asso) print "<a href=\"index.php?page=7&adh=$id_adh&asso=$key&promo={$_GET['promo']}\">$asso</a> ";
+			foreach($assos_resp as $key => $asso) print "<a href=\"index.php?page=7&adh=$id_adh&asso=$key&promo=".(isset($_GET['promo']) ? $_GET['promo'] : "")."\">$asso</a> ";
 			print "</p>";
 		}
 		//Adhésions

@@ -11,6 +11,7 @@ class EspaceMembre
 	}
     public function logout()
 	{
+		$_SESSION = array();
 		session_destroy();
 	}
     public function register()
@@ -29,7 +30,7 @@ class EspaceMembre
 		if(!isset($_SESSION['user']))
 			print '<a href="login.php">Connexion</a> | <a href="inscription.php">Inscription</a>';
 		else 
-			print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="logout.php">Déconnexion</a>';
+			print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="index.php?page=logout">Déconnexion</a>';
 		 print '</div>';
 		print '</div>';
 	}
