@@ -2,7 +2,7 @@
 
 
 ===Bugs à Fixer===
-  * inscription : bug dans le check n° tel sous certains navigateurs
+  * // :) inscription : bug dans le check n° tel sous certains navigateurs
   * listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
   * recherche : bouton select all fonctionne pas
   * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
