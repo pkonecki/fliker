@@ -41,7 +41,7 @@
     * Semaine 21 : Débug sécu fichiers php dans toute l'arborescence
     * Semaine 22 : Amélioration affichage des résultats de recherche (non-inscrits)
   * *Juin* :
-    * Semaine 23 : Synchronisation des comptes avec le wiki
+    * Semaine 23 : Synchronisation des comptes Flicker avec le wiki
     * Semaine 24 : ...
     * Semaine 25 : ...
     * Semaine 26 : ...
@@ -72,7 +72,6 @@
     * Production d'iCal
     * Affichage Agenda
     * Couplage avec base des créneaux sports dans fliker
-  * *Forum ?*
   * *Synchro comptes* (Wiki / Fliker / Tickets / Résa / Forum : Florian)
     * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
     * Couplage avec LDAP u-psud
