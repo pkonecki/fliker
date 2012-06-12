@@ -1,10 +1,12 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-/*session_start();*/
-if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid']) {
+if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid'])
+{
 	$id_adh =$_SESSION['uid'];
 	$edit=true;
-} else if($_SESSION['privilege']==1){
+}
+else if($_SESSION['privilege']==1)
+{
 	$admin=true;
 	$id_adh=$_GET['adh'];
 }
@@ -92,7 +94,8 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_mdp')
 	print '<h2>Changement de mot de passe</h2><br/>';
 	print '<FORM action="index.php?page=1" method="POST">';
 	print '<input type=\'hidden\' name=\'action\' value=\'change_mdp_submitted\' />';
-	print 'Veuillez indiquer votre adresse mail : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
+	print '<input type=\'hidden\' name="recup_mdp" value="'.$_SESSION['user'].'" />';
+	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_SESSION['user'].'</b> permettant de changer votre mot de passe.<br /><br /><input type="submit" name="email_recup" value="Envoyer l\'email"></input>';
 	print '</form>';
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'change_email')
@@ -101,15 +104,13 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email')
 	print '<p>Pour pouvoir changer d\'adresse email il vous faut pouvoir accéder à l\'ancienne ainsi qu\'a la nouvelle. Si vous n\'avez pas accès à l\'ancienne adresse, merci de contacter un administrateur.</p>';
 	print '<FORM action="index.php?page=1" method="POST">';
 	print '<input type=\'hidden\' name=\'action\' value=\'change_email_submitted\' />';
-	print 'Veuillez indiquer votre adresse mail actuelle : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
+	print '<input type=\'hidden\' name="recup_mdp" value="'.$_SESSION['user'].'" />';
+	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_SESSION['user'].'</b> permettant d\'indiquer la nouvelle adresse.<br /><br /><input type="submit" name="email_recup" value="Envoyer l\'email"></input>';
 	print '</form>';
 }
 else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' || $_POST['action'] == 'change_email_submitted'))
 {
-	if (isset($_POST['change_email_submitted']))
-		print '<h2>Changement de l\'adresse email</h2><br/>';
-	else
-		print '<h2>Changement de mot de passe</h2><br/>';
+	print '<h2>Changement identifiant de connexion</h2><br/>';
 	$query= "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email='".$_POST['recup_mdp']."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -158,9 +159,10 @@ else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' 
 			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation")."\">administrateurs</a>";
 	}
 }
-else {
-	if (isset($_POST['action']) && $_POST['action'] == 'submitted' && $edit){
-
+else
+{
+	if (isset($_POST['action']) && $_POST['action'] == 'submitted' && $edit)
+	{
 		modifAdherent($_POST);
 		$adh = getAdherent($id_adh);
 	}
@@ -169,7 +171,7 @@ else {
 		$tab = getChampsAdherents();
 		print '<div id="fiche">';
 		print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
-		print "<div class=\"tip\">".getParam('text_adherent')."</div>";
+		print "<div class=\"tip\"><center>".getParam('text_adherent')."</center></div>";
 		print '<br />';
 		if(isset($edit)) print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'modification\' />

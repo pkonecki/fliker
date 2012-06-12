@@ -1,44 +1,49 @@
 <?php
 
-function newAdherent($tab){
+function newAdherent($tab)
+{
 	$champs = getChampsAdherents();
 	$colonnes ="(";
 	$values ="(";
 	include("opendb.php");
-	foreach($champs as $row){
-		if($row['inscription']==1){
-			if($row['type']==='varchar'){
+	foreach($champs as $row)
+	{
+		if($row['inscription']==1)
+		{
+			if($row['type']==='varchar')
+			{
 				$colonnes .= $row['nom'].",";
 				$values .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
 			}
-			else
-			if($row['type']==='date'){
+			else if($row['type']==='date')
+			{
 				$colonnes .= $row['nom'].",";
 				$values .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
 			}
-			else
-			if($row['type']==='tinyint'){
+			else if($row['type']==='tinyint')
+			{
 				$colonnes .= $row['nom'].",";
-				if ($tab[$row['nom']]==='on') $values .= "1,";
-				else $values .= "0,";
-			}
-			else
-			if($row['type']==='file'){
-			$colonnes .= $row['nom'].",";
-				if($tab[$row['nom']]['name']===""){
-					$values .= "0,";
-				} else {
+				if ($tab[$row['nom']]==='on')
 					$values .= "1,";
-				}
+				else
+					$values .= "0,";
 			}
-			if($row['type']==='select'){
+			else if($row['type']==='file')
+			{
+				$colonnes .= $row['nom'].",";
+				if($tab[$row['nom']]['name']==="")
+					$values .= "0,";
+				else
+					$values .= "1,";
+			}
+			if($row['type']==='select')
+			{
 				$colonnes .= 'id_'.$row['nom'].",";
 				$values .= "'".mysql_real_escape_string($tab['id_'.$row['nom']])."',";
 			}
 		}
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
-	//print $activationKey;
 	$colonnes .= "date_creation,last_modif,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
 	$colonnes = substr($colonnes,0,-1);
@@ -46,9 +51,9 @@ function newAdherent($tab){
 	$colonnes .=")";
 	$values .=")";
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}adherent ".$colonnes." VALUES ".$values;
-	//echo $query;
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	//send mail
 	$to      = $tab['email'];
 	$subject = "Votre inscription sportive";
@@ -57,7 +62,6 @@ function newAdherent($tab){
 	           'Reply-To: '.getParam('contact_email') . "\r\n" .
 	           'X-Mailer: PHP/' . phpversion();
 	mail($to, $subject, $message, $headers);
-	include("closedb.php");
 }
 
 function getAdherent($user){
@@ -100,36 +104,39 @@ function modifAdherent($tab){
 	$champs = getChampsAdherents();
 	$set = "";
 	include("opendb.php");
-	foreach($champs as $row){
-		if($row[user_editable]==1){
-			$set .= $row[nom]."=";
-			if($row[type]==='varchar')
-				$set .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
-			else
-			if($row[type]==='date')
-				$set .= "'".mysql_real_escape_string($tab[$row[nom]])."',";
-			else
-			if($row[type]==='tinyint'){
-				if (isset($tab[$row[nom]])) $set .= "1,";
+	foreach($champs as $row)
+	{
+		if($row['user_editable']==1)
+		{
+			$set .= $row['nom']."=";
+			if($row['type']==='varchar')
+				$set .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
+			else if($row['type']==='date')
+				$set .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
+			else if($row['type']==='tinyint')
+			{
+				if (isset($tab[$row['nom']])) $set .= "1,";
 				else $set .= "0,";
 			}
-			if($row[type]==='file'){
-				if($tab[$row[nom]][name]===""){
+			if($row['type']==='file')
+			{
+				if($tab[$row['nom']]['name']==="")
 					$set .= "0,";
-				} else {
+				else
+				{
 					$set .= "1,";
-					saveImage($tab['email'],$row[nom]);
+					saveImage($tab['email'],$row['nom']);
 				}
-			} else
-			if($row[type]==='select')
-				$set .= "'".mysql_real_escape_string($tab['id_'.$row[nom]])."',";
+			}
+			else if($row['type']==='select')
+				$set .= "'".mysql_real_escape_string($tab['id_'.$row['nom']])."',";
 		}
 	}
 	$set .="last_modif='".date( 'Y-m-d H:i:s')."'";
 	$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
-	//echo $query;
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	include("closedb.php");
 }
 
@@ -139,14 +146,14 @@ function getAdherents(){
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row;
-	}
+	while($row = mysql_fetch_array($results))
+		$tab[$row['id']] = $row;
 	include("closedb.php");
 	return $tab;
 }
 
-function getAdherentsByCreneau($id_cre,$promo){
+function getAdherentsByCreneau($id_cre,$promo)
+{
 	$query = "SELECT ADH.* FROM {$GLOBALS['prefix_db']}adherent ADH, {$GLOBALS['prefix_db']}adhesion AD WHERE AD.id_adh=ADH.id  AND AD.id_cre=$id_cre AND AD.promo=$promo ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -159,7 +166,8 @@ function getAdherentsByCreneau($id_cre,$promo){
 	return $tab;
 }
 
-function getAdherentsByPromo($promo){
+function getAdherentsByPromo($promo)
+{
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE promo=$promo";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -173,7 +181,8 @@ function getAdherentsByPromo($promo){
 	return $tab;
 }
 
-function getStatuts(){
+function getStatuts()
+{
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}statut ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -186,7 +195,8 @@ function getStatuts(){
 	return $tab;
 }
 
-function getAssos(){
+function getAssos()
+{
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -199,7 +209,8 @@ function getAssos(){
 	return $tab;
 }
 
-function getMyAdherents($userid){
+function getMyAdherents($userid)
+{
 	$query="SELECT  ADH.id 
 		FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adhesion AD, {$GLOBALS['prefix_db']}adherent ADH
 		WHERE CR.id_act=AC.id
@@ -239,7 +250,8 @@ function getMyAdherents($userid){
 	return $tab;
 }
 
-function getMyAssos($userid){
+function getMyAssos($userid)
+{
 	if($userid==-1) $query="SELECT  A.*
 		FROM {$GLOBALS['prefix_db']}association A";
 	else $query="SELECT  A.*
@@ -257,7 +269,8 @@ function getMyAssos($userid){
 	return $tab;
 }
 
-function getSolde($id_adh,$promo){
+function getSolde($id_adh,$promo)
+{
 	$mycrens=getCreneaux($_SESSION['uid']);
 	$ads= getAdhesions($id_adh,$promo);
 	foreach ($ads as $key => $value)
@@ -302,7 +315,8 @@ function getSolde($id_adh,$promo){
 	return -$solde;
 }
 
-function setNumCarte($num,$adh){
+function setNumCarte($num,$adh)
+{
 	$q="UPDATE {$GLOBALS['prefix_db']}adherent SET numcarte=$num WHERE id=$adh";
 	include("opendb.php");
 	$results = mysql_query($q);
@@ -310,7 +324,8 @@ function setNumCarte($num,$adh){
 	include("closedb.php");
 }
 
-function getMaxNumCarte(){
+function getMaxNumCarte()
+{
 	$query= "SELECT MAX(numcarte) max FROM {$GLOBALS['prefix_db']}adherent ";
 	include("opendb.php");
 	$results = mysql_query($query);

@@ -33,74 +33,93 @@ $EspaceMembre->showMenu();
 print '<h2>Inscription</h2>';
 if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 {
-	if(!(strcmp($_SESSION['uid'],"") == 0)){
-		session_start();
-	$_SESSION=$_POST;
-	$tab = getChampsAdherents();
-	print "<h2>Récapitulatif</h2>";
-	print '<TABLE BORDER="1">';
-	foreach($tab as $row){
-		if($row['inscription']==1)
-		{
-			print '<TR>';
-			if($row['type']==="varchar")
-				print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
-			if($row['type']==="date")
-				print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
-			if($row['type']==="tinyint")
+	if(!(strcmp($_SESSION['uid'],"") == 0))
+	{
+		$_SESSION = $_POST;
+		$tab = getChampsAdherents();
+		print "<h2>Récapitulatif</h2>";
+		print '<TABLE BORDER="1">';
+		foreach($tab as $row){
+			if($row['inscription']==1)
 			{
-				if ($_SESSION[$row['nom']]==="on")
-					print '<TD>'.$row['description'].'</TD><TD>Oui</TD>';
-				else
-					print '<TD>'.$row['description'].'</TD><TD>Non</TD>';
+				print '<TR>';
+				if($row['type']==="varchar")
+					print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
+				if($row['type']==="date")
+					print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
+				if($row['type']==="tinyint")
+				{
+					if ($_SESSION[$row['nom']]==="on")
+						print '<TD>'.$row['description'].'</TD><TD>Oui</TD>';
+					else
+						print '<TD>'.$row['description'].'</TD><TD>Non</TD>';
+				}
+				if($row['type']==='file')
+				{
+					print '<TD>'.$row['description'].'</TD><TD>'.$_FILES[$row['nom']]['name'].'</TD>';
+					saveImage($_SESSION['email'],$row['nom']);
+				}
+				if($row['type']==="select")
+				{
+					$tab=getSelect($row['nom']);
+					print '<TD>'.$row['description'].'</TD><TD>'.$tab[$_SESSION['id_'.$row['nom']]].'</TD>';
+				}
 			}
-			if($row['type']==='file')
-			{
-				print '<TD>'.$row['description'].'</TD><TD>'.$_FILES[$row['nom']]['name'].'</TD>';
-				saveImage($_SESSION['email'],$row['nom']);
-			}
-			if($row['type']==="select")
-			{
-				$tab=getSelect($row['nom']);
-				print '<TD>'.$row['description'].'</TD><TD>'.$tab[$_SESSION['id_'.$row['nom']]].'</TD>';
-			}
+			print '</TR>';
 		}
-		print '</TR>';
+		print '</TABLE>';
+		print '<button type="button" onclick="history.go(-1)">
+			Modifier
+		</button> ';
+		print '<FORM action="inscription.php" method="POST">
+		<input type=\'hidden\' name=\'action\' value=\'confirmed\' />
+		<INPUT type=\'submit\' value=\'Confirmer\'>
+		</FORM>
+		';
+		print $footer;
 	}
-	print '</TABLE>';
-	print '<button type="button" onclick="history.go(-1)">
-		Modifier
-	</button> ';
-	print '<FORM action="inscription.php" method="POST">
-	<input type=\'hidden\' name=\'action\' value=\'confirmed\' />
-	<INPUT type=\'submit\' value=\'Confirmer\'>
-	</FORM>
-	';
-	print $footer;
-	}
-	else {
+	else
 		header("location: inscription.php") ;
-	}
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'confirmed')
 {
-	newAdherent($_SESSION);
-	print "<h2>Félicitations !</h2><p>Votre pré-inscription a été enregistrée. Veuillez SVP cliquer sur le lien de validation dans l'email qui vient de vous être envoyé, afin d'activer votre compte.</p><p>(Vous pouvez fermer cette fenêtre.)</p>";
-	print $footer;
-	session_unset();
-	session_destroy();
+	$cryptinstall="./includes/cryptographp.fct.php";
+	include $cryptinstall; 
+	include("includes/captcha.php");
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'check_code')
+{
+	$cryptinstall="./includes/cryptographp.fct.php";
+	include $cryptinstall; 
+	if (isset($_POST['code']) && chk_crypt($_POST['code']))
+	{
+		$EspaceMembre->addUser($_SESSION);
+		print "<h2>Félicitations !</h2><p>Votre pré-inscription a été enregistrée. Veuillez SVP cliquer sur le lien de validation dans l'email qui vient de vous être envoyé, afin d'activer votre compte.</p><p>(Vous pouvez fermer cette fenêtre.)</p>";
+		session_unset();
+		session_destroy();
+	}
+	else
+	{
+		echo "<center><a><font color='#FF0000'>=> Erreur, le code est incorrect</font></a></center>" ;
+		include("includes/captcha.php");
+	}
 }
 else
 {
 	$tab = getChampsAdherents();
-	print '<br/><FORM id="f_inscription" action="inscription.php" enctype="multipart/form-data" method="POST">';
+	print '<br/><FORM id="f_inscription" action="inscription.php?';
+	echo SID;
+	print '" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
-	foreach($tab as $row){
-		if($row['inscription']==1){
+	foreach($tab as $row)
+	{
+		if($row['inscription']==1)
+		{
 			$format =$row['format'];
 			if ($row['required']==1) $format ="class=\"{$format}_req\"";
 			else $format="class=\"$format\"";
-			if($row['format'] === "categorie"){
+			if($row['format'] === "categorie")
+			{
 				print '<tr ><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td>
 					<td>
 					<INPUT type=radio name='.$row['nom'].' '.$format.' value="M">Masculin
@@ -134,7 +153,7 @@ else
 		}
 	}
 	print '<input type=\'hidden\' name=\'action\' value=\'submitted\' />';
-	print '<tr><td colspan="2"><INPUT type=\'submit\' value=\'Send\'></td></tr>';
+	print '<tr><td colspan="2"><INPUT type=\'submit\' name="submit" value=\'Envoyer\'></td></tr>';
 	print '</table>';
 	print '</FORM>';
 	$_SESSION['uid']=session_id();

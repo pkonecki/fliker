@@ -1,5 +1,7 @@
 <?php
+define('_VALID_INCLUDE', TRUE);
 include("./includes/paths.php");
+include("./includes/EspaceMembre.class.php");
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -64,34 +66,34 @@ $header = '
 
 $footer = '</body></html>';
 
-if (isset($_POST['action']) && $_POST['action']==="submitted") {
-
+if (isset($_POST['action']) && $_POST['action']==="submitted")
+{
+	include("opendb.php");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_redirect' ");
+	$res_msg_redirect = mysql_fetch_array($res);
 	include("opendb.php");
 	$password = $_POST['password'];
-	$id = $_POST['id'];
-	$sql="UPDATE {$GLOBALS['prefix_db']}adherent SET password = MD5('$password'), activationkey = '', active=1 WHERE id = '$id'";
-	if (!mysql_query($sql)){
-		die('Error: ' . mysql_error());
-	}
-	else {
-		print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 		<html>
 		 <head>
 		  <title>::Fliker::Validation</title>
 		  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
-		  <meta http-equiv="refresh" content="3;url=login.php" />
 		 </head>
-		 <body>
-		<h1>Validation</h1>';
-
-		print '<div>Votre compte est à présent activé ! Vous allez être redirigé vers la page de connexion ...</div>';
-
-		print $footer;
-	}
-	include("closedb.php");
+		 <body>';
+	$EspaceMembre = new EspaceMembre;
+	$EspaceMembre->showMenu();
+	print '<h1>Validation</h1><br/>';
+	if ($EspaceMembre->updateUser("password", $_POST['password'], $_POST['email']) == false || $EspaceMembre->updateUser("activationkey", "", $_POST['email']) == false || $EspaceMembre->updateUser("active", 1, $_POST['email']) == false)
+		print 'Erreur lors de la mise à jour du mot de passe.';
+	else
+		print '<div>'.$res_msg_redirect['valeur'].'</div>';
+	print $footer;
 }
 else {
 
+	include("opendb.php");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_account' ");
+	$res_msg_account = mysql_fetch_array($res);
 	$queryString = $_SERVER['QUERY_STRING'];
 	if (empty($queryString)){
 		print('Il n\'y a pas de clef de validation !');
@@ -105,14 +107,15 @@ else {
 	{
 	  	if ($queryString == $row["activationkey"]){
   			print $header;
-		 	print "<div>Merci, " . $row["prenom"] . " !<p>Votre compte est presque activé. Votre \"identifiant\" sera votre adresse email.</p><p>Veuillez SVP définir le mot de passe qui sera associé à votre identifiant :</p>";
+		 	print "<div>Merci, " . $row["prenom"] . " !<p>".$res_msg_account['valeur']."</p>";
 		  	print '
 			<form name="f_password" id="f_password" action="validate.php" method="POST">
 			<table border=0>
 		  	<tr><td>Entrez un mot de passe : </td><td><input name="password" type="password" id="password" size="25"></td></tr>
 		  	<tr><td>Vérifiez ce mot de passe : </td><td><input name="password_confirm" type="password" id="password_confirm" size="25"></td></tr>
 		  	<input type="hidden" name="action" value="submitted" />
-		  	<input type="hidden" name="id" value="'.$row[id].'" />
+		  	<input type="hidden" name="id" value="'.$row['id'].'" />
+			<input type="hidden" name="email" value="'.$row['email'].'" />
 		  	<tr><td colspan=2 ><input type="submit" value="Envoyer"/></td></tr>
 			</table>
 			</form>

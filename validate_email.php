@@ -1,5 +1,6 @@
 <?php
 include("./includes/paths.php");
+include_once("General.php");
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
@@ -79,11 +80,11 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 		 <head>
 		  <title>::Fliker::Validation</title>
 		  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
-		  <meta http-equiv="refresh" content="3;url=login.php" />
 		 </head>
 		 <body>
 		<h2>Validation</h2>';
 
+		$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
 		$to      = $email;
 		$subject = "Confirmation nouvel email Fliker";
 		$message = "Bonjour,\r\r Pour que le changement d\'addresse email se fasse veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
@@ -95,7 +96,6 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 
 		print $footer;
 	}
-	include("closedb.php");
 }
 else
 {
@@ -116,9 +116,9 @@ else
 				{
 					if ($row["add_mail_temp"] != null)
 					{
-						$query = "UPDATE {$GLOBALS['prefix_db']}presence SET add_mail_temp='' WHERE id=".$row['id']." ";
+						$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET add_mail_temp='', email='".$row["add_mail_temp"]."' WHERE id=".$row['id']." ";
 						include("opendb.php");
-						$result = mysql_query($query);
+						$results = mysql_query($query);
 						if (!$results)
 							die(mysql_error());
 						print $header;
@@ -129,14 +129,14 @@ else
 					{
 						print $header;
 						print '
-						<form name="f_password" id="f_password" action="validate_email.php" method="POST">
-						<table border=0>
-						<tr><td>Entrez votre nouvelle adresse email : </td><td><input name="email" type="text"></td></tr>
-						<input type="hidden" name="action" value="submitted" />
-						<input type="hidden" name="id" value="'.$row[id].'" />
-						<tr><td colspan=2 ><input type="submit" value="Envoyer"/></td></tr>
-						</table>
-						</form>';
+							<form name="f_password" id="f_password" action="validate_email.php" method="POST">
+							<table border=0>
+							<tr><td>Entrez votre nouvelle adresse email : </td><td><input name="email" type="text"></td></tr>
+							<input type="hidden" name="action" value="submitted" />
+							<input type="hidden" name="id" value="'.$row['id'].'" />
+							<tr><td colspan=2 ><input type="submit" value="Envoyer"/></td></tr>
+							</table>
+							</form>';
 						print '</div>';
 						print $footer;
 					}
