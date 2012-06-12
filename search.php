@@ -85,18 +85,34 @@ print "<span class=\"tip\">".getParam('text_search')."</span>";
 			<option '.selected('select_solde','4').' value="4">Nul</option>
 		</select>
 	</div>
-	<div id="responsable">
-		<dt><input type="checkbox" '.checked('exclure_adhs','1').' name="exclure_adhs" value="1">Exclure les simples adhérents</input></dt>
-		<dt><input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Inclure responsables des sections (comité directeur)</input></dt>
-		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure responsables d\'association (bureau)</input></dt>
-		<dt><input type="checkbox" '.checked('sans_certif','1').' name="sans_certif" value="1">Adhérents sans certif</input></dt>
-		<dt><input type="checkbox" '.checked('sans_photo','1').' name="sans_photo" value="1">Adhérents sans photo</input></dt>
-		<dt><input type="checkbox" '.checked('compte_inactif','1').' name="compte_inactif" value="1">Comptes désactivés</input></dt>
+		<div id ="choix_association">
+		<b>Association est </b>
+		<select id="choix_association_type" name="choix_association_type">
+			<option '.selected('choix_association_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>';
+	
+	// Création de la liste déroulante sur le filtre des associations
+	include("opendb.php");
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$compteur = 0;
+	while ($stock_association[$compteur] = mysql_fetch_array($results))
+		$compteur++;
+	include("closedb.php");
+	$compteur_asso = 0;
+	while ($compteur_asso != $compteur)
+	{
+		print '<option '.selected('choix_association_type', $stock_association[$compteur_asso]['id']).' label="'.$stock_association[$compteur_asso]['nom'].'" value="'.$stock_association[$compteur_asso]['id'].'">'.$stock_association[$compteur_asso]['nom'].'</option>';
+		$compteur_asso++;
+	}
+
+	print '</select>
 	</div>
 	<div id ="choix_statut">
-		Filtre par type de statut :
+		<b>Statut est </b>
 		<select id="choix_statut_type" name="choix_statut_type">
-			<option '.selected('choix_statut_type','0').' label="Aucun" value="0">Aucun</option>';
+			<option '.selected('choix_statut_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>';
 	
 	// Création de la liste déroulante sur la liste des statuts
 	include("opendb.php");
@@ -116,30 +132,13 @@ print "<span class=\"tip\">".getParam('text_search')."</span>";
 	}
 	print '</select>
 	</div>
-	<div id ="choix_association">
-		Filtre par association :
-		<select id="choix_association_type" name="choix_association_type">
-			<option '.selected('choix_association_type','1').' label="Aucun" value="1">Aucun</option>';
-	
-	// Création de la liste déroulante sur le filtre des associations
-	include("opendb.php");
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association";
-	$results = mysql_query($query);
-	if (!$results)
-		echo mysql_error();
-	$compteur = 0;
-	while ($stock_association[$compteur] = mysql_fetch_array($results))
-		$compteur++;
-	include("closedb.php");
-	$compteur_asso = 0;
-	while ($compteur_asso != $compteur)
-	{
-		$valeur = $compteur_asso + 2;
-		print '<option '.selected('choix_association_type', $valeur).' label="'.$stock_association[$compteur_asso]['nom'].'" value="'.$valeur.'">'.$stock_association[$compteur_asso]['nom'].'</option>';
-		$compteur_asso++;
-	}
-
-	print '</select>
+	<div id="responsable">
+		<dt><input type="checkbox" '.checked('exclure_adhs','1').' name="exclure_adhs" value="1">Exclure les simples adhérents</input></dt>
+		<dt><input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Inclure responsables des sections (comité directeur)</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure responsables d\'association (bureau)</input></dt>
+		<dt><input type="checkbox" '.checked('sans_certif','1').' name="sans_certif" value="1">N’afficher que les adhérent sans certif</input></dt>
+		<dt><input type="checkbox" '.checked('sans_photo','1').' name="sans_photo" value="1">N’afficher que les adhérent sans photo</input></dt>
+		<dt><input type="checkbox" '.checked('compte_inactif','1').' name="compte_inactif" value="1">Comptes désactivés</input></dt>
 	</div>
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
@@ -279,7 +278,8 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	}
 	$in="('0'";
 	$i=0;
-	foreach($tab as $section){
+	foreach($tab as $section)
+	{
 		foreach($section['activites'] as $activite){
 			foreach($activite['creneaux'] as $creneau){
 				
@@ -291,10 +291,10 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 		}
 	}
 	$in.=" ) ";
-	if ($i==0 && $resp_asso)
-	{
+	if ($_POST['choix_association_type'] != 0)
+		$sql .= " AND ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso = '".$_POST['choix_association_type']."' ) ";
+	if ($i == 0 && $resp_asso)	// Utilisé pour ?
 		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
-	}
 	else
 	{
 		$sql.="AND ( false ";
@@ -302,7 +302,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			$sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
 		if (isset($_POST['responsable_asso']) || isset($_POST['responsable']))
 		{	
-			$sql.="OR (ADR.id IN (
+			$sql .= "OR (ADR.id IN (
 				SELECT  ADH.id id_adh
 				FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adherent ADH
 				WHERE CR.id_act=AC.id
@@ -329,7 +329,6 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 		}
 		$sql.=" ) ORDER BY ADR.nom";
 	}
-	//print $sql;
 	$tab = getChampsAdherents();
 	include("opendb.php");
 	$results = mysql_query($sql);

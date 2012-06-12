@@ -57,7 +57,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 	<input type="hidden" name="action" value="select_assos" />';
 	print '<ul id="tree_root">';
 	$tab=array();
-	foreach($creneaux as $creneau){
+	foreach($creneaux as $creneau)
+	{
 		$tab[$creneau['id_act']]['nom']=$creneau['nom_act'];
 		$tab[$creneau['id_act']]['id']=$creneau['id_act'];
 		$tab[$creneau['id_act']]['nom_sec']=$creneau['nom_sec'];
@@ -67,12 +68,15 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['fin']=$creneau['fin_cre'];
 	}
 	$ads=getAdhesions($id_adh,$promo);
-	foreach($tab as $act){
+	foreach($tab as $act)
+	{
 		$out= '<li><input type="checkbox" name="act'.$act['id'].'"  value="'.$act['id'].'"><label>'.$act['nom_sec'].' - '.$act['nom'].'</label>';
 		$out.= '<ul id="creneaux">';
 		$i=0;
-		foreach($act['creneaux'] as $cre){
-			if (!isset($ads['cre'.$cre['id']]) ){
+		foreach($act['creneaux'] as $cre)
+		{
+			if (!isset($ads['cre'.$cre['id']]) )
+			{
 				$out.= '<li><input type="checkbox" name="cre[]"  value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).'</label>';
 				$i++;
 			}
@@ -83,8 +87,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 	print '</ul>';
 	print '<INPUT type="submit" value="Suite"></FORM>';
 } else
-if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_POST['cre']) ) {
-	print "<span class=\"tip\">".getParam('text_select_asso')."</span>";
+if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_POST['cre']) )
+{
+	print "<span class=\"tip\"><center>".getParam('text_select_asso')."</center></span>";
 	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">';
 	if (!isset($_POST['update'])) {
 		print '<input type="hidden" name="action" value="submitted" />';
@@ -95,11 +100,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 	}
 	print '<TABLE>';
 	$assos_cre=getAssosCreneaux();
-	foreach($_POST['cre'] as $cre){
+	foreach($_POST['cre'] as $cre)
+	{
 		print '<tr>';
 		print '<td>'.$creneaux[$cre]['nom_sec'].' - '.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
 		if(isset($assos_cre[$id_statut_adh][$cre]))
-		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso){
+		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso)
+		{
 			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
 			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
 		}
@@ -138,16 +145,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 	}
 	if (isset($_POST['action']) && $_POST['action']==='nouveau_paiement')
 	{
-		if(empty($_POST['sup']) || empty($_POST['type']) || empty($_POST['promo']) || empty($_POST['num']) ){
+		if(empty($_POST['sup']) || empty($_POST['type']) || empty($_POST['promo']) || empty($_POST['num']) )
 			print "<pre>Il y a une erreur dans le paiement</pre>";
-		} else {
+		else
 			addPaiement($_POST);
-		}
 	}
 	if(isset($_POST['action']) && $_POST['action']==='setnumcarte')
-	{
 		setNumCarte($_POST['numcarte'],$id_adh);
-	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		print '<ul id="submenu"><li><a href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a></li><li><a class="selected" href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></li></ul>';
 		//Selection Promo
@@ -165,11 +169,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 			print "</p>";
 		}
 		//Adhésions
-		if ($self){
+		if ($self)
 			$ads=getAdhesions($id_adh,$promo);
-		} else {
+		else
 			$ads=getMyAdhesions($id_adh,$promo);
-		}
 		$crens=getAllCreneaux();
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
@@ -225,15 +228,18 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 					}
 				break;
 			}
-			if ($self){
+			if ($self)
+			{
 				print "<td><a href=\"".getParam("url_resiliation")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
 			} else
-			if ($resp_asso) {
+			if ($resp_asso)
+			{
 				print '<td>
 				<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
 				<input type="hidden" name="id_ads" value='.$key.' />
 				';
-				switch($value['statut']) {
+				switch($value['statut'])
+				{
 					case 0: 
 					print '<input type="hidden" name="action" value="suppression_ads" />
 					<INPUT type="image" src="images/unchecked.gif" value="submit">';
@@ -266,22 +272,26 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				<input type="hidden" name="action" value="nouveau_paiement" />
 				<table>';
 		print "<th>Entité du supplément</th><th>Type du supplément</th><th>Montant</th><th>Déjà payé</th><th>Reste à payer</th><th>A l'ordre de </th>";
-		if (isset($resp_asso)) {
+		if (isset($resp_asso))
 			print "<th>Nouveau Paiement :</th>";
-		}
 		$tab = getFacture($ads,$adh['statut'],$promo);
 		$p_sup = getPaiementsSup($id_adh);
-		foreach($tab['assos'] as $row){
+		foreach($tab['assos'] as $row)
+		{
 				print "<tr><td>Association {$assos[$row['id_asso_paie']]['nom']}</td><td>{$row['type']}</td><td>{$row['valeur']}</td>
 				<td>".(isset($p_sup[$row['id']]) ? $p_sup[$row['id']] : 0)."</td><td>".(isset($p_sup[$row['id']]) ? $row['valeur']-$p_sup[$row['id']] : 0)."</td>
 				<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-				if (isset($resp_asso) && $resp_asso && $row['id_asso_paie']==$current_asso) {
+				if (isset($resp_asso) && $resp_asso && $row['id_asso_paie']==$current_asso)
+				{
 					$paiement_possible=true;
 					print "<td><INPUT name=\"sup[{$row['id']}]\" value=\"{$_POST['sup'][$row['id']]}\" class=\"tot\" type=\"text\" />{$currency}</td>";
-				} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
+				}
+				else if (isset($resp_asso) && $resp_asso)
+					print "<td></td>";
 				print "</tr>";
 		}
-		foreach($tab['secs'] as $row){
+		foreach($tab['secs'] as $row)
+		{
 				print "<tr><td>Section {$row['nom_sec']}</td><td>{$row['type']}</td><td >{$row['valeur']}</td>
 				<td>".(isset($p_sup[$row['id']]) ? $p_sup[$row['id']] : 0)."</td><td>".(isset($p_sup[$row['id']]) ? $row['valeur']-$p_sup[$row['id']] : 0)."</td>
 				<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
@@ -291,7 +301,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
 				print "</tr>";
 		}
-		foreach($tab['acts'] as $row){
+		foreach($tab['acts'] as $row)
+		{
 				print "<tr><td>Activité {$row['nom_act']}</td><td>{$row['type']}</td><td >{$row['valeur']}</td>
 				<td>".(isset($p_sup[$row['id']]) ? $p_sup[$row['id']] : 0)."</td><td>".($row['valeur']-$p_sup[$row['id']])."</td>
 				<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
@@ -301,7 +312,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
 				print "</tr>";
 		}
-		foreach($tab['cres'] as $row){
+		foreach($tab['cres'] as $row)
+		{
 				print "<tr><td>Créneau {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}</td><td >{$row['valeur']}</td>
 				<td>".(isset($p_sup[$row['id']]) ? $p_sup[$row['id']] : 0)."</td><td>".($row['valeur']-$p_sup[$row['id']])."</td>
 				<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
@@ -311,7 +323,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
 				print "</tr>";
 		}
-		if (isset($resp_asso) && isset($paiement_possible)){
+		if (isset($resp_asso) && isset($paiement_possible))
+		{
 			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Total :</td><td><INPUT type=\"text\" id=\"total\" disabled />{$currency}</td></tr>";
 			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Type :</td><td><INPUT name=\"type\" type=\"text\" />(espèces, chèque, paypal, dispense)</td></tr>";
 			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Numéro :</td><td><INPUT name=\"num\" type=\"text\" />de la transaction (non nul !)</td></tr>";
@@ -334,10 +347,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 		//Paiements
 		print "<h2>Paiements</h2>";
 		$paiements=getMyPaiements($id_adh);
-		//print_r_html($paiements);
 		print "<table><th>Type</th><th>Numéro</th><th>Date</th><th>Remarque</th><th>Total</th><th>Promo</th><th>Enregistré par</th><th>Enregistré le</th><th>Détails</th>";
 		if(isset($resp_asso)) print "<th>Supprimer</th>";
-		foreach ($paiements as $id => $row ) {
+		foreach ($paiements as $id => $row )
+		{
 			if($row['promo']!=$promo) continue;
 			$tot=0;
 			foreach($row['ps'] as $row2) $tot+=$row2['valeur_paiement'];
@@ -355,9 +368,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 			}
 			print "</tr>";
 			print "<tr style=\"display : none; \"><td></td><td></td><td>Suppléments:</td><td colspan=6><table><th>Type</th><th>Dû</th><th>Payé</th><th>Ordre</th>";
-			foreach($row['ps'] as $row2){
+			foreach($row['ps'] as $row2)
 				print "<tr><td>{$row2['type_sup']}</td><td>{$row2['valeur_sup']}</td><td>{$row2['valeur_paiement']}</td><td>{$assos[$row2['id_asso_paie']]['nom']}</td></tr>";
-			}
 			print "</table></td>".($resp_asso ? "<td></td>" : "")."</tr>";
 		}
 		print "</table>";

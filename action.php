@@ -10,7 +10,11 @@ switch($_POST['action']){
 		$message = $_POST['message'];
 		$to = $_POST['to'];
 		$subject = $_POST['subject'];
-		print "Envoi de ".count($to)." emails (merci de patienter) : ";
+		include("opendb.php");
+		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_patienter' ");
+		$stock_pat = mysql_fetch_array($res);
+		print $stock_pat['valeur'];
+		include("closedb.php");
 		$i = 0;
 		foreach($to as $email)
 		{
@@ -20,7 +24,11 @@ switch($_POST['action']){
 			flush();
 			mail($email, $subject, $message, $headers);
 		}
-		print "OK (Vous pouvez continuer à naviguer)";
+		include("opendb.php");
+		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer' ");
+		$stock_pat = mysql_fetch_array($res);
+		print $stock_pat['valeur'];
+		include("closedb.php");
 		
 		break;
 	case "sendmail":

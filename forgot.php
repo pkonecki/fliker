@@ -2,6 +2,7 @@
 define('_VALID_INCLUDE', TRUE);
 include("./includes/paths.php");
 include_once("General.php");
+include_once("EspaceMembre.class.php");
 
 $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
@@ -13,12 +14,8 @@ $header = '
 
 print "$header";
 print '<body>';
-print '<div id="top">';
-print '<span id="title">';
-print getParam('text_top');
-print '</span>';
-include("userdiv.php");
-print '</div>';
+$EspaceMembre = new EspaceMembre;
+$EspaceMembre->showMenu();
 if (isset($_GET['forgot']) && $_GET['forgot'] == "email")
 	print '<h2>Changement de l\'adresse email</h2><br/>';
 else
@@ -109,11 +106,53 @@ else if (isset($_GET['forgot']) && $_GET['forgot'] == "email")
 	print 'Veuillez indiquer votre adresse mail actuelle : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
 	print '</form>';
 }
+else if (isset($_POST['action']) && $_POST['action'] == 'form')
+{
+	$cryptinstall="./includes/cryptographp.fct.php";
+	include $cryptinstall;
+	if (isset($_POST['code']) && chk_crypt($_POST['code']))
+	{
+		print '<form action="forgot.php" method="POST">';
+		print 'Veuillez indiquer votre adresse mail : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recu" value="Envoyer"></input>';
+		print '</form>';
+	}
+	else
+	{
+		echo "<center><a><font color='#FF0000'>=> Erreur, le code est incorrect</font></a></center>" ;
+		print '<div align="center">
+				<p>Pour des raisons de sécurité merci de bien vouloir recopier le code suivant dans le champ de texte.</p>
+				<form action="forgot.php?';
+		echo SID;
+		print '" method="post">
+				<table cellpadding=1>
+				<tr><td align="center">';
+		dsp_crypt(0,1);
+		print '</td></tr>
+				<tr><td align="center">Recopier le code:<br><input type="text" name="code"></td></tr>
+				<tr><td align="center"><input type="hidden" name="action" value="form" /><input type="submit" name="submit" value="Envoyer"></td></tr>
+				</table>
+				</form>
+				</div>';
+	}
+}
 else
 {
-	print '<form action="forgot.php" method="POST">';
-	print 'Veuillez indiquer votre adresse mail : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
-	print '</form>';
+	$cryptinstall="./includes/cryptographp.fct.php";
+	include $cryptinstall; 
+	print '<div align="center">
+			<p>Pour des raisons de sécurité merci de bien vouloir recopier le code suivant dans le champ de texte.</p>
+			<form action="forgot.php?';
+	echo SID;
+	print '" method="post">
+			<table cellpadding=1>
+			<tr><td align="center">';
+	dsp_crypt(0,1);
+	print '</td></tr>
+			<tr><td align="center">Recopier le code:<br><input type="text" name="code"></td></tr>
+			<tr><td align="center"><input type="hidden" name="action" value="form" /><input type="submit" name="submit" value="Envoyer"></td></tr>
+			</table>
+			</form>
+			</div>';
 }
 
 print "</body></html>";

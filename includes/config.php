@@ -15,4 +15,9 @@ $dbname = "asesco";
    - logo_asso, _section, _act
 */
 
+$dbhost_wiki = "localhost";
+$dbuser_wiki = "root";
+$dbpass_wiki = "";
+$dbname_wiki = "my_wiki";
+
 ?>

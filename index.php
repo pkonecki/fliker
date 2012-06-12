@@ -15,7 +15,7 @@ include_once("General.php");
 include_once("EspaceMembre.class.php");
 
 // Définition de la promo et de la localisation
-$current_promo=getParam('promo');
+$current_promo = getParam('promo');
 $GLOBALS['current_promo']=$current_promo;
 setlocale(LC_ALL, 'fr_FR');
 
@@ -42,6 +42,7 @@ setlocale(LC_ALL, 'fr_FR');
  
 <?php
 print '<body>';
+
 $EspaceMembre = new EspaceMembre;
 if (isset($_GET['page']) && $_GET['page'] == "logout")
 	$EspaceMembre->logout();

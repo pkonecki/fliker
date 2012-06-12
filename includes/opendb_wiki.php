@@ -1,0 +1,1 @@
+<?phpinclude("config.php");$conn = mysql_connect($dbhost_wiki, $dbuser_wiki, $dbpass_wiki) or die ('Error connecting to mysql');mysql_select_db($dbname_wiki);?>
