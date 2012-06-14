@@ -283,15 +283,15 @@
 
 
 ===Envoi d'Email===
-  * Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
+  * <font color="blue">Je sèche un peu sur la manière de faire ça, à discuter?</font> Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
   * Bien gérer le SUBJECT:
-    * forcer [NOM_ASSO] en début de sujet
+    * <font color="blue">Le nom d'asso est lié à quoi ? </font>forcer [NOM_ASSO] en début de sujet
   * Bien gérer le FROM: (ou REPLY-TO:)
-    * "contact_email" (cf. page admin) si c'est un membre du bureau, "admin_email" si c'est l'admin, sinon adresse email de l'utilisateur loggé
+    * <font color="red">231</font> "contact_email" (cf. page admin) si c'est un membre du bureau, "admin_email" si c'est l'admin, sinon adresse email de l'utilisateur loggé
     * <s>éditer "contact_email" et "admin_email" depuis page admin</s>
   * Bien gérer le TO:
-    * Vérifier qu'on envoie pas l'email deux fois à une même personne
-    * ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
+    * <font color="red">NEXT REVISION</font>Vérifier qu'on envoie pas l'email deux fois à une même personne
+    * <font color="blue">Prise de place importante en BDD, si from en CC quel est l'adresse ?</font> ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
     * <s>Un email par personne en TO: (timer/répartition dans le temps)</s> <b>OU</b> bulk-email en BCC: (limitation à 200 à u-psud)
 
 
