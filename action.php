@@ -1,6 +1,7 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-switch($_POST['action']){
+switch($_POST['action'])
+{
 	case "sendmail_confirm":
 		$headers = 'From: '.$_SESSION['user'] . "\r\n" .
 
@@ -37,15 +38,19 @@ switch($_POST['action']){
 			$to = $_POST['to'];
 		else
 			$to = "";
+		print $_POST['to'];
 		foreach($_POST['adh'] as $id)
-		{
 			$adhs[$id] = getAdherent($id);
-		}
 		print "<div>Destinaires:";
+		$check_exist = array();
 		foreach($adhs as $adh)
 		{
 			print "<dt>".$adh['nom']." ".$adh['prenom']."</dt>";
-			$to .= $adh['email'].",";
+			if (!isset($check_exist[$adh['email']]))
+			{
+				$to .= $adh['email'].",";
+				$check_exist[$adh['email']] = 1;
+			}
 		}
 		print "</div>";
 		print '<table><FORM action="index.php?page=10" method=POST>

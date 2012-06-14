@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Ven 25 Mai 2012 à 14:42
+-- Généré le : Jeu 14 Juin 2012 à 12:56
 -- Version du serveur: 5.5.8
 -- Version de PHP: 5.3.5
 
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `add_mail_temp` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_statut` (`id_statut`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=369 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=385 ;
 
 -- --------------------------------------------------------
 
@@ -151,6 +151,7 @@ CREATE TABLE IF NOT EXISTS `fliker_champs_adherent` (
 
 CREATE TABLE IF NOT EXISTS `fliker_config` (
   `id` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
   `valeur` varchar(1024) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
