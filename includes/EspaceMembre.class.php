@@ -40,7 +40,7 @@ class EspaceMembre
 	{
 		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email='".$session['email']."' ";
 		include("opendb.php");
-		$res = mysql_query($res);
+		$res = mysql_query($query);
 		if (!$res || mysql_num_rows($res) > 0)
 		{
 			echo mysql_error();

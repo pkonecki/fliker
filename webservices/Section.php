@@ -40,26 +40,32 @@ function newSection($tab){
 }
 
 
-function delSection($id){
+function delSection($id)
+{
 	include("opendb.php");
 	if(!isset($id)) return;
 	$query = "DELETE FROM {$GLOBALS['prefix_db']}section WHERE id=".$id."";
-	//echo $query;
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
-
 }
 
-function getSections($userid){
-	if(!empty($_SESSION['user'])){
-		if($_SESSION['privilege']==="1"){
+function getSections($userid)
+{
+	if(!empty($_SESSION['user']))
+	{
+		if($_SESSION['privilege']==="1")
+		{
 			$query = "SELECT A.id id_asso, A.nom nom_asso, S.* 
 						FROM {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE A.id=HS.id_asso
-						AND HS.id_sec=S.id ";
-		} else {
-			if (!empty($userid)) {
+						AND HS.id_sec=S.id
+						ORDER BY S.nom";
+		}
+		else
+		{
+			if (!empty($userid))
+			{
 				$query = "SELECT A.id id_asso, A.nom nom_asso, S.* 
 						FROM {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE A.id=HS.id_asso
@@ -68,9 +74,11 @@ function getSections($userid){
 							(
 							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
 							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
-							)";
+							)
+						ORDER BY S.nom";
 			}
-			else return;
+			else
+				return;
 		}
 
 	include("opendb.php");
@@ -88,7 +96,7 @@ function getSections($userid){
 function getSectionsByAsso($assoid){
 	if(!empty($_SESSION['user'])){
 			if (!empty($assoid)) {
-				$query = "SELECT * FROM {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}asso_section A WHERE A.id_asso=$assoid AND A.id_sec = S.id";
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}asso_section A WHERE A.id_asso=$assoid AND A.id_sec = S.id ORDER BY S.nom ASC";
 			}
 			else return;
 		
@@ -146,7 +154,7 @@ function delRespSec($id_sec,$id_adh){
 
 function getResponsablesSec($id_sec){
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_section RA WHERE A.id=RA.id_adh AND RA.id_sec='$id_sec'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_section RA WHERE A.id=RA.id_adh AND RA.id_sec='$id_sec' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

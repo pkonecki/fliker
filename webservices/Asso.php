@@ -48,26 +48,28 @@ function delAsso($id){
 
 }
 
-function getAssociations($userid){
-	if(!empty($_SESSION['user'])){
-		if($_SESSION['privilege']==="1"){
-			$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ";
-		} else {
-			if (!empty($userid)) {
-				$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id";
-			}
-			else return;
+function getAssociations($userid)
+{
+	if(!empty($_SESSION['user']))
+	{
+		if($_SESSION['privilege']==="1")
+			$query = "SELECT * FROM {$GLOBALS['prefix_db']}association ORDER BY nom ASC";
+		else
+		{
+			if (!empty($userid))
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id ORDER BY A.nom ASC";
+			else
+				return;
 		}
-
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$tab = array();
-	while($row = mysql_fetch_array($results)){
+		include("opendb.php");
+		$results = mysql_query($query);
+		if (!$results)
+			echo mysql_error();
+		$tab = array();
+		while($row = mysql_fetch_array($results))
 			$tab[$row['id']] = $row;
-	}
-	include("closedb.php");
-	return $tab;
+		include("closedb.php");
+		return $tab;
 	}
 }
 
@@ -113,7 +115,7 @@ function delRespAsso($id_asso,$id_adh){
 
 function getResponsablesAsso($id_asso){
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -128,7 +130,7 @@ function getResponsablesAsso($id_asso){
 }
 
 function getAllAssociations(){
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A ORDER BY A.nom ASC";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

@@ -1,6 +1,10 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
-/*session_start();*/
+$tot_asso=count(getAssociations($_SESSION['uid']));
+$tot_sec=count(getSections($_SESSION['uid']));
+$tot_act=count(getActivites($_SESSION['uid']));
+$tot_cre=count(getCreneaux($_SESSION['uid']));
+$tot = $tot_asso + $tot_sec + $tot_act + $tot_cre;
 if((strcmp($_SESSION['user'],"") == 0)){
 	print "<p>Vous n'êtes pas connecté</p>";
 	die();
@@ -46,38 +50,25 @@ if (isset($_POST['action']) && $_POST['action'] == 'new') {
 
 }
 else {
-	if (isset($_POST['action']) && $_POST['action'] === 'submitted'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
 		modifAsso($_POST);
-
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new'){
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new')
 		newAsso($_POST);
-
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'suppression'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression')
 		delAsso($_POST['id']);
-
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp')
 		delRespAsso($_POST['id_asso'],$_POST['id_resp']);
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'new_resp'){
+	if (isset($_POST['action']) && $_POST['action'] === 'new_resp')
 		ajoutResponsableAsso($_POST['id_asso'],$_POST['id_resp']);
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup'){
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_POST['id_sup']);
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'new_sup'){
-		//$tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie
+	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
 		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],$promo);
-	}
-	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups'){
+	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
+	{
 		$sups = getSup("association",$_GET['asso'],$_POST['old_promo']);
-		foreach ($sups as $key => $value) {
-			//print "add sup: idasso={$_GET['asso']} type={$value['type']} valeur={$value['valeur']} id_statut={$value['id_statut']} id_asso_paie={$value['id_asso_paie']} promo=$current_promo";
+		foreach ($sups as $key => $value)
 			addSup("association",$_GET['asso'],$value['type'],$value['valeur'],$value['id_statut'],$value['id_asso_paie'],$promo);
-		}
-
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getAssociations($_SESSION['uid']);
@@ -145,7 +136,7 @@ else {
 			print '<ul>';
 			foreach($sections as $section){
 				print '<li>
-				<FORM action="index.php?page=4" method="POST">
+				<FORM action="index.php?page=4&section='.$section['id'].'"" method="POST">
 					<input type="hidden" name="action" value="suppression" />
 					<input type="hidden" name="id" value="'.$section['id'].'" />
 					<a href="index.php?page=4&section='.$section['id'].'">'.$section['nom'].'</a>
@@ -201,7 +192,9 @@ else {
 			foreach ($sups as $id => $sup) {
 				print '<tr><td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$sup['statut'].'</td>';
 				if($promo==$current_promo) print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_sup" /><input type="hidden" name="id_sup" value="'.$id.'" /><INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></td>
+					<input type="hidden" name="action" value="suppression_sup" />
+					<input type="hidden" name="id_sup" value="'.$id.'" />
+					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></td>
 					</FORM>'; 
 				print '</tr>';
 			}

@@ -56,7 +56,8 @@ function getActivites($userid){
 						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE AC.id_sec=S.id
 						AND A.id=HS.id_asso
-						AND HS.id_sec=S.id";
+						AND HS.id_sec=S.id
+						ORDER BY S.nom, AC.nom";
 		} else {
 			if (!empty($userid)) {
 				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
@@ -69,7 +70,8 @@ function getActivites($userid){
 							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '".$userid."')
 							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '".$userid."')
 							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '".$userid."')
-							)";
+							)
+						ORDER BY S.nom, AC.nom";
 			}
 			else return;
 		}
@@ -87,22 +89,21 @@ function getActivites($userid){
 }
 
 function getActivitesBySection($sectionid){
-	if(!empty($_SESSION['user'])){
-			if (!empty($sectionid)) {
-				$query = "SELECT * FROM {$GLOBALS['prefix_db']}activite A WHERE A.id_sec= ".$sectionid." ";
-			}
-			else return;
-		
-
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$tab = array();
-	while($row = mysql_fetch_array($results)){
+	if(!empty($_SESSION['user']))
+	{
+		if (!empty($sectionid))
+			$query = "SELECT * FROM {$GLOBALS['prefix_db']}activite A WHERE A.id_sec= ".$sectionid." ORDER BY A.nom ASC";
+		else
+			return;
+		include("opendb.php");
+		$results = mysql_query($query);
+		if (!$results)
+			echo mysql_error();
+		$tab = array();
+		while($row = mysql_fetch_array($results))
 			$tab[$row['id']] = $row;
-	}
-	include("closedb.php");
-	return $tab;
+		include("closedb.php");
+		return $tab;
 	}
 }
 
