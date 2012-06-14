@@ -5,6 +5,10 @@ function newAdherent($tab)
 	$champs = getChampsAdherents();
 	$colonnes ="(";
 	$values ="(";
+	$tab['nom'] = strtolower($tab['nom']);
+	$tab['nom'][0] = strtoupper($tab['nom'][0]);
+	$tab['prenom'] = strtolower($tab['prenom']);
+	$tab['prenom'][0] = strtoupper($tab['prenom'][0]);
 	include("opendb.php");
 	foreach($champs as $row)
 	{
@@ -103,6 +107,10 @@ function modifAdherent($tab){
 	require("saveImage.php");
 	$champs = getChampsAdherents();
 	$set = "";
+	$tab['nom'] = strtolower($tab['nom']);
+	$tab['nom'][0] = strtoupper($tab['nom'][0]);
+	$tab['prenom'] = strtolower($tab['prenom']);
+	$tab['prenom'][0] = strtoupper($tab['prenom'][0]);
 	include("opendb.php");
 	foreach($champs as $row)
 	{
