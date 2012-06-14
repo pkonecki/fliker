@@ -150,10 +150,10 @@
 
 
 ===Adhérents===
-  * forcer écriture des noms/prénoms au format "Mmmmm" (quelle que soit la casse saisie dans formulaire)
+  * <font color="red">244</font>forcer écriture des noms/prénoms au format "Mmmmm" (quelle que soit la casse saisie dans formulaire)
   * <font color="red">229</font> bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
   * <font color="red">229</font> bouton pour changer son email (par adhérent ou resp --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
-  * bouton pour dés/activer un compte (seulement par admin)
+  * <font color="red">244</font>bouton pour dés/activer un compte (seulement par admin)
   * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
   * <font color="blue">Déjà présent ?</font> bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
   * Case à cocher : je n'ai pas d'adresse email
@@ -290,7 +290,7 @@
     * <font color="red">231</font> "contact_email" (cf. page admin) si c'est un membre du bureau, "admin_email" si c'est l'admin, sinon adresse email de l'utilisateur loggé
     * <s>éditer "contact_email" et "admin_email" depuis page admin</s>
   * Bien gérer le TO:
-    * <font color="red">NEXT REVISION</font>Vérifier qu'on envoie pas l'email deux fois à une même personne
+    * <font color="red">244</font>Vérifier qu'on envoie pas l'email deux fois à une même personne
     * <font color="blue">Prise de place importante en BDD, si from en CC quel est l'adresse ?</font> ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
     * <s>Un email par personne en TO: (timer/répartition dans le temps)</s> <b>OU</b> bulk-email en BCC: (limitation à 200 à u-psud)
 
