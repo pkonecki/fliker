@@ -3,13 +3,13 @@
 
 ===Bugs à Fixer===
   * inscription : bug dans le check n° tel sous certains navigateurs
-  * <font color="red">239</font>listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
+  * <font color="red">239 </font>listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
   * recherche : bouton select all fonctionne pas
   * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
-  * <font color="red">239</font>suppression resp/asso/sec/act/cre : homogénéiser affichage de la confirmation (inline ou popup ?)
+  * <font color="red">239 </font>suppression resp/asso/sec/act/cre : homogénéiser affichage de la confirmation (inline ou popup ?)
   * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
-  * <font color="blue">N°carte n'existe plus dans l'inscription ?</font>n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
-  * <font color="blue">Aucuns problèmes remarqué, la conversion s’effectue bien</font>modif fiche adherent : imageCreateFromPNG does not exist ...
+  * <font color="blue">N°carte n'existe plus dans l'inscription ?</font> n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
+  * <font color="blue">Aucuns problèmes remarqué, la conversion s’effectue bien</font> modif fiche adherent : imageCreateFromPNG does not exist ...
      * ? purger répertoires photo / certmeds des fichiers non-jpg ?
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
   * <s>fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir</s>
@@ -48,17 +48,17 @@
   * <s>custom logo en haut à gauche (code html libre : img ou txt ou ce qu'on veut ...)</s>
   * <s>custom texte pour chaque page affichée (ex description "impossible")</s>
   * déplacer en table custom :
-    * <font color="red">238</font>login : l'email que vous entré n'existe pas
-    * <font color="red">238</font>login : Le mot de passe que vous avez entré est erroné!
-    * <font color="red">238</font>validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
-    * <font color="red">238</font>validate : ok ... vous allez etre redirigés
-    * <font color="red">238</font>envoi email : patienter / continuer
-  * <font color="red">238</font>Ajouter champ description admin + modification de l’affiche de page admin
-  * <font color="red">238</font>Ajout de la synchro avec le Wiki + variable enable dans la fiche admin
+    * <font color="red">238</font> login : l'email que vous entré n'existe pas
+    * <font color="red">238</font> login : Le mot de passe que vous avez entré est erroné!
+    * <font color="red">238</font> validate : Bravo! ..., votre compte est presque activé. Veuillez entrer un mot de passe pour finir votre inscription 
+    * <font color="red">238</font> validate : ok ... vous allez etre redirigés
+    * <font color="red">238</font> envoi email : patienter / continuer
+  * <font color="red">238</font> Ajouter champ description admin + modification de l’affiche de page admin
+  * <font color="red">238</font> Ajout de la synchro avec le Wiki + variable enable dans la fiche admin
 
 
 ===Login/Logout===
-  * <font color="red">229</font>bouton "j'ai oublié mon passwd" --> changer son pass dans chapitre "Adhérent"
+  * <font color="red">229</font> bouton "j'ai oublié mon passwd" --> changer son pass dans chapitre "Adhérent"
   * bouton "je suis un gros boulet" (oublié email et pass) --> rediriger vers "ticket" (cf. "url_resiliation" dans page admin)
   * <s>après l'étape "validate" (saisie mot de passe) on a un message "votre inscription est validée" mais on n'est pas redirigé</s>
 
@@ -119,15 +119,15 @@
   * Gestion des adhésions impossibles (basculer au statut actif si un supplément adéquat est rajouté + cf. notifications)
   * Fonction pour vraiment supprimer un sport de la facture d'un adhérent
   * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
-  * <font color="red">238</font>? pas nécessaire ? <s>captcha en confirmation des formulaires</s>
-  * <font color="blue">Après test, aucuns problème remarqué</font>? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
+  * <font color="red">238</font> ? pas nécessaire ? <s>captcha en confirmation des formulaires</s>
+  * <font color="blue">Après test, aucuns problème remarqué</font> ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
   * <s>identifiant = email</s>
-    * <font color="bleu">Récapitulatif déjà présent sur la page après l'inscription</font>? pas nécessaire ? <s>Demander 2 fois email</s>
+    * <font color="blue">Récapitulatif déjà présent sur la page après l'inscription</font>? pas nécessaire ? <s>Demander 2 fois email</s>
   * <s>gestion de password</s>
-    * <font color="bleu">Pas compris la modification salt</font><s>Mot de passe : à la vérification, encryption md5</s> + salt
+    * <font color="blue">Pas compris la modification salt</font><s> Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
     * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
-    * <font color="blue">Pas compris</font>? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
+    * <font color="blue">Pas compris</font> ? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
     * <s>faire page séparée</s>
     * <s>encourager l'inscription chez d'autres assos (liste unique</s> + popup d'info onmousehover)
   * 2 Scénarii d'inscription :
@@ -151,11 +151,11 @@
 
 ===Adhérents===
   * forcer écriture des noms/prénoms au format "Mmmmm" (quelle que soit la casse saisie dans formulaire)
-  * <font color="red">229</font>bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
-  * <font color="red">229</font>bouton pour changer son email (par adhérent ou resp --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
+  * <font color="red">229</font> bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
+  * <font color="red">229</font> bouton pour changer son email (par adhérent ou resp --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
   * bouton pour dés/activer un compte (seulement par admin)
   * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
-  * <font color="blue">Déjà présent ?</font>bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
+  * <font color="blue">Déjà présent ?</font> bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
   * Case à cocher : je n'ai pas d'adresse email
     * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc.
     * autre possibilité : gérer par représentation (1 seul email parent pour plusieurs fiches ...)
