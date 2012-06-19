@@ -156,18 +156,18 @@
   * <font color="red">244</font>bouton pour dés/activer un compte (seulement par admin)
   * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
   * <font color="blue">Déjà présent ?</font> bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
-  * Case à cocher : je n'ai pas d'adresse email
+  * <font color="blue">Plus dé précisions ?</font>Case à cocher : je n'ai pas d'adresse email
     * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc.
     * autre possibilité : gérer par représentation (1 seul email parent pour plusieurs fiches ...)
     * possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
   * Vérifications par un gestionnaire : case à cocher pour certains champs (qui indique que cette info doit être verifiée par gestionnaire) ex: numayantdroit/certificat med/etc.
     * LDAP utilisera cette case
     * Table de hash champ_adherent à vérifier --> id_adherent + date_verif + id_verif
-  * +champs date de validation du cookie
+  * <font color="blue">Plus dé précisions ?</font> +champs date de validation du cookie
   * +champs date de dernière modif du droit à l'image
-  * +champ exemple dans champs_adherent
-  * Séparer données login/données perso ? --> Customisations supplémentaires assos locales
-  * ? créer nouvelle section/activité compète ? <s>Compétiteur (o/n)</s>
+  * <font color="blue">Plus dé précisions ?</font> +champ exemple dans champs_adherent
+  * <font color="blue">Plus dé précisions ?</font> Séparer données login/données perso ? --> Customisations supplémentaires assos locales
+  * <font color="blue">Plus dé précisions ?</font> ? créer nouvelle section/activité compète ? <s>Compétiteur (o/n)</s>
   * <s>Catégorie Homme/Femme --> Masculin/Féminin</s>
   * <s>-preinscription --> +date creation</s>
   * <s>+adresse professionnelle (cf customisation locale PSUC)</s>
