@@ -45,7 +45,7 @@ else	// Si l'utilisateur est connecté
 			$resp_asso=true;
 		}
 	}
-	$query="SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
 	UNION
 	SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."'
  	UNION
@@ -66,7 +66,7 @@ else	// Si l'utilisateur est connecté
 <img src="images/downarrow.gif" class="inline" id="toggle_f_search" ></img>
 </div>
 <?php
-print "<span class=\"tip\">".getParam('text_search')."</span>";
+print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	if (empty($_POST['set1_text'])) $_POST['set1_text']="";

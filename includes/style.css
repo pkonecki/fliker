@@ -328,6 +328,42 @@ div.conf_dial{
 	background:white;
 	border: 1px solid;
 }
+
+table.tab_grille th
+{
+	border-bottom:1px;
+	border-style:solid;
+}
+
+table.tab_grille td
+{
+	border-bottom:1px;
+	border-style:solid;
+}
+
+table tr.tab_footer_line
+{
+border: 2px solid black;
+}
+
+table td.tab_footer_colonne
+{
+border-left: 2px solid black;
+border-right: 2px solid black;
+}
+
+table th.tab_footer_colonne
+{
+border-left: 2px solid black;
+border-right: 2px solid black;
+border-top: 2px solid black;
+}
+
+.form_left
+{
+	float:left;
+}
+
 /*
 body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
 body { color: #333;  background-color: #fff; text-align: left; }

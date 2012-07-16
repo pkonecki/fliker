@@ -48,8 +48,8 @@ function newAdherent($tab)
 		}
 	}
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
-	$colonnes .= "date_creation,last_modif,activationkey,";
-	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
+	$colonnes .= "date_creation,last_modif,last_modif_droit_image,activationkey,";
+	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
 	$colonnes = substr($colonnes,0,-1);
 	$values = substr($values,0,-1);
 	$colonnes .=")";
@@ -61,29 +61,29 @@ function newAdherent($tab)
 	//send mail
 	$to      = $tab['email'];
 	$subject = "Votre inscription sportive";
-	$message = "Bienvenue !\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\r  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\r  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
-	$headers = 'From: '.getParam('admin_email') . "\r\n" .
-	           'Reply-To: '.getParam('contact_email') . "\r\n" .
+	$message = "Bienvenue !\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\r  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r".getParam('url_site.conf')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\r  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+	$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
+	           'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 	           'X-Mailer: PHP/' . phpversion();
 	mail($to, $subject, $message, $headers);
 }
 
-function getAdherent($user){
+function getAdherent($user)
+{
 	$return = array();
 	$tab = getChampsAdherents();
 	include("opendb.php");
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `id` = '".$user."'";
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	$row = mysql_fetch_assoc($results);
-	foreach($tab as $champ){
-			if($champ['type']==='select'){
-				$return[$champ['nom']] = $row['id_'.$champ['nom']];
-			}
-			else
-			{
-				$return[$champ['nom']] = $row[$champ['nom']];
-			}
+	foreach($tab as $champ)
+	{
+		if($champ['type']==='select')
+			$return[$champ['nom']] = $row['id_'.$champ['nom']];
+		else
+			$return[$champ['nom']] = $row[$champ['nom']];
 	}
 	include("closedb.php");
 	return $return;
@@ -103,14 +103,24 @@ function getChampsAdherents(){
 }
 
 function modifAdherent($tab){
-	require("class.imageconverter.php");
-	require("saveImage.php");
+	include_once("class.imageconverter.php");
+	include_once("saveImage.php");
 	$champs = getChampsAdherents();
 	$set = "";
 	$tab['nom'] = strtolower($tab['nom']);
 	$tab['nom'][0] = strtoupper($tab['nom'][0]);
 	$tab['prenom'] = strtolower($tab['prenom']);
 	$tab['prenom'][0] = strtoupper($tab['prenom'][0]);
+	
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id='".$tab['id_adh']."'";
+		include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	include("closedb.php");
+	$stock_droit_image = mysql_fetch_array($results);
+	$is_change_droit_image = false;
+
 	include("opendb.php");
 	foreach($champs as $row)
 	{
@@ -123,24 +133,37 @@ function modifAdherent($tab){
 				$set .= "'".mysql_real_escape_string($tab[$row['nom']])."',";
 			else if($row['type']==='tinyint')
 			{
-				if (isset($tab[$row['nom']])) $set .= "1,";
-				else $set .= "0,";
+				if (isset($tab[$row['nom']]))
+				{
+					$set .= "1,";
+					if ($row['nom'] == "droit_image" && $stock_droit_image['droit_image'] == 0)
+						$is_change_droit_image = true;
+				}
+				else
+				{
+					$set .= "0,";
+					if ($row['nom'] == "droit_image" && $stock_droit_image['droit_image'] == 1)
+						$is_change_droit_image = true;
+				}
 			}
 			if($row['type']==='file')
 			{
-				if($tab[$row['nom']]['name']==="")
+				if ($tab[$row['nom']]['name']==="")
 					$set .= "0,";
 				else
 				{
 					$set .= "1,";
 					saveImage($tab['email'],$row['nom']);
+					
 				}
 			}
 			else if($row['type']==='select')
 				$set .= "'".mysql_real_escape_string($tab['id_'.$row['nom']])."',";
 		}
 	}
-	$set .="last_modif='".date( 'Y-m-d H:i:s')."'";
+	if ($is_change_droit_image == true)
+		$set .=" last_modif_droit_image='".date( 'Y-m-d H:i:s')."', ";
+	$set .=" last_modif='".date( 'Y-m-d H:i:s')."' ";
 	$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$set." WHERE id='".$tab['id_adh']."'";
 	$results = mysql_query($query);
 	if (!$results)
@@ -325,24 +348,46 @@ function getSolde($id_adh,$promo)
 
 function setNumCarte($num,$adh)
 {
-	$q="UPDATE {$GLOBALS['prefix_db']}adherent SET numcarte=$num WHERE id=$adh";
+	$promo = getParam('promo.conf');
+	$q="UPDATE {$GLOBALS['prefix_db']}numcarte_fk SET numcarte=$num WHERE id_adh=$adh AND promo='".$promo."' ";
 	include("opendb.php");
 	$results = mysql_query($q);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
 }
 
-function getMaxNumCarte()
+function getNumCarte($adh)
 {
-	$query= "SELECT MAX(numcarte) max FROM {$GLOBALS['prefix_db']}adherent ";
+	$promo = getParam('promo.conf');
+	$q="SELECT numcarte FROM {$GLOBALS['prefix_db']}numcarte_fk WHERE id_adh=$adh AND promo='".$promo."' ";
 	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
-	$tab = array();
-	$ret = mysql_result($results,0,"max");
+	$results = mysql_query($q);
+	if (!$results)
+		echo mysql_error();
+	$array_tmp = mysql_fetch_array($results);
 	include("closedb.php");
-	$ret++;
-	return $ret;
+	return $array_tmp['numcarte'];
 }
 
+function getMaxNumCarte()
+{
+	$query= "SELECT numcarte FROM {$GLOBALS['prefix_db']}numcarte_fk ORDER BY numcarte ASC";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$i = 1;
+	while ($array_tmp = mysql_fetch_array($results))
+	{
+		if ($array_tmp['numcarte'] != 0)
+		{
+			if ($array_tmp['numcarte'] == $i)
+				$i++;
+			else
+				break;
+		}
+	}
+	include("closedb.php");
+	return $i;
+}
 ?>

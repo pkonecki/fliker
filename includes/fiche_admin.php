@@ -12,113 +12,284 @@ if(isset($_GET['promo']))
 else
 	$promo = $current_promo;
 
-if (isset($_POST['replace_email']))	// Page admin utilisé pour le changement d'une adresse email
+if (isset($_POST['purge']))	// Page purger l'année en cours
 {
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email = '".$_POST['replace_email']."' ";
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results)
-		echo mysql_error();
-	else if (mysql_num_rows($results) > 1)
-		print "Il y a plusieurs utilisateurs possédant cette adresse email, impossible d'effectuer le remplacement.";
-	else
-	{
-		$stock_result = mysql_fetch_array($results);
-		if ($stock_result['active'] == 1)
-			$user_actif = "actif";
-		else
-			$user_actif = "non activé";
-		print "Vous souhaitez remplacer l'adresse email <b>".$stock_result['email']."</b> de ".$stock_result['prenom']." ".$stock_result['nom']." possédant un compte <b>".$user_actif."</b>.";
-		print 	'<br /><br />';
-		print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
-				<input type='hidden' name='old_email' value='".$stock_result['email']."' />
-				Choisissez la nouvelle adresse email :<input type='text' name='new_email'></input>
-				<input type=\"submit\" />
-				</form>";
-	}
-	include("closedb.php");
+	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
+			Lors d'une purge de données les certifications médicales sont supprimé et les adhérents n'ayant jamais effectué de paiement sont supprimé.<br/></br>Etes-vous sûr de vouloir effectuer cette action ?<br/><br/>   => ";
+	print	"<input type=\"submit\" name='purge_confirmed' value='Oui'/>";
+	print	"<input type=\"submit\" name='no_purge' value='Non'/>";
+	print	"</form><br/>";
 }
-else if (isset($_POST['modif_compte']))	// Page modifiant l'activité d'un compte
+else
 {
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email = '".$_POST['modif_compte']."' ";
-	include("opendb.php");
-	$results = mysql_query($query);
-	if (!$results)
-		echo mysql_error();
-	else if (mysql_num_rows($results) > 1)
-		print "Il y a plusieurs utilisateurs possédant cette adresse email, impossible d'effectuer le remplacement.";
-	else
+	if (isset($_POST['modif_statut']))
 	{
-		$text_activ = "";
-		$stock_result = mysql_fetch_array($results);
-		if ($stock_result['active'] == 1)
-		{
-			$user_actif = "actif";
-			$text_activ = "dés";
-		}
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}statut SET nom='".$_POST['modif_statut']."' WHERE id=".$_POST['old_statut']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
-			$user_actif = "non activé";
-		print "Vous souhaitez modifier l'activité du compte ayant l'email <b>".$stock_result['email']."</b>, le prenom ".$stock_result['prenom'].", le nom ".$stock_result['nom']." et possédant un compte <b>".$user_actif."</b>.";
-		print 	'<br /><br />';
-		print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
-				<input type='hidden' name='etat_compte' value='".$stock_result['active']."' />
-				<input type='hidden' name='etat_compte_email' value='".$stock_result['email']."' />
-				En cliquant sur le bouton ci-dessous vous allez <b>".$text_activ."activer</b> le compte<br/><input type=\"submit\" value='Effectuer le changement' />
-				</form>";
+			print "<FONT COLOR='#16B84E'><b>Statut modifié avec succès.</b></font>";
 	}
-}
-else	// Page admin de base
-{
-	if (isset($_POST['new_email']))
+	else if (isset($_POST['supr_statut']))
 	{
-		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email = '".$_POST['new_email']."' ";
+		$res = doQuery("DELETE FROM {$GLOBALS['prefix_db']}statut WHERE id=".$_POST['supr_statut']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Statut supprimé avec succès.</b></font>";
+	}
+	else if (isset($_POST['new_statut']))
+	{
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}statut (nom) VALUES('".$_POST['new_statut']."')");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Statut ajouté avec succès.</b></font>";
+	}
+	else if (isset($_POST['modif_type_transa']))
+	{
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_transa SET nom='".$_POST['modif_type_transa']."' WHERE id=".$_POST['old_type_transa']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur modifié avec succès.</b></font>";
+	}
+	else if (isset($_POST['supr_type_transa']))
+	{
+		$res = doQuery("DELETE FROM {$GLOBALS['prefix_db']}type_transa WHERE id=".$_POST['supr_type_transa']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur supprimé avec succès.</b></font>";
+	}
+	else if (isset($_POST['new_type_transa']))
+	{
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_transa (nom) VALUES('".$_POST['new_type_transa']."')");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur ajouté avec succès.</b></font>";
+	}
+	else if (isset($_POST['modif_type_dep']))
+	{
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_dep SET nom='".$_POST['modif_type_dep']."' WHERE id=".$_POST['old_type_dep']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur modifié avec succès.</b></font>";
+	}
+	else if (isset($_POST['supr_type_dep']))
+	{
+		$res = doQuery("DELETE FROM {$GLOBALS['prefix_db']}type_dep WHERE id=".$_POST['supr_type_dep']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur supprimé avec succès.</b></font>";
+	}
+	else if (isset($_POST['new_type_dep']))
+	{
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_dep (nom) VALUES('".$_POST['new_type_dep']."')");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur ajouté avec succès.</b></font>";
+	}
+	else if (isset($_POST['synchro_wiki']))	// Page synchronisant les comptes avec le wiki
+	{
+		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent";
 		include("opendb.php");
-		$results = mysql_query($query);
-		if (!$results)
+		$res = mysql_query($query);
+		if (!$res)
 			echo mysql_error();
-		if ( mysql_num_rows($results) == 0)
+		else
 		{
-			$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE email = '".$_POST['old_email']."' ";
+			$i = 0;
+			while ($list_adh[$i] = mysql_fetch_array($res))
+			{
+				if ($list_adh[$i]['email'] != "")
+					$list_adh[$i]['email'][0] = strtoupper($list_adh[$i]['email'][0]);
+				$i++;
+			}
+			$query = "SELECT * FROM mw_user";
+			include("opendb_wiki.php");
+			$res = mysql_query($query);
+			if (!$res)
+				echo mysql_error();
+			else
+			{
+				$i = 0;
+				while ($list_adh_wiki[$i] = mysql_fetch_array($res))
+					$i++;
+				$i = 0;
+				while ($list_adh[$i])
+				{
+					$to_add = true;
+					$count = 0;
+					while ($list_adh_wiki[$count])
+					{
+						if ($list_adh_wiki[$count]['user_name'] == $list_adh[$i]['email'])
+							$to_add = false;
+						$count++;
+					}
+					if ($to_add == true)
+						$EspaceMembre->addWiki($list_adh[$i]['id']);
+					$i++;
+				}
+			}
+		}
+	}
+	else if (isset($_POST['purge_confirmed']))	// Page synchronisant les comptes avec le wiki
+	{
+		$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET certmed=''";
+		include("opendb.php");
+		$res = mysql_query($query);
+		if (!$res)
+			echo mysql_error();
+		$dirname = './certmed/';
+		$dir = opendir($dirname); 
+		while($file = readdir($dir))
+		{
+			if($file != '.' && $file != '..' && !is_dir($dirname.$file) && $file != "index.html")
+				unlink("./certmed/".$file);
+		}
+		closedir($dir);
+		
+		$query = "SELECT DISTINCT id_adh FROM {$GLOBALS['prefix_db']}paiement";
+		include("closedb.php");
+		include("opendb.php");
+		$res = mysql_query($query);
+		if (!$res)
+			echo mysql_error();
+		else
+		{
+			$tmp_setup = "";
+			while ($tmp = mysql_fetch_array($res))
+			{
+				$array_adhs[$tmp['id_adh']] = 1;
+				$tmp_setup .= " AND id != ".$tmp['id_adh']."";
+			}
+			$query = "SELECT id FROM {$GLOBALS['prefix_db']}adherent WHERE 1=1". $tmp_setup." ORDER BY id ASC";
 			include("opendb.php");
 			$res = mysql_query($query);
 			if (!$res)
 				echo mysql_error();
 			else
 			{
-				$array_adh = mysql_fetch_array($res);
-				$EspaceMembre = new EspaceMembre;
-				if ($EspaceMembre->updateUser("email", $_POST['new_email'], $array_adh['email']) == TRUE)
-					print "<FONT COLOR='#16B84E'><b>Le changement d'adresse a été effectué avec succès.</b></font>";
-				else
-					print "<FONT COLOR='#FF0000'><b>Un problème est servenu lors de la mise à jour, le changement n'a pas été réalisé.</b></font>";
-				print "<br /><br/>";
+				while ($tmp = mysql_fetch_array($res))
+				{
+					print $tmp['id']."<br/>";
+				}
 			}
 		}
-		else
-			print "<FONT COLOR='#FF0000'><b>L'adresse email existe déjà dans notre base de données.</b></font><br /><br />";
-		include("closedb.php");
 	}
-	if (isset($_POST['etat_compte']))
+	if(isset($_POST['supr_asso']) && $_POST['choix_asso_type'] != 0)
 	{
-		if ($_POST['etat_compte'] == 1)
-			$var_tmp = 0;
-		else
-			$var_tmp = 1;
-		$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET active=".$var_tmp." WHERE email='".$_POST['etat_compte_email']."' ";
+		$query = "SELECT * FROM {$GLOBALS['prefix_db']}asso_section WHERE id_asso='".$_POST['choix_asso_type']."' ";
 		include("opendb.php");
 		$res = mysql_query($query);
 		if (!$res)
 		{
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 			echo mysql_error();
-			print "<FONT COLOR='#FF0000'><b>Erreur lors de la mise à jour du compte.</b></font><br /><br />";
+		}
+		else if (mysql_num_rows($res) == 0)
+		{
+			$query = "DELETE FROM {$GLOBALS['prefix_db']}association WHERE id='".$_POST['choix_asso_type']."' ";
+			include("opendb.php");
+			$res = mysql_query($query);
+			if (!$res)
+			{
+				print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+				echo mysql_error();
+			}
+			else
+				print "<FONT COLOR='#16B84E'><b>L'association a été supprimé.</b></font>";
 		}
 		else
-			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectué avec succès.</b></font>";
+			print "<FONT COLOR='#FF0000'><b>L'association contient encore des sections.</b></font>";
 	}
+	
 	if(isset($_POST['action']) && $_POST['action'] === "setparam")
 		setParam($_POST['id'], htmlspecialchars($_POST['valeur']));
-	$params = getParams();
-	$params_2 = getParamsBis();
+	$params = getConfig("conf");
+	$params_2 = getConfigBis("conf");
+
+	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
+			<input type='hidden' name='synchro_wiki' value='1'/>
+			Insérer les nouveaux comptes Fliker dans Wiki <img src='./images/Button_Next.png' height='18' width='18' > ";
+	if ($params['is_wiki.conf'] == "true")
+		print	"<input type=\"submit\" value='Synchroniser maintenant'/>";
+	else
+		print "Activation d'une base de données Wiki nécessaire";
+	print	"</form><br/>";
+
+	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
+			<input type='hidden' name='purge' value='1'/>
+			Purge de l'année courante (certmed, adherents sans paiements) <img src='./images/Button_Next.png' height='18' width='18' > ";
+	print	"<input type=\"submit\" value='Purger maintenant'/>";
+	print	"</form><br/>";
+
+	$tab = getAssociations($_SESSION['uid']);
+	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">";
+	print 'Supprimer une association <select id="choix_asso_type" name="choix_asso_type">
+			<option selected  name="choix" value="0">Aucune</option>';
+	foreach($tab as $asso)
+		print '<option name="choix" value="'.$asso['id'].'">'.$asso['nom'].'</option>';
+	print	"<input type=\"submit\" name='supr_asso' value='Supprimer'/>";
+	print	"</form>";
+	
+	print 	"<br/><table>
+			<tr><th colspan='3' align='center'>Gestion des statuts</th></tr>
+			<form method='POST' action='index.php?page=9'><tr><td>Ajouter : </td><td><input name='new_statut' type='text'/></td><td><input type='submit'/></td></tr></form>
+			
+			<form method='POST' action='index.php?page=9'><tr><td>Modifier : </td><td>Ancien : <select name='old_statut'>";
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}statut ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+		print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";	
+	print	"</select><br/>Nouveau : <input name='modif_statut' type='text'/></td><td><input type='submit'/></td></tr></form>";
+			
+	// print	"<form method='POST' action='index.php?page=9'><tr><td>Supprimer : </td><td><select name='supr_statut'>";
+	// $res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}statut ORDER BY nom ASC");
+	// while ($tmp_array = mysql_fetch_array($res))
+		// print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";
+	// print 	"</select></td><td><input type='submit'/></td></tr></form>";
+	print 		"</table>";
+	
+	print 	"<br/><table>
+			<tr><th colspan='3' align='center'>Gestion des types de transaction</th></tr>
+			<form method='POST' action='index.php?page=9'><tr><td>Ajouter : </td><td><input name='new_type_transa' type='text'/></td><td><input type='submit'/></td></tr></form>
+			
+			<form method='POST' action='index.php?page=9'><tr><td>Modifier : </td><td>Ancien : <select name='old_type_transa'>";
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_transa ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+		print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";	
+	print	"</select><br/>Nouveau : <input name='modif_type_transa' type='text'/></td><td><input type='submit'/></td></tr></form>";
+			
+	// print	"<form method='POST' action='index.php?page=9'><tr><td>Supprimer : </td><td><select name='supr_type_transa'>";
+	// $res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_transa ORDER BY nom ASC");
+	// while ($tmp_array = mysql_fetch_array($res))
+		// print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";
+	// print 	"</select></td><td><input type='submit'/></td></tr></form>";
+	print 		"</table>";
+	
+	print 	"<br/><table>
+			<tr><th colspan='3' align='center'>Gestion des types de dépenses</th></tr>
+			<form method='POST' action='index.php?page=9'><tr><td>Ajouter : </td><td><input name='new_type_dep' type='text'/></td><td><input type='submit'/></td></tr></form>
+			
+			<form method='POST' action='index.php?page=9'><tr><td>Modifier : </td><td>Ancien : <select name='old_type_dep'>";
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_dep ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+		print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";	
+	print	"</select><br/>Nouveau : <input name='modif_type_dep' type='text'/></td><td><input type='submit'/></td></tr></form>";
+			
+	// print	"<form method='POST' action='index.php?page=9'><tr><td>Supprimer : </td><td><select name='supr_type_dep'>";
+	// $res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_dep ORDER BY nom ASC");
+	// while ($tmp_array = mysql_fetch_array($res))
+		// print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";
+	// print 	"</select></td><td><input type='submit'/></td></tr></form>";
+	print 		"</table>";
+	
+	print "<br/><br/>";
 	$table_config = "<table id=\"table_config\" >";
 	foreach($params as $key => $value)
 	{
@@ -131,15 +302,5 @@ else	// Page admin de base
 	}
 	$table_config .= "</table>";
 	print $table_config;
-	print '<br />';
-	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
-			Activer ou désactiver le compte correspondant à l'adresse email suivante :<input type='text' name='modif_compte'></input>
-			<input type=\"submit\" />
-			</form>";
-	print '<br />';
-	print 	"<FORM action=\"index.php?page=9\" method=\"POST\">
-			Adresse email à remplacer :<input type='text' name='replace_email'></input>
-			<input type=\"submit\" />
-			</form>";
 }
 ?>

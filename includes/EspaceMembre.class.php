@@ -19,11 +19,11 @@ class EspaceMembre
 	{
 	
 	}
-	public function showMenu()
+	public function showMenu($page = 0)
 	{
 		print '<div id="top">';
 		print '<span id="title"><h1>';
-		print getParam('text_top');
+		print getParam('text_top.txt');
 		print '</h1></span>';
 		if(isset($_SESSION['user']))
 			include("menu.php");
@@ -34,6 +34,21 @@ class EspaceMembre
 			print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="index.php?page=logout">Déconnexion</a>';
 		 print '</div>';
 		print '</div>';
+		if (isset($_SESSION['user']))
+		{
+			if ($page == 1)
+				print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li><li><a href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li></ul>';
+			else if ($page == 7)
+				print '<ul id="submenu"><li><a href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li><li><a class="selected" href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li></ul>';
+			else if ($page == 9)
+				print '<ul id="submenu"><li><a class="selected" href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a href="index.php?page=12">Utilisateurs</a></li><li><a href="index.php?page=13">Messages</a></li></ul>';
+			else if ($page == 11)
+				print '<ul id="submenu"><li><a href="index.php?page=9">Général</a></li><li><a class="selected" href="index.php?page=11">Notifications</a></li><li><a href="index.php?page=12">Utilisateurs</a></li><li><a href="index.php?page=13">Messages</a></li></ul>';
+			else if ($page == 12)
+				print '<ul id="submenu"><li><a href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a class="selected" href="index.php?page=12">Utilisateurs</a></li><li><a href="index.php?page=13">Messages</a></li></ul>';
+			else if ($page == 13)
+				print '<ul id="submenu"><li><a href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a href="index.php?page=12">Utilisateurs</a></li><li><a class="selected" href="index.php?page=13">Messages</a></li></ul>';
+		}
 	}
 	
 	public function addUser($session)
@@ -83,7 +98,7 @@ class EspaceMembre
 		return (true);
 	}
 
-	private function addWiki($id_user)
+	public function addWiki($id_user)
 	{
 		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id = '".$id_user."' ";
 		include("opendb.php");
@@ -99,9 +114,10 @@ class EspaceMembre
 			include("closedb.php");
 			include("opendb_wiki.php");
 			$user_name = $array['email'];
-			$user_name[0] = strtoupper($user_name[0]);
-			$user_mdp = "";
-			$result = mysql_query("INSERT INTO mw_user (user_name, user_password, user_registration, user_editcount) VALUES ('".$user_name."', CONCAT(':A:', MD5('".$user_mdp."')), CURRENT_TIMESTAMP()+0, 0) ");
+			if ($user_name != "")
+				$user_name[0] = strtoupper($user_name[0]);
+			$user_mdp = $array['password'];
+			$result = mysql_query("INSERT INTO mw_user (user_name, user_password, user_registration, user_editcount) VALUES ('".$user_name."', CONCAT(':A:', '".$user_mdp."'), CURRENT_TIMESTAMP()+0, 0) ");
 			if (!$result)
 			{
 				echo mysql_error();
@@ -162,7 +178,7 @@ class EspaceMembre
 		return (true);
 	}
 	
-	private function updateWiki($column, $value, $email)
+	public function updateWiki($column, $value, $email)
 	{
 		$email[0] = strtoupper($email[0]);
 		$query = "";

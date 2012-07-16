@@ -47,16 +47,16 @@ if (isset($_POST['email_recu']))
 		include("closedb.php");
 		$to      = $_POST['email_recu'];
 		$subject = "Changement de mot de passe Fliker";
-		$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification du mot de passe lié à cette adresse email veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
-		$headers = 'From: '.getParam('admin_email') . "\r\n" .
-				'Reply-To: '.getParam('contact_email') . "\r\n" .
+		$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification du mot de passe lié à cette adresse email veuillez cliquer sur le lien suivant:\r".getParam('url_site.conf')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
+				'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 				'X-Mailer: PHP/' . phpversion();
 		$return = 0;
 		$return = mail($to, $subject, $message, $headers);
 		if ($return == TRUE)
 			print 'Un email vient d\'être envoyé à l\'adresse '.$_POST["email_recu"].', veuiller vérifier votre boîte mail.';
 		else
-			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation")."\">administrateurs</a>";
+			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
 	}
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted')
@@ -87,15 +87,15 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted'
 		include("closedb.php");
 		$to      = $_POST['recup_mdp'];
 		$subject = "Changement de l\adresse email Fliker";
-		$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification de l\email lié à ce compte veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate_email.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
-		$headers = 	'From: '.getParam('admin_email') . "\r\n" .
-					'Reply-To: '.getParam('contact_email') . "\r\n" .
+		$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification de l\email lié à ce compte veuillez cliquer sur le lien suivant:\r".getParam('url_site.conf')."validate_email.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+		$headers = 	'From: '.getParam('admin_email.conf') . "\r\n" .
+					'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 					'X-Mailer: PHP/' . phpversion();
 		$return = mail($to, $subject, $message, $headers);
 		if ($return == TRUE)
 			print 'Un email vient d\'être envoyé à l\'adresse '.$_POST["email_recup"].', veuiller vérifier votre boîte mail.';
 		else
-			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation")."\">administrateurs</a>";
+			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
 	}
 }
 else if (isset($_GET['forgot']) && $_GET['forgot'] == "email")
@@ -156,5 +156,4 @@ else
 }
 
 print "</body></html>";
-// <a href=\"".getParam("url_resiliation")."\">administrateurs</a>
 ?>

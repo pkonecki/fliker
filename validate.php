@@ -69,7 +69,7 @@ $footer = '</body></html>';
 if (isset($_POST['action']) && $_POST['action']==="submitted")
 {
 	include("opendb.php");
-	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_redirect' ");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_redirect.txt' ");
 	$res_msg_redirect = mysql_fetch_array($res);
 	include("opendb.php");
 	$password = $_POST['password'];
@@ -92,7 +92,7 @@ if (isset($_POST['action']) && $_POST['action']==="submitted")
 else {
 
 	include("opendb.php");
-	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_account' ");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'validate_account.txt' ");
 	$res_msg_account = mysql_fetch_array($res);
 	$queryString = $_SERVER['QUERY_STRING'];
 	if (empty($queryString)){

@@ -213,7 +213,4 @@ function getAllCreneaux(){
 		return $tab;
 	
 }
-
-
-
 ?>

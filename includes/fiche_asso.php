@@ -34,8 +34,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'modification') {
 	print '</table>';
 	print '</FORM>';
 
-} else
-if (isset($_POST['action']) && $_POST['action'] == 'new') {
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '<h2>Nouvelle Association</h2>';
 	print '<FORM id="f_asso_new" action="index.php?page=3" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -49,7 +49,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '</FORM>';
 
 }
-else {
+else
+{
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
 		modifAsso($_POST);
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new')
@@ -70,21 +71,18 @@ else {
 		foreach ($sups as $key => $value)
 			addSup("association",$_GET['asso'],$value['type'],$value['valeur'],$value['id_statut'],$value['id_asso_paie'],$promo);
 	}
-	if(!(strcmp($_SESSION['user'],"") == 0)){
+	if(!(strcmp($_SESSION['user'],"") == 0))
+	{
 		$tab=getAssociations($_SESSION['uid']);
 		print '<ul id="submenu">';
-		if(isset($tot_asso) && $tot_asso > 0){
+		if(isset($tot_asso) && $tot_asso > 0)
 			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-		}
-		if(isset($tot_sec) && $tot_sec > 0){
+		if(isset($tot_sec) && $tot_sec > 0)
 			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-		}
-		if(isset($tot_act) && $tot_act > 0){
+		if(isset($tot_act) && $tot_act > 0)
 			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-		}
-		if(isset($tot_cre) && $tot_cre > 0){
+		if(isset($tot_cre) && $tot_cre > 0)
 			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-		}
 		print '</ul>';
 		if(empty($_GET['asso'])){
 
@@ -103,7 +101,7 @@ else {
 
 		} else {
 			print '<h2>Fiche Association</h2>';
-			print "<div class=\"tip\">".getParam('text_asso')."</div>";
+			print "<div class=\"tip\">".getParam('text_asso.txt')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['asso']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['asso']]['description'].'</td></tr>';
@@ -190,7 +188,7 @@ else {
 			if($promo==$current_promo) print '<th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup) {
-				print '<tr><td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$sup['statut'].'</td>';
+				print '<tr><td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$sup['statut'].'</td>';
 				if($promo==$current_promo) print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
 					<input type="hidden" name="id_sup" value="'.$id.'" />

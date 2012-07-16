@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
--- Serveur: localhost
--- Généré le : Jeu 14 Juin 2012 à 12:56
--- Version du serveur: 5.5.8
--- Version de PHP: 5.3.5
+-- Client: localhost
+-- Généré le : Lun 16 Juillet 2012 à 18:35
+-- Version du serveur: 5.5.16
+-- Version de PHP: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -43,8 +44,7 @@ CREATE TABLE IF NOT EXISTS `fliker_activite` (
 
 CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
-  `privilege` int(1) NOT NULL DEFAULT '0',
-  `numcarte` varchar(255) NOT NULL,
+  `privilege` tinyint(1) NOT NULL DEFAULT '0',
   `numayantdroit` varchar(255) NOT NULL,
   `categorie` varchar(255) NOT NULL,
   `id_statut` int(16) NOT NULL,
@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `code_postal` varchar(255) NOT NULL,
   `adresse_pro` varchar(255) NOT NULL,
   `last_modif` datetime NOT NULL,
+  `last_modif_droit_image` datetime NOT NULL,
   `charte` tinyint(1) NOT NULL,
   `assurance` tinyint(4) NOT NULL,
   `droit_image` tinyint(4) NOT NULL,
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adherent` (
   `add_mail_temp` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_statut` (`id_statut`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=385 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=371 ;
 
 -- --------------------------------------------------------
 
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   KEY `id_adh` (`id_adh`),
   KEY `id_cre` (`id_cre`),
   KEY `id_asso` (`id_asso`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=615 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=634 ;
 
 -- --------------------------------------------------------
 
@@ -133,6 +134,7 @@ CREATE TABLE IF NOT EXISTS `fliker_champs_adherent` (
   `type` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `inscription` tinyint(1) NOT NULL,
+  `admin` tinyint(1) NOT NULL,
   `user_editable` tinyint(1) NOT NULL,
   `user_viewable` tinyint(4) NOT NULL DEFAULT '0',
   `search_simple` tinyint(4) NOT NULL,
@@ -187,6 +189,78 @@ CREATE TABLE IF NOT EXISTS `fliker_entite` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `fliker_finances`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_finances` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL,
+  `type_transaction` varchar(255) NOT NULL,
+  `num_transaction` varchar(255) NOT NULL,
+  `emetteur` varchar(255) NOT NULL,
+  `beneficiaire` varchar(255) NOT NULL,
+  `montant` int(11) NOT NULL,
+  `date_transaction` datetime NOT NULL,
+  `nom_signataire` varchar(255) NOT NULL,
+  `nom_enregistreur` varchar(255) NOT NULL,
+  `facture` int(11) NOT NULL,
+  `validation` varchar(255) NOT NULL,
+  `verification` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `id_obj_inventaire` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_inventaire`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_inventaire` (
+  `id_entite` int(11) NOT NULL,
+  `id_objet` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `quantite` int(11) NOT NULL,
+  `dates_entree` datetime NOT NULL,
+  `dates_sortie` datetime NOT NULL,
+  `dates_verification` datetime NOT NULL,
+  `date_enregistrement` datetime NOT NULL,
+  `amortissement` int(11) NOT NULL,
+  `promo` int(11) NOT NULL,
+  `reservable` tinyint(1) NOT NULL,
+  UNIQUE KEY `id_objet` (`id_objet`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_inv_hist`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_inv_hist` (
+  `id_obj` int(11) NOT NULL,
+  `quantite` int(11) NOT NULL,
+  `date_modif` datetime NOT NULL,
+  `Commentaire` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_numcarte_fk`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_numcarte_fk` (
+  `id_adh` int(16) NOT NULL DEFAULT '0',
+  `numcarte` int(11) NOT NULL,
+  `promo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `fliker_paiement`
 --
 
@@ -201,8 +275,7 @@ CREATE TABLE IF NOT EXISTS `fliker_paiement` (
   `promo` int(4) NOT NULL,
   `recorded_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_adh_2` (`id_adh`),
-  KEY `recorded_by` (`recorded_by`)
+  KEY `id_adh_2` (`id_adh`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=273 ;
 
 -- --------------------------------------------------------
@@ -229,7 +302,9 @@ CREATE TABLE IF NOT EXISTS `fliker_presence` (
   `id_adh` int(16) NOT NULL,
   `id_cre` int(16) NOT NULL,
   `week` int(2) NOT NULL,
-  `promo` int(4) NOT NULL
+  `promo` int(4) NOT NULL,
+  KEY `id_adh` (`id_adh`),
+  KEY `id_cre` (`id_cre`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -329,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `fliker_sup` (
   KEY `id_statut` (`id_statut`),
   KEY `id_asso_adh` (`id_asso_adh`),
   KEY `id_asso_paie` (`id_asso_paie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=228 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=230 ;
 
 -- --------------------------------------------------------
 
@@ -345,6 +420,42 @@ CREATE TABLE IF NOT EXISTS `fliker_sup_fk` (
   KEY `id_sup` (`id_sup`),
   KEY `id_2` (`id_ent`,`id_sup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_type_dep`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_type_dep` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_type_supl`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_type_supl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_type_transa`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_type_transa` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Contraintes pour les tables exportées
@@ -405,6 +516,12 @@ ALTER TABLE `fliker_paiement_sup`
   ADD CONSTRAINT `paiement_sup_ibfk_2` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Contraintes pour la table `fliker_presence`
+--
+ALTER TABLE `fliker_presence`
+  ADD CONSTRAINT `fliker_presence_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Contraintes pour la table `fliker_resp_act`
 --
 ALTER TABLE `fliker_resp_act`
@@ -452,3 +569,7 @@ ALTER TABLE `fliker_sup`
 ALTER TABLE `fliker_sup_fk`
   ADD CONSTRAINT `sup_fk_ibfk_1` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sup_fk_ibfk_2` FOREIGN KEY (`id_ent`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

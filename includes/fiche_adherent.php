@@ -27,27 +27,40 @@ else
 
 }
 $adh = getAdherent($id_adh);
-print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.$id_adh.'">Fiche Adhérent</a></li><li><a href="index.php?page=7&adh='.$id_adh.'">Adhésions</a></li></ul>';
-
 $dest_dossier = "../photos";
 if (isset($_POST['action']) && $_POST['action'] == 'modification' && $edit) {
 	$tab = getChampsAdherents();
 	print '<FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
+	$current_adh = getAdherent($_SESSION['uid']);
 	foreach($tab as $row)
 	{
 		if($row['user_editable'] == 1)
 		{
 			$format =$row['format'];
 			if ($row['required'] == 1)
-				$format ="class=\"{$format}_req\"";
+			{
+				if ($row['nom'] == "photo" || $row['nom'] == "certmed")
+				{
+					if(($row['nom'] == 'photo' && $current_adh['photo'] == 1) || (($row['nom'] == 'certmed' && $current_adh['certmed'] == 1)))
+						$format="class=\"$format\"";
+					else
+						$format ="class=\"{$format}_req\"";
+				}
+				else
+					$format ="class=\"{$format}_req\"";
+			}
 			else
 				$format="class=\"$format\"";
-			if($row['format'] === "categorie"){
-				if($adh[$row['nom']]==='M'){
+			if($row['format'] === "categorie")
+			{
+				if($adh[$row['nom']]==='M')
+				{
 					$homme='checked';
 					$femme='';
-				} else {
+				}
+				else
+				{
 					$homme='';
 					$femme='checked';
 
@@ -142,21 +155,21 @@ else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' 
 		if (isset($_POST['change_email_submitted']))
 		{
 			$subject = "Changement de l\adresse email Fliker";
-			$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification de l\email lié à ce compte veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate_email.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+			$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification de l\email lié à ce compte veuillez cliquer sur le lien suivant:\r".getParam('url_site.conf')."validate_email.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
 		}
 		else
 		{
 			$subject = "Changement de mot de passe Fliker";
-			$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification du mot de passe lié à cette adresse email veuillez cliquer sur le lien suivant:\r".getParam('url_site')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+			$message = "Bonjour,\r\r  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\r  Suite à une demande de modification du mot de passe lié à cette adresse email veuillez cliquer sur le lien suivant:\r".getParam('url_site.conf')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
 		}
-		$headers = 'From: '.getParam('admin_email') . "\r\n" .
-				'Reply-To: '.getParam('contact_email') . "\r\n" .
+		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
+				'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 				'X-Mailer: PHP/' . phpversion();
 		$return = mail($to, $subject, $message, $headers);
 		if ($return == TRUE)
 			print 'Un email vient d\'être envoyé à l\'adresse '.$_POST["email_recup"].', veuiller vérifier votre boîte mail.';
 		else
-			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation")."\">administrateurs</a>";
+			print "Une erreur est survenu lors de l'envoi du mail, veuiller vérifier votre adresse mail ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
 	}
 }
 else
@@ -171,59 +184,60 @@ else
 		$tab = getChampsAdherents();
 		print '<div id="fiche">';
 		print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
-		print "<div class=\"tip\"><center>".getParam('text_adherent')."</center></div>";
+		print "<div class=\"tip\"><center>".getParam('text_adherent.txt')."</center></div>";
 		print '<br />';
 		if(isset($edit)) print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'modification\' />
-		<INPUT type=\'submit\' value=\'Modifier\'>
+		<INPUT type=\'submit\' value=\'Modifier\'/>
 		</FORM>
 		';
 		print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'change_mdp\' />
-		<INPUT type=\'submit\' value=\'Changer de mot de passe\'>
+		<INPUT type=\'submit\' value=\'Changer de mot de passe\'/>
 		</FORM>
 		';
 		print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'change_email\' />
-		<INPUT type=\'submit\' value="Changer d\'email">
+		<INPUT type=\'submit\' value="Changer d\'email"/>
 		</FORM>
 		';
-		print '<TABLE BORDER="0">';
-		foreach($tab as $row){
-			if($row['user_viewable']==1){
+		print "<br/>";
+		print '<TABLE>';
+		foreach($tab as $row)
+		{
+			if($row['user_viewable'] == 1)
+			{
 				print '<TR>';
 				if($row['type']==="varchar")
 					print '<TD>'.$row['description'].'</TD><TD>'.$adh[$row['nom']].'</TD>';
-
 				if($row['type']==="date")
 					print '<TD>'.$row['description'].'</TD><TD>'.$adh[$row['nom']].'</TD>';
-
-				if($row['type']==="tinyint"){
+				if($row['type']==="tinyint")
+				{
 					if ($adh[$row['nom']]==1)
 						print '<TD>'.$row['description'].'</TD><TD>Oui</TD>';
 					else
 						print '<TD>'.$row['description'].'</TD><TD>Non</TD>';
 				}
-				if($row['type']==='file'){
+				if($row['type']==='file')
+				{
 					$_SESSION['auth_thumb']='true';
 					$photo="includes/thumb.php?folder=".$row['nom']."&file=".$adh['email'].".jpg";
 					print '<TD>'.$row['description'].'</TD><TD><a href="'.$row['nom'].'/'.$adh['email'].'.jpg"><img src="'.$photo.'" height="150"></a></TD>';
 				}
-				if($row['type']==="select"){
+				if($row['type']==="select")
+				{
 					$tab=getSelect($row['nom']);
 					print '<TD>'.$row['description'].'</TD><TD>'.$tab[$adh[$row['nom']]].'</TD>';
 				}
-
+				print '</TR>';
 			}
-			print '</TR>';
 		}
 		print '</TABLE>';
 		print '</div>';
 	}
 	else
-	{
 		print "<p>Vous n'êtes pas connecté</p>";
-	}
 }
 
 

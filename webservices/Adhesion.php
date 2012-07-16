@@ -17,7 +17,8 @@ function getMyAdhesions($id_adh,$promo){
 	$mycrens=getCreneaux($_SESSION['uid']);
 	$ads= getAdhesions($id_adh,$promo);
 	foreach ($ads as $key => $value){
-		if(!isset($mycrens[$value['id_cre']])) unset($ads[$key]);
+		if(!isset($mycrens[$value['id_cre']]))
+			unset($ads[$key]);
 	}
 	return $ads;
 }

@@ -162,5 +162,24 @@ function getResponsablesAct($id_act){
 	return $tab;
 }
 
+function getActiviteByCre($id_cre)
+{
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}creneau WHERE id='".$id_cre."'";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$tab = mysql_fetch_array($results);
+	include("closedb.php");
+	
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}activite WHERE id='".$tab['id_act']."'";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$tab = mysql_fetch_array($results);
+	include("closedb.php");
+	return $tab;
+}
 
 ?>

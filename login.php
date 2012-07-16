@@ -23,9 +23,9 @@ if(isset($_POST['submit']))
 {
 	print '<br/><font color="#	FF	00	00">';
 	include("opendb.php");
-	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'msgError_email'");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'msgError_email.txt'");
 	$array_res_email = mysql_fetch_array($res);
-	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'msgError_mdp'");
+	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'msgError_mdp.txt'");
 	$array_res_mdp = mysql_fetch_array($res);
 	$username = protect($_POST['username']);
 	$password = protect($_POST['password']);
@@ -54,7 +54,7 @@ if(isset($_POST['submit']))
 
 				//check to see if the user has not activated his account yet
 				if($row['active'] != 1)
-					echo "Désolé, votre compte a été <b>désactivé</b> !<br>Prenez contact avec nos <a href=\"".getParam("url_resiliation")."\">administrateurs</a>.";
+					echo "Désolé, votre compte a été <b>désactivé</b> !<br>Prenez contact avec nos <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>.";
 				else
 				{
 					//set the login session storing there id - we use this to see if they are logged in or not
@@ -70,7 +70,7 @@ if(isset($_POST['submit']))
 					}
 					include("closedb.php");
 					include("opendb.php");
-					$res = mysql_query("SELECT valeur FROM {$GLOBALS['prefix_db']}config WHERE id = 'dest_redirect' ");
+					$res = mysql_query("SELECT valeur FROM {$GLOBALS['prefix_db']}config WHERE id = 'dest_redirect.conf' ");
 					$stock_res = mysql_fetch_array($res);
 					header("location: ".$stock_res['valeur']."") ;
 				}
