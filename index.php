@@ -12,10 +12,11 @@ include_once('Adhesion.php');
 include_once('Supplement.php');
 include_once("Paiement.php");
 include_once("General.php");
+include_once("saveImage.php");
 include_once("EspaceMembre.class.php");
 
 // Définition de la promo et de la localisation
-$current_promo = getParam('promo');
+$current_promo = getParam('promo.conf');
 $GLOBALS['current_promo']=$current_promo;
 setlocale(LC_ALL, 'fr_FR');
 
@@ -46,14 +47,18 @@ print '<body>';
 $EspaceMembre = new EspaceMembre;
 if (isset($_GET['page']) && $_GET['page'] == "logout")
 	$EspaceMembre->logout();
-$EspaceMembre->showMenu();
-
+if (isset($_GET['page']))
+	$EspaceMembre->showMenu($_GET['page']);
+else
+	$EspaceMembre->showMenu(1);
+	
 if(isset($_SESSION['user']))
 {
 	print '<div id="content">';
 	if(empty($_GET['page']))
 		$_GET['page']=1;
-	switch($_GET['page']){
+	switch($_GET['page'])
+	{
 		case 1:
 			include("fiche_adherent.php");
 			break;
@@ -68,22 +73,40 @@ if(isset($_SESSION['user']))
 			break;
 		case 5:
 			include("fiche_activite.php");
-		break;
+			break;
 		case 6:
 			include("fiche_creneau.php");
-		break;
+			break;
 		case 7:
 			include("fiche_adhesion.php");
-		break;
+			break;
 		case 8:
 			include("fiche_presence.php");
-		break;
+			break;
 		case 9:
 			include("fiche_admin.php");
-		break;
+			break;
 		case 10:
 			include("action.php");
-		break;
+			break;
+		case 11:
+			include("fiche_notifications.php");
+			break;
+		case 12:
+			include("fiche_utilisateurs.php");
+			break;
+		case 13:
+			include("fiche_messages.php");
+			break;
+		case 14:
+			include("fiche_recapitulatif.php");
+			break;
+		case 16:
+			include("fiche_operations.php");
+			break;
+		case 17:
+			include("fiche_inventaire.php");
+			break;
 	}
 	print '</div>';
 }

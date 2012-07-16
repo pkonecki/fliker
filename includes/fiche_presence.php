@@ -37,7 +37,7 @@ if ($modif_week > 100)
 if ($modif_week < -100)
 	$modif_week = -100;
 
-$output = "<div class=\"tip\">".getParam('text_presence')."</div>";
+$output = "<div class=\"tip\">".getParam('text_presence.txt')."</div>";
 if(isset($_POST['cre'])) {
 	$cre = $_POST['cre'];
 	$adhs = getAdherentsByCreneau($cre,$promo);
@@ -70,10 +70,27 @@ if(isset($_POST['cre'])) {
 			$jour_num=7;
 			break;
 	}
+	$date_debut = "09/01";
+	$date_fin = "06/30";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}config";
+	include("opendb.php");
+	$res = mysql_query($query);
+	if (!$res)
+		echo mysql_error();
+	else
+	{
+		while ($tmp_date = mysql_fetch_array($res))
+		{
+			if ($tmp_date['id'] == "date_debut_promo")
+				$date_debut = $tmp_date['valeur'];
+			if ($tmp_date['id'] == "date_fin_promo")
+				$date_fin = $tmp_date['valeur'];
+		}
+	}
 	$pre_promo = $promo - 1;
-	$w_debut = strtotime("09/01/{$pre_promo}");
+	$w_debut = strtotime("".$date_debut."/{$pre_promo}");
 	$w_debut = strtotime("next Monday", $w_debut);
-	$w_fin = strtotime("06/30/{$promo}");
+	$w_fin = strtotime("".$date_fin."/{$promo}");
 	$date_now = strtotime("now");
 	$date_now = strtotime("next Monday", $date_now);
 	$date_now = strtotime("$modif_week week", $date_now);
@@ -206,14 +223,18 @@ if(isset($_POST['cre'])) {
 else
 {
 	$output.= "<form class=\"toggle\" action=\"index.php?page=8\" method=\"POST\" >";
-	$output.= "<p>Promo :<SELECT id=\"promo\" name=\"promo\" >";
-	$output.= "<OPTION value=\"$current_promo\" ".(isset($_POST['promo']) && $_POST['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
-	for ($i=1; $i<=10; $i++)
+	$query = "SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}presence ORDER BY promo DESC";
+	include("opendb.php");
+	$res = mysql_query($query);
+	if (!$res)
+		echo mysql_error();
+	else
 	{
-		$p = $current_promo-$i;
-		$output.= "<OPTION value=\"$p\" ".(isset($_POST['promo']) && $_POST['promo']==$p ? "selected" : "")." >$p</OPTION>";
+		$output.= "<p>Promo :<SELECT id=\"promo\" name=\"promo\" >";
+		while ($array_promo = mysql_fetch_array($res))
+			$output.= "<OPTION value=\"".$array_promo['promo']."\" ".(isset($_GET['promo']) && $_GET['promo']==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
+		$output.= "</SELECT></p>";
 	}
-	$output.= "</SELECT></p>";
 	$output .= "<table><tr><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th></tr>";
 	$tab_regular = getAdherentsByPromo($promo);
 	foreach($tab as $creneau)

@@ -46,47 +46,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '</table>';
 	print '</FORM>';
 
-}/*
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_confirm')
-{
-	print '<h2>Supprimer?</h2>';
-	print '<FORM action="index.php?page=4" method="POST">
-			<input type="hidden" name="id" value="'.$_GET['section'].'" />
-			<input type="hidden" name="action" value="suppression" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=4" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
 }
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_resp_confirm')
-{
-	print '<h2>Supprimer Responsable?</h2>';
-	print '<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-			<input type="hidden" name="id_sec" value="'.$_GET['section'].'" />
-			<input type="hidden" name="id_resp" value="'.$_GET['resp'].'" />
-			<input type="hidden" name="action" value="suppression_resp" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
-}
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_sup_confirm') {
-	print '<h2>Supprimer Supplément?</h2>';
-	print '<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-			<input type="hidden" name="id_sec" value="'.$_GET['section'].'" />
-			<input type="hidden" name="id_sup" value="'.$_GET['sup'].'" />
-			<input type="hidden" name="action" value="suppression_sup" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-				<INPUT type="submit" value="Non">
-				</FORM>';
-
-}*/
 else
 {
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
@@ -142,7 +102,7 @@ else
 
 		} else {
 			print '<h2>Fiche Section</h2>';
-			print "<div class=\"tip\">".getParam('text_section')."</div>";
+			print "<div class=\"tip\">".getParam('text_section.txt')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['section']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['section']]['description'].'</td></tr>';
@@ -219,9 +179,10 @@ else
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';
 			print '</tr>';
-			foreach ($sups as $id => $sup) {
+			foreach ($sups as $id => $sup)
+			{
 				print '<tr>
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
 				
 				if($promo==$current_promo) print '<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
@@ -234,7 +195,11 @@ else
 				print '<tr><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
 				<input type="hidden" name="action" value="new_sup" />
 				<input type="hidden" name="id_sec" value="'.$_GET['section'].'">
-				<td><INPUT type="text" name="type"></INPUT></td>
+				<td><select name="type">';
+				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_supl ORDER BY nom ASC");
+				while ($tmp_array = mysql_fetch_array($res))
+					print "<option value='".$tmp_array['nom']."'>".$tmp_array['nom']."</option>";
+				print '</select></td>
 				<td><INPUT type="text" name="valeur"></INPUT></td>
 				<td><SELECT name="id_asso_adh">';
 				foreach ($assos as $key => $value) {

@@ -17,9 +17,12 @@ function getParam($id){
 	return $ret;
 }
 
-function getParams()
+function getConfig($texte = "")
 {
-	$query="SELECT * FROM {$GLOBALS['prefix_db']}config";
+	if ($texte == "")
+		$query="SELECT * FROM {$GLOBALS['prefix_db']}config";
+	else
+		$query="SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id LIKE '%.".$texte."'";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -31,9 +34,12 @@ function getParams()
 	return $tab;
 }
 
-function getParamsBis()
+function getConfigBis($texte = "")
 {
-	$query="SELECT * FROM {$GLOBALS['prefix_db']}config";
+	if ($texte == "")
+		$query="SELECT * FROM {$GLOBALS['prefix_db']}config";
+	else
+		$query="SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id LIKE '%.".$texte."'";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -83,4 +89,20 @@ function etaitPresent($adh,$cre,$week,$promo){
 	include("closedb.php");	
 	return $ret;
 }
+
+function doQuery($query, $stopIfError = false)
+{
+	include('opendb.php');
+	$res = mysql_query($query);
+	if (!$res)
+	{
+		echo mysql_error();
+		if ($stopIfError == true)
+			die();
+	}
+	else
+		return $res;
+	return false;
+}
+
 ?>

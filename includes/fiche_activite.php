@@ -44,46 +44,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '</table>';
 	print '</FORM>';
 
-}/*
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_confirm') {
-	print '<h2>Supprimer Activité?</h2>';
-	print '<FORM action="index.php?page=5" method="POST">
-			<input type="hidden" name="id" value="'.$_GET['act'].'" />
-			<input type="hidden" name="action" value="suppression" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=5" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
 }
-
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_resp_confirm') {
-	print '<h2>Supprimer Responsable?</h2>';
-	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
-			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
-			<input type="hidden" name="id_resp" value="'.$_GET['resp'].'" />
-			<input type="hidden" name="action" value="suppression_resp" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
-			<INPUT type="submit" value="Non">
-			</FORM>';
-
-}
-else if (isset($_POST['action']) && $_POST['action'] == 'suppression_sup_confirm') {
-	print '<h2>Supprimer Supplément?</h2>';
-	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
-			<input type="hidden" name="id_act" value="'.$_GET['act'].'" />
-			<input type="hidden" name="id_sup" value="'.$_GET['sup'].'" />
-			<input type="hidden" name="action" value="suppression_sup" />
-			<INPUT type="submit" value="Oui">
-			</FORM>';
-	print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
-				<INPUT type="submit" value="Non">
-				</FORM>';
-
-}*/
 else{
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
 		modifActivite($_POST);
@@ -136,7 +97,7 @@ else{
 		else
 		{
 			print '<h2>Fiche Activité</h2>';
-			print "<div class=\"tip\">".getParam('text_activite')."</div>";
+			print "<div class=\"tip\">".getParam('text_activite.conf')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['act']]['nom_sec'].' - '.$tab[$_GET['act']]['nom'].'</td></tr>';
 			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['act']]['description'].'</td></tr>';
@@ -203,7 +164,8 @@ else{
 			//Selection Promo
 			print "<p>Promo:<SELECT id=\"promo\" >";
 			print "<OPTION value=$current_promo ".(isset($_GET['promo']) && $_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
-			for ($i=1; $i<=10; $i++ ){
+			for ($i=1; $i<=10; $i++ )
+			{
 				$p=$current_promo-$i;
 				print "<OPTION value=\"$p\" ".(isset($_GET['promo']) && $_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
 			}
@@ -213,7 +175,7 @@ else{
 			print '</tr>';
 			foreach ($sups as $id => $sup) {
 				print '<tr>
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
 			if($promo==$current_promo) 	print '<td><FORM action="index.php?page=5&sup='.$id.'&act='.$_GET['act'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
 					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>';
@@ -224,7 +186,11 @@ else{
 				print '<tr><FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
 				<input type="hidden" name="action" value="new_sup" />
 				<input type="hidden" name="id_act" value="'.$_GET['act'].'">
-				<td><INPUT type="text" name="type"></INPUT></td>
+				<td><select name="type">';
+				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_supl ORDER BY nom ASC");
+				while ($tmp_array = mysql_fetch_array($res))
+					print "<option value='".$tmp_array['nom']."'>".$tmp_array['nom']."</option>";
+				print '</select></td>
 				<td><INPUT type="text" name="valeur"></INPUT></td>
 				<td><SELECT name="id_asso_adh">';
 				foreach ($assos as $key => $value) {

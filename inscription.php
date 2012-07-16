@@ -23,7 +23,7 @@ include("General.php");
 include("Adherent.php");
 include("Select.php");
 include("saveImage.php");
-require("class.imageconverter.php");
+include_once("class.imageconverter.php");
 include_once("EspaceMembre.class.php");
 $dest_dossier = "./photos";
 
@@ -116,8 +116,10 @@ else
 		if($row['inscription']==1)
 		{
 			$format =$row['format'];
-			if ($row['required']==1) $format ="class=\"{$format}_req\"";
-			else $format="class=\"$format\"";
+			if ($row['required']==1)
+				$format ="class=\"{$format}_req\"";
+			else
+				$format="class=\"$format\"";
 			if($row['format'] === "categorie")
 			{
 				print '<tr ><td class="label"><LABEL for ='.$row['nom'].' >'.$row['description'].'</LABEL> : </td>

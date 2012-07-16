@@ -12,7 +12,7 @@ switch($_POST['action'])
 		$to = $_POST['to'];
 		$subject = $_POST['subject'];
 		include("opendb.php");
-		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_patienter' ");
+		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_patienter.txt' ");
 		$stock_pat = mysql_fetch_array($res);
 		print $stock_pat['valeur'];
 		include("closedb.php");
@@ -26,7 +26,7 @@ switch($_POST['action'])
 			mail($email, $subject, $message, $headers);
 		}
 		include("opendb.php");
-		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer' ");
+		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer.txt' ");
 		$stock_pat = mysql_fetch_array($res);
 		print $stock_pat['valeur'];
 		include("closedb.php");
