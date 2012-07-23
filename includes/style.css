@@ -302,6 +302,19 @@ table a {
 color: #333333;
 text-decoration:none;
 }
+
+th {
+background-color: #FFCE85;
+font-family:Arial;
+border-bottom:1px solid;
+
+}
+
+.td_color
+{
+	background-color: #CFDEFF;
+}
+
 table a:hover {
 text-decoration:underline;
 }
@@ -341,7 +354,7 @@ table.tab_grille td
 	border-style:solid;
 }
 
-table tr.tab_footer_line
+.tab_footer_line
 {
 border: 2px solid black;
 }
@@ -363,26 +376,3 @@ border-top: 2px solid black;
 {
 	float:left;
 }
-
-/*
-body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
-body { color: #333;  background-color: #fff; text-align: left; }
-
-h3 {
-border-bottom: 1px solid #006080;
-letter-spacing: -2px;
-line-height: 0.9em;
-padding: 0px;
-margin: 0px;
-}
-h1 {
-font-size: 180%;
-letter-spacing: -2px;
-line-height: 0.9em;
-font-variant : small-caps;
-padding: 0px;
-margin: 0px;
-}
-
-
-*/

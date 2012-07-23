@@ -24,7 +24,7 @@ else
 {
 	if (isset($_POST['modif_statut']))
 	{
-		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}statut SET nom='".$_POST['modif_statut']."' WHERE id=".$_POST['old_statut']." ");
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}statut SET nom='".secur_data($_POST['modif_statut'])."' WHERE id=".$_POST['old_statut']." ");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
@@ -40,7 +40,7 @@ else
 	}
 	else if (isset($_POST['new_statut']))
 	{
-		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}statut (nom) VALUES('".$_POST['new_statut']."')");
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}statut (nom) VALUES('".secur_data($_POST['new_statut'])."')");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
@@ -48,7 +48,7 @@ else
 	}
 	else if (isset($_POST['modif_type_transa']))
 	{
-		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_transa SET nom='".$_POST['modif_type_transa']."' WHERE id=".$_POST['old_type_transa']." ");
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_transa SET nom='".secur_data($_POST['modif_type_transa'])."' WHERE id=".$_POST['old_type_transa']." ");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
@@ -64,7 +64,7 @@ else
 	}
 	else if (isset($_POST['new_type_transa']))
 	{
-		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_transa (nom) VALUES('".$_POST['new_type_transa']."')");
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_transa (nom) VALUES('".secur_data($_POST['new_type_transa'])."')");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
@@ -72,7 +72,7 @@ else
 	}
 	else if (isset($_POST['modif_type_dep']))
 	{
-		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_dep SET nom='".$_POST['modif_type_dep']."' WHERE id=".$_POST['old_type_dep']." ");
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}type_dep SET nom='".secur_data($_POST['modif_type_dep'])."' WHERE id=".$_POST['old_type_dep']." ");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
@@ -88,7 +88,7 @@ else
 	}
 	else if (isset($_POST['new_type_dep']))
 	{
-		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_dep (nom) VALUES('".$_POST['new_type_dep']."')");
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}type_dep (nom) VALUES('".secur_data($_POST['new_type_dep'])."')");
 		if (!$res)
 			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
 		else
