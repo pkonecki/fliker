@@ -7,21 +7,11 @@ include_once("General.php");
 include_once("EspaceMembre.class.php");
 
 $tab = getChampsAdherents();
-print 	'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-		<html>
-		<head>
-		<title>::Fliker::Connexion</title>
-		<link rel="stylesheet" type="text/css" href="./includes/style.css" />
-		</head>
-		<body>';
-		
-$EspaceMembre = new EspaceMembre;
-$EspaceMembre->showMenu();
-print '<h2>Connexion</h2>';
+$output = "";
 //If the user has submitted the form
 if(isset($_POST['submit']))
 {
-	print '<br/><font color="#	FF	00	00">';
+	$output .= '<br/><font color="#	FF	00	00">';
 	include("opendb.php");
 	$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'msgError_email.txt'");
 	$array_res_email = mysql_fetch_array($res);
@@ -31,14 +21,14 @@ if(isset($_POST['submit']))
 	$password = protect($_POST['password']);
 
 	if(!$username || !$password)
-        print "Vous devez entrer votre <b>email</b> et votre <b>mot de passe</b> !";
+        $output .= "Vous devez entrer votre <b>email</b> et votre <b>mot de passe</b> !";
 	else
 	{
 		//select all rows from the table where the username matches the one entered by the user
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `email` = '".$username."'");
 		$num = mysql_num_rows($res);
 		if($num == 0)
-			echo $array_res_email['valeur'];
+			$output .= $array_res_email['valeur'];
 		else
 		{
 			//select all rows where the username and password match the ones submitted by the user
@@ -46,7 +36,7 @@ if(isset($_POST['submit']))
 			$num = mysql_num_rows($res);
 
 			if($num == 0)
-				echo $array_res_mdp['valeur'];
+				$output .= $array_res_mdp['valeur'];
 			else
 			{
 				//split all fields fom the correct row into an associative array
@@ -54,7 +44,7 @@ if(isset($_POST['submit']))
 
 				//check to see if the user has not activated his account yet
 				if($row['active'] != 1)
-					echo "Désolé, votre compte a été <b>désactivé</b> !<br>Prenez contact avec nos <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>.";
+					  $output .= "Désolé, votre compte a été <b>désactivé</b> !<br>Prenez contact avec nos <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>.";
 				else
 				{
 					//set the login session storing there id - we use this to see if they are logged in or not
@@ -77,8 +67,21 @@ if(isset($_POST['submit']))
 			}
 		}
 	}
-	print '</font><br /><br />';
+	$output .= '</font><br /><br />';
 }
+print 	'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+		<html>
+		<head>
+		<title>::Fliker::Connexion</title>
+		<link rel="stylesheet" type="text/css" href="./includes/style.css" />
+		</head>
+		<body>';
+		
+$EspaceMembre = new EspaceMembre;
+$EspaceMembre->showMenu();
+print '<h2>Connexion</h2>';
+print $output;
+
 print '<form action="login.php" method="post">
 			<div id="border">
 				<table cellpadding="2" cellspacing="0" border="0">

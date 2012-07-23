@@ -289,7 +289,7 @@ else
 		$count_presence *= 100;
 		$number_week = 0;
 		$i = 0;
-		while ($i != 53)
+		while ($i != 60)
 		{
 			if (isset($tab_week[$i]) && $tab_week[$i] == 1)
 				$number_week++;

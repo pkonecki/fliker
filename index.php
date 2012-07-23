@@ -26,12 +26,13 @@ setlocale(LC_ALL, 'fr_FR');
 <html>
  <head>
   <title>::Fliker::Accueil</title>
-  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-timepicker.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.filter.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.checkboxtree.min.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <script type="text/javascript" src="./includes/js/jquery.js"></script>
   <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.timepicker.js"></script>
@@ -39,6 +40,8 @@ setlocale(LC_ALL, 'fr_FR');
   <script type="text/javascript" src="./includes/js/jquery.confirm.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.validate.min.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.datepicker-fr.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.multiselect.min.js"></script>
+  <script type="text/javascript" src="./includes/js/jquery.multiselect.filter.js"></script>
  </head>
  
 <?php
@@ -225,5 +228,15 @@ $(function() {
 		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
 	});
 });
-
+$(function() {
+	$( ".datepicker" ).datepicker({ 
+		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
+	});
+});
+$(".filterselect").multiselect({
+multiple: false,
+header: "Choisissez",
+noneSelectedText: "Choisissez",
+selectedList: 1
+}).multiselectfilter();
 </script>
