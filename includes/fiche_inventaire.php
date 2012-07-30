@@ -11,6 +11,7 @@ if((strcmp($_SESSION['user'],"") == 0))
 	die();
 }
 
+$reservable_check = "";
 if ($_SESSION['privilege'] == 1)
 	$tab_asso = getAssociations($_SESSION['uid']);
 else if (isset($tot_asso) && $tot_asso > 0)
@@ -156,19 +157,22 @@ else
 		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}inventaire");
 	else
 		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}inventaire WHERE id_entite IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh=".$_SESSION['uid'].") OR id_entite IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh=".$_SESSION['uid'].")");
-	
+	$tab_inv = null;
 	while ($tmp_array = mysql_fetch_array($res))
 		$tab_inv[$tmp_array['id_objet']] = $tmp_array;
 
 	print "<br/>";
 	print 	"<table>
 			<tr align='center'><th>Nom</th><th>Description</th><th>Quantité</th><th>Date d'enregistrement</th><th>Date de vérification</th><th>Amortissement</th><th>Réservable</th><th>Action</th></tr>";
-			foreach ($tab_inv as $tmp_tab)
-			{
-				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}inv_hist WHERE id_obj=".$tmp_tab['id_objet']." ORDER BY date_modif DESC");
-				$tab_quant = mysql_fetch_array($res);
-				print "<tr><td>".$tmp_tab['nom']."</td><td>".$tmp_tab['description']."</td><td>".$tab_quant['quantite']."</td><td>".$tmp_tab['date_enregistrement']."</td><td>".$tmp_tab['dates_verification']."</td><td>".$tmp_tab['amortissement']."</td><td>".($tmp_tab['reservable'] == 1 ? "Oui" : "Non")."</td><td><form name='action_inv' method='POST' action='index.php?page=17'><input type='hidden' name='id_obj' value='".$tmp_tab['id_objet']."'/><input name='modifier' title='Modifier' border='0' type='image' src='./images/icone_edit.png' height='17' width='17' value='submit' /><input name='supprimer' title='Supprimer' border='0' type='image' src='./images/icone_delete.png' height='17' width='17' value='submit' /><input type='submit' name='historique' value='Historique'/></form></td></tr>";
-			}
+	if (isset($tab_inv))
+	{
+		foreach ($tab_inv as $tmp_tab)
+		{
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}inv_hist WHERE id_obj=".$tmp_tab['id_objet']." ORDER BY date_modif DESC");
+			$tab_quant = mysql_fetch_array($res);
+			print "<tr><td>".$tmp_tab['nom']."</td><td>".$tmp_tab['description']."</td><td>".$tab_quant['quantite']."</td><td>".$tmp_tab['date_enregistrement']."</td><td>".$tmp_tab['dates_verification']."</td><td>".$tmp_tab['amortissement']."</td><td>".($tmp_tab['reservable'] == 1 ? "Oui" : "Non")."</td><td><form name='action_inv' method='POST' action='index.php?page=17'><input type='hidden' name='id_obj' value='".$tmp_tab['id_objet']."'/><input name='modifier' title='Modifier' border='0' type='image' src='./images/icone_edit.png' height='17' width='17' value='submit' /><input name='supprimer' title='Supprimer' border='0' type='image' src='./images/icone_delete.png' height='17' width='17' value='submit' /><input type='submit' name='historique' value='Historique'/></form></td></tr>";
+		}
+	}
 	print	"</table>";
 }
 ?>

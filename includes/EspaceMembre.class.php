@@ -37,9 +37,9 @@ class EspaceMembre
 		if (isset($_SESSION['user']))
 		{
 			if ($page == 1)
-				print '<ul id="submenu"><li><a class="selected" href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li><li><a href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li></ul>';
+				print '<ul id="submenu"><li><a href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li><li><a class="selected" href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li></ul>';
 			else if ($page == 7)
-				print '<ul id="submenu"><li><a href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li><li><a class="selected" href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li></ul>';
+				print '<ul id="submenu"><li><a class="selected" href="index.php?page=7&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Adhésions</a></li><li><a href="index.php?page=1&adh='.(isset($_GET['adh']) ? $_GET['adh'] : $_SESSION['uid']).'">Fiche Adhérent</a></li></ul>';
 			else if ($page == 9)
 				print '<ul id="submenu"><li><a class="selected" href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a href="index.php?page=12">Utilisateurs</a></li><li><a href="index.php?page=13">Messages</a></li></ul>';
 			else if ($page == 11)

@@ -106,20 +106,14 @@ else
 		$list_type[$tmp_array['type']] = 0;
 		$i++;
 	}
-	print "<th class='tab_footer_colonne'><b>TOTAL</b></th><th>En attente</th>";
+	print "<th class='tab_footer_colonne'><b>TOTAL</b></th>";
 	print "</tr>";
-	$option = "";
-	if ($current_asso != 0)
-		$option = "WHERE id='".$current_asso."'";
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}association " . $option." ORDER BY nom ASC");
-	while ($tmp_array = mysql_fetch_array($res))
-		$list_asso[$tmp_array['id']] = $tmp_array;
 	foreach ($tab_asso as $asso)
 	{
-		print "<tr><td align='center'>|</td>";
+		print "<tr><td align='center'><font color='#f6f6f6'>|</font></td>";
 		foreach ($list_type as $key => $value)
 			print "<td></td>";
-		print "<td></td><td></td></tr>";
+		print "<td></td></tr>";
 		print "<tr align='center'>";
 		print "<td><b>".$asso['nom']."</b></td>";
 		if ($_SESSION['privilege'] == 1 || (isset($tot_asso) && $tot_asso > 0))
@@ -133,25 +127,22 @@ else
 			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup WHERE id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$asso['id']."')");
 			$list_paie = null;
 			while ($tmp_array = mysql_fetch_array($res))
-				$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
-			
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE beneficiaire='".$asso['id']."' AND type_register='recette'");
-			$list_dep = null;
-			$value_verif = 0;
-			while ($tmp_array = mysql_fetch_array($res))
 			{
-				$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-				if ($tmp_array['validation'] != '1')
-						$value_verif += $tmp_array['montant'];
+				if (isset($list_paie[$tmp_array['id_sup']]))
+					$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
+				else
+					$list_paie[$tmp_array['id_sup']] = $tmp_array['valeur'];
 			}
-			
 			foreach ($list_type as $key => $value)
 			{
 				if (isset($list_sup[$key]))
 				{
-					$count_total = $list_dep[$key];
+					$count_total = 0;
 					foreach ($list_sup[$key] as $id => $number)
-						$count_total += $list_paie[$id];
+					{
+						if (isset($list_paie[$id]))
+							$count_total += $list_paie[$id];
+					}
 					print "<td>";
 					if ($count_total > 0)
 						print "<FONT COLOR='#16B84E'>";
@@ -162,25 +153,10 @@ else
 					$total_line += $count_total;
 					$list_type[$key] += $count_total;
 				}
-				else if (isset($list_dep[$key]))
-				{
-					print "<td>";
-					print "<FONT COLOR='#16B84E'>";
-					print $list_dep[$key]."€";
-					print "</FONT>";
-					print "</td>";
-					$total_line += $list_dep[$key];
-					$list_type[$key] += $list_dep[$key];
-				}
 				else
 					print "<td >0€</td>";
 			}
-			//$total_line += $value_verif;
 			print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-			if ($value_verif > 0)
-				print "<td><font color='orange'>".$value_verif."€</font></td>";
-			else
-				print "<td>0€</td>";
 		}
 		else
 		{
@@ -227,23 +203,22 @@ else
 			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup WHERE id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$sec['id']]."))");
 			$list_paie = null;
 			while ($tmp_array = mysql_fetch_array($res))
-				$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
-				
-			$list_dep = null;
-			$value_verif = 0;
-			while ($tmp_array = mysql_fetch_array($res))
 			{
-				$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-				if ($tmp_array['validation'] != '1')
-						$value_verif += $tmp_array['montant'];
+				if (isset($list_paie[$tmp_array['id_sup']]))
+					$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
+				else
+					$list_paie[$tmp_array['id_sup']] = $tmp_array['valeur'];
 			}
 			foreach ($list_type as $key => $value)
 			{
 				if (isset($list_sup[$key]))
 				{
-					$count_total = $list_dep[$key];
+					$count_total = 0;
 					foreach ($list_sup[$key] as $id => $number)
+					{
+						if (isset($list_paie[$id]))
 						$count_total += $list_paie[$id];
+					}
 					print "<td>";
 					if ($count_total > 0)
 						print "<FONT COLOR='#16B84E'>";
@@ -254,24 +229,10 @@ else
 					$total_line += $count_total;
 					$list_type[$key] += $count_total;
 				}
-				else if (isset($list_dep[$key]))
-				{
-					print "<td>";
-					print "<FONT COLOR='#16B84E'>";
-					print $list_dep[$key]."€";
-					print "</FONT>";
-					print "</td>";
-					$total_line += $list_dep[$key];
-					$list_type[$key] += $list_dep[$key];
-				}
 				else
 					print "<td >0€</td>";
 			}
 			print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-			if ($value_verif > 0)
-				print "<td><font color='orange'>".$value_verif."€</font></td>";
-			else
-				print "<td>0€</td>";
 			print "</tr>";
 		}
 		print "</tr>";
@@ -285,7 +246,7 @@ else
 			$total_line += $value;
 			$list_type[$key] = 0;
 		}
-		print "<td class='tab_footer_colonne'>".$total_line."€</td><td></td></tr>";
+		print "<td class='tab_footer_colonne'>".$total_line."€</td></tr>";
 		
 	}
 	print "</table></div>";
@@ -306,23 +267,17 @@ while ($tmp_array = mysql_fetch_array($res))
 	print "<th>".$tmp_array['nom']."</th>";
 	$list_type[$tmp_array['nom']] = 0;
 }
-print "<th class='tab_footer_colonne'><b>TOTAL</b></th><th>En attente</th>";
+print "<th class='tab_footer_colonne'><b>TOTAL</b></th><th>En attente</th><th>Demandé</th><th>Autorisé</th>";
 print "</tr>";
-$option = "";
-if (isset($_GET['asso']) && $_GET['asso'] != 0)
-	$option = "WHERE id='".$_GET['asso']."'";
-$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}association " . $option." ORDER BY nom ASC");
-while ($tmp_array = mysql_fetch_array($res))
-	$list_asso[$tmp_array['id']] = $tmp_array;
 foreach ($tab_asso as $asso)
 {
-	print "<tr><td align='center'>|</td>";
+	print "<tr><td align='center'><font color='#f6f6f6'>|</font></td>";
 	foreach ($list_type as $key => $value)
 	{
 		$list_type[$key] = 0;
 		print "<td></td>";
 	}
-	print "<td></td><td></td></tr>";
+	print "<td></td><td></td><td></td><td></td></tr>";
 	print "<tr align='center'>";
 	print "<td><b>".$asso['nom']."</b></td>";
 	if ($_SESSION['privilege'] == 1 || (isset($tot_asso) && $tot_asso > 0))
@@ -334,8 +289,11 @@ foreach ($tab_asso as $asso)
 		$value_verif = 0;
 		while ($tmp_array = mysql_fetch_array($res))
 		{
-			$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-			if ($tmp_array['validation'] != '1')
+			if (isset($list_dep[$tmp_array['type']]))
+				$list_dep[$tmp_array['type']] += $tmp_array['montant'];
+			else
+				$list_dep[$tmp_array['type']] = $tmp_array['montant'];
+			if ($tmp_array['autorisation'] != '1')
 					$value_verif += $tmp_array['montant'];
 		}
 		foreach ($list_type as $key => $value)
@@ -358,6 +316,7 @@ foreach ($tab_asso as $asso)
 			print "<td><font color='orange'>".$value_verif."€</font></td>";
 		else
 			print "<td>0€</td>";
+		print "<td>0€</td><td>0€</td>";
 	}
 	else
 	{
@@ -401,35 +360,35 @@ foreach ($tab_asso as $asso)
 		$value_verif = 0;
 		while ($tmp_array = mysql_fetch_array($res))
 		{
-			$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
+			if (isset($list_paie[$tmp_array['type']]))
+				$list_paie[$tmp_array['type']] += $tmp_array['montant'];
+			else
+				$list_paie[$tmp_array['type']] = $tmp_array['montant'];
 			if ($tmp_array['validation'] != '1')
-				$value_verif += $tmp_array['valeur'];
+				$value_verif += $tmp_array['montant'];
 		}
 		foreach ($list_type as $key => $value)
 		{
 			if (isset($list_paie[$key]))
 			{
-				$count_total = 0;
-				foreach ($list_sup[$key] as $id => $number)
-					$count_total += $list_paie[$id];
 				print "<td>";
-				if ($count_total > 0)
-					print "<FONT COLOR='#16B84E'>";
-				print $count_total."€";
-				if ($count_total > 0)
-					print "</FONT>";
+				print "<FONT COLOR='#16B84E'>";
+				print $list_paie[$key]."€";
+				print "</FONT>";
 				print "</td>";
-				$total_line += $count_total;
-				$list_type[$key] += $count_total;
+				$total_line += $list_paie[$key];
+				$list_type[$key] += $list_paie[$key];
 			}
 			else
 				print "<td >0€</td>";
+			
 		}
 		print "<td class='tab_footer_colonne'>".$total_line."€</td>";
 		if ($value_verif > 0)
 			print "<td><font color='orange'>".$value_verif."€</font></td>";
 		else
 			print "<td>0€</td>";
+		print "<td>0€</td><td>0€</td>";
 		print "</tr>";
 	}
 	print "</tr>";
@@ -441,7 +400,7 @@ foreach ($tab_asso as $asso)
 		print "<td>".$value."€</td>";
 		$total_line += $value;
 	}
-	print "<td class='tab_footer_colonne'>".$total_line."€</td><td></td></tr>";
+	print "<td class='tab_footer_colonne'>".$total_line."€</td><td></td><td></td><td></td></tr>";
 }
 print "</table>";
 ?>

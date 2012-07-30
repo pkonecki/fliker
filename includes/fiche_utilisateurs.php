@@ -110,9 +110,7 @@ else	// Page demande de l'adresse email et traitements
 				else if ($champs['type'] == "tinyint")
 				{
 					if ($champs['nom'] == "active")
-					{
-						print $_POST[$champs['nom']];
-						
+					{	
 						$values .= ", ".$champs['nom']."=".(isset($_POST[$champs['nom']]) && $_POST[$champs['nom']] == 1 ? 1 : 0)."";
 						if ($array_adh["active"] == 1 && $_POST[$champs['nom']] == 0 && getParam('account_out.notif') == "now")
 						{
