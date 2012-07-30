@@ -1,5 +1,7 @@
 <?php
 session_start();
+if (!isset($_GET['page']))
+	$_GET['page'] = 7;
 define('_VALID_INCLUDE', TRUE);
 include_once("./includes/paths.php");
 include_once("Adherent.php");
@@ -59,7 +61,7 @@ if(isset($_SESSION['user']))
 {
 	print '<div id="content">';
 	if(empty($_GET['page']))
-		$_GET['page']=1;
+		$_GET['page']=7;
 	switch($_GET['page'])
 	{
 		case 1:
@@ -109,6 +111,9 @@ if(isset($_SESSION['user']))
 			break;
 		case 17:
 			include("fiche_inventaire.php");
+			break;
+		case 20:
+			include("tab_tmp.php");
 			break;
 	}
 	print '</div>';

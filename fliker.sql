@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le : Lun 16 Juillet 2012 à 18:35
+-- Généré le : Lun 30 Juillet 2012 à 11:44
 -- Version du serveur: 5.5.16
 -- Version de PHP: 5.3.8
 
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `fliker_adhesion` (
   KEY `id_adh` (`id_adh`),
   KEY `id_cre` (`id_cre`),
   KEY `id_asso` (`id_asso`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=634 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=715 ;
 
 -- --------------------------------------------------------
 
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `fliker_creneau` (
 CREATE TABLE IF NOT EXISTS `fliker_entite` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=128 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=129 ;
 
 -- --------------------------------------------------------
 
@@ -201,15 +201,21 @@ CREATE TABLE IF NOT EXISTS `fliker_finances` (
   `beneficiaire` varchar(255) NOT NULL,
   `montant` int(11) NOT NULL,
   `date_transaction` datetime NOT NULL,
-  `nom_signataire` varchar(255) NOT NULL,
-  `nom_enregistreur` varchar(255) NOT NULL,
-  `facture` int(11) NOT NULL,
-  `validation` varchar(255) NOT NULL,
-  `verification` varchar(255) NOT NULL,
+  `signataire` int(11) NOT NULL,
+  `enregistreur` int(11) NOT NULL,
+  `date_bancaire` datetime NOT NULL,
+  `autorisation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=en attente,1=autorisé,2=refusé',
+  `confirmation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=en attente,1=autorisé,2=refusé',
   `description` varchar(255) NOT NULL,
   `id_obj_inventaire` int(11) NOT NULL DEFAULT '0',
+  `type_register` varchar(255) NOT NULL,
+  `date_enregistrement` datetime NOT NULL,
+  `confirmed_by` int(11) NOT NULL,
+  `confirmed_date` datetime NOT NULL,
+  `authorized_by` int(11) NOT NULL,
+  `authorized_date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=72 ;
 
 -- --------------------------------------------------------
 
@@ -222,16 +228,13 @@ CREATE TABLE IF NOT EXISTS `fliker_inventaire` (
   `id_objet` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `quantite` int(11) NOT NULL,
-  `dates_entree` datetime NOT NULL,
-  `dates_sortie` datetime NOT NULL,
   `dates_verification` datetime NOT NULL,
   `date_enregistrement` datetime NOT NULL,
   `amortissement` int(11) NOT NULL,
   `promo` int(11) NOT NULL,
   `reservable` tinyint(1) NOT NULL,
   UNIQUE KEY `id_objet` (`id_objet`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -243,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `fliker_inv_hist` (
   `id_obj` int(11) NOT NULL,
   `quantite` int(11) NOT NULL,
   `date_modif` datetime NOT NULL,
-  `Commentaire` varchar(255) NOT NULL
+  `commentaire` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -404,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `fliker_sup` (
   KEY `id_statut` (`id_statut`),
   KEY `id_asso_adh` (`id_asso_adh`),
   KEY `id_asso_paie` (`id_asso_paie`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=230 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=231 ;
 
 -- --------------------------------------------------------
 

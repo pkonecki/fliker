@@ -184,7 +184,6 @@ else
 		$tab = getChampsAdherents();
 		print '<div id="fiche">';
 		print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
-		print "<div class=\"tip\"><center>".getParam('text_adherent.txt')."</center></div>";
 		print '<br />';
 		if(isset($edit)) print '<FORM action="index.php?page=1" method="POST">
 		<input type=\'hidden\' name=\'action\' value=\'modification\' />
@@ -237,7 +236,7 @@ else
 		print '</div>';
 	}
 	else
-		print "<p>Vous n'êtes pas connecté</p>";
+		print "<p>Vous n'êtes pas connecté UHUH</p>";
 }
 
 

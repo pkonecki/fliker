@@ -26,7 +26,7 @@ function multiselected($post,$val)
 }
 if(!isset($_SESSION['user']))	// Si l'utilisateur est déconnecté
 {
-	print "<p>Vous n'êtes pas connecté</p>";
+	print "<p>Vous n'êtes pas connectéahahah</p>";
 }
 else	// Si l'utilisateur est connecté
 {

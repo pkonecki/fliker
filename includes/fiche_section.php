@@ -167,15 +167,17 @@ else
 			//Liste de suppléments
 			$sups = getSup("section",$_GET['section'],$promo);
 			$assos = getAssos();
-			//Selection Promo
-			print "<p>Promo:<SELECT id=\"promo\" >";
-			print "<OPTION value=$current_promo ".(isset($_GET['promo']) && $_GET['promo']==$current_promo ? "selected" : "")." >$current_promo</OPTION>";
-			for ($i=1; $i<=10; $i++ ){
-				$p=$current_promo-$i;
-				print "<OPTION value=\"$p\" ".(isset($_GET['promo']) && $_GET['promo']==$p ? "selected" : "")." >$p</OPTION>";
-			}
-			print "</SELECT></p>";
 			print '<h3>Suppléments de la section</h3>';
+			
+			//Selection Promo
+			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['section'].") ORDER BY promo DESC");
+			print "<p>Promo:<SELECT id=\"promo\" >";
+			if (!$res || mysql_num_rows($res) <= 0)
+				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
+			while ($tmp_array_promo = mysql_fetch_array($res))
+				print "<OPTION value='".$tmp_array_promo['promo']."' ".(isset($_GET['promo']) && $_GET['promo'] == $tmp_array_promo['promo'] ? "selected" : "")." >".$tmp_array_promo['promo']."</OPTION>";
+			print "</SELECT></p>";
+			
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';
 			print '</tr>';
@@ -211,7 +213,7 @@ else
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 				}
 				print '</SELECT></td>
-				<td><INPUT type="image" src="images/checked.gif" value="submit"></td>
+				<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
 				';
 				print '</FORM>';
 			}	else {

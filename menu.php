@@ -5,12 +5,13 @@ $tot_sec=count(getSections($_SESSION['uid']));
 $tot_act=count(getActivites($_SESSION['uid']));
 $tot_cre=count(getCreneaux($_SESSION['uid']));
 $tot = $tot_asso + $tot_sec + $tot_act + $tot_cre;
+
 if (isset($_GET['page']))
 	$tmp_stock = (($_GET['page']==1|| $_GET['page']==7) ? 'selected' : '');
 else
 	$tmp_stock = '';
 print '<ul id="main_menu">
-<li><a class="'.$tmp_stock.'" href="index.php?page=1">Mon espace</a></li>';
+<li><a class="'.$tmp_stock.'" href="index.php?page=7&adh='.$_SESSION['uid'].'">Mon espace</a></li>';
 if($tot > 0)
 {
 	if (isset($_GET['page']))

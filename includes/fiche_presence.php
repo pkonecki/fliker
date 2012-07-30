@@ -250,6 +250,8 @@ else
 		}
 		$tmp_value = sizeof(getAdherentsByCreneau($cre, $promo));
 		$count_presence *= 100;
+		if ($tmp_value == 0)
+			$tmp_value = 1;
 		$count_presence /= ($tmp_value * 43);
 		$count_presence = round($count_presence);
 		$i = 0;
