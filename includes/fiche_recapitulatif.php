@@ -286,15 +286,42 @@ foreach ($tab_asso as $asso)
 		$total_line = 0;
 		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE emetteur='".$asso['id']."' AND type_register='depense'");
 		$list_dep = null;
-		$value_verif = 0;
+		$value_demande = 0;
+		$value_confirm = 0;
 		while ($tmp_array = mysql_fetch_array($res))
 		{
-			if (isset($list_dep[$tmp_array['type']]))
-				$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-			else
-				$list_dep[$tmp_array['type']] = $tmp_array['montant'];
 			if ($tmp_array['autorisation'] != '1')
-					$value_verif += $tmp_array['montant'];
+				$value_demande += $tmp_array['montant'];
+			else
+			{
+				if ($tmp_array['confirmation'] != '1')
+					$value_confirm += $tmp_array['montant'];
+				else
+				{
+					if (isset($list_dep[$tmp_array['type']]))
+						$list_dep[$tmp_array['type']] += $tmp_array['montant'];
+					else
+						$list_dep[$tmp_array['type']] = $tmp_array['montant'];
+				}
+			}
+		}
+		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE beneficiaire='".$asso['id']."' AND type_register='recette'");
+		while ($tmp_array = mysql_fetch_array($res))
+		{
+			if ($tmp_array['autorisation'] != '1')
+				$value_demande += $tmp_array['montant'];
+			else
+			{
+				if ($tmp_array['confirmation'] != '1')
+					$value_confirm += $tmp_array['montant'];
+				else
+				{
+					if (isset($list_dep[$tmp_array['type']]))
+						$list_dep[$tmp_array['type']] += $tmp_array['montant'];
+					else
+						$list_dep[$tmp_array['type']] = $tmp_array['montant'];
+				}
+			}
 		}
 		foreach ($list_type as $key => $value)
 		{
@@ -312,11 +339,9 @@ foreach ($tab_asso as $asso)
 				print "<td >0€</td>";
 		}
 		print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-		if ($value_verif > 0)
-			print "<td><font color='orange'>".$value_verif."€</font></td>";
-		else
-			print "<td>0€</td>";
-		print "<td>0€</td><td>0€</td>";
+		print "<td>0€</td>";
+		print "<td><FONT COLOR='blue'>".$value_demande."€</font></td>";
+		print "<td><FONT COLOR='orange'>".$value_confirm."€</font></td>";
 	}
 	else
 	{
@@ -357,15 +382,42 @@ foreach ($tab_asso as $asso)
 		$list_id_sec = $sec['id'];
 		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE emetteur='".$sec['id']."' AND type_register='depense' ");
 		$list_paie = null;
-		$value_verif = 0;
+		$value_demande = 0;
+		$value_confirm = 0;
 		while ($tmp_array = mysql_fetch_array($res))
 		{
-			if (isset($list_paie[$tmp_array['type']]))
-				$list_paie[$tmp_array['type']] += $tmp_array['montant'];
+			if ($tmp_array['autorisation'] != '1')
+				$value_demande += $tmp_array['montant'];
 			else
-				$list_paie[$tmp_array['type']] = $tmp_array['montant'];
-			if ($tmp_array['validation'] != '1')
-				$value_verif += $tmp_array['montant'];
+			{
+				if ($tmp_array['confirmation'] != '1')
+					$value_confirm += $tmp_array['montant'];
+				else
+				{
+					if (isset($list_paie[$tmp_array['type']]))
+						$list_paie[$tmp_array['type']] += $tmp_array['montant'];
+					else
+						$list_paie[$tmp_array['type']] = $tmp_array['montant'];
+				}
+			}
+		}
+		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE beneficiaire='".$sec['id']."' AND type_register='recette' ");
+		while ($tmp_array = mysql_fetch_array($res))
+		{
+			if ($tmp_array['autorisation'] != '1')
+				$value_demande += $tmp_array['montant'];
+			else
+			{
+				if ($tmp_array['confirmation'] != '1')
+					$value_confirm += $tmp_array['montant'];
+				else
+				{
+					if (isset($list_paie[$tmp_array['type']]))
+						$list_paie[$tmp_array['type']] += $tmp_array['montant'];
+					else
+						$list_paie[$tmp_array['type']] = $tmp_array['montant'];
+				}
+			}
 		}
 		foreach ($list_type as $key => $value)
 		{
@@ -380,15 +432,13 @@ foreach ($tab_asso as $asso)
 				$list_type[$key] += $list_paie[$key];
 			}
 			else
-				print "<td >0€</td>";
+				print "<td>0€</td>";
 			
 		}
 		print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-		if ($value_verif > 0)
-			print "<td><font color='orange'>".$value_verif."€</font></td>";
-		else
-			print "<td>0€</td>";
-		print "<td>0€</td><td>0€</td>";
+		print "<td>0€</td>";
+		print "<td><FONT COLOR='blue'>".$value_demande."€</font></td>";
+		print "<td><FONT COLOR='orange'>".$value_confirm."€</font></td>";
 		print "</tr>";
 	}
 	print "</tr>";
