@@ -1,11 +1,29 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
+$tot_asso=count(getAssociations($_SESSION['uid']));
+$tot_sec=count(getSections($_SESSION['uid']));
+$tot_act=count(getActivites($_SESSION['uid']));
+$tot_cre=count(getCreneaux($_SESSION['uid']));
+$tot = $tot_asso + $tot_sec + $tot_act + $tot_cre;
 if(!($_SESSION['privilege'] === '1'))
 {
 	print "Vous n'avez pas accès à cette page.";
 	print $die_footer;
 	die();
 }
+
+print '<ul id="submenu">';
+if(isset($tot_asso) && $tot_asso > 0)
+	print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
+if(isset($tot_sec) && $tot_sec > 0)
+	print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
+if(isset($tot_act) && $tot_act > 0)
+	print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
+if(isset($tot_cre) && $tot_cre > 0)
+	print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
+if(isset($tot_asso) && $tot_asso > 0)
+	print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
+print '</ul>';
 
 if(isset($_GET['promo']))
 	$promo = $_GET['promo'];
@@ -120,7 +138,8 @@ else	// Page demande de l'adresse email et traitements
 							$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 									   'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 									   'X-Mailer: PHP/' . phpversion();
-							mail($to, $subject, $message, $headers);
+							if (getParam('allow_mail.conf') == true)
+								mail($to, $subject, $message, $headers);
 						}
 					}
 					else

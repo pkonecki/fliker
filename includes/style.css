@@ -365,7 +365,7 @@ border-left: 2px solid black;
 border-right: 2px solid black;
 }
 
-table th.tab_footer_colonne
+table td.tab_footer_colonne_top
 {
 border-left: 2px solid black;
 border-right: 2px solid black;

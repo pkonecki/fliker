@@ -65,7 +65,8 @@ function newAdherent($tab)
 	$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 	           'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 	           'X-Mailer: PHP/' . phpversion();
-	mail($to, $subject, $message, $headers);
+	if (getParam('allow_mail.conf') == true)
+		mail($to, $subject, $message, $headers);
 }
 
 function getAdherent($user)

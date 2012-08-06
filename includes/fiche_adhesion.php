@@ -261,8 +261,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 			if ($self)
 			{
 				print "<td><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
-			} else
-			if ($resp_asso)
+			}
+			else if ($resp_asso)
 			{
 				print '<td>
 				<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
@@ -284,8 +284,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				}
 				
 				print '</FORM>
-				</td>
-				';
+				</td>';
 			}
 			print "</tr>";
 		}
@@ -341,14 +340,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 		}
 		foreach($tab['cres'] as $row)
 		{
-				print "<tr><td>Créneau {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}</td><td >{$row['valeur']}</td>
-				<td>".(isset($p_sup[$row['id']]) ? $p_sup[$row['id']] : 0)."</td><td>".($row['valeur']-$p_sup[$row['id']])."</td>
-				<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-				if (isset($resp_asso) && $resp_asso && $row['id_asso_paie']==$current_asso) {
-					$paiement_possible=true;
-					print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" />{$currency}</td>";
-				} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
-				print "</tr>";
+			$tmp_id = 0;
+			if (isset($p_sup[$row['id']]))
+				$tmp_id = $p_sup[$row['id']];
+			print "<tr><td>Créneau {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}</td><td >{$row['valeur']}</td>
+			<td>".$tmp_id."</td><td>".($row['valeur']- $tmp_id)."</td>
+			<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
+			if (isset($resp_asso) && $resp_asso && $row['id_asso_paie']==$current_asso) {
+				$paiement_possible=true;
+				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" />{$currency}</td>";
+			} else if (isset($resp_asso) && $resp_asso) print "<td></td>";
+			print "</tr>";
 		}
 		if (isset($resp_asso) && isset($paiement_possible))
 		{

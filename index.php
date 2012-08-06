@@ -17,6 +17,7 @@ include_once("General.php");
 include_once("saveImage.php");
 include_once("EspaceMembre.class.php");
 
+date_default_timezone_set(getParam('timezone.conf'));
 // Définition de la promo et de la localisation
 $current_promo = getParam('promo.conf');
 $GLOBALS['current_promo']=$current_promo;
@@ -112,8 +113,11 @@ if(isset($_SESSION['user']))
 		case 17:
 			include("fiche_inventaire.php");
 			break;
-		case 20:
-			include("tab_tmp.php");
+		case 18:
+			include("fiche_cotisations.php");
+			break;
+		case 19:
+			include("fiche_champs.php");
 			break;
 	}
 	print '</div>';

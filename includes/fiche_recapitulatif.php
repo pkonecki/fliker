@@ -42,6 +42,8 @@ if(isset($_GET['promo']))
 else
 	$promo=$current_promo;
 
+$currency = getParam('currency.conf');
+
 if(!(strcmp($_SESSION['user'],"") == 0))
 {
 	$tab=getAssociations($_SESSION['uid']);
@@ -52,120 +54,69 @@ if(!(strcmp($_SESSION['user'],"") == 0))
 		print '<li><a class="'.(($_GET['page']==14) ? 'selected' : '').'" href="index.php?page=14">Récapitulatif</a></li>';
 	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
 		print '<li><a class="'.(($_GET['page']==17) ? 'selected' : '').'" href="index.php?page=17">Inventaire</a></li>';
+	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
+		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Cotisations</a></li>';
 	print '</ul>';
 }
-$query = "SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}paiement ORDER BY promo DESC";
-include("opendb.php");
-$res = mysql_query($query);
-if (!$res)
-	echo mysql_error();
-else
-{
-	print "<p>Promo:<SELECT id=\"promo\" >";
-	while ($array_promo = mysql_fetch_array($res))
-		print "<OPTION value=\"".$array_promo['promo']."\" ".(isset($_GET['promo']) && $_GET['promo']==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
-	print "</SELECT></p>";
-}
-/*if($_SESSION['privilege'] == 1)
-{
-	print "<br/>";
-	$res = doQuery("SELECT id, nom FROM {$GLOBALS['prefix_db']}association");
-	print 	"Choix de l'association : <select id='choix_association' name='choix_association'>";
-	if ($current_asso != 0)
-		print	"<option value='0'>Toutes</option>'";
-	else
-		print	"<option selected value='0'>Toutes</option>'";
-	while ($tmp_array = mysql_fetch_array($res))
-	{
-		if ($current_asso == $tmp_array['id'])
-			print "<option selected value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>'";
-		else
-			print "<option value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>'";
-	}
-	print		"</select>";
-	print "<br/>";
-	print "<br/>";
-}*/
 
+$tab_promo = getPromoRecap();
+print "<p>Promo:<SELECT id='promo' ><option value='0'>Toutes</option>";
+foreach ($tab_promo as $key => $value)
+	print "<OPTION value='".$key."' ".($promo == $key ? "selected" : "")." >".$key."</OPTION>";
+print "</SELECT></p>";
 
-$query = "SELECT DISTINCT type FROM {$GLOBALS['prefix_db']}sup WHERE promo='".$promo."' ORDER BY type ASC";
-include('opendb.php');
-$res = mysql_query($query);
-if (!$res)
+if ($promo == 0)
 {
-	echo mysql_error();
-	die();
-}
-else
-{
-	print "<div style='float:left;'><table class='tab_grille'><tr><th></th>";
-	$i = 0;
-	while ($tmp_array = mysql_fetch_array($res))
-	{
-		print "<th>".$tmp_array['type']."</th>";
-		$list_type[$tmp_array['type']] = 0;
-		$i++;
-	}
-	print "<th class='tab_footer_colonne'><b>TOTAL</b></th>";
-	print "</tr>";
+	$tab_type = getPromoRecap();
+	$tab_type_montant = $tab_type;
+	print "<table><tr align='center'><th></th>";
+	foreach ($tab_type as $key => $value)
+		print "<th>".$key."</th>";
+	print "<th>TOTAL</th><tr>";
 	foreach ($tab_asso as $asso)
 	{
-		print "<tr><td align='center'><font color='#f6f6f6'>|</font></td>";
-		foreach ($list_type as $key => $value)
+		print "<tr><td><font color='#f6f6f6'>|</font></td>";
+		foreach ($tab_type as $key => $value)
 			print "<td></td>";
 		print "<td></td></tr>";
-		print "<tr align='center'>";
-		print "<td><b>".$asso['nom']."</b></td>";
+		print "<tr align='center'><td><b>".$asso['nom']."</b></td>";
+		
+		// Affichage des données d'une association
 		if ($_SESSION['privilege'] == 1 || (isset($tot_asso) && $tot_asso > 0))
 		{
-			$count = 0;
+			// Initialisation des variables
 			$total_line = 0;
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup WHERE promo='".$promo."' AND id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$asso['id']."')");
-			$list_sup = null;
-			while ($tmp_array = mysql_fetch_array($res))
-				$list_sup[$tmp_array['type']][$tmp_array['id']] = 0;
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup WHERE id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$asso['id']."')");
-			$list_paie = null;
-			while ($tmp_array = mysql_fetch_array($res))
+			$tab_paiement = getPaiementsAssoAll($asso['id'], $tab_type);
+
+			// Affichage des paiement pour chaque type
+			foreach ($tab_type as $key => $value)
 			{
-				if (isset($list_paie[$tmp_array['id_sup']]))
-					$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
-				else
-					$list_paie[$tmp_array['id_sup']] = $tmp_array['valeur'];
-			}
-			foreach ($list_type as $key => $value)
-			{
-				if (isset($list_sup[$key]))
+				if (isset($tab_paiement[$key]))
 				{
-					$count_total = 0;
-					foreach ($list_sup[$key] as $id => $number)
-					{
-						if (isset($list_paie[$id]))
-							$count_total += $list_paie[$id];
-					}
 					print "<td>";
-					if ($count_total > 0)
-						print "<FONT COLOR='#16B84E'>";
-					print $count_total."€";
-					if ($count_total > 0)
-						print "</FONT>";
+					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
+					print $tab_paiement[$key]."$currency";
+					print "</FONT>";
 					print "</td>";
-					$total_line += $count_total;
-					$list_type[$key] += $count_total;
+					$total_line += $tab_paiement[$key];
+					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
 				else
-					print "<td >0€</td>";
+					print "<td>0$currency</td>";
 			}
-			print "<td class='tab_footer_colonne'>".$total_line."€</td>";
+			
+			// Total de la ligne
+			print "<td class='tab_footer_colonne_top'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</FONT></td>";
 		}
 		else
 		{
-			foreach ($list_type as $key => $value)
+			foreach ($tab_type as $key => $value)
 				print "<td ></td>";
-			print "<td class='tab_footer_colonne'></td>";
+			print "<td class='tab_footer_colonne_top'></td>";
 		}
 		print "</tr>";
 		
+		// Récupération de la liste des sections
 		$sections = null;
 		if (isset($tot_asso) && $tot_asso > 0 || $_SESSION['privilege'] == 1)
 			$sections = getSectionsByAsso($asso['id']);
@@ -189,278 +140,208 @@ else
 					$list_id[$key] .= ', '.$key_cre.'';
 			}
 		}
+		
+		// Affichage des données d'une section
 		foreach ($sections as $sec)
 		{
 			print "<tr align='center'>";
 			print "<td>".$sec['nom']."</td>";
-			$count = 0;
+			
+			// Récupération des paiements
 			$total_line = 0;
-			$list_id_sec = $sec['id'];
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup WHERE promo='".$promo."' AND id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$sec['id']].")) AND id_asso_paie=".$asso['id']." ");
-			$list_sup = null;
-			while ($tmp_array = mysql_fetch_array($res))
-				$list_sup[$tmp_array['type']][$tmp_array['id']] = 0;
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup WHERE id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$sec['id']]."))");
-			$list_paie = null;
-			while ($tmp_array = mysql_fetch_array($res))
+			$tab_paiement = getPaiementsSecAll($asso['id'], $sec['id'], $tab_type, $list_id);
+
+			// Affichage des paiement pour chaque type
+			foreach ($tab_type as $key => $value)
 			{
-				if (isset($list_paie[$tmp_array['id_sup']]))
-					$list_paie[$tmp_array['id_sup']] += $tmp_array['valeur'];
-				else
-					$list_paie[$tmp_array['id_sup']] = $tmp_array['valeur'];
-			}
-			foreach ($list_type as $key => $value)
-			{
-				if (isset($list_sup[$key]))
+				if (isset($tab_paiement[$key]))
 				{
-					$count_total = 0;
-					foreach ($list_sup[$key] as $id => $number)
-					{
-						if (isset($list_paie[$id]))
-						$count_total += $list_paie[$id];
-					}
 					print "<td>";
-					if ($count_total > 0)
-						print "<FONT COLOR='#16B84E'>";
-					print $count_total."€";
-					if ($count_total > 0)
-						print "</FONT>";
+					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
+					print $tab_paiement[$key]."$currency";
+					print "</FONT>";
 					print "</td>";
-					$total_line += $count_total;
-					$list_type[$key] += $count_total;
+					$total_line += $tab_paiement[$key];
+					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
 				else
-					print "<td >0€</td>";
+					print "<td>0$currency</td>";
 			}
-			print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-			print "</tr>";
+			
+			// Total de la ligne
+			print "<td class='tab_footer_colonne_top'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</FONT></td>";
 		}
-		print "</tr>";
+		
+		// Affichage des sous-totaux pour chaque type
 		print "<tr align='center' class='tab_footer_line'><td><b>Sous-Total</b></td>";
 		$final_total = 0;
 		$total_line = 0;
-		foreach ($list_type as $key => $value)
+		foreach ($tab_type_montant as $key => $value)
 		{
-			print "<td>".$value."€</td>";
+			print "<td><FONT COLOR='".findColor($value)."'>".$value."$currency</font></td>";
 			$final_total += $value;
 			$total_line += $value;
-			$list_type[$key] = 0;
+			$tab_type_montant[$key] = 0;
 		}
-		print "<td class='tab_footer_colonne'>".$total_line."€</td></tr>";
-		
+		print "<td class='tab_footer_colonne'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</font></td></tr>";
 	}
-	print "</table></div>";
+	print "</table>";
 }
-$final_total = 0;
-$total_line = 0;
-$list_type = null;
-$total_line = 0;
-$count_total = 0;
-$list_sup = null;
-$list_paie = null;
+else
+{
+	$tab_type = getTypeRecap();
+	$tab_type_montant = $tab_type;
 
-print "<table class='tab_grille'><tr><th></th>";
-$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_dep ORDER BY nom ASC");
-$i = 0;
-while ($tmp_array = mysql_fetch_array($res))
-{
-	print "<th>".$tmp_array['nom']."</th>";
-	$list_type[$tmp_array['nom']] = 0;
-}
-print "<th class='tab_footer_colonne'><b>TOTAL</b></th><th>En attente</th><th>Demandé</th><th>Autorisé</th>";
-print "</tr>";
-foreach ($tab_asso as $asso)
-{
-	print "<tr><td align='center'><font color='#f6f6f6'>|</font></td>";
-	foreach ($list_type as $key => $value)
+	print "<table><tr align='center'><th></th>";
+	foreach ($tab_type as $key => $value)
+		print "<th>".$key."</th>";
+	print "<th>TOTAL</th><th>Cotisations à réclamer</th><th>Cotisations à déposer</th><th>Demandé</th><th>Autorisé</th><tr>";
+	foreach ($tab_asso as $asso)
 	{
-		$list_type[$key] = 0;
-		print "<td></td>";
-	}
-	print "<td></td><td></td><td></td><td></td></tr>";
-	print "<tr align='center'>";
-	print "<td><b>".$asso['nom']."</b></td>";
-	if ($_SESSION['privilege'] == 1 || (isset($tot_asso) && $tot_asso > 0))
-	{
-		$count = 0;
-		$total_line = 0;
-		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE emetteur='".$asso['id']."' AND type_register='depense'");
-		$list_dep = null;
-		$value_demande = 0;
-		$value_confirm = 0;
-		while ($tmp_array = mysql_fetch_array($res))
+		$tab_total_supl = array("Cotis_demande" => 0,"Cotis_depot" => 0,"Demander" => 0,"Autoriser" => 0);
+
+		print "<tr><td><font color='#f6f6f6'>|</font></td>";
+		foreach ($tab_type as $key => $value)
+			print "<td></td>";
+		print "<td></td><td></td><td></td><td></td><td></td></tr>";
+		print "<tr align='center'><td><b>".$asso['nom']."</b></td>";
+		
+		// Affichage des données d'une association
+		if ($_SESSION['privilege'] == 1 || (isset($tot_asso) && $tot_asso > 0))
 		{
-			if ($tmp_array['autorisation'] != '1')
-				$value_demande += $tmp_array['montant'];
-			else
+			// Initialisation des variables
+			$total_line = 0;
+			$tab_paiement_ligne = getPaiementsAsso($asso['id'], $promo, $tab_type);
+			$tab_paiement = $tab_paiement_ligne['Paiements'];
+
+			// Affichage des paiement pour chaque type
+			foreach ($tab_type as $key => $value)
 			{
-				if ($tmp_array['confirmation'] != '1')
-					$value_confirm += $tmp_array['montant'];
-				else
+				if (isset($tab_paiement[$key]))
 				{
-					if (isset($list_dep[$tmp_array['type']]))
-						$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-					else
-						$list_dep[$tmp_array['type']] = $tmp_array['montant'];
+					print "<td>";
+					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
+					print $tab_paiement[$key]."$currency";
+					print "</FONT>";
+					print "</td>";
+					$total_line += $tab_paiement[$key];
+					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
-			}
-		}
-		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE beneficiaire='".$asso['id']."' AND type_register='recette'");
-		while ($tmp_array = mysql_fetch_array($res))
-		{
-			if ($tmp_array['autorisation'] != '1')
-				$value_demande += $tmp_array['montant'];
-			else
-			{
-				if ($tmp_array['confirmation'] != '1')
-					$value_confirm += $tmp_array['montant'];
 				else
-				{
-					if (isset($list_dep[$tmp_array['type']]))
-						$list_dep[$tmp_array['type']] += $tmp_array['montant'];
-					else
-						$list_dep[$tmp_array['type']] = $tmp_array['montant'];
-				}
+					print "<td>0$currency</td>";
 			}
-		}
-		foreach ($list_type as $key => $value)
-		{
-			if (isset($list_dep[$key]))
-			{
-				print "<td>";
-				print "<FONT COLOR='#16B84E'>";
-				print $list_dep[$key]."€";
-				print "</FONT>";
-				print "</td>";
-				$total_line += $list_dep[$key];
-				$list_type[$key] += $list_dep[$key];
-			}
-			else
-				print "<td >0€</td>";
-		}
-		print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-		print "<td>0€</td>";
-		print "<td><FONT COLOR='blue'>".$value_demande."€</font></td>";
-		print "<td><FONT COLOR='orange'>".$value_confirm."€</font></td>";
-	}
-	else
-	{
-		foreach ($list_type as $key => $value)
-			print "<td ></td>";
-		print "<td class='tab_footer_colonne'><td></td></td>";
-	}
-	print "</tr>";
-	$sections = null;
-	if (isset($tot_asso) && $tot_asso > 0 || $_SESSION['privilege'] == 1)
-		$sections = getSectionsByAsso($asso['id']);
-	else
-	{
-		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}section WHERE id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}asso_section WHERE id_asso=".$asso['id']." AND id_sec IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh=".$_SESSION['uid']."))");
-		while ($tmp_array_sec = mysql_fetch_array($res))
-			$sections[$tmp_array_sec['id']] = $tmp_array_sec;
-	}
-	$list_id_ent = array();
-	$list_id = array();
-	foreach ($sections as $key => $value)
-	{
-		$list_id[$key] = $key;
-		$list_id_ent[$key] = getActivitesBySection($key);
-		foreach ($list_id_ent[$key] as $key_act => $value_act)
-		{
-			$list_id_ent[$key][$key_act] = getCreneauxByActivite($key_act);
-			$list_id[$key] .= ', '.$key_act.'';
-			foreach ($list_id_ent[$key][$key_act] as $key_cre => $value_cre)
-				$list_id[$key] .= ', '.$key_cre.'';
-		}
-	}
-	foreach ($sections as $sec)
-	{
-		print "<tr align='center'>";
-		print "<td>".$sec['nom']."</td>";
-		$count = 0;
-		$total_line = 0;
-		$list_id_sec = $sec['id'];
-		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE emetteur='".$sec['id']."' AND type_register='depense' ");
-		$list_paie = null;
-		$value_demande = 0;
-		$value_confirm = 0;
-		while ($tmp_array = mysql_fetch_array($res))
-		{
-			if ($tmp_array['autorisation'] != '1')
-				$value_demande += $tmp_array['montant'];
-			else
-			{
-				if ($tmp_array['confirmation'] != '1')
-					$value_confirm += $tmp_array['montant'];
-				else
-				{
-					if (isset($list_paie[$tmp_array['type']]))
-						$list_paie[$tmp_array['type']] += $tmp_array['montant'];
-					else
-						$list_paie[$tmp_array['type']] = $tmp_array['montant'];
-				}
-			}
-		}
-		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}finances WHERE beneficiaire='".$sec['id']."' AND type_register='recette' ");
-		while ($tmp_array = mysql_fetch_array($res))
-		{
-			if ($tmp_array['autorisation'] != '1')
-				$value_demande += $tmp_array['montant'];
-			else
-			{
-				if ($tmp_array['confirmation'] != '1')
-					$value_confirm += $tmp_array['montant'];
-				else
-				{
-					if (isset($list_paie[$tmp_array['type']]))
-						$list_paie[$tmp_array['type']] += $tmp_array['montant'];
-					else
-						$list_paie[$tmp_array['type']] = $tmp_array['montant'];
-				}
-			}
-		}
-		foreach ($list_type as $key => $value)
-		{
-			if (isset($list_paie[$key]))
-			{
-				print "<td>";
-				print "<FONT COLOR='#16B84E'>";
-				print $list_paie[$key]."€";
-				print "</FONT>";
-				print "</td>";
-				$total_line += $list_paie[$key];
-				$list_type[$key] += $list_paie[$key];
-			}
-			else
-				print "<td>0€</td>";
 			
+			// Total de la ligne
+			print "<td class='tab_footer_colonne_top'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</FONT></td>";
+			
+			// Informations supplémentaire pour la section
+			$tab_total_supl['Cotis_demande'] += 0;
+			$tab_total_supl['Cotis_depot'] += $tab_paiement_ligne['Cotis_depot'];
+			$tab_total_supl['Demander'] += $tab_paiement_ligne['Demandé'];
+			$tab_total_supl['Autoriser'] += $tab_paiement_ligne['Autorisé'];
+
+			print 	"<td>0$currency</td>
+					<td>".$tab_paiement_ligne['Cotis_depot']."$currency</td>
+					<td><FONT COLOR='blue'>".$tab_paiement_ligne['Demandé']."$currency</font></td>
+					<td><FONT COLOR='orange'>".$tab_paiement_ligne['Autorisé']."$currency</font></td>";
 		}
-		print "<td class='tab_footer_colonne'>".$total_line."€</td>";
-		print "<td>0€</td>";
-		print "<td><FONT COLOR='blue'>".$value_demande."€</font></td>";
-		print "<td><FONT COLOR='orange'>".$value_confirm."€</font></td>";
+		else
+		{
+			foreach ($tab_type as $key => $value)
+				print "<td ></td>";
+			print "<td class='tab_footer_colonne_top'></td><td ></td><td ></td><td ></td><td ></td>";
+		}
 		print "</tr>";
+		
+		// Récupération de la liste des sections
+		$sections = null;
+		if (isset($tot_asso) && $tot_asso > 0 || $_SESSION['privilege'] == 1)
+			$sections = getSectionsByAsso($asso['id']);
+		else
+		{
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}section WHERE id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}asso_section WHERE id_asso=".$asso['id']." AND id_sec IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh=".$_SESSION['uid']."))");
+			while ($tmp_array_sec = mysql_fetch_array($res))
+				$sections[$tmp_array_sec['id']] = $tmp_array_sec;
+		}
+		$list_id_ent = array();
+		$list_id = array();
+		foreach ($sections as $key => $value)
+		{
+			$list_id[$key] = $key;
+			$list_id_ent[$key] = getActivitesBySection($key);
+			foreach ($list_id_ent[$key] as $key_act => $value_act)
+			{
+				$list_id_ent[$key][$key_act] = getCreneauxByActivite($key_act);
+				$list_id[$key] .= ', '.$key_act.'';
+				foreach ($list_id_ent[$key][$key_act] as $key_cre => $value_cre)
+					$list_id[$key] .= ', '.$key_cre.'';
+			}
+		}
+		
+		// Affichage des données d'une section
+		foreach ($sections as $sec)
+		{
+			print "<tr align='center'>";
+			print "<td>".$sec['nom']."</td>";
+			
+			// Récupération des paiements
+			$total_line = 0;
+			$tab_paiement_ligne = getPaiementsSec($asso['id'], $sec['id'], $promo, $tab_type, $list_id);
+			$tab_paiement = $tab_paiement_ligne['Paiements'];
+
+			// Affichage des paiement pour chaque type
+			foreach ($tab_type as $key => $value)
+			{
+				if (isset($tab_paiement[$key]))
+				{
+					print "<td>";
+					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
+					print $tab_paiement[$key]."$currency";
+					print "</FONT>";
+					print "</td>";
+					$total_line += $tab_paiement[$key];
+					$tab_type_montant[$key] += $tab_paiement[$key];
+				}
+				else
+					print "<td>0$currency</td>";
+			}
+			
+			// Total de la ligne
+			print "<td class='tab_footer_colonne_top'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</FONT></td>";
+			
+			// Informations supplémentaire pour la section
+			$tab_total_supl['Cotis_demande'] += 0;
+			$tab_total_supl['Cotis_depot'] += $tab_paiement_ligne['Cotis_depot'];
+			$tab_total_supl['Demander'] += $tab_paiement_ligne['Demandé'];
+			$tab_total_supl['Autoriser'] += $tab_paiement_ligne['Autorisé'];
+
+			print 	"<td>0$currency</td>
+					<td>".$tab_paiement_ligne['Cotis_depot']."$currency</td>
+					<td><FONT COLOR='blue'>".$tab_paiement_ligne['Demandé']."$currency</font></td>
+					<td><FONT COLOR='orange'>".$tab_paiement_ligne['Autorisé']."$currency</font></td>
+					</tr>";
+		}
+		
+		// Affichage des sous-totaux pour chaque type
+		print "<tr align='center' class='tab_footer_line'><td><b>Sous-Total</b></td>";
+		$final_total = 0;
+		$total_line = 0;
+		foreach ($tab_type_montant as $key => $value)
+		{
+			print "<td><FONT COLOR='".findColor($value)."'>".$value."$currency</font></td>";
+			$final_total += $value;
+			$total_line += $value;
+			$tab_type_montant[$key] = 0;
+		}
+		print "<td class='tab_footer_colonne'><FONT COLOR='".findColor($total_line)."'>".$total_line."$currency</font></td><td>".$tab_total_supl['Cotis_demande']."$currency</td><td>".$tab_total_supl['Cotis_depot']."$currency</td><td><FONT COLOR='blue' >".$tab_total_supl['Demander']."$currency</font></td><td><FONT COLOR='orange' >".$tab_total_supl['Autoriser']."$currency</font></td></tr>";
 	}
-	print "</tr>";
-	print "<tr align='center' class='tab_footer_line'><td><b>Sous-Total</b></td>";
-	$final_total = 0;
-	$total_line = 0;
-	foreach ($list_type as $key => $value)
-	{
-		print "<td>".$value."€</td>";
-		$total_line += $value;
-	}
-	print "<td class='tab_footer_colonne'>".$total_line."€</td><td></td><td></td><td></td></tr>";
+	print "</table>";
 }
-print "</table>";
 ?>
 <script type="text/javascript">
 $('#promo').change( function (){
         window.location.search = "page=14&adh="+$.getUrlVar('adh')+"&promo="+$(this).val();
 });
-</script>
-<script type="text/javascript">
-
 $('#choix_association').change( function (){
         window.location.search = "page=14&asso="+$(this).val();
 });

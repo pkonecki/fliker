@@ -23,7 +23,7 @@ if($tot > 0)
 if($tot_asso > 0)
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6 || $_GET['page']==12) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=3">Gestion</a></li>';
@@ -31,7 +31,7 @@ if($tot_asso > 0)
 else if($tot_sec > 0)
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6 || $_GET['page']==12) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=4">Gestion</a></li>';
@@ -39,7 +39,7 @@ else if($tot_sec > 0)
 else if($tot_act > 0)
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6 || $_GET['page']==12) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=5">Gestion</a></li>';
@@ -47,7 +47,7 @@ else if($tot_act > 0)
 else if($tot_cre > 0)
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6 || $_GET['page']==12) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=6">Gestion</a></li>';
@@ -55,7 +55,7 @@ else if($tot_cre > 0)
 if ($_SESSION['privilege']==='1' || $tot_sec > 0 || $tot_asso > 0)
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==14 || $_GET['page']==15 || $_GET['page']==16 || $_GET['page']==17) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==14 || $_GET['page']==15 || $_GET['page']==16 || $_GET['page']==17 || $_GET['page']==18) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=16">Finances</a></li>';
@@ -71,7 +71,7 @@ if($tot > 0)
 if($_SESSION['privilege']==='1')
 {
 	if (isset($_GET['page']))
-		$tmp_stock = (($_GET['page']==9) ? 'selected' : '');
+		$tmp_stock = (($_GET['page']==9 || $_GET['page']==11 || $_GET['page']==13 || $_GET['page']==19) ? 'selected' : '');
 	else
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=9">Admin</a></li>';

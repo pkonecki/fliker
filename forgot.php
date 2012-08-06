@@ -52,7 +52,8 @@ if (isset($_POST['email_recu']))
 				'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 				'X-Mailer: PHP/' . phpversion();
 		$return = 0;
-		$return = mail($to, $subject, $message, $headers);
+		if (getParam('allow_mail.conf') == true)
+			$return = mail($to, $subject, $message, $headers);
 		if ($return == TRUE)
 			print 'Un email vient d\'être envoyé à l\'adresse '.$_POST["email_recu"].', veuiller vérifier votre boîte mail.';
 		else
@@ -91,7 +92,8 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted'
 		$headers = 	'From: '.getParam('admin_email.conf') . "\r\n" .
 					'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 					'X-Mailer: PHP/' . phpversion();
-		$return = mail($to, $subject, $message, $headers);
+		if (getParam('allow_mail.conf') == true)
+			$return = mail($to, $subject, $message, $headers);
 		if ($return == TRUE)
 			print 'Un email vient d\'être envoyé à l\'adresse '.$_POST["email_recup"].', veuiller vérifier votre boîte mail.';
 		else
