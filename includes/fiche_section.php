@@ -88,6 +88,8 @@ else
 		if($tot_cre > 0){
 			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
 		}
+		if(isset($tot_asso) && $tot_asso > 0)
+			print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
 		print '</ul>';
 		$tab=getSections($_SESSION['uid']);
 		if(empty($_GET['section'])){

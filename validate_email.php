@@ -91,7 +91,8 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 				'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 				'X-Mailer: PHP/' . phpversion();
-		$return = mail($to, $subject, $message, $headers);
+		if (getParam('allow_mail.conf') == true)
+			$return = mail($to, $subject, $message, $headers);
 		print '<p>Une demande de confirmation vient d\'être envoyé à l\'adresse '.$email.'. Une fois cette confirmation effectué le changement d\'adresse sera fait.</p>';
 
 		print $footer;
