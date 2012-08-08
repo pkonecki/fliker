@@ -5,12 +5,12 @@
   * inscription : bug dans le check n° tel sous certains navigateurs
   * <font color="red">239 </font>listes sports recherche/gestion/présence : afficher systématiquement trié par section - activité - créneau
   * recherche : bouton select all fonctionne pas
-  * choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
+  * <font color="red">249 </font> choix resp asso/sec/act/cre : disparition du plugin de scrollbox intelligente ? (fouiller vieilles révisions ?)
   * <font color="red">239 </font>suppression resp/asso/sec/act/cre : homogénéiser affichage de la confirmation (inline ou popup ?)
-  * fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
-  * <font color="blue">N°carte n'existe plus dans l'inscription ?</font> n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
-  * <font color="blue">Aucuns problèmes remarqué, la conversion s’effectue bien</font> modif fiche adherent : imageCreateFromPNG does not exist ...
-     * ? purger répertoires photo / certmeds des fichiers non-jpg ?
+  * <font color="red">248 </font> fiche adhesion : quand on change de promo de visualisation, le n° de carte reste affiché à la valeur promo courante ... que devient n° carte d'une année sur l'autre ?
+  * <font color="red">248 </font> n° carte : j'ai réussi à mettre 2 fois le même n° de carte !?
+  * <font color="blue">Aucuns problèmes remarqué</font> modif fiche adherent : imageCreateFromPNG does not exist ...
+     *  <font color="blue">C'est toujours du .jpg</font> ? purger répertoires photo / certmeds des fichiers non-jpg ?
   * <s>interlignes entre tableaux (adhesions) : dans CSS !</s>
   * <s>fiche d'inscription : ne rien mettre comme valeur par défaut du "statut" (au lieu de première valeur possible du type énuméré) mais laisser obligation de choisir</s>
   * <s>fiche adhesion : on peut pas changer la promo du paiement</s>
@@ -64,11 +64,11 @@
 
 
 ===Notion de promo===
-  * dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
+  * <font color="red">Multiple versions</font> dans scrollbox choix promo, afficher TOUTES (et SEULEMENT) les promos ayant des données ... (et pas les 20 dernières années ...)
   * Page admin :
-    * booléen pour mode standby (inscriptions ok mais temporairement plus d'adhésions)
-    * stocker/modifier Bornes de la Promo courante (actuellement hardcodées = next Monday after 31/08 --> sem du 30/06)
-    * bouton de purge en fin d'année : des certificats méd / des n° carte (?) / des fiches adhérents n'ayant JAMAIS eu de paiements
+    * <font color="red">248 </font> booléen pour mode standby (inscriptions ok mais temporairement plus d'adhésions)
+    * <font color="red">248 </font> stocker/modifier Bornes de la Promo courante (actuellement hardcodées = next Monday after 31/08 --> sem du 30/06)
+    * <font color="red">248 </font> bouton de purge en fin d'année : des certificats méd / des n° carte (?) / des fiches adhérents n'ayant JAMAIS eu de paiements
     * <s>changer de promo courante (stocker dans table sql)</s>
   * <s>Champ promo dans table adhesions/paiements</s>
   * <s>Champ promo dans table présences</s>
@@ -78,9 +78,9 @@
 
 ===Associations===
   * <s>Tables des statuts (etudiant/personnel/exterieur ...)</s>
-    * ! possibilité d'éditer les statuts possibles dans page admin !
+    * <font color="red">248 </font> ! possibilité d'éditer les statuts possibles dans page admin !
   * <s>Ajout/Modif/Suppression entité (nom/desc/logo/url)</s>
-    * ? suppression devrait être remonté au niveau/droit "admin" ?
+    * <font color="red">248 </font> ? suppression devrait être remonté au niveau/droit "admin" ?
   * <s>Ajout/Suppression Responsable</s>
   * <s>Ajout/Suppression Montant de Cotisation</s>
   * <s>Associations possibles pour un statut (ex: etudiant --> Asesco et PSUC) --> choix utilisateur en fonction des suppléments affichés</s>
@@ -120,13 +120,13 @@
   * Fonction pour vraiment supprimer un sport de la facture d'un adhérent
   * Ne pas afficher les créneaux <s>sans prof/responsables au dessus</s> (ni les section désactivées) (ni rien du tout si mode standby)
   * <font color="red">238</font> ? pas nécessaire ? <s>captcha en confirmation des formulaires</s>
-  * <font color="blue">Après test, aucuns problème remarqué</font> ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
+  * <font color="blue">Aucuns problème remarqué</font> ? NE MARCHE PLUS ? <s>conservation données en post si retour pendant saisie</s>
   * <s>identifiant = email</s>
     * <font color="blue">Récapitulatif déjà présent sur la page après l'inscription</font>? pas nécessaire ? <s>Demander 2 fois email</s>
   * <s>gestion de password</s>
-    * <font color="blue">Pas compris la modification salt</font><s> Mot de passe : à la vérification, encryption md5</s> + salt
+    * <font color="blue">Pas nécessaire</font><s> Mot de passe : à la vérification, encryption md5</s> + salt
   * liste des sports:
-    * faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
+    * <font color="red">248 </font> faire en sorte que le nom de l'activité/section choisie soit cliquable et mène vers l'URL déclarée dans la fiche de l'activité/section
     * <font color="blue">Pas compris</font> ? pas nécessaire ? <s>liste dynamique en fct statut (etu/pers) / age / critères personalisés (prix/lieu/type/horaire)</s>
     * <s>faire page séparée</s>
     * <s>encourager l'inscription chez d'autres assos (liste unique</s> + popup d'info onmousehover)
@@ -154,9 +154,9 @@
   * <font color="red">229</font> bouton pour changer/récupérer son passwd (seulement par adhérent --> envoi d'email de (re)validation)
   * <font color="red">229</font> bouton pour changer son email (par adhérent ou resp --> envoi d'un cookie/email pour réactivation) (cf. bouton j'ai oublie mon pass ...)
   * <font color="red">244</font>bouton pour dés/activer un compte (seulement par admin)
-  * bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
-  * <font color="blue">Déjà présent ?</font> bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
-  * <font color="blue">Plus dé précisions ?</font>Case à cocher : je n'ai pas d'adresse email
+  * <font color="red">248 </font> bouton pour changer son statut (seulement par admin car admin devra supprimer un éventuel paiement déjà fait et le resaisir afin d'enregistrer la nouvelle valeur du supplément dû...)
+  * <font color="blue">Déjà présent</font> bypasser "required" pour photo/certmed si fichier présent (même si champs laissé vide lors d'une modif)
+  * Case à cocher : je n'ai pas d'adresse email
     * afficher warning pour dissuader les gens de cocher cette case : si pas d'email alors pas d'info sur les activités / événements / news / réunions / etc.
     * autre possibilité : gérer par représentation (1 seul email parent pour plusieurs fiches ...)
     * possibilité de rajouter l'adresse email par le bureau plus tard --> envoie d'email/cookie de confirmation
@@ -165,7 +165,7 @@
     * Table de hash champ_adherent à vérifier --> id_adherent + date_verif + id_verif
   * <font color="blue">Plus dé précisions ?</font> +champs date de validation du cookie
   * +champs date de dernière modif du droit à l'image
-  * <font color="blue">Plus dé précisions ?</font> +champ exemple dans champs_adherent
+  * <font color="red">256 </font> +champ exemple dans champs_adherent
   * <font color="blue">Plus dé précisions ?</font> Séparer données login/données perso ? --> Customisations supplémentaires assos locales
   * <font color="blue">Plus dé précisions ?</font> ? créer nouvelle section/activité compète ? <s>Compétiteur (o/n)</s>
   * <s>Catégorie Homme/Femme --> Masculin/Féminin</s>
@@ -199,11 +199,11 @@
 
 ===Paiements===
   * ! Créer la notion de supplément optionnel => dispensé par défaut mais rajoutable par prof ! (ex : lic féd)
-  * Table types de suppléments (cotiz, location, caution, supplément)
-    * ! possibilité d'éditer les types possibles dans page admin !
-  * Table types de paiements (chèque/espèces/CB/paypal/dispense)
-    * ! possibilité d'éditer les types possibles dans page admin !
-  * id_asso/num_carte --> table (plusieurs assos pour un adherent)
+  * <font color="red">248 </font> Table types de suppléments (cotiz, location, caution, supplément)
+    * <font color="red">248 </font> ! possibilité d'éditer les types possibles dans page admin !
+  * <font color="red">248 </font> Table types de paiements (chèque/espèces/CB/paypal/dispense)
+    * <font color="red">248 </font> ! possibilité d'éditer les types possibles dans page admin !
+  * <font color="blue">Système déjà présent suffisant ?</font>id_asso/num_carte --> table (plusieurs assos pour un adherent)
     * <s>Faire table de hash entre adh et asso</s>
   * <s>Numéro de carte asesco:
     * n'en générer un qu'à partir du moment où au moins la cotisation asso est payée
@@ -220,7 +220,7 @@
 
 
 ===Présences===
-  * <font color="blue">Plus nécessaire ?</font>Bouton pour Imprimer fiche de présence
+  * <font color="blue">Plus nécessaire</font>Bouton pour Imprimer fiche de présence
   * <font color="red">218</font>? Stocker dates vac et fériés pour supprimer colonnes inutiles ? (ou bien on ignore les colonnes à zéro ... charge au bureau de cocher au moins la présence du prof pour les créneaux effectués/payés !)
   * ? créer une nouvelle section ? <s>Evénements exceptionnels (stages, matchs...) : table spéciale</s>
   * <s>Table de hash créneau --> adhérent</s>
@@ -234,12 +234,12 @@
     * <font color="red">231</font>bouton pour recherche "pas de certif" et "pas de photo"
     * <font color="red">231</font>Ajouter recherche par statut et/ou par asso
       * ! afficher asso d'appartenance dans résultat !
-    * <font color="blue">Fonctionnalité déjà présente dans "notifications" ?</font>Ajouter recherche de certmed/photo manquant
-    * <font color="blue">Doublons avec "bouton pour n'afficher que les "impossibles"" ?</font>Ajouter recherche de compte désactivé
+    * Ajouter recherche de certmed/photo manquant
+    * <font color="red">248 </font>Ajouter recherche de compte désactivé
     * AJouter recherche d'encadrant non adhérent
     * Ajouter recherche de paiement qui correspond plus à rien
     * <s>boutons pour n'afficher que les "responsables" (ass/sec/act/cre)</s>
-    * <font color="blue">"OU" lié à quoi ?</font><s>Ajouter règles de recherche (et</s>/ou)
+    * <s>Ajouter règles de recherche (et</s>/ou)
     * <font color="blue">Encore du travail à faire ?</font>Sélection des colonnes à afficher <s>(au moins un menu partiel : résumé / complet / trombino ...)</s>
     * <s>afficher par défaut: nom,prénom,email,catégorie (détecter si vide) --> utiliser table des champs</s>
     * <s>si aucun sport coché alors afficher les adhérents actifs mais sans adhésion pour promo en cours (uniquement pour resp asso)</s>
@@ -283,15 +283,15 @@
 
 
 ===Envoi d'Email===
-  * <font color="blue">Je sèche un peu sur la manière de faire ça, à discuter?</font> Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
+  *  Vérifier bounces : si erreur revenue alors désactiver email/compte destinataire ...
   * Bien gérer le SUBJECT:
-    * <font color="blue">Le nom d'asso est lié à quoi ? </font>forcer [NOM_ASSO] en début de sujet
+    * forcer [NOM_ASSO] en début de sujet
   * Bien gérer le FROM: (ou REPLY-TO:)
     * <font color="red">231</font> "contact_email" (cf. page admin) si c'est un membre du bureau, "admin_email" si c'est l'admin, sinon adresse email de l'utilisateur loggé
     * <s>éditer "contact_email" et "admin_email" depuis page admin</s>
   * Bien gérer le TO:
     * <font color="red">244</font>Vérifier qu'on envoie pas l'email deux fois à une même personne
-    * <font color="blue">Prise de place importante en BDD, si from en CC quel est l'adresse ?</font> ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
+    *  ? Conserver copie des mails envoyés ou au moins mettre le from en CC: ? (externaliser dans outil de tickets !)
     * <s>Un email par personne en TO: (timer/répartition dans le temps)</s> <b>OU</b> bulk-email en BCC: (limitation à 200 à u-psud)
 
 
@@ -333,7 +333,7 @@
   * stocker les achats de matériel pour chaque section
     * date (promo) d'acquisition, coût, upload pdf devis/facture, etc.
     * fonction d'affichage (tri par promo, par coût, par nom)
-    * fonction de saisie/modif/suppresion
+    * <font color="red">248 </font>fonction de saisie/modif/suppresion
 
 
 ===Synoptiques/Statistiques===
@@ -344,7 +344,7 @@
       * détail par UFRs ...
     * nbr d'inscrits assidus mais pas à jour
     * nbr touristes = pas assidus et pas à jour
-  * tableau des recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections par asso)
+  * <font color="red">248 </font>tableau des recettes (total des suppléments) & dépenses (cf. plugin inventaire) & bilan annuel (+ bilan annuel cumulé des sections par asso)
 
 
 ===Feuille de Prof===
