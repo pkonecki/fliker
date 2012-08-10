@@ -388,4 +388,126 @@ function getPaiementsSecAll($id_asso, $id_sec, $tab_type, $list_id)
 	return ($tab_type);
 }
 
+function age($naiss, $year, $month)
+{
+	$naissance = explode("-", $naiss);
+	
+	$final_year = $year - $naissance[0];
+	$final_month = $month - $naissance[1];
+	if ($final_month < 0)
+		$final_year--;
+	return ($final_year);
+}
+
+function getStats($tab_type, $id_asso)
+{
+	$homme = 0;
+	$femme = 0;
+	$statut = 0;
+	$inscrit = 0;
+	$a_jour = adhStateAsso($id_asso);
+	$age_0 = 0;
+	$age_19 = 0;
+	$age_26 = 0;
+	$age_46 = 0;
+	$age_66 = 0;
+	
+	$year = strftime("%Y",strtotime("now"));
+	$month = strftime("%m",strtotime("now"));
+
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$id_asso." ) ");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		if ($tmp_array['categorie'] == "M")
+			$homme++;
+		if ($tmp_array['categorie'] == "F")
+			$femme++;
+		$inscrit++;
+		$age = age($tmp_array['naissance'], $year, $month);
+		if ($age <= 18)
+			$age_0++;
+		else if ($age <= 25)
+			$age_19++;
+		else if ($age <= 45)
+			$age_26++;
+		else if ($age <= 65)
+			$age_46++;
+		else if ($age >= 66)
+			$age_66++;
+	}
+	
+	return (array("Inscrits" => $inscrit, "Sexe" => $homme."/".$femme, "Age" => "0-18: <font color='blue'>".$age_0."</font>, 19-25: <font color='blue'>".$age_19."</font>, 26-45: <font color='blue'>".$age_26."</font>, 46-65: <font color='blue'>".$age_46."</font>, 66+: <font color='blue'>".$age_66."</font>", "A jour" => $a_jour, "Statut" => $statut));
+}
+
+function adhStateAsso($asso)
+{
+	$list_adh = null;
+	
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." ) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent = ".$asso.")");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		if (isset($list_adh[$tmp_array['id_adh']]))
+			$list_adh[$tmp_array['id_adh']]++;
+		else
+			$list_adh[$tmp_array['id_adh']] = 1;
+	}
+	
+	return (sizeof($list_adh));
+}
+
+function getStatsSec($tab_type, $asso, $list_id)
+{
+	$homme = 0;
+	$femme = 0;
+	$statut = 0;
+	$inscrit = 0;
+	$a_jour = adhStateSec($asso, $list_id);
+	$age_0 = 0;
+	$age_19 = 0;
+	$age_26 = 0;
+	$age_46 = 0;
+	$age_66 = 0;
+	
+	$year = strftime("%Y",strtotime("now"));
+	$month = strftime("%m",strtotime("now"));
+
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." AND id_cre IN (".$list_id.")) ");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		if ($tmp_array['categorie'] == "M")
+			$homme++;
+		if ($tmp_array['categorie'] == "F")
+			$femme++;
+		$inscrit++;
+		$age = age($tmp_array['naissance'], $year, $month);
+		if ($age <= 18)
+			$age_0++;
+		else if ($age <= 25)
+			$age_19++;
+		else if ($age <= 45)
+			$age_26++;
+		else if ($age <= 65)
+			$age_46++;
+		else if ($age >= 66)
+			$age_66++;
+	}
+	
+	return (array("Inscrits" => $inscrit, "Sexe" => $homme."/".$femme, "Age" => "0-18: <font color='blue'>".$age_0."</font>, 19-25: <font color='blue'>".$age_19."</font>, 26-45: <font color='blue'>".$age_26."</font>, 46-65: <font color='blue'>".$age_46."</font>, 66+: <font color='blue'>".$age_66."</font>", "A jour" => $a_jour, "Statut" => $statut));
+}
+
+function adhStateSec($asso, $list_id)
+{
+	$list_adh = null;
+	
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." ) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id."))");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		if (isset($list_adh[$tmp_array['id_adh']]))
+			$list_adh[$tmp_array['id_adh']]++;
+		else
+			$list_adh[$tmp_array['id_adh']] = 1;
+	}
+	
+	return (sizeof($list_adh));
+}
 ?>

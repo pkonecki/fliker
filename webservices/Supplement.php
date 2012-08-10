@@ -91,7 +91,8 @@ function getAssosCreneaux(){
 
 }
 
-function getFacture($ads,$id_statut_adh,$promo){
+function getFacture($ads,$id_statut_adh,$promo)
+{
 	$where=" false ";
 	foreach($ads as $key => $ad ){
 		

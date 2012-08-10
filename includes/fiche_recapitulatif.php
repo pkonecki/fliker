@@ -54,7 +54,7 @@ if(!(strcmp($_SESSION['user'],"") == 0))
 		print '<li><a class="'.(($_GET['page']==14) ? 'selected' : '').'" href="index.php?page=14">Récapitulatif</a></li>';
 	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
 		print '<li><a class="'.(($_GET['page']==17) ? 'selected' : '').'" href="index.php?page=17">Inventaire</a></li>';
-	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
+	if((isset($tot_asso) && $tot_asso > 0))
 		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Cotisations</a></li>';
 	print '</ul>';
 }
@@ -93,11 +93,7 @@ if ($promo == 0)
 			{
 				if (isset($tab_paiement[$key]))
 				{
-					print "<td>";
-					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
-					print $tab_paiement[$key]."$currency";
-					print "</FONT>";
-					print "</td>";
+					print "<td><FONT COLOR='".findColor($tab_paiement[$key])."'>".$tab_paiement[$key]."$currency</FONT></td>";
 					$total_line += $tab_paiement[$key];
 					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
@@ -156,11 +152,7 @@ if ($promo == 0)
 			{
 				if (isset($tab_paiement[$key]))
 				{
-					print "<td>";
-					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
-					print $tab_paiement[$key]."$currency";
-					print "</FONT>";
-					print "</td>";
+					print "<td><FONT COLOR='".findColor($tab_paiement[$key])."'>".$tab_paiement[$key]."$currency</FONT></td>";
 					$total_line += $tab_paiement[$key];
 					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
@@ -219,11 +211,7 @@ else
 			{
 				if (isset($tab_paiement[$key]))
 				{
-					print "<td>";
-					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
-					print $tab_paiement[$key]."$currency";
-					print "</FONT>";
-					print "</td>";
+					print "<td><FONT COLOR='".findColor($tab_paiement[$key])."'>".$tab_paiement[$key]."$currency</FONT></td>";
 					$total_line += $tab_paiement[$key];
 					$tab_type_montant[$key] += $tab_paiement[$key];
 				}
@@ -294,11 +282,7 @@ else
 			{
 				if (isset($tab_paiement[$key]))
 				{
-					print "<td>";
-					print "<FONT COLOR='".findColor($tab_paiement[$key])."'>";
-					print $tab_paiement[$key]."$currency";
-					print "</FONT>";
-					print "</td>";
+					print "<td><FONT COLOR='".findColor($tab_paiement[$key])."'>".$tab_paiement[$key]."$currency</FONT></td>";
 					$total_line += $tab_paiement[$key];
 					$tab_type_montant[$key] += $tab_paiement[$key];
 				}

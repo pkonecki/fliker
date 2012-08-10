@@ -119,6 +119,9 @@ if(isset($_SESSION['user']))
 		case 19:
 			include("fiche_champs.php");
 			break;
+		case 20:
+			include("fiche_statistiques.php");
+			break;
 	}
 	print '</div>';
 }

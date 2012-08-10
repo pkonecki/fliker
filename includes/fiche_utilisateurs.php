@@ -5,10 +5,9 @@ $tot_sec=count(getSections($_SESSION['uid']));
 $tot_act=count(getActivites($_SESSION['uid']));
 $tot_cre=count(getCreneaux($_SESSION['uid']));
 $tot = $tot_asso + $tot_sec + $tot_act + $tot_cre;
-if(!($_SESSION['privilege'] === '1'))
+if(!($_SESSION['privilege'] === '1') && $tot_asso <= 0)
 {
 	print "Vous n'avez pas accès à cette page.";
-	print $die_footer;
 	die();
 }
 
@@ -23,6 +22,8 @@ if(isset($tot_cre) && $tot_cre > 0)
 	print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
 if(isset($tot_asso) && $tot_asso > 0)
 	print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
+if(isset($tot_cre) && $tot_cre > 0)
+	print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
 print '</ul>';
 
 if(isset($_GET['promo']))
