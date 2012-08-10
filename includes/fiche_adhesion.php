@@ -209,85 +209,86 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Statut</th><th>Année</th><th>Association</th>';
 		if ($self || $resp_asso)
 			print "<th>Résilier</th>";
-		foreach($ads as $key => $value) if(is_numeric($key) && ($self || $value['id_asso']==$current_asso || isset($mycrens[$value['id_cre']])))
-		{
-			$url_act = getActiviteByCre($value['id_cre']);
-			$url_act = $url_act['url'];
-			print '<tr>';
-			print "<td>{$value['date']}</td>";
-			print "<td>".($url_act != "" ? "<a href='$url_act'>" : null )."{$crens[$value['id_cre']]['nom_sec']} - {$crens[$value['id_cre']]['nom_act']}".($url_act != "" ? "</a>" : null )."</td>";
-			print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
-			print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']}</td>";
-			print "<td>";
-			switch($value['statut']) {
-				case 0: 
-				print "Active";
-				print "</td>";
-				print "<td>{$value['promo']}</td>";
-				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
-				break;
-				case 1:
-				print "Résiliée";
-				print "</td>";
-				print "<td>{$value['promo']}</td>";
-				print "<td>{$assos[$value['id_asso']]['nom']}</td>";
-				break;
-				case 2:
-					if(isset($assos_cre[$id_statut_adh][$value['id_cre']]))
-					{
-						print "Possible";
-						print "</td>";
-						print "<td>{$value['promo']}</td>";
-						print "<td>";
-						print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.(isset($current_asso) ? $current_asso : "").'" method="POST">';
-						print '<input type="hidden" name="action" value="select_assos" />';
-						print '<input type="hidden" name="update" value="true" />';
-						print '<input type="hidden" name="id_ads" value="'.$key.'" />';
-						print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
-						print '<input type="submit" value="Choisir asso" >';
-						print '</FORM>';
-						print "</td>";
-					}
-					else
-					{
-						print "Impossible";
-						print "</td>";
-						print "<td>{$value['promo']}</td>";
-						print "<td>";
-						print "</td>";
-					}
-				break;
-			}
-			if ($self)
+		foreach($ads as $key => $value)
+			if(is_numeric($key) && ($self || $value['id_asso']==$current_asso || isset($mycrens[$value['id_cre']])))
 			{
-				print "<td><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
-			}
-			else if ($resp_asso)
-			{
-				print '<td>
-				<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
-				<input type="hidden" name="id_ads" value='.$key.' />
-				';
-				switch($value['statut'])
-				{
+				$url_act = getActiviteByCre($value['id_cre']);
+				$url_act = $url_act['url'];
+				print '<tr>';
+				print "<td>{$value['date']}</td>";
+				print "<td>".($url_act != "" ? "<a href='$url_act'>" : null )."{$crens[$value['id_cre']]['nom_sec']} - {$crens[$value['id_cre']]['nom_act']}".($url_act != "" ? "</a>" : null )."</td>";
+				print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
+				print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']}</td>";
+				print "<td>";
+				switch($value['statut']) {
 					case 0: 
-					print '<input type="hidden" name="action" value="suppression_ads" />
-					<INPUT type="image" src="images/unchecked.gif" value="submit">';
+					print "Active";
+					print "</td>";
+					print "<td>{$value['promo']}</td>";
+					print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 					break;
 					case 1:
-					print '<input type="hidden" name="action" value="activation_ads" />
-					<INPUT type="image" src="images/checked.gif" value="submit">';
+					print "Résiliée";
+					print "</td>";
+					print "<td>{$value['promo']}</td>";
+					print "<td>{$assos[$value['id_asso']]['nom']}</td>";
 					break;
 					case 2:
-					print "";
+						if(isset($assos_cre[$id_statut_adh][$value['id_cre']]))
+						{
+							print "Possible";
+							print "</td>";
+							print "<td>{$value['promo']}</td>";
+							print "<td>";
+							print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.(isset($current_asso) ? $current_asso : "").'" method="POST">';
+							print '<input type="hidden" name="action" value="select_assos" />';
+							print '<input type="hidden" name="update" value="true" />';
+							print '<input type="hidden" name="id_ads" value="'.$key.'" />';
+							print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
+							print '<input type="submit" value="Choisir asso" >';
+							print '</FORM>';
+							print "</td>";
+						}
+						else
+						{
+							print "Impossible";
+							print "</td>";
+							print "<td>{$value['promo']}</td>";
+							print "<td>";
+							print "</td>";
+						}
 					break;
 				}
-				
-				print '</FORM>
-				</td>';
+				if ($self)
+				{
+					print "<td><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
+				}
+				else if ($resp_asso)
+				{
+					print '<td>
+					<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
+					<input type="hidden" name="id_ads" value='.$key.' />
+					';
+					switch($value['statut'])
+					{
+						case 0: 
+						print '<input type="hidden" name="action" value="suppression_ads" />
+						<INPUT type="image" src="images/unchecked.gif" value="submit">';
+						break;
+						case 1:
+						print '<input type="hidden" name="action" value="activation_ads" />
+						<INPUT type="image" src="images/checked.gif" value="submit">';
+						break;
+						case 2:
+						print "";
+						break;
+					}
+					
+					print '</FORM>
+					</td>';
+				}
+				print "</tr>";
 			}
-			print "</tr>";
-		}
 		print '</TABLE>';
 		//Facture
 		if (!isset($current_asso))

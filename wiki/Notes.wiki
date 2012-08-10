@@ -308,7 +308,7 @@
     * *responsables :* --> obligation recevoir tous mails
       * liste des responsables qui ne sont pas adhérents de leur section : weekly
       * stats de taille de la base sql (prévenir risques explosions) : ? weekly ?
-      * <font color="blue">Pas nécessaire ?</font> liste des comptes jamais activés (à purger ?) : ? weekly ?
+      * liste des comptes jamais activés (à purger ?) : ? weekly ?
       * nouvelle adhésion impossible : immédiat
       * nouvelle adhésion (invitation à prendre contact) : immédiat
       * section désactivée : immédiat
