@@ -51,7 +51,14 @@ function delCreneau($id)
 function getCreneau($id){
 	include("opendb.php");
 	if(!isset($id)) return;
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}creneau WHERE id=$id ORDER BY debut ASC";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}creneau WHERE id=$id ORDER BY CASE jour
+                 WHEN 'Lundi' THEN 1 
+                 WHEN 'Mardi' THEN 2 
+                 WHEN 'Mercredi' THEN 3 
+                 WHEN 'Jeudi' THEN 4 
+                 WHEN 'Vendredi' THEN 5 
+                 WHEN 'Samedi' THEN 6 
+                 WHEN 'Dimanche' THEN 7 END, debut ASC";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$row = mysql_fetch_array($results);
@@ -72,7 +79,14 @@ function getCreneaux($userid)
 						AND AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id 
-						ORDER BY nom_sec, nom_act, CR.debut";
+						ORDER BY nom_sec, nom_act, CASE jour
+                 WHEN 'Lundi' THEN 1 
+                 WHEN 'Mardi' THEN 2 
+                 WHEN 'Mercredi' THEN 3 
+                 WHEN 'Jeudi' THEN 4 
+                 WHEN 'Vendredi' THEN 5 
+                 WHEN 'Samedi' THEN 6 
+                 WHEN 'Dimanche' THEN 7 END, CR.debut";
 		}
 		else
 		{
@@ -92,7 +106,14 @@ function getCreneaux($userid)
 							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
 							/*OR CR.id IN (SELECT id_cre FROM adhesion WHERE id_adh = '$userid')*/
 							)
-							ORDER BY nom_sec, nom_act, CR.debut";
+							ORDER BY nom_sec, nom_act, CASE jour
+                 WHEN 'Lundi' THEN 1 
+                 WHEN 'Mardi' THEN 2 
+                 WHEN 'Mercredi' THEN 3 
+                 WHEN 'Jeudi' THEN 4 
+                 WHEN 'Vendredi' THEN 5 
+                 WHEN 'Samedi' THEN 6 
+                 WHEN 'Dimanche' THEN 7 END, CR.debut";
 			}
 			else
 				return;
@@ -113,7 +134,14 @@ function getCreneaux($userid)
 function getCreneauxByActivite($actid){
 	if(!empty($_SESSION['user'])){
 			if (!empty($actid)) {
-				$query = "SELECT * FROM {$GLOBALS['prefix_db']}creneau A WHERE A.id_act= ".$actid." ORDER BY debut ASC";
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}creneau A WHERE A.id_act= ".$actid." ORDER BY CASE jour
+                 WHEN 'Lundi' THEN 1 
+                 WHEN 'Mardi' THEN 2 
+                 WHEN 'Mercredi' THEN 3 
+                 WHEN 'Jeudi' THEN 4 
+                 WHEN 'Vendredi' THEN 5 
+                 WHEN 'Samedi' THEN 6 
+                 WHEN 'Dimanche' THEN 7 END, debut ASC";
 			}
 			else return;
 		
@@ -199,7 +227,14 @@ function getAllCreneaux(){
 							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act )
 							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren )
 							)
-						ORDER BY nom_sec, nom_act, CR.debut";
+						ORDER BY nom_sec, nom_act, CASE jour
+                 WHEN 'Lundi' THEN 1 
+                 WHEN 'Mardi' THEN 2 
+                 WHEN 'Mercredi' THEN 3 
+                 WHEN 'Jeudi' THEN 4 
+                 WHEN 'Vendredi' THEN 5 
+                 WHEN 'Samedi' THEN 6 
+                 WHEN 'Dimanche' THEN 7 END, CR.debut";
 		
 
 		include("opendb.php");
