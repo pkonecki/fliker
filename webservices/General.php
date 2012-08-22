@@ -399,7 +399,7 @@ function age($naiss, $year, $month)
 	return ($final_year);
 }
 
-function getStats($tab_type, $id_asso)
+function getStats(&$nb_statut, $id_asso)
 {
 	$homme = 0;
 	$femme = 0;
@@ -415,13 +415,14 @@ function getStats($tab_type, $id_asso)
 	$year = strftime("%Y",strtotime("now"));
 	$month = strftime("%m",strtotime("now"));
 
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$id_asso." ) ");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$id_asso." AND statut=0) ");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
 		if ($tmp_array['categorie'] == "M")
 			$homme++;
 		if ($tmp_array['categorie'] == "F")
 			$femme++;
+		$nb_statut[$tmp_array['id_statut']]++;
 		$inscrit++;
 		$age = age($tmp_array['naissance'], $year, $month);
 		if ($age <= 18)
@@ -435,27 +436,73 @@ function getStats($tab_type, $id_asso)
 		else if ($age >= 66)
 			$age_66++;
 	}
-	
-	return (array("Inscrits" => $inscrit, "Sexe" => $homme."/".$femme, "Age" => "0-18: <font color='blue'>".$age_0."</font>, 19-25: <font color='blue'>".$age_19."</font>, 26-45: <font color='blue'>".$age_26."</font>, 46-65: <font color='blue'>".$age_46."</font>, 66+: <font color='blue'>".$age_66."</font>", "A jour" => $a_jour, "Statut" => $statut));
+	if ($a_jour == -1)
+		$a_jour = $inscrit;
+	return (array("Inscrits" => $inscrit, "Homme" => $homme, "Femme" => $femme, "0-18" => "<font color='blue'>".$age_0."</font>", "19-25" =>" <font color='blue'>".$age_19."</font>", "26-45" => "<font color='blue'>".$age_26."</font>", "46-65" => "<font color='blue'>".$age_46."</font>", "66+" => "<font color='blue'>".$age_66."</font>", "A jour" => $a_jour));
 }
 
 function adhStateAsso($asso)
 {
 	$list_adh = null;
-	
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." ) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent = ".$asso.")");
+	$listSup = null;
+	$nb_ok = 0;
+	$listStatut = null;
+	$listTotalAdh = null;
+
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup_fk, {$GLOBALS['prefix_db']}sup WHERE {$GLOBALS['prefix_db']}sup_fk.id_sup={$GLOBALS['prefix_db']}sup.id AND id_ent = ".$asso."");
+	while ($tmp_array = mysql_fetch_array($res))
+		$listSup[$tmp_array['id_statut']] = $tmp_array['valeur'];
+
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adhesion INNER JOIN {$GLOBALS['prefix_db']}adherent ON {$GLOBALS['prefix_db']}adhesion.id_adh={$GLOBALS['prefix_db']}adherent.id WHERE id_asso=".$asso." AND statut=0");
+	while ($tmp_array = mysql_fetch_array($res))
+		$listTotalAdh[$tmp_array['id_adh']] = $tmp_array['id_statut'];
+	if ($listTotalAdh != null)
+	{
+		foreach ($listTotalAdh as $key => $value)
+		{
+			if (!isset($listSup[$value]) || $listSup[$value] == 0)
+				$nb_ok++;
+		}
+	}
+	$res = doQuery("SELECT * FROM ({$GLOBALS['prefix_db']}paiement_sup INNER JOIN {$GLOBALS['prefix_db']}paiement ON {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id) INNER JOIN {$GLOBALS['prefix_db']}adherent ON {$GLOBALS['prefix_db']}paiement.id_adh = {$GLOBALS['prefix_db']}adherent.id WHERE id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." AND statut=0) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent = ".$asso.")");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
+		$listStatut[$tmp_array['id_adh']] = $tmp_array['id_statut'];
 		if (isset($list_adh[$tmp_array['id_adh']]))
-			$list_adh[$tmp_array['id_adh']]++;
+			$list_adh[$tmp_array['id_adh']] += $tmp_array['valeur'];
 		else
-			$list_adh[$tmp_array['id_adh']] = 1;
+			$list_adh[$tmp_array['id_adh']] = $tmp_array['valeur'];
 	}
-	
-	return (sizeof($list_adh));
+	if ($list_adh != null)
+	{
+		foreach ($list_adh as $key => $value)
+		{
+			if (isset($listSup[$listStatut[$key]]))
+			{
+				if ($listSup[$listStatut[$key]] == $value)
+					$nb_ok++;
+			}
+			else
+				$nb_ok++;
+		}
+	}
+	if ($listSup == null || tabConIsEmpty($listSup) == true)
+		return -1;
+	else
+		return ($nb_ok);
 }
 
-function getStatsSec($tab_type, $asso, $list_id)
+function tabConIsEmpty($tab)
+{
+	foreach ($tab as $key => $value)
+	{
+		if ($value != 0)
+			return false;
+	}
+	return true;
+}
+
+function getStatsSec(&$nb_statut, $asso, $list_id)
 {
 	$homme = 0;
 	$femme = 0;
@@ -471,13 +518,14 @@ function getStatsSec($tab_type, $asso, $list_id)
 	$year = strftime("%Y",strtotime("now"));
 	$month = strftime("%m",strtotime("now"));
 
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." AND id_cre IN (".$list_id.")) ");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." AND id_cre IN (".$list_id.") AND statut=0) ");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
 		if ($tmp_array['categorie'] == "M")
 			$homme++;
 		if ($tmp_array['categorie'] == "F")
 			$femme++;
+		$nb_statut[$tmp_array['id_statut']]++;
 		$inscrit++;
 		$age = age($tmp_array['naissance'], $year, $month);
 		if ($age <= 18)
@@ -492,22 +540,50 @@ function getStatsSec($tab_type, $asso, $list_id)
 			$age_66++;
 	}
 	
-	return (array("Inscrits" => $inscrit, "Sexe" => $homme."/".$femme, "Age" => "0-18: <font color='blue'>".$age_0."</font>, 19-25: <font color='blue'>".$age_19."</font>, 26-45: <font color='blue'>".$age_26."</font>, 46-65: <font color='blue'>".$age_46."</font>, 66+: <font color='blue'>".$age_66."</font>", "A jour" => $a_jour, "Statut" => $statut));
+	if ($a_jour == -1)
+		$a_jour = $inscrit;
+	return (array("Inscrits" => $inscrit, "Homme" => $homme, "Femme" => $femme, "0-18" => "<font color='blue'>".$age_0."</font>", "19-25" =>" <font color='blue'>".$age_19."</font>", "26-45" => "<font color='blue'>".$age_26."</font>", "46-65" => "<font color='blue'>".$age_46."</font>", "66+" => "<font color='blue'>".$age_66."</font>", "A jour" => $a_jour));
 }
 
 function adhStateSec($asso, $list_id)
 {
 	$list_adh = null;
+	$listTotalAdh = null;
+	$cout_sup = 0;
+	$nb_ok = 0;
+
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup_fk, {$GLOBALS['prefix_db']}sup WHERE {$GLOBALS['prefix_db']}sup_fk.id_sup={$GLOBALS['prefix_db']}sup.id AND id_ent IN (".$list_id.") AND id_asso_adh=".$asso."");
+	while ($tmp_array = mysql_fetch_array($res))
+		$cout_sup += $tmp_array['valeur'];
 	
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." ) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id."))");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adhesion WHERE id_cre IN (".$list_id.") AND statut=0");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		if (isset($listTotalAdh[$tmp_array['id_adh']]))
+			$listTotalAdh[$tmp_array['id_adh']] .= ",".$tmp_array['id_cre'];
+		else
+			$listTotalAdh[$tmp_array['id_adh']] = $tmp_array['id_cre'];
+	}
+	
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_adh IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso=".$asso." AND statut=0) AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id."))");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
 		if (isset($list_adh[$tmp_array['id_adh']]))
-			$list_adh[$tmp_array['id_adh']]++;
+			$list_adh[$tmp_array['id_adh']] += $tmp_array['valeur'];
 		else
-			$list_adh[$tmp_array['id_adh']] = 1;
+			$list_adh[$tmp_array['id_adh']] = $tmp_array['valeur'];
 	}
-	
-	return (sizeof($list_adh));
+	if ($list_adh != null)
+	{
+		foreach ($list_adh as $key => $value)
+		{
+			if ($value == $cout_sup)
+				$nb_ok++;
+		}
+	}
+	if ($cout_sup == 0)
+		return -1;
+	else
+		return ($nb_ok);
 }
 ?>
