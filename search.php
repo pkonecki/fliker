@@ -356,7 +356,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 							print '<th>'.$champ['description'].'</th>';
 				}
 			}
-			print '</tr></thead>';
+			print '<th>Association</th></tr></thead>';
 			print '<tbody>';
 			$i = 0;
 			while($row = mysql_fetch_array($results))
@@ -410,7 +410,16 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 						}
 					}
 				}
-				print '</tr>';
+				$res = doQuery("SELECT DISTINCT id_asso, nom FROM {$GLOBALS['prefix_db']}adhesion a INNER JOIN {$GLOBALS['prefix_db']}association b ON a.id_asso=b.id WHERE id_adh=".$row['id']."");
+				print "<td>";
+				$output = "";
+				while ($tmp_array = mysql_fetch_array($res))
+				{
+					$output .= ", ".$tmp_array['nom'];
+				}
+				$output[0] = "";
+				print $output;
+				print '</td></tr>';
 			}
 			print '</tbody>';
 			print '</table>';

@@ -220,7 +220,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
 				print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']}</td>";
 				print "<td>";
-				switch($value['statut']) {
+				switch($value['statut'])
+				{
 					case 0: 
 					print "Active";
 					print "</td>";
@@ -257,11 +258,42 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 							print "<td>";
 							print "</td>";
 						}
-					break;
+						break;
 				}
 				if ($self)
 				{
-					print "<td><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
+					
+					$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE id_adh=$id_adh AND promo = $promo AND id_cre=".$value['id_cre']."");
+					if (mysql_num_rows($res) == 0)
+					{
+						$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup WHERE id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$value['id_cre'].")");
+						if (mysql_num_rows($res) == 0)
+						{
+							print '<td>
+							<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
+							<input type="hidden" name="id_ads" value='.$key.' />
+							';
+							switch($value['statut'])
+							{
+								case 0: 
+								print '<input type="hidden" name="action" value="suppression_ads" />
+								<INPUT type="image" src="images/unchecked.gif" value="submit">';
+								break;
+								case 1:
+								print '<input type="hidden" name="action" value="activation_ads" />
+								<INPUT type="image" src="images/checked.gif" value="submit">';
+								break;
+								case 2:
+								print "";
+								break;
+							}
+							
+							print '</FORM>
+							</td>';
+						}
+					}
+					else
+						print "<td><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><img src=\"images/unchecked.gif\" ></a></td>";
 				}
 				else if ($resp_asso)
 				{

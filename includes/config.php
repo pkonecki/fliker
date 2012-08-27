@@ -2,7 +2,8 @@
 
 //Pensez à modifier le fichier paths.php
 
-$dbhost = "localhost";
+// Connexion à la base fliker
+$dbhost = "localhost";	
 $dbuser = "root";
 $dbpass = "";
 $dbname = "asesco";
@@ -15,6 +16,7 @@ $dbname = "asesco";
    - logo_asso, _section, _act
 */
 
+// Connexion à la base wiki
 $dbhost_wiki = "localhost";
 $dbuser_wiki = "root";
 $dbpass_wiki = "";
