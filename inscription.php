@@ -49,7 +49,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'submitted')
 					print '<TD>'.$row['description'].'</TD><TD>'.$_SESSION[$row['nom']].'</TD>';
 				if($row['type']==="tinyint")
 				{
-					if ($_SESSION[$row['nom']]==="on")
+					if (isset($_SESSION[$row['nom']]) && $_SESSION[$row['nom']]==="on")
 						print '<TD>'.$row['description'].'</TD><TD>Oui</TD>';
 					else
 						print '<TD>'.$row['description'].'</TD><TD>Non</TD>';

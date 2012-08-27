@@ -27,7 +27,7 @@ function newAdherent($tab)
 			else if($row['type']==='tinyint')
 			{
 				$colonnes .= $row['nom'].",";
-				if ($tab[$row['nom']]==='on')
+				if (isset($tab[$row['nom']]) && $tab[$row['nom']]==='on')
 					$values .= "1,";
 				else
 					$values .= "0,";
