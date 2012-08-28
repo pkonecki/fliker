@@ -1,6 +1,6 @@
 <?php
 if (!defined('MEDIAWIKI')) die();
-	$wgExtensionFunctions[] = "wftab_sport";
+	$wgExtensionFunctions[] = "wftest";
 
 // {{{ DB ACCESS CONFIGURATION
 $inscriptionDBi = NULL;
@@ -15,12 +15,12 @@ $sufix_db = "fliker_";
 
 
 // SPECIALPAGE FABRIC
-class tab_sport extends SpecialPage
+class test extends SpecialPage
 {
 	// CONSTRUCTOR
-	function tab_sport()
+	function test()
 	{
-		SpecialPage::SpecialPage( 'tab_sport' );
+		SpecialPage::SpecialPage( 'test' );
 	}
 
 	// execute
@@ -30,27 +30,38 @@ class tab_sport extends SpecialPage
 	}
 }
 
+function mysql_connect_sport()
+{
+	global $wgRequest, $wgOut, $IP, $wgPageName, $inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName, $sufix_db, $promo;
+
+	$conn = mysql_connect($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd) or die ('Error connecting to mysql');
+	mysql_select_db($inscriptionDBName);
+}
+
+
 function calc_cout_cre($id_asso, $id_sec, $id_act, $id_cre)
 {
 	global $wgRequest, $wgOut, $IP, $wgPageName, $inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName, $sufix_db, $promo;
 	$total = 0;
 	
-	$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
-	$res = $inscriptionDBi->select("".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."sup b ON a.id_sup=b.id", array('id_ent', 'valeur', 'id_asso_adh', 'promo'), "id_asso_adh = $id_asso AND id_ent IN ($id_sec, $id_act, $id_cre)", 'Database::select', array());
+	mysql_connect_sport();
+	$res = mysql_query("SELECT 'id_ent', 'valeur', 'id_asso_adh', 'promo' FROM ".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."sup b ON a.id_sup=b.id WHERE id_asso_adh = $id_asso AND id_ent IN ($id_sec, $id_act, $id_cre) ");
+	//$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
+	//$res = $inscriptionDBi->select("".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."sup b ON a.id_sup=b.id", array('id_ent', 'valeur', 'id_asso_adh', 'promo'), "id_asso_adh = $id_asso AND id_ent IN ($id_sec, $id_act, $id_cre)", 'Database::select', array());
 
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
-		$total += $tmp_array->valeur;
+	while ($tmp_array = mysql_fetch_array($res))
+		$total += $tmp_array['valeur'];
 	return ($total);
 }
 
 // EXTENSION SETUP
-function wftab_sport()
+function wftest()
 {
 	// Choix de l'asso à afficher
 	$affAsso = "all";
 	
 	global $wgRequest, $wgOut, $IP, $wgPageName, $inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName, $sufix_db;
-	$PageName = "Spécial:tab_sport";
+	$PageName = "Spécial:Test";
 	$sort = $wgRequest->getText('sort');
 	$order = $wgRequest->getText('order');
 	$creneaux = null;
@@ -115,33 +126,40 @@ function wftab_sport()
 					 WHEN 'Samedi' THEN 6 
 					 WHEN 'Dimanche' THEN 7 END, debut, lieu");
 	// Récupération des créneaux
-	$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
-	$res = $inscriptionDBi->select("".$sufix_db."creneau", array('id', 'jour', 'debut', 'fin', 'lieu', 'id_act'), array(), 'Database::select', $OrderCre);
+	mysql_connect_sport();
+	//$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
+	$res = mysql_query("SELECT * FROM ".$sufix_db."creneau ORDER BY ".$OrderCre["ORDER BY"]."");
+	//$res = $inscriptionDBi->select("".$sufix_db."creneau", array('id', 'jour', 'debut', 'fin', 'lieu', 'id_act'), array(), 'Database::select', $OrderCre);
 
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
-		$creneaux[$tmp_array->id] = $tmp_array;
+	while ($tmp_array = mysql_fetch_array($res))
+		$creneaux[$tmp_array['id']] = $tmp_array;
 	
 	// Récupération des activités
 	if ($sort == "activite")
 		$OrderAct = array('ORDER BY' => "nom $order");
 	else if ($sort == "section" || $sort == "asso" || $sort == null)
 		$OrderAct = array('ORDER BY' => "nom");
-	$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
-	$res = $inscriptionDBi->select("".$sufix_db."activite", array('id', 'nom', 'url', 'id_sec'), array(), 'Database::select', $OrderAct);
+	mysql_connect_sport();
+	$res = mysql_query("SELECT * FROM ".$sufix_db."activite ORDER BY ".$OrderAct['ORDER BY']."");
+	//$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
+	//$res = $inscriptionDBi->select("".$sufix_db."activite", array('id', 'nom', 'url', 'id_sec'), array(), 'Database::select', $OrderAct);
 
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
-		$activites[$tmp_array->id] = $tmp_array;
+	while ($tmp_array = mysql_fetch_array($res))
+		$activites[$tmp_array['id']] = $tmp_array;
 	
 	// Récupération des sections
 	if ($sort == "section")
 		$OrderSec = array('ORDER BY' => "nom $order");
 	else if ($sort == null || $sort == "asso")
 		$OrderSec = array('ORDER BY' => "nom");
-	$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
-	$res = $inscriptionDBi->select("".$sufix_db."section", array('id', 'nom', 'url'), array(), 'Database::select', $OrderSec);
+		
+	mysql_connect_sport();
+	$res = mysql_query("SELECT * FROM ".$sufix_db."section ORDER BY ".$OrderSec['ORDER BY']."");
+	//$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
+	//$res = $inscriptionDBi->select("".$sufix_db."section", array('id', 'nom', 'url'), array(), 'Database::select', $OrderSec);
 
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
-		$sections[$tmp_array->id] = $tmp_array;
+	while ($tmp_array = mysql_fetch_array($res))
+		$sections[$tmp_array['id']] = $tmp_array;
 	
 	// Récupération des associations
 	if ($sort == "asso")
@@ -149,27 +167,31 @@ function wftab_sport()
 	else if ($sort == null)
 		$OrderAsso = array('ORDER BY' => "b.nom, nom_sec");
 	if ($affAsso == "all")
-		$tabCondAsso = array();
+		$tabCondAsso = null;
 	else
 		$tabCondAsso = array('b.nom' => $affAsso);
-	$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
-	$res = $inscriptionDBi->select("(".$sufix_db."asso_section a INNER JOIN ".$sufix_db."association b ON a.id_asso=b.id) INNER JOIN ".$sufix_db."section c ON a.id_sec=c.id", array('id_asso', 'id_sec', 'b.id as id_asso', 'b.nom', 'b.url', 'c.id', 'c.nom as nom_sec'), $tabCondAsso, 'Database::select', $OrderAsso);
+	mysql_connect_sport();
+	$res = mysql_query("SELECT id_asso, id_sec, b.id as 'id_asso', b.nom as 'nom_asso', b.url as 'url_asso', c.id as 'id_sec', c.nom as 'nom_sec' FROM (".$sufix_db."asso_section a INNER JOIN ".$sufix_db."association b ON a.id_asso=b.id) INNER JOIN ".$sufix_db."section c ON a.id_sec=c.id ".($tabCondAsso != null ? "WHERE b.nom='$affAsso'" : "")." ORDER BY ".$OrderAsso['ORDER BY']."");
+	//$inscriptionDBi = Database::newFromParams($inscriptionDBHostname, $inscriptionDBUser, $inscriptionDBPasswd, $inscriptionDBName);
+	//$res = $inscriptionDBi->select("(".$sufix_db."asso_section a INNER JOIN ".$sufix_db."association b ON a.id_asso=b.id) INNER JOIN ".$sufix_db."section c ON a.id_sec=c.id", array('id_asso', 'id_sec', 'b.id as id_asso', 'b.nom', 'b.url', 'c.id', 'c.nom as nom_sec'), $tabCondAsso, 'Database::select', $OrderAsso);
 	
 	$i = 0;
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
+	while ($tmp_array = mysql_fetch_array($res))
 	{
 		$assos[$i] = $tmp_array;
 		$i++;
 	}
 	
 	// Calcule du supplément pour chaque section
-	$res = $inscriptionDBi->select("(".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."section b ON a.id_ent=b.id) INNER JOIN ".$sufix_db."sup c ON a.id_sup=c.id", array('id_ent', 'valeur', 'id_statut', 'id_asso_adh'), array(), 'Database::select', array());
-	while ($tmp_array = $inscriptionDBi->fetchObject($res))
+	mysql_connect_sport();
+	$res = mysql_query("SELECT * FROM (".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."section b ON a.id_ent=b.id) INNER JOIN ".$sufix_db."sup c ON a.id_sup=c.id");
+	//$res = $inscriptionDBi->select("(".$sufix_db."sup_fk a INNER JOIN ".$sufix_db."section b ON a.id_ent=b.id) INNER JOIN ".$sufix_db."sup c ON a.id_sup=c.id", array('id_ent', 'valeur', 'id_statut', 'id_asso_adh'), array(), 'Database::select', array());
+	while ($tmp_array = mysql_fetch_array($res))
 	{
-		if (isset($listSup[$tmp_array->id_asso_adh."-".$tmp_array->id_ent]))
-			$listSup[$tmp_array->id_asso_adh."-".$tmp_array->id_ent] += $tmp_array->valeur;
+		if (isset($listSup[$tmp_array['id_asso_adh']."-".$tmp_array['id_ent']]))
+			$listSup[$tmp_array['id_asso_adh']."-".$tmp_array['id_ent']] += $tmp_array['valeur'];
 		else
-			$listSup[$tmp_array->id_asso_adh."-".$tmp_array->id_ent] = $tmp_array->valeur;
+			$listSup[$tmp_array['id_asso_adh']."-".$tmp_array['id_ent']] = $tmp_array['valeur'];
 	}	
 	
 	// Affichage de la liste des statuts
@@ -255,8 +277,8 @@ function wftab_sport()
 			foreach ($sections as $section)
 				foreach ($activites as $activite)
 					foreach ($creneaux as $creneau)
-						if ($asso->id_sec == $section->id && $activite->id_sec == $section->id && $creneau->id_act == $activite->id)
-							$out .= "<tr align='center'><td><input type='checkbox' name='options_cre_".$asso->id_asso."[]' value=', ".$creneau->id.", ".$activite->id.", ".$section->id."' /></td><td>".($asso->url != "" ? "<a href='".$asso->url."'>".$asso->nom."</a>" : $asso->nom)."</td><td>".($section->url != "" ? "<a href='".$section->url."'>".$section->nom."</a>" : $section->nom)."</td><td>".($activite->url != "" ? "<a href='".$activite->url."'>".$activite->nom."</a>" : $activite->nom)."</td><td>".$creneau->jour."</td><td>".$creneau->debut." - ".$creneau->fin."</td><td>".$creneau->lieu."</td><td></td><td>".calc_cout_cre($asso->id_asso, $section->id, $activite->id, $creneau->id)."&euro;</td></tr>";
+						if ($asso['id_sec'] == $section['id'] && $activite['id_sec'] == $section['id'] && $creneau['id_act'] == $activite['id'])
+							$out .= "<tr align='center'><td><input type='checkbox' name='options_cre_".$asso['id_asso']."[]' value=', ".$creneau['id'].", ".$activite['id'].", ".$section['id']."' /></td><td>".($asso['url_asso'] != "" ? "<a href='".$asso['url_asso']."'>".$asso['nom_asso']."</a>" : $asso['nom_asso'])."</td><td>".($section['url'] != "" ? "<a href='".$section['url']."'>".$section['nom']."</a>" : $section['nom'])."</td><td>".($activite['url'] != "" ? "<a href='".$activite['url']."'>".$activite['nom']."</a>" : $activite['nom'])."</td><td>".$creneau['jour']."</td><td>".$creneau['debut']." - ".$creneau['fin']."</td><td>".$creneau['lieu']."</td><td></td><td>".calc_cout_cre($asso['id_asso'], $section['id'], $activite['id'], $creneau['id'])."&euro;</td></tr>";
 	}
 	
 	// Affichage du tri par section
@@ -266,7 +288,7 @@ function wftab_sport()
 			foreach ($activites as $activite)
 				foreach ($creneaux as $creneau)
 					foreach ($assos as $asso)
-						if ($asso->id_sec == $section->id && $activite->id_sec == $section->id && $creneau->id_act == $activite->id)
+						if ($asso['id_sec'] == $section['id'] && $activite['id_sec'] == $section['id'] && $creneau['id_act'] == $activite['id'])
 							$out .= "<tr align='center'><td><input type='checkbox' name='options_cre_".$asso->id_asso."[]' value=', ".$creneau->id.", ".$activite->id.", ".$section->id."' /></td><td>".($asso->url != "" ? "<a href='".$asso->url."'>".$asso->nom."</a>" : $asso->nom)."</td><td>".($section->url != "" ? "<a href='".$section->url."'>".$section->nom."</a>" : $section->nom)."</td><td>".($activite->url != "" ? "<a href='".$activite->url."'>".$activite->nom."</a>" : $activite->nom)."</td><td>".$creneau->jour."</td><td>".$creneau->debut." - ".$creneau->fin."</td><td>".$creneau->lieu."</td><td></td><td>".calc_cout_cre($asso->id_asso, $section->id, $activite->id, $creneau->id)."&euro;</td></tr>";
 	}
 	// Affichage du tri par activité
@@ -276,7 +298,7 @@ function wftab_sport()
 			foreach ($creneaux as $creneau)
 				foreach ($assos as $asso)
 					foreach ($sections as $section)
-						if ($asso->id_sec == $section->id && $activite->id_sec == $section->id && $creneau->id_act == $activite->id)
+						if ($asso['id_sec'] == $section['id'] && $activite['id_sec'] == $section['id'] && $creneau['id_act'] == $activite['id'])
 							$out .= "<tr align='center'><td><input type='checkbox' name='options_cre_".$asso->id_asso."[]' value=', ".$creneau->id.", ".$activite->id.", ".$section->id."' /></td><td>".($asso->url != "" ? "<a href='".$asso->url."'>".$asso->nom."</a>" : $asso->nom)."</td><td>".($section->url != "" ? "<a href='".$section->url."'>".$section->nom."</a>" : $section->nom)."</td><td>".($activite->url != "" ? "<a href='".$activite->url."'>".$activite->nom."</a>" : $activite->nom)."</td><td>".$creneau->jour."</td><td>".$creneau->debut." - ".$creneau->fin."</td><td>".$creneau->lieu."</td><td></td><td>".calc_cout_cre($asso->id_asso, $section->id, $activite->id, $creneau->id)."&euro;</td></tr>";
 	}
 	// Affichage du tri par créneau
@@ -286,7 +308,7 @@ function wftab_sport()
 			foreach ($assos as $asso)
 				foreach ($sections as $section)
 					foreach ($activites as $activite)
-						if ($asso->id_sec == $section->id && $activite->id_sec == $section->id && $creneau->id_act == $activite->id)
+						if ($asso['id_sec'] == $section['id'] && $activite['id_sec'] == $section['id'] && $creneau['id_act'] == $activite['id'])
 							$out .= "<tr align='center'><td><input type='checkbox' name='options_cre_".$asso->id_asso."[]' value=', ".$creneau->id.", ".$activite->id.", ".$section->id."' /></td><td>".($asso->url != "" ? "<a href='".$asso->url."'>".$asso->nom."</a>" : $asso->nom)."</td><td>".($section->url != "" ? "<a href='".$section->url."'>".$section->nom."</a>" : $section->nom)."</td><td>".($activite->url != "" ? "<a href='".$activite->url."'>".$activite->nom."</a>" : $activite->nom)."</td><td>".$creneau->jour."</td><td>".$creneau->debut." - ".$creneau->fin."</td><td>".$creneau->lieu."</td><td></td><td>".calc_cout_cre($asso->id_asso, $section->id, $activite->id, $creneau->id)."&euro;</td></tr>";
 	}
 
@@ -316,6 +338,6 @@ function wftab_sport()
 
 	$out .= "<input type='submit' name='list_choice' value='Calculer Prix' /></form>";
 	$wgOut->addHTML(utf8_encode($out));
-	SpecialPage::addPage(new tab_sport);
+	SpecialPage::addPage(new test);
 }
 ?>
