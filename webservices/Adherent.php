@@ -90,7 +90,8 @@ function getAdherent($user)
 	return $return;
 }
 
-function getChampsAdherents(){
+function getChampsAdherents()
+{
 	include("opendb.php");
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}champs_adherent ORDER BY ordre ASC";
 	$results = mysql_query($query);
@@ -103,7 +104,8 @@ function getChampsAdherents(){
 	return $champs;
 }
 
-function modifAdherent($tab){
+function modifAdherent($tab)
+{
 	include_once("class.imageconverter.php");
 	include_once("saveImage.php");
 	$champs = getChampsAdherents();
@@ -172,7 +174,8 @@ function modifAdherent($tab){
 	include("closedb.php");
 }
 
-function getAdherents(){
+function getAdherents()
+{
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE active=1 ORDER BY nom ";
 	include("opendb.php");
 	$results = mysql_query($query);
@@ -234,7 +237,8 @@ function getAssos()
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
+	while($row = mysql_fetch_array($results))
+	{
 			$tab[$row['id']] = $row['nom'];
 	}
 	include("closedb.php");
@@ -275,8 +279,9 @@ function getMyAdherents($userid)
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row['id'];
+	while($row = mysql_fetch_array($results))
+	{
+		$tab[$row['id']] = $row['id'];
 	}
 	include("closedb.php");
 	return $tab;
@@ -284,17 +289,18 @@ function getMyAdherents($userid)
 
 function getMyAssos($userid)
 {
-	if($userid==-1) $query="SELECT  A.*
-		FROM {$GLOBALS['prefix_db']}association A";
-	else $query="SELECT  A.*
-		FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
+	if($userid==-1)
+		$query="SELECT  A.*	FROM {$GLOBALS['prefix_db']}association A";
+	else 
+	$query="SELECT  A.*	FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
 		WHERE A.id=RS.id_asso AND RS.id_adh=$userid
 		";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
+	while($row = mysql_fetch_array($results))
+	{
 		$tab[$row['id']] = $row['nom'];
 	}
 	include("closedb.php");

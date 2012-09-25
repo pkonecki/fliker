@@ -10,8 +10,10 @@ if (isset($_GET['id_statut_adh']))
 	$id_statut_adh=$_GET['id_statut_adh'];
 else
 	$id_statut_adh = null;
-foreach($_GET as $key => $asso ){
-	if(preg_match('/^cre_\d+/',$key)) {
+foreach($_GET as $key => $asso )
+{
+	if(preg_match('/^cre_\d+/',$key))
+	{
 		$cre = preg_replace('/^cre_(\d+)/','$1',$key);
 		$where.="OR (CR.id=$cre AND A.id=$asso ) ";
 	}

@@ -1,6 +1,7 @@
 <?php
 
-function newAsso($tab){
+function newAsso($tab)
+{
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die();
@@ -37,7 +38,8 @@ function newAsso($tab){
 
 }
 
-function delAsso($id){
+function delAsso($id)
+{
 	include("opendb.php");
 	if(!isset($id)) return;
 	$query = "DELETE FROM {$GLOBALS['prefix_db']}entite WHERE id=".$id."";
@@ -73,7 +75,8 @@ function getAssociations($userid)
 	}
 }
 
-function modifAsso($tab){
+function modifAsso($tab)
+{
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	include("opendb.php");
@@ -97,31 +100,38 @@ function modifAsso($tab){
 
 }
 
-function ajoutResponsableAsso($id_asso,$id_adh){
+function ajoutResponsableAsso($id_asso,$id_adh)
+{
 	include("opendb.php");
 	$query = "INSERT into {$GLOBALS['prefix_db']}resp_asso(id_asso,id_adh) VALUES ('$id_asso.','$id_adh')";
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();	
+	if (!$results)
+		echo mysql_error();	
 	include("closedb.php");
 	
 }
-function delRespAsso($id_asso,$id_adh){
+function delRespAsso($id_asso,$id_adh)
+{
 	include("opendb.php");
 	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' ";
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();	
+	if (!$results)
+		echo mysql_error();	
 	include("closedb.php");
 }
 
-function getResponsablesAsso($id_asso){
+function getResponsablesAsso($id_asso)
+{
 
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso' ";
 	include("opendb.php");
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row;
+	while($row = mysql_fetch_array($results))
+	{
+		$tab[$row['id']] = $row;
 	}
 	include("closedb.php");
 	return $tab;
@@ -129,20 +139,17 @@ function getResponsablesAsso($id_asso){
 	
 }
 
-function getAllAssociations(){
+function getAllAssociations()
+{
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A ORDER BY A.nom ASC";
 	include("opendb.php");
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	$tab = array();
-	while($row = mysql_fetch_array($results)){
-			$tab[$row['id']] = $row;
-	}
+	while($row = mysql_fetch_array($results))
+		$tab[$row['id']] = $row;
 	include("closedb.php");
 	return $tab;
-	
 }
-
-
-
 ?>
