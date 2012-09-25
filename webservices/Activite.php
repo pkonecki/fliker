@@ -7,27 +7,24 @@ function newActivite($tab){
 	include("opendb.php");
 	$q1 = "INSERT INTO {$GLOBALS['prefix_db']}entite VALUES ()";
 	$r1 = mysql_query($q1);
-	if (!$r1){ 
+	if (!$r1)
+	{ 
 		echo mysql_error();
 		die();
 	}
 	$id = mysql_insert_id();
 	
-	if(empty($tab['nom'])) die('il faut un nom!');
+	if(empty($tab['nom']))
+		die('il faut un nom!');
 	$set = "(";
 	$colonnes="(id,nom,description,id_sec,url)";
-	//id
 	$set.="'$id', ";
-	//nom
 	$set.="'".mysql_real_escape_string($tab['nom'])."', ";
-	//Description
 	$set.="'".mysql_real_escape_string($tab['description'])."', ";
-	//id_sec
 	$set.="'".mysql_real_escape_string($tab['id_sec'])."', ";
-	//url
 	$set.="'".mysql_real_escape_string($tab['url'])."') ";
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}activite ".$colonnes." VALUES ".$set." ";
-	//echo $query;
+
 	$results = mysql_query($query);
 	if (!$results){ 
 		echo mysql_error();
@@ -38,7 +35,8 @@ function newActivite($tab){
 
 }
 
-function delActivite($id){
+function delActivite($id)
+{
 	include("opendb.php");
 	if(!isset($id)) return;
 	$query = "DELETE FROM {$GLOBALS['prefix_db']}entite WHERE id=".$id."";
@@ -49,17 +47,23 @@ function delActivite($id){
 
 }
 
-function getActivites($userid){
-	if(!empty($_SESSION['user'])){
-		if($_SESSION['privilege']==="1"){
+function getActivites($userid)
+{
+	if(!empty($_SESSION['user']))
+	{
+		if($_SESSION['privilege']==="1")
+		{
 			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
 						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id
 						ORDER BY S.nom, AC.nom";
-		} else {
-			if (!empty($userid)) {
+		}
+		else
+		{
+			if (!empty($userid))
+			{
 				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.* 
 						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE AC.id_sec=S.id
@@ -73,14 +77,16 @@ function getActivites($userid){
 							)
 						ORDER BY S.nom, AC.nom";
 			}
-			else return;
+			else
+				return;
 		}
 
 		include("opendb.php");
 		$results = mysql_query($query);
 		if (!$results) echo mysql_error();
 		$tab = array();
-		while($row = mysql_fetch_array($results)){
+		while($row = mysql_fetch_array($results))
+		{
 			$tab[$row['id']] = $row;
 		}
 		include("closedb.php");
@@ -88,7 +94,8 @@ function getActivites($userid){
 	}
 }
 
-function getActivitesBySection($sectionid){
+function getActivitesBySection($sectionid)
+{
 	if(!empty($_SESSION['user']))
 	{
 		if (!empty($sectionid))
@@ -107,7 +114,8 @@ function getActivitesBySection($sectionid){
 	}
 }
 
-function modifActivite($tab){
+function modifActivite($tab)
+{
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
 	include("opendb.php");
@@ -127,12 +135,14 @@ function modifActivite($tab){
 	$set = substr($set,0,-2);
 	$query = "UPDATE {$GLOBALS['prefix_db']}activite SET ".$set." WHERE id=".$tab['id']."";
 	$results = mysql_query($query);
-	if (!$results) echo mysql_error();
+	if (!$results)
+		echo mysql_error();
 	include("closedb.php");
 
 }
 
-function ajoutResponsableAct($id_act,$id_adh){
+function ajoutResponsableAct($id_act,$id_adh)
+{
 	include("opendb.php");
 	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh) VALUES ('$id_act.','$id_adh')";
 	$results = mysql_query($query);
@@ -140,7 +150,8 @@ function ajoutResponsableAct($id_act,$id_adh){
 	include("closedb.php");
 	
 }
-function delRespActivite($id_act,$id_adh){
+function delRespActivite($id_act,$id_adh)
+{
 	include("opendb.php");
 	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act='$id_act' AND id_adh='$id_adh' ";
 	$results = mysql_query($query);
@@ -148,7 +159,8 @@ function delRespActivite($id_act,$id_adh){
 	include("closedb.php");
 }
 
-function getResponsablesAct($id_act){
+function getResponsablesAct($id_act)
+{
 
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
 	include("opendb.php");
