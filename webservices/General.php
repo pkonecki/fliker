@@ -196,7 +196,7 @@ function getPromoRecap()
 	$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}paiement");
 	while ($tmp_array = mysql_fetch_array($res))
 		$tab_2[" ".$tmp_array['promo']." "] = 0;
-	
+
 	$tab_final = array_merge($tab_1, $tab_2);
 	ksort($tab_final);
 	foreach ($tab_final as $key => $value)

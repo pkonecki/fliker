@@ -87,14 +87,14 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 		$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
 		$to      = $email;
 		$subject = "Confirmation nouvel email Fliker";
-		$message = "Bonjour,\r\r Pour que le changement d\'addresse email se fasse veuillez cliquer sur le lien suivant:\r".getParam('url_site.conf')."validate.php?$activationKey\r\r  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\r  \r\r  Remarque: Notre serveur d'adhésion en ligne (".getParam('url_site').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+		$message = "Bonjour,\r\n Pour confirmer le changement d\'adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-				'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-				'X-Mailer: PHP/' . phpversion();
+		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
+		'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
 		if (getParam('allow_mail.conf') == true)
-			$return = mail($to, $subject, $message, $headers);
-		print '<p>Une demande de confirmation vient d\'être envoyé à l\'adresse '.$email.'. Une fois cette confirmation effectué le changement d\'adresse sera fait.</p>';
-
+			mail($to, $subject, $message, $headers);
+		print '<p>Une demande de confirmation vient d\'être envoyée à l\'adresse '.$to.'. Une fois cette confirmation effectuée, le changement d\'adresse sera fait.</p>';
 		print $footer;
 	}
 }

@@ -88,7 +88,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 		$i=0;
 		foreach($act['creneaux'] as $cre)
 		{
-			if (!isset($ads['cre'.$cre['id']]) )
+			$resps = getResponsablesCre( $cre['id'] );
+			if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 )
 			{
 				$out.= '<li><input type="checkbox" name="cre[]"  value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).'</label>';
 				$i++;
