@@ -3,14 +3,13 @@ defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 switch($_POST['action'])
 {
 	case "sendmail_confirm":
-		$headers = 'From: '.$_SESSION['user'] . "\r\n" .
-
-		'Reply-To: '.$_SESSION['user'] . "\r\n" .
-
-		'X-Mailer: PHP/' . phpversion();
-		$message = $_POST['message'];
 		$to = $_POST['to'];
 		$subject = $_POST['subject'];
+		$message = $_POST['message'];
+		$headers = 'From: '.$_SESSION['user'] . "\r\n" .
+		'Reply-To: '.$_SESSION['user'] . "\r\n" .
+		'Return-Path: '.$_SESSION['user'] . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
 		include("opendb.php");
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_patienter.txt' ");
 		$stock_pat = mysql_fetch_array($res);

@@ -135,10 +135,11 @@ else	// Page demande de l'adresse email et traitements
 						{
 							$to      = $_POST['email'];
 							$subject = "Désactivation du compte Fliker";
-							$message = "Bonjour,\r\r  Votre compte Fliker a été désactivé, pour plus d'informations merci de contacter les administrateurs. \r\r  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\r  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\r  Excellente saison sportive,\r\r--\rles administrateurs.";
+							$message = "Bonjour,\r\n  Votre compte Fliker a été désactivé, pour plus d'informations merci de contacter les administrateurs. \r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 							$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-									   'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-									   'X-Mailer: PHP/' . phpversion();
+							'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
+							'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
+							'X-Mailer: PHP/' . phpversion();
 							if (getParam('allow_mail.conf') == true)
 								mail($to, $subject, $message, $headers);
 						}
@@ -158,11 +159,11 @@ else	// Page demande de l'adresse email et traitements
 		$results = mysql_query($query);
 		if (!$results)
 		{
-			print "<FONT COLOR='#FF0000'><b>Un problème est servenu lors de la mise à jour, le changement n'a pas été réalisé.</b></font>";
+			print "<FONT COLOR='#FF0000'><b>Un problème est survenu lors de la mise à jour, les modifications n'ont pas été effectuées.</b></font>";
 			echo mysql_error();
 		}
 		else
-			print "<FONT COLOR='#16B84E'><b>Le changement d'adresse a été effectué avec succès.</b></font>";
+			print "<FONT COLOR='#16B84E'><b>Les modifications ont été effectuées avec succès.</b></font>";
 	}
 	else if (isset($_POST['new_email']))
 	{
@@ -185,7 +186,7 @@ else	// Page demande de l'adresse email et traitements
 				if ($EspaceMembre->updateUser("email", $_POST['new_email'], $array_adh['email']) == TRUE)
 					print "<FONT COLOR='#16B84E'><b>Le changement d'adresse a été effectué avec succès.</b></font>";
 				else
-					print "<FONT COLOR='#FF0000'><b>Un problème est servenu lors de la mise à jour, le changement n'a pas été réalisé.</b></font>";
+					print "<FONT COLOR='#FF0000'><b>Un problème est survenu lors de la mise à jour, le changement n'a pas été effectué.</b></font>";
 				print "<br /><br/>";
 			}
 		}
@@ -208,7 +209,7 @@ else	// Page demande de l'adresse email et traitements
 			echo mysql_error();
 		}
 		else
-			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectué avec succès.</b></font><br/>";
+			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectuée avec succès.</b></font><br/>";
 	}
 	else if (isset($_POST['current_email']))
 	{
@@ -221,7 +222,7 @@ else	// Page demande de l'adresse email et traitements
 			print "<FONT COLOR='#FF0000'><b>Erreur lors de la mise à jour du compte.</b></font><br /><br />";
 		}
 		else
-			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectué avec succès.</b></font>";
+			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectuée avec succès.</b></font>";
 	}
 
 	print '<br />';

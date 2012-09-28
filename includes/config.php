@@ -6,7 +6,7 @@
 $dbhost = "localhost";	
 $dbuser = "root";
 $dbpass = "";
-$dbname = "asesco";
+$dbname = "fliker";
 
 /* VEUILLEZ EGALEMENT VOUS ASSURER
    QUE LE SERVEUR APACHE
@@ -20,6 +20,6 @@ $dbname = "asesco";
 $dbhost_wiki = "localhost";
 $dbuser_wiki = "root";
 $dbpass_wiki = "";
-$dbname_wiki = "my_wiki";
+$dbname_wiki = "mediawiki";
 
 ?>

@@ -282,7 +282,6 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	{
 		foreach($section['activites'] as $activite){
 			foreach($activite['creneaux'] as $creneau){
-				
 				if(!empty($_POST['cre'.$creneau['id']])){
 				 	$in.=",'".$creneau['id']."' ";
 					$i++;
@@ -293,13 +292,13 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	$in.=" ) ";
 	if ($_POST['choix_association_type'] != 0)
 		$sql .= " AND ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso = '".$_POST['choix_association_type']."' ) ";
-	if ($i == 0 && $resp_asso)	// Utilisé pour ?
+	if ($i == 0 && $resp_asso)	// Utilisé pour recherche des gens sans adhésion
 		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
 	else
 	{
 		$sql.="AND ( false ";
-		if (!isset($_POST['exclure_adhs']))
-			$sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.id_cre IN $in  ) )";
+		if (!isset($_POST['exclure_adhs'])) // Utilisé pour la recherche classique sur les créneaux sélectionnés
+			$sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo AND ADS.id_cre IN $in ) )";
 		if (isset($_POST['responsable_asso']) || isset($_POST['responsable']))
 		{	
 			$sql .= "OR (ADR.id IN (
