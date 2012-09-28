@@ -126,33 +126,11 @@ if(isset($_SESSION['user']))
 	print '</div>';
 }
 else
-	print "Vous n'êtes pas connecté
-
-<br><br><br><br><br><br><br>
-
-<center>
-
-<h3>NOUVEAU CRENEAU PARKOUR :</h3>
-merci de vous pr&eacute;-inscrire &agrave; TOUS les cr&eacute;neaux possibles pour vous ...<br>
-SEUL celui ayant totalis&eacute; le plus grand nombre de pr&eacute;-inscriptions sera retenu (et les autres annul&eacute;s) !<br>
-les cours ne commenceront que la semaine du 08 octobre 2012 sur ce cr&eacute;neau retenu.
-
-<h3>ANCIENS ADHERENTS :</h3>
-merci de remettre &agrave; jour votre fiche de l'an dernier !<br>
-il vous suffit de choisir vos sports pour cette ann&eacute;e ...<br>
-votre identifiant est votre adresse email de l'an dernier ...<br>
-en cas d'oubli, contactez notre webmaster.<br>
-en cas de perte de votre password, suivez le lien de d&eacute;pannage.<br>
-en cas de changement de statut, contactez notre webmaster.
-
-<h3>NOUVEAUX ADHERENTS :</h3>
-merci de suivre le lien ''inscription'' !<br>
-recopiez votre adresse email avec soin car vous recevrez un message de confirmation ...<br>
-cette confirmation EST NECESSAIRE pour activer votre fiche et choisir vos sports !
-
-</center>
-
-</body></html>";
+{
+	print "Vous n'êtes pas connect&eacute;.";
+	include_once("Welcome_msg.php");
+	print "</body></html>";
+}
 ?>
 
 <script type="text/javascript">
