@@ -68,11 +68,11 @@ function delPaiement($id)
 
 }
 
-function getPaiementsSup($id_adh)
+function getPaiementsSup($id_adh, $promo)
 {
 	$query = "SELECT SUM(PS.valeur) total,PS.id_sup 
 	FROM {$GLOBALS['prefix_db']}paiement P, {$GLOBALS['prefix_db']}paiement_sup PS 
-	WHERE P.id=PS.id_paiement AND P.id_adh=$id_adh GROUP BY PS.id_sup";
+	WHERE P.id=PS.id_paiement AND P.id_adh=$id_adh AND P.promo=$promo GROUP BY PS.id_sup";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
