@@ -287,9 +287,13 @@ function getMyAdherents($userid)
 	return $tab;
 }
 
-function getMyAssos($userid)
+function getMyAssos($userid, $section = false)
 {
-	if($userid==-1)
+	if($section)
+		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section SA, {$GLOBALS['prefix_db']}resp_section RS
+		WHERE A.id=SA.id_asso AND SA.id_sec=RS.id_sec AND RS.id_adh=$userid
+		";
+	else if($userid==-1)
 		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A";
 	else
 		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
@@ -320,7 +324,7 @@ function getSolde($id_adh,$promo)
 	if (!isset($adh['statut']))
 		$adh['statut'] = "";
 	$tab = getFacture($ads,$adh['statut'], $promo);
-	$p_sup = getPaiementsSup($id_adh);
+	$p_sup = getPaiementsSup($id_adh, $promo);
 	$solde=0;
 	foreach($tab['assos'] as $row)
 	{
