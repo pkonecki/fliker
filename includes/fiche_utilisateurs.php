@@ -134,8 +134,8 @@ else	// Page demande de l'adresse email et traitements
 						if ($array_adh["active"] == 1 && $_POST[$champs['nom']] == 0 && getParam('account_out.notif') == "now")
 						{
 							$to      = $_POST['email'];
-							$subject = "Désactivation du compte Fliker";
-							$message = "Bonjour,\r\n  Votre compte Fliker a été désactivé, pour plus d'informations merci de contacter les administrateurs. \r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+							$subject = "[".getParam('text_top.txt')."] Désactivation du compte";
+							$message = "Bonjour,\r\n  Votre compte a été désactivé, pour plus d'informations merci de contacter les administrateurs. \r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 							$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 							'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
 							'Return-Path: '.getParam('admin_email.conf') . "\r\n" .

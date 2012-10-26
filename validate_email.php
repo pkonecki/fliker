@@ -86,7 +86,7 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 
 		$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
 		$to      = $email;
-		$subject = "Confirmation nouvel email Fliker";
+		$subject = "Confirmation nouvel email";
 		$message = "Bonjour,\r\n Pour confirmer le changement d\'adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .

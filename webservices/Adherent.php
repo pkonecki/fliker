@@ -59,7 +59,7 @@ function newAdherent($tab)
 		echo mysql_error();
 	//send mail
 	$to      = $tab['email'];
-	$subject = "Votre inscription sportive";
+	$subject = "[".getParam('text_top.txt')."] Votre inscription sportive";
 	$message = "Bienvenue !\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\n  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 	$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 	           'Reply-To: '.getParam('contact_email.conf') . "\r\n" .

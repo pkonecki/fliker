@@ -4,7 +4,7 @@ switch($_POST['action'])
 {
 	case "sendmail_confirm":
 		$to = $_POST['to'];
-		$subject = $_POST['subject'];
+		$subject = "[".getParam('text_top.txt')."] ".$_POST['subject'];
 		$message = $_POST['message'];
 		$headers = 'From: '.$_SESSION['user'] . "\r\n" .
 		'Reply-To: '.$_SESSION['user'] . "\r\n" .

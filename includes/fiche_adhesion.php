@@ -49,23 +49,20 @@ else
 		die();
 	}
 }
-if ($resp_asso)
-	$rep1 = "true";
-else
-	$rep1 = "false";
-if ($self == true)
-	$rep2 = "true";
-else
-	$rep2 = "false";
+
+//if ($resp_asso)
+//	$rep1 = "true";
+//else
+//	$rep1 = "false";
+//if ($self == true)
+//	$rep2 = "true";
+//else
+//	$rep2 = "false";
 
 if(!empty($_GET['promo']))
-{
 	$promo = $_GET['promo'];
-}
 else
-{
 	$promo = $current_promo;
-}
 
 print "<div class=\"tip\"><center>".getParam('text_adherent.txt')."</center></div>";
 
