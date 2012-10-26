@@ -32,7 +32,7 @@ if (isset($_POST['email_recu']))
 		include("closedb.php");
 		print "L'adresse email <b>".$_POST['recup_mdp']."</b> n'existe pas dans notre base de données, merci de s'assurer de sa validité.<br/><br/>";
 		print '<form action="forgot.php" method="POST">';
-		print 'Veuillez indiquer votre adresse email : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recu" value="Envoyer"></input>';
+		// print 'Veuillez indiquer votre adresse email : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recu" value="Envoyer"></input>';
 		print '</form>';
 	}
 	else
@@ -46,7 +46,7 @@ if (isset($_POST['email_recu']))
 			echo mysql_error();
 		include("closedb.php");
 		$to      = $_POST['recup_mdp'];
-		$subject = "Changement de mot de passe Fliker";
+		$subject = "[".getParam('text_top.txt')."] Changement de mot de passe";
 		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification du mot de passe lié à cette adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  \r\n  Remarque : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
@@ -74,7 +74,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted'
 		print "L'adresse email <b>".$_POST['recup_mdp']."</b> n'existe pas dans notre base de données, merci de s'assurer de sa validité.<br/><br/>";
 		print '<form action="forgot.php?forgot=email" method="POST">';
 		print '<input type=\'hidden\' name=\'action\' value=\'change_email_submitted\' />';
-		print 'Veuillez indiquer votre adresse email : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
+		// print 'Veuillez indiquer votre adresse email : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
 		print '</form>';
 	}
 	else
@@ -88,7 +88,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted'
 			echo mysql_error();
 		include("closedb.php");
 		$to      = $_POST['recup_mdp'];
-		$subject = "Changement de l\'adresse email Fliker";
+		$subject = "[".getParam('text_top.txt')."] Changement de l\'adresse email";
 		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification de l\'email lié à ce compte, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate_email.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  \r\n  Remarque : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
 		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
 		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
@@ -108,7 +108,7 @@ else if (isset($_GET['forgot']) && $_GET['forgot'] == "email")
 	print '<p>Pour pouvoir changer d\'adresse email, il vous faut pouvoir accéder à l\'ancienne ainsi qu\'&agrave; la nouvelle. Si vous n\'avez plus accès à l\'ancienne adresse, merci de contacter un administrateur.</p>';
 	print '<FORM action="forgot.php?forgot=email" method="POST">';
 	print '<input type=\'hidden\' name=\'action\' value=\'change_email_submitted\' />';
-	print 'Veuillez indiquer votre adresse email actuelle : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
+	// print 'Veuillez indiquer votre adresse email actuelle : <input type="text" name="recup_mdp" /></input><br/><input type="submit" name="email_recup" value="Envoyer"></input>';
 	print '</form>';
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'form')
