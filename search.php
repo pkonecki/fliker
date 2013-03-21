@@ -336,8 +336,8 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	$num = mysql_num_rows($results);
 	switch($_POST['affichage']){
 		case 1: //Simple
-			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
-			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
+			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
+			print '<thead><tr><th></th><th><input type="button" value="check all" onclick="javascript:cocheToute(0);" /><input type="button" value="uncheck all" onclick="javascript:cocheToute(1);" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ)	// Tête du tableau d'affichage des résultats
 			{
 				if ($champ['search_simple']==1)
@@ -389,7 +389,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 					print '<tr class="'.$active.'">';
 				else
 					print '<tr class="odd '.$active.'">';
-				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ><input type="hidden" name="adh[]_hid" value="'.$row['id'].'"></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ)
 				{
 					if ($champ['search_simple']==1){
@@ -425,10 +425,10 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			print '<SELECT name="action" >
 					<OPTION value="sendmail">Envoyer Email</OPTION>
 					</SELECT>';
-			print '<input type="submit" value="GO"></input></FORM>';
+			print '<input type="submit" value="Go"></input></FORM>';
 		break;
 		case 2: //Complet			
-			print '<table class="search_results" ><FORM action="index.php?page=10" method="POST">';
+			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
 			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ)
 			{
@@ -476,7 +476,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				$i++;
 				if($i % 2 == 0) print '<tr class="'.$active.'">';
 				else print '<tr class="odd '.$active.'">';
-				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ><input type="hidden" name="adh[]_hid" value="'.$row['id'].'"></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
 				foreach($tab as $champ){
 					if ($champ['user_viewable']==1){
 						if($champ['type']==='varchar')
@@ -556,7 +556,6 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 		break;
 	}	
 }
-
 ?>
 
 <script type="text/javascript">
@@ -585,6 +584,22 @@ $('#tree_root').checkboxTree({
 $("#toggle_f_search").click(function () {
       $("#f_search").slideToggle("fast");
 });
+
+function cocheToute(value){
+   var taille = document.forms['all_results'].elements.length;
+   var element = null;
+   for(i=0; i < taille; i++)
+   {
+		element = document.forms['all_results'].elements[i];
+		if(element.type == "checkbox")
+		{
+			if (value == 0)
+				element.checked = true;
+			else
+				element.checked = false;
+		}
+	}
+}
 </script>
 
 <?php

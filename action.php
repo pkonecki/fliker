@@ -23,7 +23,7 @@ switch($_POST['action'])
 			print "$i-";
 			flush();
 			if (getParam('allow_mail.conf') == true)
-				mail($email, $subject, $message, $headers);
+				mail($email, $subject, stripslashes($message), $headers);
 		}
 		include("opendb.php");
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer.txt' ");

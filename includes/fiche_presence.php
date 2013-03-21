@@ -281,7 +281,7 @@ else
 			$output.= "<OPTION value=\"".$array_promo['promo']."\" ".(isset($_GET['promo']) && $_GET['promo']==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
 		$output.= "</SELECT></p>";
 	}
-	$output .= "<input type='submit' value='Afficher' /><table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
+	$output .= "<table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
 	$tab_regular = getAdherentsByPromo($promo);
 	$nb_week = 0;
 	$pre_promo = $promo - 1;
@@ -408,14 +408,9 @@ else
 			$presence_encadrant /= (sizeof($nb_encadrant) * $nb_week);
 		else
 			$presence_encadrant = 100;
-		$output.= '<tr align="center"><div><td><input type="radio" name="cre" value='.$cre.' ></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$tmp_value.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
+		$output.= '<tr align="center"><div><td><input  type="radio" name="cre" value='.$cre.' onchange="submit(this.form)" ></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$tmp_value.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
 	}
 	$output.= '</table></form>';
 }
 print $output;
 ?>
-<script type="text/javascript">
-$(".auto").change( function (){
-	$(this).submit();
-});
-</script>
