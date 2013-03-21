@@ -429,7 +429,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
-			print '<thead><tr><th></th><th><input type="checkbox" id="select_all" /></th><th>Fiche</th><th>Solde</th>';
+			print '<thead><tr><th></th><th><input type="button" value="check all" onclick="javascript:cocheToute(0);" /><input type="button" value="uncheck all" onclick="javascript:cocheToute(1);" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ)
 			{
 				if ($champ['user_viewable']==1)
