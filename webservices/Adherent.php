@@ -247,34 +247,56 @@ function getAssos()
 
 function getMyAdherents($userid)
 {
-	$query="SELECT  ADH.id 
-		FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adhesion AD, {$GLOBALS['prefix_db']}adherent ADH
-		WHERE CR.id_act=AC.id
-		AND AC.id_sec=S.id
-		AND A.id=HS.id_asso
-		AND HS.id_sec=S.id
-		AND AD.id_cre=CR.id
-		AND ( AD.id_adh=ADH.id
-			OR
-			(
-				ADH.id IN
-				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_asso IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid'))
-				OR ADH.id IN
-				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_sec IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid'))
-				OR ADH.id IN
-				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_act IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid'))
-				OR ADH.id IN
-				(SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_cre IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid'))
-			)
-		)
+	$query="SELECT ADH.id 
+		FROM   {$GLOBALS['prefix_db']}adherent     ADH,
+                       {$GLOBALS['prefix_db']}adhesion     AD,
+                       {$GLOBALS['prefix_db']}creneau      CR,
+                       {$GLOBALS['prefix_db']}activite     AC,
+                       {$GLOBALS['prefix_db']}section      S,
+                       {$GLOBALS['prefix_db']}asso_section HS,
+                       {$GLOBALS['prefix_db']}association  A
+		WHERE  AD.id_cre  = CR.id
+		AND    CR.id_act  = AC.id
+		AND    AC.id_sec  = S.id
+		AND    S.id       = HS.id_sec
+		AND    HS.id_asso = A.id
+                AND
+		 (
+		       CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    WHERE id_adh = '$userid')
+		       OR
+		       AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     WHERE id_adh = '$userid')
+		       OR
+		       S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
+		       OR
+		       A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    WHERE id_adh = '$userid')
+		 )
 		AND
-		(
-			S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
-			OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid')
-			OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid')
-			OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
-		)
-		";		
+                 (
+                       ADH.id = AD.id_adh
+                       OR
+		        (
+			      0
+		        )
+                       OR
+                       ADH.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE 1)
+		 )";
+// Avec "0" qui pourrait être :
+// * cette nouvelle formulation trop permissive (un responsable de créneau peut avoir du pouvoir sur la fiche d'un responsable de section) :
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_asso = A.id)
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_sec  = S.id)
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_act     RA WHERE RA.id_act  = AC.id)
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_cren    RA WHERE RA.id_cre  = CR.id)
+// * l'ancienne formulation trop restreinte (il fallait être responsable au même niveau de responsabilité exactement) :
+//                            ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_asso IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    WHERE id_adh = '$userid'))
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_sec  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid'))
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_act     RA WHERE RA.id_act  IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     WHERE id_adh = '$userid'))
+//			      OR
+//			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_cren    RA WHERE RA.id_cre  IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    WHERE id_adh = '$userid'))
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

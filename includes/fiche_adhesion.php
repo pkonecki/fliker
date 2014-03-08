@@ -2,13 +2,14 @@
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 
 $self = false;
+$admin = false;
 $resp_asso = false;
 $resp_section = false;
 
 if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid'])
 {
 	$self = true;
-	$id_adh =$_SESSION['uid'];
+	$id_adh = $_SESSION['uid'];
 }
 else if($_SESSION['privilege']==1)
 {
@@ -23,15 +24,13 @@ else if($_SESSION['privilege']==1)
 }
 else
 {
-	$assos_resp = getMyAssos($_SESSION['uid']);
-	if (count($assos_resp) > 0 )
+	$ass_resp = getMyAssos($_SESSION['uid']);
+	if (count($ass_resp) > 0 )
 		$resp_asso = true;
-	else
-	{
-		$assos_resp = getMyAssos($_SESSION['uid'], true);
-		if (count($assos_resp) > 0 )
-		   $resp_section = true;
-	}
+	$sec_resp = getMyAssos($_SESSION['uid'], true);
+	if (count($sec_resp) > 0 )
+		$resp_section = true;
+	$assos_resp = $ass_resp + $sec_resp;
 	if ($resp_asso || $resp_section)
 	{
 		if(!isset($_GET['asso']))
@@ -50,11 +49,12 @@ else
 	}
 }
 
+//A quoi ça sert ce qui suit ?
 //if ($resp_asso)
 //	$rep1 = "true";
 //else
 //	$rep1 = "false";
-//if ($self == true)
+//if ($self)
 //	$rep2 = "true";
 //else
 //	$rep2 = "false";
@@ -206,7 +206,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 			print "</SELECT></h2>";
 		}
 		//Bouton nouvelle adhésion
-		if (($self || $resp_asso) && $promo == $current_promo && getParam("stop_adhesions.conf") == "false")
+		if (($self || $resp_asso || $resp_section) && $promo == $current_promo && getParam("stop_adhesions.conf") == "false")
 			print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
 			<input type="hidden" name="action" value="nouvelle" />
 			<INPUT type="submit" value="Nouvelle">';
@@ -269,7 +269,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_PO
 				}
 				if ($self || $resp_section)
 				{
-					
 					$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE id_adh=$id_adh AND promo = $promo AND id_cre=".$value['id_cre']."");
 					if (mysql_num_rows($res) == 0)
 					{
