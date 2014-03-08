@@ -1,9 +1,13 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
+
+$self = false;
+$admin = false;
+
 if (!isset($_GET['adh']) or $_GET['adh']==$_SESSION['uid'])
 {
+	$self = true;
 	$id_adh = $_SESSION['uid'];
-	$edit = true;
 }
 else if($_SESSION['privilege']==1)
 {
@@ -12,9 +16,6 @@ else if($_SESSION['privilege']==1)
 }
 else
 {
-        $assos_resp = getMyAssos($_SESSION['uid']);
-	if(count($assos_resp) > 0)
-	  $resp_asso = true;
 	$tab = getMyAdherents($_SESSION['uid']);
 	if (isset($tab[$_GET['adh']]))
 	  $id_adh=$_GET['adh'];
@@ -26,7 +27,7 @@ else
 }
 $adh = getAdherent($id_adh);
 $dest_dossier = "../photos";
-if (isset($_POST['action']) && $_POST['action'] == 'modification' && $edit)
+if (isset($_POST['action']) && $_POST['action'] == 'modification' && $self)
 {
 	$tab = getChampsAdherents();
 	print '<FORM id="f_adherent_modif" action="index.php?page=1" enctype="multipart/form-data" method="POST">';
@@ -173,7 +174,7 @@ else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' 
 }
 else
 {
-	if (isset($_POST['action']) && $_POST['action'] == 'submitted' && $edit)
+	if (isset($_POST['action']) && $_POST['action'] == 'submitted' && $self)
 	{
 		modifAdherent($_POST);
 		$adh = getAdherent($id_adh);
@@ -184,7 +185,7 @@ else
 		print '<div id="fiche">';
 		print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
 		print '<br />';
-		if(isset($edit)) print '<FORM action="index.php?page=1" method="POST">
+		if($self) print '<FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="modification" />
 		<INPUT type="submit" value="Modifier"/>
 		</FORM>
