@@ -17,16 +17,17 @@ function checked($post,$val)
 
 function multiselected($post,$val)
 {
-	for($i=0; $i < sizeof($_POST[$post]);$i++)
+	for($i=0; $i < sizeof($_POST[$post]); $i++)
 	{
 		if($_POST[$post][$i]===$val)
 			return "selected";
 	}
 	return "";
 }
+
 if(!isset($_SESSION['user']))	// Si l'utilisateur est déconnecté
 {
-	print "<p>Vous n'êtes pas connectéahahah</p>";
+	print "<p>Vous n'êtes pas connecté !</p>";
 }
 else	// Si l'utilisateur est connecté
 {
@@ -57,7 +58,7 @@ else	// Si l'utilisateur est connecté
 	include("closedb.php");
 	if (!$results) echo mysql_error();
 	else if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1'){
-		print 'Vous n\'avez pas accès à cette page.';
+		print "Vous n'avez pas acc&egrave;s &agrave; cette page.";
 	}
 	else{
 ?>
@@ -66,16 +67,37 @@ else	// Si l'utilisateur est connecté
 <img src="images/downarrow.gif" class="inline" id="toggle_f_search" ></img>
 </div>
 <?php
-print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
+print '<span class="tip">'.getParam('text_search.txt').'</span>';
 
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	if (empty($_POST['set1_text'])) $_POST['set1_text']="";
 	//print '<button id="toggle_f_search">Toggle</button>';
-	
-	print '<form id="f_search" method="post" action="index.php?page=2">
+
+	if(isset($_POST['select_promo']))
+		$promo=$_POST['select_promo'];
+	else
+		$promo=$current_promo;
+	$query = "SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion ORDER BY promo DESC";
+	include("opendb.php");
+	$promoliste = mysql_query($query);
+	if (!$promoliste) echo mysql_error();
+
+	print '
+	<form id="f_search" method="post" action="index.php?page=2">
 	<fieldset class="main"><legend>Critères Adhérent</legend>
 	<input type="hidden" name="field_count" value="'.$_POST['field_count'].'" />
 	<input type="hidden" name="action" value="submitted" />
+
+	<div id="promo">
+	     <label for="select_promo">Promo est</label>
+	     <select id="select_promo" name="select_promo">
+	';
+	while ($array_promo = mysql_fetch_array($promoliste))
+		print '<option '.selected('select_promo',$array_promo['promo']).' value="'.$array_promo['promo'].'">'.$array_promo['promo'].'</option>';
+	print '
+	      </select>
+	</div>
+
 	<div id="solde">
 		<label for="select_solde">Solde est</label>
 		<select id="select_solde" name="select_solde">
@@ -85,11 +107,11 @@ print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 			<option '.selected('select_solde','4').' value="4">Nul</option>
 		</select>
 	</div>
-		<div id ="choix_association">
-		<b>Association est </b>
+	<div id ="choix_association">
+		<label for="choix_association_type">Association est</label>
 		<select id="choix_association_type" name="choix_association_type">
-			<option '.selected('choix_association_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>';
-	
+			<option '.selected('choix_association_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>
+	';
 	// Création de la liste déroulante sur le filtre des associations
 	include("opendb.php");
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}association";
@@ -106,14 +128,15 @@ print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 		print '<option '.selected('choix_association_type', $stock_association[$compteur_asso]['id']).' label="'.$stock_association[$compteur_asso]['nom'].'" value="'.$stock_association[$compteur_asso]['id'].'">'.$stock_association[$compteur_asso]['nom'].'</option>';
 		$compteur_asso++;
 	}
-
-	print '</select>
+	// fin filtre assos
+	print '
+	      </select>
 	</div>
 	<div id ="choix_statut">
-		<b>Statut est </b>
-		<select id="choix_statut_type" name="choix_statut_type">
-			<option '.selected('choix_statut_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>';
-	
+		<label for="choix_statut_type">Statut est</label>
+		<select id="choix_statut_type" name="choix_statut_type[]" multiple="yes" size="5">
+			<option '.multiselected('choix_statut_type','0').' label="Indiff&eacute;rent" value="0">Indiff&eacute;rent</option>
+	';
 	// Création de la liste déroulante sur la liste des statuts
 	include("opendb.php");
 	$query = "SELECT * FROM {$GLOBALS['prefix_db']}statut";
@@ -127,18 +150,22 @@ print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 	$compteur_statut = 0;
 	while ($compteur_statut != $compteur)
 	{
-		print '<option '.selected('choix_statut_type', $stock_statut[$compteur_statut]['id']).' label="'.$stock_statut[$compteur_statut]['nom'].'" value="'.$stock_statut[$compteur_statut]['id'].'">'.$stock_statut[$compteur_statut]['nom'].'</option>';
+		print '<option '.multiselected('choix_statut_type', $stock_statut[$compteur_statut]['id']).' label="'.$stock_statut[$compteur_statut]['nom'].'" value="'.$stock_statut[$compteur_statut]['id'].'">'.$stock_statut[$compteur_statut]['nom'].'</option>';
 		$compteur_statut++;
 	}
-	print '</select>
+	// fin filtre statuts
+	print '
+	      </select>
 	</div>
 	<div id="responsable">
 		<dt><input type="checkbox" '.checked('exclure_adhs','1').' name="exclure_adhs" value="1">Exclure les simples adhérents</input></dt>
-		<dt><input type="checkbox" '.checked('responsable','1').' name="responsable" value="1">Inclure responsables des sections (comité directeur)</input></dt>
-		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure responsables d\'association (bureau)</input></dt>
-		<dt><input type="checkbox" '.checked('sans_certif','1').' name="sans_certif" value="1">N’afficher que les adhérent sans certif</input></dt>
-		<dt><input type="checkbox" '.checked('sans_photo','1').' name="sans_photo" value="1">N’afficher que les adhérent sans photo</input></dt>
-		<dt><input type="checkbox" '.checked('compte_inactif','1').' name="compte_inactif" value="1">Comptes désactivés</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_cren','1').' name="responsable_cren" value="1">Inclure les responsables des créneaux (les encadrants)</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_acti','1').' name="responsable_acti" value="1">Inclure les responsables des activités (?)</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_sect','1').' name="responsable_sect" value="1">Inclure les responsables des sections (le comité directeur)</input></dt>
+		<dt><input type="checkbox" '.checked('responsable_asso','1').' name="responsable_asso" value="1">Inclure les responsables de l\'association (le bureau)</input></dt>
+		<dt><input type="checkbox" '.checked('sans_certif','1').' name="sans_certif" value="1">Afficher seulement les adhérents sans certif</input></dt>
+		<dt><input type="checkbox" '.checked('sans_photo','1').' name="sans_photo" value="1">Afficher seulement les adhérents sans photo</input></dt>
+		<dt><input type="checkbox" '.checked('compte_inactif','1').' name="compte_inactif" value="1">Afficher seulement les comptes désactivés</input></dt>
 	</div>
 	<div id="set1">
 	<select id="set1_type" name="set1_type">
@@ -146,6 +173,7 @@ print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 		<option '.selected('set1_type','2').' label="Pr&eacute;nom" value="2">Pr&eacute;nom</option>
 		<option '.selected('set1_type','3').' label="Email" value="3">Email</option>
 		<option '.selected('set1_type','4').' label="Cat&eacute;gorie" value="4">Cat&eacute;gorie</option>
+		<option '.selected('set1_type','5').' label="Code postal" value="5">Code Postal</option>
 	</select>
 	<select id="set1_action" name="set1_action">
 		<option '.selected('set1_action','1').' label="Contient" value="1">Contient</option>
@@ -231,15 +259,21 @@ print "<span class=\"tip\">".getParam('text_search.txt')."</span>";
 	</form>';
 if(isset($_POST['action']) && $_POST['action']==="submitted")
 {
-	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true ";
+	$sql = "SELECT DISTINCT ADR.* FROM {$GLOBALS['prefix_db']}adherent ADR WHERE true";
 	if (isset($_POST['sans_certif']))	// Si case sans certif coché
-		$sql .= "AND certmed != 1 ";
+		$sql .= ' AND certmed != 1';
 	if (isset($_POST['sans_photo']))	// Si case sans photo coché
-		$sql .= "AND photo != 1 ";
+		$sql .= ' AND photo != 1';
 	if (isset($_POST['compte_inactif']))	// Si case compte inactif coché
-		$sql .= "AND active = 0 ";
-	if (isset($_POST['choix_statut_type']) && $_POST['choix_statut_type'] != 0)		// Si filtre par statut sélectionné
-		$sql .= "AND id_statut = ".$_POST['choix_statut_type']." ";
+		$sql .= ' AND active = 0';
+	if (isset($_POST['choix_statut_type']) && !(multiselected('choix_statut_type','0')))	// Si filtre par statut sélectionné
+	{
+		$sql .= ' AND (0';
+		$statuts_choisis = $_POST['choix_statut_type'];
+		foreach($statuts_choisis AS $key=>$value)
+			$sql .= " OR id_statut = $value";
+		$sql .= ')';
+	}
 	for($i = 0; $i < $_POST['field_count']; $i++)
 	{
 		$n = $i + 1;
@@ -251,28 +285,31 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 		switch($_POST[$type])
 		{
 			case 1: //Nom
-					$sql.="AND ADR.nom ";
+					$sql .= " AND ADR.nom";
 					break;
 			case 2: //Prénom
-					$sql.="AND ADR.prenom ";
+					$sql .= " AND ADR.prenom";
 					break;
 			case 3: //email
-					$sql.="AND ADR.email ";
+					$sql .= " AND ADR.email";
 					break;
 			case 4: //Catégorie
-					$sql.="AND ADR.categorie ";
+					$sql .= " AND ADR.categorie";
+					break;
+			case 5: //Code postal
+					$sql .= " AND ADR.code_postal";
 					break;
 		}
 		switch($_POST[$action])
 		{
 			case 1: //Contient
-				$sql.="LIKE '%".$_POST[$text]."%' ";
+				$sql .= " LIKE '%".$_POST[$text]."%'";
 				break;
 			case 2: //commence
-				$sql.="LIKE '".$_POST[$text]."%' ";
+				$sql .= " LIKE '".$_POST[$text]."%'";
 				break;
 			case 3: //est
-				$sql.="= '".$_POST[$text]."' ";;
+				$sql .= "= '".$_POST[$text]."'";;
 				break;
 		}
 	}
@@ -291,42 +328,36 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	}
 	$in.=" ) ";
 	if ($_POST['choix_association_type'] != 0)
-		$sql .= " AND ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE id_asso = '".$_POST['choix_association_type']."' ) ";
+		$sql .= " AND ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.id_asso={$_POST['choix_association_type']} AND ADS.promo={$promo})";
 	if ($i == 0 && $resp_asso)	// Utilisé pour recherche des gens sans adhésion
-		$sql.=" AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo )";
+		$sql .= " AND ADR.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo={$promo})";
 	else
 	{
-		$sql.="AND ( false ";
+		$sql .= " AND ( false";
 		if (!isset($_POST['exclure_adhs'])) // Utilisé pour la recherche classique sur les créneaux sélectionnés
-			$sql.="OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo=$current_promo AND ADS.id_cre IN $in ) )";
-		if (isset($_POST['responsable_asso']) || isset($_POST['responsable']))
+			$sql .= " OR (ADR.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.statut=0 AND ADS.promo={$promo} AND ADS.id_cre IN {$in}))";
+		if (isset($_POST['responsable_asso']) || isset($_POST['responsable_sect']) || isset($_POST['responsable_acti']) || isset($_POST['responsable_cren']))
 		{	
-			$sql .= "OR (ADR.id IN (
-				SELECT  ADH.id id_adh
+			$sql .= " OR (ADR.id IN (
+				SELECT ADH.id id_adh
 				FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS , {$GLOBALS['prefix_db']}adherent ADH
 				WHERE CR.id_act=AC.id
 				AND AC.id_sec=S.id
 				AND A.id=HS.id_asso
 				AND HS.id_sec=S.id
 				AND CR.id IN $in
-				AND (";
+				AND (0 ";
 			if (isset($_POST['responsable_asso']))
-			{
-				$sql.= "A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso RA WHERE RA.id_adh=ADH.id)";
-				if (isset($_POST['responsable']))
-					$sql.=" OR ";		
-			}
-			if (isset($_POST['responsable'])) 
-				$sql.= "S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section RA WHERE RA.id_adh=ADH.id )
-					OR
-					AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act RA WHERE RA.id_adh=ADH.id )
-					OR
-					CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren RA WHERE RA.id_adh=ADH.id )
-					";
-			$sql.=")
-				 ) )";
+				$sql .= " OR A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_adh=ADH.id)";
+			if (isset($_POST['responsable_sect']))
+				$sql .= " OR S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section RS WHERE RS.id_adh=ADH.id)";
+			if (isset($_POST['responsable_acti']))
+				$sql .= " OR AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     RT WHERE RT.id_adh=ADH.id)";
+			if (isset($_POST['responsable_cren']))
+				$sql .= " OR CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    RC WHERE RC.id_adh=ADH.id)";
+			$sql .= " )))";
 		}
-		$sql.=" ) ORDER BY ADR.nom";
+		$sql .= " ) ORDER BY ADR.nom";
 	}
 	$tab = getChampsAdherents();
 	include("opendb.php");
@@ -337,7 +368,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	switch($_POST['affichage']){
 		case 1: //Simple
 			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
-			print '<thead><tr><th></th><th><input type="button" value="check all" onclick="javascript:cocheToute(0);" /><input type="button" value="uncheck all" onclick="javascript:cocheToute(1);" /></th><th>Fiche</th><th>Solde</th>';
+			print '<thead><tr><th><input type="button" value="tout" onclick="javascript:cocheToute(1);" /></th><th><input type="button" value="rien" onclick="javascript:cocheToute(0);" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ)	// Tête du tableau d'affichage des résultats
 			{
 				if ($champ['search_simple']==1)
@@ -370,15 +401,15 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 					case 1: //indifférent
 						break;
 					case 2: //positif
-						if(!(getSolde($row['id'],$current_promo)>0))
+						if(!(getSolde($row['id'],$promo) > 0))
 							$stop = true;
 						break;
 					case 3: //négatif
-						if(!(getSolde($row['id'],$current_promo)<0))
+						if(!(getSolde($row['id'],$promo) < 0))
 							$stop = true;
 						break;
 					case 4: //null
-						if(!(getSolde($row['id'],$current_promo)==0))
+						if(!(getSolde($row['id'],$promo) == 0))
 							$stop = true;
 						break;
 				}
@@ -389,7 +420,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 					print '<tr class="'.$active.'">';
 				else
 					print '<tr class="odd '.$active.'">';
-				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ><input type="hidden" name="adh[]_hid" value="'.$row['id'].'"></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
 				foreach($tab as $champ)
 				{
 					if ($champ['search_simple']==1){
@@ -409,13 +440,10 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 						}
 					}
 				}
-				$res = doQuery("SELECT DISTINCT id_asso, nom FROM {$GLOBALS['prefix_db']}adhesion a INNER JOIN {$GLOBALS['prefix_db']}association b ON a.id_asso=b.id WHERE id_adh=".$row['id']."");
+				$res = doQuery("SELECT DISTINCT id_asso, nom FROM {$GLOBALS['prefix_db']}adhesion a INNER JOIN {$GLOBALS['prefix_db']}association b ON a.id_asso=b.id WHERE promo={$promo} AND id_adh={$row['id']}");
 				print "<td>";
 				$output = "";
-				while ($tmp_array = mysql_fetch_array($res))
-				{
-					$output .= ", ".$tmp_array['nom'];
-				}
+				while ($tmp_array = mysql_fetch_array($res)) $output .= ", ".$tmp_array['nom'];
 				$output[0] = "";
 				print $output;
 				print '</td></tr>';
@@ -423,13 +451,13 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			print '</tbody>';
 			print '</table>';
 			print '<SELECT name="action" >
-					<OPTION value="sendmail">Envoyer Email</OPTION>
-					</SELECT>';
+			      	       <OPTION value="sendmail">Envoyer Email</OPTION>
+				</SELECT>';
 			print '<input type="submit" value="Go"></input></FORM>';
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
-			print '<thead><tr><th></th><th><input type="button" value="check all" onclick="javascript:cocheToute(0);" /><input type="button" value="uncheck all" onclick="javascript:cocheToute(1);" /></th><th>Fiche</th><th>Solde</th>';
+			print '<thead><tr><th><input type="button" value="tout" onclick="javascript:cocheToute(1);" /></th><th><input type="button" value="rien" onclick="javascript:cocheToute(0);" /></th><th>Fiche</th><th>Solde</th>';
 			foreach($tab as $champ)
 			{
 				if ($champ['user_viewable']==1)
@@ -458,15 +486,15 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 					case 1: //indifférent
 						break;
 					case 2: //positif
-						if(!(getSolde($row['id'],$current_promo)>0))
+						if(!(getSolde($row['id'],$promo) > 0))
 							$stop=true;
 						break;
 					case 3: //négatif
-						if(!(getSolde($row['id'],$current_promo)<0))
+						if(!(getSolde($row['id'],$promo) < 0))
 							$stop=true;
 						break;
 					case 4: //nul
-						if(!(getSolde($row['id'],$current_promo)==0))
+						if(!(getSolde($row['id'],$promo) == 0))
 							$stop=true;
 						break;
 				}
@@ -476,7 +504,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				$i++;
 				if($i % 2 == 0) print '<tr class="'.$active.'">';
 				else print '<tr class="odd '.$active.'">';
-				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ><input type="hidden" name="adh[]_hid" value="'.$row['id'].'"></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$current_promo).'</td>';
+				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
 				foreach($tab as $champ){
 					if ($champ['user_viewable']==1){
 						if($champ['type']==='varchar')
@@ -515,15 +543,15 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 					case 1: //indifférent
 						break;
 					case 2: //positif
-						if(!(getSolde($row['id'],$current_promo)>0))
+						if(!(getSolde($row['id'],$promo) > 0))
 							$stop=true;
 						break;
 					case 3: //négatif
-						if(!(getSolde($row['id'],$current_promo)<0))
+						if(!(getSolde($row['id'],$promo) < 0))
 							$stop=true;
 						break;
 					case 4: //nul
-						if(!(getSolde($row['id'],$current_promo)==0))
+						if(!(getSolde($row['id'],$promo) == 0))
 							$stop=true;
 						break;
 				}
@@ -534,13 +562,13 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				foreach($tab as $champ){
 					if ($champ['search_trombi']==1){
 						if($champ['type']==='varchar')
-							print "<span class=\"trombi\">".(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
+							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? '<br>' : $row[$champ['nom']]).'</span>';
 						else
 						if($champ['type']==='date')
-							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
+							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? '<br>' : $row[$champ['nom']]).'</span>';
 						else
 						if($champ['type']==='tinyint')
-							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? "<br>" : $row[$champ['nom']]).'</span>';
+							print '<span class="trombi">'.(empty($row[$champ['nom']]) ? '<br>' : $row[$champ['nom']]).'</span>';
 						else
 						if($champ['type']==='file'){
 							$_SESSION['auth_thumb']='true';
@@ -593,7 +621,7 @@ function cocheToute(value){
 		element = document.forms['all_results'].elements[i];
 		if(element.type == "checkbox")
 		{
-			if (value == 0)
+			if (value == 1)
 				element.checked = true;
 			else
 				element.checked = false;

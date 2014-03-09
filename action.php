@@ -6,10 +6,10 @@ switch($_POST['action'])
 		$to = $_POST['to'];
 		$subject = "[".getParam('text_top.txt')."] ".$_POST['subject'];
 		$message = $_POST['message'];
-		$headers = 'From: '.$_SESSION['user'] . "\r\n" .
-		'Reply-To: '.$_SESSION['user'] . "\r\n" .
-		'Return-Path: '.$_SESSION['user'] . "\r\n" .
-		'X-Mailer: PHP/' . phpversion();
+		$headers = 'From: '.$_SESSION['user']."\r\n"        .
+		           'Reply-To: '.$_SESSION['user']."\r\n"    .
+		           'Return-Path: '.$_SESSION['user']."\r\n" .
+		           'X-Mailer: PHP/'.phpversion();
 		include("opendb.php");
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_patienter.txt' ");
 		$stock_pat = mysql_fetch_array($res);
@@ -23,7 +23,7 @@ switch($_POST['action'])
 			print "$i-";
 			flush();
 			if (getParam('allow_mail.conf') == true)
-				mail($email, $subject, stripslashes($message), $headers);
+				mail($email, stripslashes($subject), stripslashes($message), $headers);
 		}
 		include("opendb.php");
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer.txt' ");
@@ -62,7 +62,7 @@ switch($_POST['action'])
 			foreach ($adhs as $adh)
 				print "<input type=\"hidden\" name=\"to[]\" value=\"{$adh['email']}\"  />";
 			print '<input type="hidden" name="action" value="sendmail_confirm" >
-					<tr><td><input type="submit" ></td></tr></FORM>';
+					<tr><td><input type="submit" value="envoyer" ></td></tr></FORM>';
 		}
 		else
 		{

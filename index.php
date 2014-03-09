@@ -53,6 +53,7 @@ print '<body>';
 $EspaceMembre = new EspaceMembre;
 if (isset($_GET['page']) && $_GET['page'] == "logout")
 	$EspaceMembre->logout();
+
 if (isset($_GET['page']))
 	$EspaceMembre->showMenu($_GET['page']);
 else
@@ -128,7 +129,9 @@ if(isset($_SESSION['user']))
 else
 {
 	print "Vous n'êtes pas connect&eacute;.";
-	include_once("Welcome_msg.php");
+//	include_once("Welcome_msg.php");
+	$welcome_msg = getParam('text_accueil.txt');
+	print "<br><br><br><br><br><br><br>$welcome_msg";
 	print "</body></html>";
 }
 ?>

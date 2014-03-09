@@ -4,9 +4,9 @@
 
 // Connexion à la base fliker
 $dbhost = "localhost";	
-$dbuser = "root";
-$dbpass = "";
-$dbname = "fliker";
+$dbuser = "asesco";
+$dbpass = "4Axshx";
+$dbname = "asesco";
 
 /* VEUILLEZ EGALEMENT VOUS ASSURER
    QUE LE SERVEUR APACHE
@@ -18,8 +18,8 @@ $dbname = "fliker";
 
 // Connexion à la base wiki
 $dbhost_wiki = "localhost";
-$dbuser_wiki = "root";
-$dbpass_wiki = "";
-$dbname_wiki = "mediawiki";
+$dbuser_wiki = "asesco";
+$dbpass_wiki = "4Axshx";
+$dbname_wiki = "asesco";
 
 ?>
