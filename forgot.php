@@ -47,11 +47,11 @@ if (isset($_POST['email_recu']))
 		include("closedb.php");
 		$to      = $_POST['recup_mdp'];
 		$subject = "[".getParam('text_top.txt')."] Changement de mot de passe";
-		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification du mot de passe lié à cette adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  \r\n  Remarque : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
-		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-		'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
-		'X-Mailer: PHP/' . phpversion();
+		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification du mot de passe lié à cette adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre mot de passe ne sera pas modifié.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+		$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+		           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+		           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+		           'X-Mailer: PHP/'.phpversion();
 //		$return = FALSE;
 		if (getParam('allow_mail.conf') == true)
 			mail($to, $subject, $message, $headers);
@@ -88,12 +88,12 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email_submitted'
 			echo mysql_error();
 		include("closedb.php");
 		$to      = $_POST['recup_mdp'];
-		$subject = "[".getParam('text_top.txt')."] Changement de l\'adresse email";
-		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification de l\'email lié à ce compte, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate_email.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées ne seront pas modifiées.\r\n  \r\n  Remarque : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
-		$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-		'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-		'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
-		'X-Mailer: PHP/' . phpversion();
+		$subject = "[".getParam('text_top.txt')."] Changement d'adresse email";
+		$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification de l'email lié à ce compte, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate_email.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre adresse email ne sera pas modifiée.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+		$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+		           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+		           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+		           'X-Mailer: PHP/'.phpversion();
 //		$return = FALSE;
 		if (getParam('allow_mail.conf') == true)
 			mail($to, $subject, $message, $headers);

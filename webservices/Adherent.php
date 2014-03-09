@@ -60,11 +60,11 @@ function newAdherent($tab)
 	//send mail
 	$to      = $tab['email'];
 	$subject = "[".getParam('text_top.txt')."] Votre inscription sportive";
-	$message = "Bienvenue !\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\n  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
-	$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-	           'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-	           'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
-	           'X-Mailer: PHP/' . phpversion();
+	$message = "Bienvenue !\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes pré-inscrit sur notre service d'adhésion en ligne.\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et vos coordonnées seront automatiquement purgées de notre serveur dans quelques temps.\r\n  Vous devez à présent activer votre compte en cliquant sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  APRES ACTIVATION, vous pourrez vous connecter sur votre profil et vous PRE-inscrire à vos sports favoris (obligatoire, même pour un premier cours d'essai gratuit !) ...\r\n  ENFIN, vos inscriptions ne seront définitives qu'APRES PAIEMENT au bureau de permanence !\r\n  Remarque : pour exercer votre droit de consultation ou modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+	$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+	           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+	           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+	           'X-Mailer: PHP/'.phpversion();
 	if (getParam('allow_mail.conf') == true)
 		mail($to, $subject, $message, $headers);
 }
@@ -189,7 +189,7 @@ function getAdherents()
 
 function getAdherentsByCreneau($id_cre,$promo)
 {
-	$query = "SELECT ADH.* FROM {$GLOBALS['prefix_db']}adherent ADH, {$GLOBALS['prefix_db']}adhesion AD WHERE AD.id_adh=ADH.id  AND AD.id_cre=$id_cre AND AD.promo=$promo ORDER BY nom ";
+	$query = "SELECT ADH.*, ADS.statut FROM {$GLOBALS['prefix_db']}adherent ADH, {$GLOBALS['prefix_db']}adhesion ADS WHERE ADS.id_adh=ADH.id AND ADS.id_cre=$id_cre AND ADS.promo=$promo ORDER BY nom";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -245,9 +245,9 @@ function getAssos()
 	return $tab;
 }
 
-function getMyAdherents($userid)
+function isAmongMyAdherents($userid,$adhid)
 {
-	$query="SELECT ADH.id 
+	$query="SELECT ADH.id
 		FROM   {$GLOBALS['prefix_db']}adherent     ADH,
                        {$GLOBALS['prefix_db']}adhesion     AD,
                        {$GLOBALS['prefix_db']}creneau      CR,
@@ -255,7 +255,9 @@ function getMyAdherents($userid)
                        {$GLOBALS['prefix_db']}section      S,
                        {$GLOBALS['prefix_db']}asso_section HS,
                        {$GLOBALS['prefix_db']}association  A
-		WHERE  AD.id_cre  = CR.id
+		WHERE  
+		       ADH.id = $adhid
+		AND    AD.id_cre  = CR.id
 		AND    CR.id_act  = AC.id
 		AND    AC.id_sec  = S.id
 		AND    S.id       = HS.id_sec
@@ -279,7 +281,8 @@ function getMyAdherents($userid)
 		        )
                        OR
                        ADH.id NOT IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}adhesion WHERE 1)
-		 )";
+		 )
+		";
 // Avec "0" qui pourrait être :
 // * cette nouvelle formulation trop permissive (un responsable de créneau peut avoir du pouvoir sur la fiche d'un responsable de section) :
 //			      ADH.id IN (SELECT id_adh FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_asso = A.id)
@@ -300,10 +303,12 @@ function getMyAdherents($userid)
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
-	$tab = array();
+//	$tab = array();
+	$tab = false;
 	while($row = mysql_fetch_array($results))
 	{
-			$tab[$row['id']] = $row['id'];
+//			$tab[$row['id']] = $row['id'];
+			$tab = true;
 	}
 	include("closedb.php");
 	return $tab;
@@ -312,14 +317,15 @@ function getMyAdherents($userid)
 function getMyAssos($userid, $section = false)
 {
 	if($section)
-		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section SA, {$GLOBALS['prefix_db']}resp_section RS
-		WHERE A.id=SA.id_asso AND SA.id_sec=RS.id_sec AND RS.id_adh=$userid
+		$query="SELECT A.*, S.nom as 'section' FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section SA, {$GLOBALS['prefix_db']}resp_section RS, {$GLOBALS['prefix_db']}section S
+		        WHERE A.id=SA.id_asso AND SA.id_sec=RS.id_sec AND RS.id_adh=$userid AND S.id=RS.id_sec
 		";
 	else if($userid==-1)
-		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A";
+		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A
+		";
 	else
 		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
-		WHERE A.id=RS.id_asso AND RS.id_adh=$userid
+		        WHERE A.id=RS.id_asso AND RS.id_adh=$userid
 		";
 	include("opendb.php");
 	$results = mysql_query($query);

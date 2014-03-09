@@ -250,28 +250,32 @@ legend {
 
 
 #f_search{
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 #f_search .main {
-	float : left;
-	width : 345px;
+  float : left;
+/*width : 345px;*/
+  width : 40%;
 }
 
 #f_search .selects{
-	float : left;
-	width : 300px;
-}
-
-#f_search .buttons{
-clear : both;
-text-align:center;
-width : 669px;
+  float : left;
+/*width : 300px;*/
+  width : 40%;
 }
 
 #f_search .affichage{
-clear : both;
-width : 669px;
+  clear : both;
+/*width : 669px;*/
+  width : 80%;
+}
+
+#f_search .buttons{
+  clear : both;
+  text-align:center;
+/*width : 669px;*/
+  width : 80%;
 }
 
 table {

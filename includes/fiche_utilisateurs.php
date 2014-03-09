@@ -75,11 +75,13 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 							</tr>";
 				}
 				else if($row['type']==='varchar')
-					print '<tr><td>'.$row['description'].' : </td><td><input type=text name="'.$row['nom'].'" value="'.$final[$row['nom']].'" ></td></tr>';
+					print '<tr><td>'.$row['description'].' : </td><td><input type=text name='.$row['nom'].' value="'.$final[$row['nom']].'"></td></tr>';
 				else if($row['type']==='tinyint')
 					print '<tr><td>'.$row['description'].' : </td><td><input type=checkbox name='.$row['nom'].' '.($final[$row['nom']] == 1 ? 'checked' : '').'></td></tr>';
 				else if($row['type']==='file')
 					print '<tr><td>'.$row['description'].' : </td><td><input type=file name='.$row['nom'].' value="'.$final[$row['nom']].'"></td></tr>';
+				else if($row['type']==='date' || $row['type']==='datetime' || $row['type']==='int')
+					print '<tr><td>'.$row['description'].' : </td><td><input type=text name='.$row['nom'].' value="'.$final[$row['nom']].'"></td></tr>';
 				else if($row['type']==='select')
 				{
 					$values = getSelect($row['nom']);
@@ -135,11 +137,11 @@ else	// Page demande de l'adresse email et traitements
 						{
 							$to      = $_POST['email'];
 							$subject = "[".getParam('text_top.txt')."] Désactivation du compte";
-							$message = "Bonjour,\r\n  Votre compte a été désactivé, pour plus d'informations merci de contacter les administrateurs. \r\n  Remarque 1 : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Remarque 2 : Notre serveur d'adhésion en ligne (".getParam('url_site.conf').") est différent de notre site web principal (wiki) ... Ne vous trompez donc pas d'URL quand vous essaierez de vous connecter !\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
-							$headers = 'From: '.getParam('admin_email.conf') . "\r\n" .
-							'Reply-To: '.getParam('contact_email.conf') . "\r\n" .
-							'Return-Path: '.getParam('admin_email.conf') . "\r\n" .
-							'X-Mailer: PHP/' . phpversion();
+							$message = "Bonjour,\r\n  Votre compte a été désactivé, merci de contacter les administrateurs pour plus d'informations. \r\n  Remarque : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+							$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+							           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+							           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+							           'X-Mailer: PHP/'.phpversion();
 							if (getParam('allow_mail.conf') == true)
 								mail($to, $subject, $message, $headers);
 						}

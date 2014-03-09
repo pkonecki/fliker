@@ -2,8 +2,8 @@
 
 //Personnaliser ici :
 
-$GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker";
-$GLOBALS['prefix_db']="fliker_";
+$GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker/";
+$GLOBALS['prefix_db']="fliker2_";
 
 //Fin personnalisation
 
