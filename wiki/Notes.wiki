@@ -1,5 +1,43 @@
 = Notes =
 
+== Nouvelle Liste Emmanuel ==
+  * Coder un design commun au SUAPS et à l'ASESCO --> Relancer la DI pour l'unique portail http://sports.u-psud.fr
+  * Simplifier la page d'accueil en mettant par exemple directement le formulaire de connexion
+  * Mise à jour auto du <b>Total à payer</b> lors d'une nouvelle adhésion
+    * en fait faire un "panier dynamique" dès coches/choix dans liste sports (et tab_sports ...)
+    * démarrer avec une liste de sports compacte + remettre le niveau "sections" (encore + compact) + ajouter un niveau "catégorie de sport" (encore + compact) ...
+    * rmq : pas de couleurs car discriminatoire ... (cf. aussi discrimination par les inhomogénéités de tarifs ...)
+    * cocher par défaut bouton radio si un seul choix entité (+ msg rouge demandant de faire le choix si choix multiple / refuser valider et attendre bonnes valeurs comme pour fiche inscription)
+    * changer le texte d'en-tête de la deuxième page (confirmation)
+    * remettre une acceptation de la charte à cet endroit (+ mise à jour texte charte sur site)
+  * réfléchir à un système de "coupon de réduction" (ex : inscription tardive, cas des licences facultatives, etudiants boursiers, etc.)
+    * ET/OU réorganiser les statuts par arborescence E/P/X -> UFR (+boursier ?) -> etc.
+    * MISE A JOUR FACILE DU STATUT !!!
+      * ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
+  * pb utilisation des bornes imac
+  * question ldap - pré-remplissage ... photo ... 3 sources différentes /// pb du mot de passe confidentiel
+    * 2 appliances : pré-remplissage formulaire /// pointeuse présence ... (raccourci à cette étape en mémorisant l'id de la carte => pas de repassage par adonis ...)
+  * mailing fliker : pb du bouton return qui valide ??? pb limite 997 ! pb de la barre de progression ! pb du délai d'envoi DI / autre fonction php à utiliser ...
+  * FFSU : cf jeff
+
+  * quotas, listes d'attente ...
+
+  * Pouvoir envoyer les mails depuis asesco.asso@u-psud.fr
+  * Gérer la Licence facultative car du coup presque personne n'est à jour en Boxe Française !! // OU // Demander aux responsables étudiants de mettre à jour
+  * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés -> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
+  * Ajouter le détail du créneau dans le paiement - Il y a actuellement marqué "Supplément Section" ... et donc si plusieurs sports ont été payés, on ne sait pas lesquels
+  * Gestion Responsable Etudiant // Encadrant cf Section / Activité / Créneaux ... ??
+  * Ajouter un raccourci (uniquement bureau) sur la page "Adhérent" d'une personne pour pouvoir modifier son profil sans aller dans "Gestion" -> "Utilisateur"
+  * Mettre à jour Fiche Statistiques & Présences !
+  * Rajouter les pièces justificatives à fournir lors de l'inscription (à voir avec le SUAPS pour l'année prochaine)
+  * C'est un détail mais dans la recherche une fois le formulaire validé, passer les créneaux en "compact" javascript "onCheck: {node: 'collapse'}" au lieu de expand
+
+
+== Nouvelle Liste Phil ==
+à faire ...
+
+
+== Ancienne Liste 2013 et avant ... ==
 
 ===Bugs à Fixer===
   * inscription : bug dans le check n° tel sous certains navigateurs
