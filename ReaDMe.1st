@@ -1,6 +1,6 @@
 1/ installer la base de données sql (attention au prefixe ... cf. fichier sql.sh ?)
 
-2/ ajuster le fichier ./includes/config.php pour permettre l'accès à la base sql
+2/ renommer le fichier ./includes/config.php.default en ./includes/config.php et le modifier pour permettre l'accès à la base sql
 
 3/ créer un compte (avec l'URL d'inscription)
 
@@ -10,4 +10,3 @@
 
 rmq/ ne PAS ajouter de fichier index.html dans ./includes/thumb_plugins sinon le module 'thumbs' (basé sur gd ou imagick) ne marchera plus !...
 
-.
