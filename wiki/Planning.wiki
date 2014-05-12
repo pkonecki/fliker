@@ -1,30 +1,55 @@
 #summary Planning du développement
 
+
 = Planning 2011 =
-  * *Mars*: Reverse Engineering & Conception Tables MySQL
-  * *Avril*: Spécification des fonctionnalités core (php/mysql)
   * *Mai* : Développement Fonctionnalités Core (PHP)
-    * Semaine 18 : Finir formulaire d'inscription (-->envoie d'email/mot de passe)
-    * Semaine 19 : Page de connexion
-    * Semaine 20 : Fiche adherent
-    * Semaine 21 : Formulaire de recherche
+    * Semaine 20 : installation machine travail / prise en main code / docs
+    * Semaine 21 : prise en main code : repérage doublons / schémas uml
+    * Semaine 22 : repérage des bugs et choses à faire / début rédaction
   * *Juin* :
-    * Semaine 22 : "
-    * Semaine 23 : "
-    * Semaine 24 : 7 fonctions d'ajout/modification
-    * Semaine 25 : "
-    * Semaine 26 : "
+    * Semaine 23 : ?
+    * Semaine 24 : ?
+    * Semaine 25 : ?
+    * Semaine 26 : ? / rédaction
   * *Juillet*:
-    * Semaine 27 : Ajout Responsable/Suppléments (changement UML supplément)
-    * Semaine 28 : Gestion Adhésions/Paiements + Présences
-    * Semaine 29 : Vac   / Suite Adhésions/Paiements
-    * Semaine 30 : Vac   / Suite Adhésions/Paiements
+    * Semaine 27 : ?
+    * Semaine 28 : ?
+    * Semaine 29 : ?
+    * Semaine 30 : ?
+    * Semaine 31 : ? / rédaction
   * *Aout*:
-    * Semaine 31 : Vac   / Suite Adhésions/Paiements
-    * Semaine 32 : Tests / Fin Adhésions/Paiements
-    * Semaine 33 : Tests / Fin Présences
-    * Semaine 34 : Tests / Monitoring, Notes
-    * Semaine 35 : Tests / Fonctions de customisation
+    * Semaine 32 : ?
+    * Semaine 33 : ?
+    * Semaine 34 : ?
+    * Semaine 35 : Mise en production / Rédaction
+  * *Septembre*:
+    * Semaine 36 : Support production / Rédaction
+    * Semaine 37 : Rédaction
+    * Semaine 38 : Rédaction
+    * Semaine 39 : Répétition et soutenance
+
+
+= Perspectives =
+  * *Intégration Fliker/Wiki* (page d'accueil/login : Phil)
+    * Création dynamique du tableau des sports (wiki+printable) à partir base fliker
+    * Couplage avec Paypal ?
+  * *Module d'inventaire et gestion financière (rec/dép) dans Fliker* (A inventer ? Florian)
+  * *Système de tickets* (RT : Phil)
+    * Couplage avec adresses emails asesco@u-psud
+  * *Système de reservation* (PhpMyResa : Florian)
+    * Couplage avec inventaire
+    * Production d'iCal
+    * Affichage Agenda
+    * Couplage avec base des créneaux sports dans fliker
+  * *Forum ?*
+  * *Synchro comptes* (Wiki / Fliker / Tickets / Résa / Forum : Florian)
+    * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
+    * Couplage avec LDAP u-psud
+  * *Portail Sports* (Phil)
+    * Couplage avec cartes multiservice étudiants et personnels ...
+  * *Portail Evenementiel* (plus tard ...)
+    * Couplage avec système billeterie en ligne (paypal ... ticketlib ...)
+
 
 = Planning 2012 =
   * *Avril* : Prise en main du code, Installation plateforme de développement
@@ -60,23 +85,29 @@
   * *Documentation*
     * le rapport de stage pourrait éventuellement consister en cette documentation (= manuel de l'utilisateur) en indiquant en marge quel est ton apport par rapport à la version 1.0 ???
 
-= Perspectives =
-  * *Intégration Fliker/Wiki* (page d'accueil/login : Phil)
-    * Création dynamique du tableau des sports (wiki+printable) à partir base fliker
-    * Couplage avec Paypal ?
-  * *Module d'inventaire et gestion financière (rec/dép) dans Fliker* (A inventer ? Florian)
-  * *Système de tickets* (RT : Phil)
-    * Couplage avec adresses emails asesco@u-psud
-  * *Système de reservation* (PhpMyResa : Florian)
-    * Couplage avec inventaire
-    * Production d'iCal
-    * Affichage Agenda
-    * Couplage avec base des créneaux sports dans fliker
-  * *Forum ?*
-  * *Synchro comptes* (Wiki / Fliker / Tickets / Résa / Forum : Florian)
-    * Gestion des droits associés aux comptes (anon / membre / prof / bureau) notamment dans wiki !
-    * Couplage avec LDAP u-psud
-  * *Portail Sports* (Phil & Florian)
-    * Couplage avec cartes multiservice étudiants et personnels ...
-  * *Portail Evenementiel* (plus tard ...)
-    * Couplage avec système billeterie en ligne (paypal ... ticketlib ...)
+
+= Planning 2011 =
+  * *Mars*: Reverse Engineering & Conception Tables MySQL
+  * *Avril*: Spécification des fonctionnalités core (php/mysql)
+  * *Mai* : Développement Fonctionnalités Core (PHP)
+    * Semaine 18 : Finir formulaire d'inscription (-->envoie d'email/mot de passe)
+    * Semaine 19 : Page de connexion
+    * Semaine 20 : Fiche adherent
+    * Semaine 21 : Formulaire de recherche
+  * *Juin* :
+    * Semaine 22 : "
+    * Semaine 23 : "
+    * Semaine 24 : 7 fonctions d'ajout/modification
+    * Semaine 25 : "
+    * Semaine 26 : "
+  * *Juillet*:
+    * Semaine 27 : Ajout Responsable/Suppléments (changement UML supplément)
+    * Semaine 28 : Gestion Adhésions/Paiements + Présences
+    * Semaine 29 : Vac   / Suite Adhésions/Paiements
+    * Semaine 30 : Vac   / Suite Adhésions/Paiements
+  * *Aout*:
+    * Semaine 31 : Vac   / Suite Adhésions/Paiements
+    * Semaine 32 : Tests / Fin Adhésions/Paiements
+    * Semaine 33 : Tests / Fin Présences
+    * Semaine 34 : Tests / Monitoring, Notes
+    * Semaine 35 : Tests / Fonctions de customisation
