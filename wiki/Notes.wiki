@@ -21,16 +21,18 @@
   * FFSU : cf jeff
 
   * quotas, listes d'attente ...
-
-  * Pouvoir envoyer les mails depuis asesco.asso@u-psud.fr
+  
+  * Pouvoir envoyer les mails depuis asesco.asso@u-psud.fr (responsable asso)
   * Gérer la Licence facultative car du coup presque personne n'est à jour en Boxe Française !! // OU // Demander aux responsables étudiants de mettre à jour
-  * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés -> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
+  * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés --> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
   * Ajouter le détail du créneau dans le paiement - Il y a actuellement marqué "Supplément Section" ... et donc si plusieurs sports ont été payés, on ne sait pas lesquels
   * Gestion Responsable Etudiant // Encadrant cf Section / Activité / Créneaux ... ??
   * Ajouter un raccourci (uniquement bureau) sur la page "Adhérent" d'une personne pour pouvoir modifier son profil sans aller dans "Gestion" -> "Utilisateur"
   * Mettre à jour Fiche Statistiques & Présences !
+    * Bien compter les semaines de présences réelles par rapport aux vacances et aux jours fériés !
+    * Éventuellement, faire un suivi des présences des encadrants pour savoir exactement s'ils sont là ou pas -> qu'ils viennent signaler leur présence au secrétariat avant leur cours puis cocher un bouton. Cela permet de mieux calculer le nombre de cours véritable (cf gratification pour certains profs)
   * Rajouter les pièces justificatives à fournir lors de l'inscription (à voir avec le SUAPS pour l'année prochaine)
-  * C'est un détail mais dans la recherche une fois le formulaire validé, passer les créneaux en "compact" javascript "onCheck: {node: 'collapse'}" au lieu de expand
+  * C'est un détail mais dans la recherche une fois le formulaire validé, passer les créneaux en "compact" javascript "initializeChecked: 'collapsed'" au lieu de expand
 
 
 == Nouvelle Liste Phil ==
