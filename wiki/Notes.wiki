@@ -25,6 +25,11 @@
   * Pouvoir envoyer les mails depuis asesco.asso@u-psud.fr (responsable asso)
   * Gérer la Licence facultative car du coup presque personne n'est à jour en Boxe Française !! // OU // Demander aux responsables étudiants de mettre à jour
   * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés --> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
+    * En mettant à jour le module "Finances" notamment "Cotisations" (qui ne devrait pas s'appeler comme ça ...)
+      * Les id ne correspondent pas ...
+      * Revoir la requête d'affichage puisqu'en tant que resp asso, on ne voit pas les paiements des suppléments
+      * Dans la même requête, il faut afficher les chèques et pas les paiements (il y a actuellement des montants à 0 qui correspondent a des suppléments) --> utiliser table paiement plutôt que paiement_sup
+    * Dans le module "Finances" rubrique "Récapitulatif", ne pas compter les Dispenses et dans "Cotisations" ne pas les afficher
   * Ajouter le détail du créneau dans le paiement - Il y a actuellement marqué "Supplément Section" ... et donc si plusieurs sports ont été payés, on ne sait pas lesquels
   * Gestion Responsable Etudiant // Encadrant cf Section / Activité / Créneaux ... ??
   * Ajouter un raccourci (uniquement bureau) sur la page "Adhérent" d'une personne pour pouvoir modifier son profil sans aller dans "Gestion" -> "Utilisateur"
