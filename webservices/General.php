@@ -215,7 +215,7 @@ function getPaiementsAsso($id_asso, $promo, $tab_type)
 	while ($tmp_array = mysql_fetch_array($res))
 		$list_type[$tmp_array['type']][$tmp_array['id']] = 0;
 	
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement.id = {$GLOBALS['prefix_db']}paiement_sup.id_paiement AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$id_asso."') AND id_paiement IN (SELECT id FROM {$GLOBALS['prefix_db']}paiement WHERE promo=$promo)");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE type<>'Dispense' AND {$GLOBALS['prefix_db']}paiement.id = {$GLOBALS['prefix_db']}paiement_sup.id_paiement AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$id_asso."') AND id_paiement IN (SELECT id FROM {$GLOBALS['prefix_db']}paiement WHERE promo=$promo)");
 	$list_paie = null;
 	while ($tmp_array = mysql_fetch_array($res))
 	{
@@ -266,7 +266,7 @@ function getPaiementsAsso($id_asso, $promo, $tab_type)
 			}
 		}
 	}
-	return (array("Paiements" => $tab_type, "Demandé" => $demander, "Autorisé" => $autoriser, "Cotis_depot" => $cotis_depot));
+	return (array("Paiements" => $tab_type, "DemandÃ©" => $demander, "AutorisÃ©" => $autoriser, "Cotis_depot" => $cotis_depot));
 }
 
 function getPaiementsSec($id_asso, $id_sec, $promo, $tab_type, $list_id)
@@ -280,7 +280,7 @@ function getPaiementsSec($id_asso, $id_sec, $promo, $tab_type, $list_id)
 	while ($tmp_array = mysql_fetch_array($res))
 		$list_type[$tmp_array['type']][$tmp_array['id']] = 0;
 	
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement.id = {$GLOBALS['prefix_db']}paiement_sup.id_paiement AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$id_sec].")) AND id_paiement IN (SELECT id FROM {$GLOBALS['prefix_db']}paiement WHERE promo=$promo)");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE type<>'Dispense' AND {$GLOBALS['prefix_db']}paiement.id = {$GLOBALS['prefix_db']}paiement_sup.id_paiement AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$id_sec].")) AND id_paiement IN (SELECT id FROM {$GLOBALS['prefix_db']}paiement WHERE promo=$promo)");
 	$list_paie = null;
 	while ($tmp_array = mysql_fetch_array($res))
 	{
@@ -331,7 +331,7 @@ function getPaiementsSec($id_asso, $id_sec, $promo, $tab_type, $list_id)
 			}
 		}
 	}
-	return (array("Paiements" => $tab_type, "Demandé" => $demander, "Autorisé" => $autoriser, "Cotis_depot" => $cotis_depot));
+	return (array("Paiements" => $tab_type, "DemandÃ©" => $demander, "AutorisÃ©" => $autoriser, "Cotis_depot" => $cotis_depot));
 }
 
 function findColor($number)
@@ -346,7 +346,7 @@ function findColor($number)
 
 function getPaiementsAssoAll($id_asso, $tab_type)
 {
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$id_asso."') AND date_bordereau is not null AND date_bordereau != 0");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE type<>'Dispense' AND {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent='".$id_asso."') AND date_bordereau is not null AND date_bordereau != 0");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
 		if (isset($tab_type[$tmp_array['promo']]))
@@ -368,7 +368,7 @@ function getPaiementsAssoAll($id_asso, $tab_type)
 
 function getPaiementsSecAll($id_asso, $id_sec, $tab_type, $list_id)
 {
-	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$id_sec].")) AND id_sup IN (SELECT id FROM {$GLOBALS['prefix_db']}sup WHERE id_asso_paie = ".$id_asso.") AND date_bordereau is not null AND date_bordereau != 0");
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}paiement_sup, {$GLOBALS['prefix_db']}paiement WHERE type<>'Dispense' AND {$GLOBALS['prefix_db']}paiement_sup.id_paiement = {$GLOBALS['prefix_db']}paiement.id AND id_sup IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent IN (".$list_id[$id_sec].")) AND id_sup IN (SELECT id FROM {$GLOBALS['prefix_db']}sup WHERE id_asso_paie = ".$id_asso.") AND date_bordereau is not null AND date_bordereau != 0");
 	while ($tmp_array = mysql_fetch_array($res))
 	{
 		if (isset($tab_type[$tmp_array['promo']]))
