@@ -1,6 +1,8 @@
 = Notes =
 
 == Nouvelle Liste Sylvain ==
+  * Dans finance et/ou stat toutes les promos sont prises en compte ce qui est pas bon et qu'il faudrait changer.
+  * Rajouter dans les stats une colone de statut "inscription impossibles" (creneau pas ouvert)
 
 == Nouvelle Liste Emmanuel ==
   * Coder un design commun au SUAPS et à l'ASESCO --> Relancer la DI pour l'unique portail http://sports.u-psud.fr
