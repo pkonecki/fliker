@@ -7,8 +7,8 @@
     * Semaine 21 : prise en main code : repérage doublons / schémas uml
     * Semaine 22 : repérage des bugs et choses à faire / début rédaction
   * *Juin* :
-    * Semaine 23 : réinstallation machine virtuelle, UML code PHP et BD. 
-    * Semaine 24 : SQL, recherche sur la lenteur des stats, UML code PHP
+    * Semaine 23 : réinstallation machine virtuelle/ UML code PHP et BD. 
+    * Semaine 24 : SQL, recherche sur la lenteur des stats/ UML code PHP
     * Semaine 25 : ?
     * Semaine 26 : ? / rédaction
   * *Juillet*:
