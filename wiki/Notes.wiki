@@ -1,5 +1,7 @@
 = Notes =
 
+== Nouvelle Liste Sylvain ==
+
 == Nouvelle Liste Emmanuel ==
   * Coder un design commun au SUAPS et à l'ASESCO --> Relancer la DI pour l'unique portail http://sports.u-psud.fr
   * Simplifier la page d'accueil en mettant par exemple directement le formulaire de connexion
