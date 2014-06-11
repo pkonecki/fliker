@@ -11,7 +11,7 @@
     * changer le texte d'en-tête de la deuxième page (confirmation)
     * remettre une acceptation de la charte à cet endroit (+ mise à jour texte charte sur site)
   * réfléchir à un système de "coupon de réduction" (ex : inscription tardive, cas des licences facultatives, etudiants boursiers, etc.)
-    * ET/OU réorganiser les statuts par arborescence E/P/X -> UFR (+boursier ?) -> etc.
+    * ET/OU réorganiser les statuts par arborescence E/P/X -> UFR (+boursier ?) -> etc. Et faire en sorte que les supplement creneaux activite section prennent en compte le statut
     * MISE A JOUR FACILE DU STATUT !!!
       * ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
   * pb utilisation des bornes imac
