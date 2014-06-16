@@ -1,6 +1,13 @@
 = Notes =
 
 == Nouvelle Liste Sylvain ==
+  * formulaire d'inscription et fenêtre de login 
+quand l'adresse mail est marquée existe déjà: ouvrir un popup qui dit 
+"ne pas  créer pas un nouveau compte, essayez de retrouver le mot de passe de votre compte"
+
+  * modifier le message "ce mail n'existe pas ou compte pas activé": 
+pour ajouter :"veillez créer un compte ou utiliser un email qui existe déjà dans le site"
+
   * Dans finance et/ou stat toutes les promos sont prises en compte ce qui est pas bon et qu'il faudrait changer.
   * Rajouter dans les stats une colone de statut "inscription impossibles" (creneau pas ouvert)
 
