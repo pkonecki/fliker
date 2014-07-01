@@ -1,6 +1,15 @@
 = Notes =
 
 == Nouvelle Liste Sylvain ==
+
+ * ajouter une colonne report de l'année précédente (par assoce)  dans finances récapitulatif
+a rajouter dans le SQL + ajouter les fonctions pour le gérer
+avec un bouton passer a la promo suivante (arrête les compte et les passe en report) dans admin général
+
+  * rajouter un choix de promo + a jour / inscrits/ résiliés/ total/ présents dans gestion-stat (voir code Emmanuel)
+(virer la colonne à jour + changer calcul colonne inscrits qui deviens la référence et qui va changer de titre)
+éventuellement afficher des camemberts graphiques
+
   * formulaire d'inscription et fenêtre de login 
 quand l'adresse mail est marquée existe déjà: ouvrir un popup qui dit 
 "ne pas  créer pas un nouveau compte, essayez de retrouver le mot de passe de votre compte"
@@ -9,7 +18,12 @@ quand l'adresse mail est marquée existe déjà: ouvrir un popup qui dit
 pour ajouter :"veillez créer un compte ou utiliser un email qui existe déjà dans le site"
 
   * Dans finance et/ou stat toutes les promos sont prises en compte ce qui est pas bon et qu'il faudrait changer.
-  * Rajouter dans les stats une colone de statut "inscription impossibles" (creneau pas ouvert)
+  * Rajouter dans les stats une colonne de statut "inscription impossibles" (créneau pas ouvert)
+
+  * Réorganiser les statuts par arborescence
+Et faire en sorte que les supplément créneaux activité section prennent en compte le statut.
+
+  * compléter le manuel.doc: écrire un tuto pour une procédure de remplissage des bases de données vides sans passer par phpmyadmin
 
 == Nouvelle Liste Emmanuel ==
   * <s>Coder un design commun --> Relancer la DI pour l'unique portail http://sports.u-psud.fr</s>
