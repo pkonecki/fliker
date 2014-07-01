@@ -9,14 +9,14 @@
   * *Juin* :
     * Semaine 23 : réinstallation machine virtuelle/ UML code PHP et BD. 
     * Semaine 24 : SQL, recherche sur la lenteur des stats/ UML code PHP
-    * Semaine 25 : ?
-    * Semaine 26 : ? / rédaction
+    * Semaine 25 : UML fonctions PHP
+    * Semaine 26 : UML fonctions PHP / rédaction
   * *Juillet*:
-    * Semaine 27 : ?
-    * Semaine 28 : ?
-    * Semaine 29 : ?
-    * Semaine 30 : ?
-    * Semaine 31 : ? / rédaction
+    * Semaine 27 : UML fonctions PHP / travail sur fiche statistique / 
+    * Semaine 28 : mise à jour du calcul dans fiche statistique
+    * Semaine 29 : mise à jour du calcul dans fiche statistique
+    * Semaine 30 : rajouter un choix de promo dans gestion stat
+    * Semaine 31 : finalisation fiche_statique / rédaction
   * *Aout*:
     * Semaine 32 : ?
     * Semaine 33 : ?
