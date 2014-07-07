@@ -274,6 +274,22 @@ CREATE TABLE IF NOT EXISTS `fliker_entite` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `fliker_famille`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_famille` (
+  `id` int(16) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `url` varchar(1024) NOT NULL,
+  `description` longtext NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+
+--
 -- Structure de la table `fliker_finances`
 --
 
@@ -284,7 +300,7 @@ CREATE TABLE IF NOT EXISTS `fliker_finances` (
   `num_transaction` varchar(255) NOT NULL,
   `section` varchar(255) NOT NULL,
   `fournisseur` varchar(255) NOT NULL,
-  `montant` int(11) NOT NULL,
+  `montant` decimal(38,2) NOT NULL,
   `date_transaction` datetime NOT NULL,
   `signataire` int(11) NOT NULL,
   `enregistreur` int(11) NOT NULL,
@@ -463,6 +479,7 @@ CREATE TABLE IF NOT EXISTS `fliker_section` (
   `url` varchar(1024) NOT NULL,
   `description` longtext NOT NULL,
   `logo` varchar(255) NOT NULL,
+  `id_famille` int(16) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
