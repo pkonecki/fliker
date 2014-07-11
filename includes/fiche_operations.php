@@ -39,7 +39,7 @@ if(!(strcmp($_SESSION['user'],"") == 0))
 	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
 		print '<li><a class="'.(($_GET['page']==17) ? 'selected' : '').'" href="index.php?page=17">Inventaire</a></li>';
 	if((isset($tot_asso) && $tot_asso > 0))
-		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Cotisations</a></li>';
+		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Paiements</a></li>';
 	print '</ul>';
 }
 
@@ -141,7 +141,7 @@ if (isset($_POST['autorisation']) && $_POST['autorisation'] == "Autoriser")
 	print 	"</select></td></tr>";
 	$res = doQuery("SELECT montant FROM {$GLOBALS['prefix_db']}finances WHERE id=".$_POST['id_transa']."");
 	$tmp_array = mysql_fetch_array($res);
-	print	"<tr><td>Montant : </td><td><input name='montant' type='number' value=".$tmp_array['montant']." required /></td></tr>
+	print	"<tr><td>Montant : </td><td><input name='montant' type='number' step='any' value=".$tmp_array['montant']." required /></td></tr>
 			<tr><td>Date de transaction : </td><td><input name='date_transa' type='text' class='datepicker' required /></td></tr>
 			<tr><td>Numéro de transaction</td><td><input name='num_transa' type='text' required /></td></tr>
 			<tr><td>Nom du signataire : </td><td><SELECT name='signataire' class='filterselect' >";
@@ -168,7 +168,7 @@ else if (isset($_POST['modif_transa']))
 	while ($tmp_array = mysql_fetch_array($res))
 		print "<option ".($_POST['type'] == $tmp_array['nom'] ? "selected" : "")." value='".$tmp_array['nom']."'>".$tmp_array['nom']."</option>";
 	print 	"</select></td></tr>
-			<tr><td>Montant :</td><td><input name='montant' type='text' value='".$_POST['montant']."' /></td></tr>
+			<tr><td>Montant :</td><td><input name='montant' type='number' step='any' value='".$_POST['montant']."' /></td></tr>
 			<tr><td>Description :</td><td><input name='description' type='text' value='".$_POST['description']."' /></td></tr>
 			<tr><td align='center' colspan='2'><input type='hidden' name='id_transa' value=".$_POST['id']." /><input type='submit' name='modif_transa_sub'/></td></tr>
 			</form></table>";
@@ -206,8 +206,13 @@ else
 			$tmp_adh_resp[$tmp_array['id_sec']] = 1;
 			
 	$res= doQuery("SELECT * FROM {$GLOBALS['prefix_db']}asso_section");
-	while ($tmp_array = mysql_fetch_array($res))
+	while ($tmp_array = mysql_fetch_array($res)){
 		$list_enti[$tmp_array['id_asso']."-".$tmp_array['id_sec']] = $list_enti[$tmp_array['id_asso']]." - ".$tmp_list_sec[$tmp_array['id_sec']];
+			if($_SESSION['privilege'] != 1){
+			foreach ($tmp_adh_resp as $id_asso_resp => $bool)
+			{if($tmp_array['id_asso'] == $id_asso_resp){$tmp_adh_resp[$tmp_array['id_sec']] = 1;}}
+			}
+		}
 	asort($list_enti);
 
 	print "<td><select name='section'>";
@@ -227,7 +232,7 @@ else
 	}
 	print 	"</select></td></tr>
 			<tr><td>Fournisseur: </td><td><input name='fournisseur' type='text' required /></td></tr>
-			<tr><td>Montant (en $currency): </td><td><input name='montant' type='number' required /></td></tr>
+			<tr><td>Montant (en $currency): </td><td><input name='montant' type='number' step='any' required /></td></tr>
 			<tr><td>Description : </td><td><input name='description' type='text' /></td></tr>
 			<tr><td colspan='2' align='center'><input name='new_demande' type='submit'/></td>
 			</form></table>";
