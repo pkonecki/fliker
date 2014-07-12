@@ -39,7 +39,7 @@ if(!(strcmp($_SESSION['user'],"") == 0))
 	if((isset($tot_asso) && $tot_asso > 0) || (isset($tot_sec) && $tot_sec > 0))
 		print '<li><a class="'.(($_GET['page']==17) ? 'selected' : '').'" href="index.php?page=17">Inventaire</a></li>';
 	if((isset($tot_asso) && $tot_asso > 0))
-		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Paiements</a></li>';
+		print '<li><a class="'.(($_GET['page']==18) ? 'selected' : '').'" href="index.php?page=18">Bordereaux</a></li>';
 	print '</ul>';
 }
 
@@ -242,8 +242,8 @@ else
 	// Liste des demandes d'autorisation
 	print "<br/><h2>Liste des transactions</h2><br/>";
 	print 	"<form method='POST' action='index.php?page=16'>
-			<b>La confirmation est </b><select name='statut_demande'><option value='all'>Indifférent</option><option ".($statut_demande == "pending" ? "selected" : "")." value='pending'>En attente</option><option ".($statut_demande == "accepted" ? "selected" : "")." value='accepted'>Accepté</option><option ".($statut_demande == "refused" ? "selected" : "")." value='refused'>Refusé</option></select><br/>
-			<b>La validation est </b><select name='etape_demande'><option value='all'>Indifférent</option><option ".($etape_demande == "ask" ? "selected" : "")." value='ask'>Demandé</option><option ".($etape_demande == "authorized" ? "selected" : "")." value='authorized'>Autorisé</option><option ".($etape_demande == "over" ? "selected" : "")." value='over'>Terminé</option></select><br/>
+			<b>La confirmation est </b><select name='statut_demande'><option value='all'>Indifférent</option><option ".($statut_demande == "pending" ? "selected" : "")." value='pending'>En attente</option><option ".($statut_demande == "accepted" ? "selected" : "")." value='accepted'>Acceptée</option><option ".($statut_demande == "refused" ? "selected" : "")." value='refused'>Refusée</option></select><br/>
+			<b>La validation est </b><select name='etape_demande'><option value='all'>Indifférent</option><option ".($etape_demande == "ask" ? "selected" : "")." value='ask'>Demandée</option><option ".($etape_demande == "authorized" ? "selected" : "")." value='authorized'>Autorisée</option><option ".($etape_demande == "over" ? "selected" : "")." value='over'>Terminée</option></select><br/>
 			Date de début des demandes : Année <select name='demande_debut_annee'>".returnSelectYear((isset($_POST['demande_debut_annee']) ? $_POST['demande_debut_annee'] : strftime("%Y", $date_debut_demande)))."</select> - Mois <select name='demande_debut_mois'>".returnSelectMonth((isset($_POST['demande_debut_mois']) ? $_POST['demande_debut_mois'] : strftime("%m", $date_debut_demande)))."</select><br/>
 			Date de fin des demandes : Année <select name='demande_fin_annee'>".returnSelectYear((isset($_POST['demande_fin_annee']) ? $_POST['demande_fin_annee'] : strftime("%Y", $date_fin_demande)))."</select> - Mois <select name='demande_fin_mois'>".returnSelectMonth((isset($_POST['demande_fin_mois']) ? $_POST['demande_fin_mois'] : strftime("%m", $date_fin_demande)))."</select><br/>
 			<input type='submit' name='demande_intervalle' value='Rechercher'/>
