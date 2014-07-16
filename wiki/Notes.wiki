@@ -69,6 +69,14 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
 à faire ...
 
 
+== Remarque Florian ==
+
+ * La table fliker_statut est vide lors de l'import du fichier fliker.sql, il est donc impossible de s'inscrire puisque c'est bloquant dans l'inscription. Je ne sais pas si c'est prévu de base mais il serait peux-être intéressant de mettre des exemples par défaut.
+
+ * Le fichier paths.php est préfixé par défaut sur "fliker2_" alors que le fichier fliker.sql préfixe par défaut sur "fliker_". A corriger pour plus de simplicité.
+
+ * Les pictogrammes lors de l'inscription ne s'affichent pas.
+
 == Ancienne Liste 2013 et avant ... ==
 
 ===Bugs à Fixer===
