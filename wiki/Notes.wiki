@@ -75,7 +75,7 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
 
  * Le fichier paths.php est préfixé par défaut sur "fliker2_" alors que le fichier fliker.sql préfixe par défaut sur "fliker_". A corriger pour plus de simplicité.
 
- * Les pictogrammes lors de l'inscription ne s'affichent pas.
+ * Les pictogrammes du captcha lors de l'inscription ne s'affichent pas.
 
 == Ancienne Liste 2013 et avant ... ==
 
