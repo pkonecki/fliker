@@ -288,6 +288,18 @@ CREATE TABLE IF NOT EXISTS `fliker_famille` (
 
 -- --------------------------------------------------------
 
+--
+-- Structure de la table `fliker_famille_section`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_famille_section` (
+  `id_famille` int(16) NOT NULL,
+  `id_sec` int(16) NOT NULL,
+  KEY `id_sec` (`id_sec`),
+  KEY `id_famille` (`id_famille`,`id_sec`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `fliker_finances`
@@ -424,6 +436,7 @@ CREATE TABLE IF NOT EXISTS `fliker_presence` (
 CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
   `id_act` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
+  `promo` int(4) NOT NULL,
   PRIMARY KEY (`id_act`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -437,6 +450,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
 CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
   `id_asso` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
+  `promo` int(4) NOT NULL,
   PRIMARY KEY (`id_asso`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -450,6 +464,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
 CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
   `id_cre` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
+  `promo` int(4) NOT NULL,
   PRIMARY KEY (`id_cre`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -463,6 +478,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
 CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   `id_sec` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
+  `promo` int(4) NOT NULL,
   PRIMARY KEY (`id_sec`,`id_adh`),
   KEY `id_adh` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -479,7 +495,6 @@ CREATE TABLE IF NOT EXISTS `fliker_section` (
   `url` varchar(1024) NOT NULL,
   `description` longtext NOT NULL,
   `logo` varchar(255) NOT NULL,
-  `id_famille` int(16) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -652,6 +667,13 @@ ALTER TABLE `fliker_asso_section`
 ALTER TABLE `fliker_creneau`
   ADD CONSTRAINT `creneau_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `creneau_ibfk_2` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `fliker_famille_section`
+--
+ALTER TABLE `fliker_famille_section`
+  ADD CONSTRAINT `famille_section_ibfk_1` FOREIGN KEY (`id_famille`) REFERENCES `fliker_famille` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `famille_section_ibfk_2` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `fliker_paiement`
