@@ -3,7 +3,7 @@
 //Personnaliser ici :
 
 $GLOBALS['root']=$_SERVER['DOCUMENT_ROOT']."/fliker/";
-$GLOBALS['prefix_db']="fliker2_";
+$GLOBALS['prefix_db']="fliker_";
 
 //Fin personnalisation
 
