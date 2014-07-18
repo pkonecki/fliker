@@ -39,7 +39,7 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
       * ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
   * Ajouter une sauvegarde de tous les Responsables (Asso, Section, Activité, Créneau) -> Ajout colonne "promo" dans tables sql + Ajout de selecteur de promo dans les gestions
   * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés --> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
-    * <s>En mettant à jour le module "Finances" notamment "Cotisations" (qui ne devrait pas s'appeler comme ça ...)
+    * <font color="red">294</font> <s>En mettant à jour le module "Finances" notamment "Cotisations" (qui ne devrait pas s'appeler comme ça ...)
       * Les id ne correspondent pas ...
       * Revoir la requête d'affichage puisqu'en tant que resp asso, on ne voit pas les paiements des suppléments
       * Dans la même requête, il faut afficher les chèques et pas les paiements (il y a actuellement des montants à 0 qui correspondent a des suppléments) --> utiliser table paiement plutôt que paiement_sup</s>
@@ -73,7 +73,7 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
 
  * La table fliker_statut est vide lors de l'import du fichier fliker.sql, il est donc impossible de s'inscrire puisque c'est bloquant dans l'inscription. Je ne sais pas si c'est prévu de base mais il serait peux-être intéressant de mettre des exemples par défaut.
 
- * Le fichier paths.php est préfixé par défaut sur "fliker2_" alors que le fichier fliker.sql préfixe par défaut sur "fliker_". A corriger pour plus de simplicité.
+ * <font color="red">298</font> <s>Le fichier paths.php est préfixé par défaut sur "fliker2_" alors que le fichier fliker.sql préfixe par défaut sur "fliker_". A corriger pour plus de simplicité.</s>
 
  * Les pictogrammes du captcha lors de l'inscription ne s'affichent pas.
 
