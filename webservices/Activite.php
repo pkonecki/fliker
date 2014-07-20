@@ -3,7 +3,7 @@
 function newActivite($tab){
 	require_once("class.imageconverter.php");
 	require_once("saveImage.php");
-	//Nouvelle entité
+	//Nouvelle entitÃ©
 	include("opendb.php");
 	$q1 = "INSERT INTO {$GLOBALS['prefix_db']}entite VALUES ()";
 	$r1 = mysql_query($q1);
@@ -71,9 +71,9 @@ function getActivites($userid)
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '".$userid."')
-							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '".$userid."')
-							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '".$userid."')
+							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '".$userid."' AND promo = ".getParam('promo.conf').")
+							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '".$userid."' AND promo = ".getParam('promo.conf').")
+							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '".$userid."' AND promo = ".getParam('promo.conf').")
 							)
 						ORDER BY S.nom, AC.nom";
 			}
@@ -141,19 +141,19 @@ function modifActivite($tab)
 
 }
 
-function ajoutResponsableAct($id_act,$id_adh)
+function ajoutResponsableAct($id_act,$id_adh,$promo)
 {
 	include("opendb.php");
-	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh) VALUES ('$id_act.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh,promo) VALUES ('$id_act.','$id_adh','$promo')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
 	
 }
-function delRespActivite($id_act,$id_adh)
+function delRespActivite($id_act,$id_adh,$promo)
 {
 	include("opendb.php");
-	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act='$id_act' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act='$id_act' AND id_adh='$id_adh' AND promo='$promo' ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -162,7 +162,7 @@ function delRespActivite($id_act,$id_adh)
 function getResponsablesAct($id_act)
 {
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."' AND promo='".$promo."'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

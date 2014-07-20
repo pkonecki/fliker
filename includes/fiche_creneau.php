@@ -82,9 +82,9 @@ else
 		header("Location: index.php?page=6");
 	}
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp')
-		delRespCre($_GET['creneau'],$_GET['resp']);
+		delRespCre($_GET['creneau'],$_GET['resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_resp')
-		ajoutResponsableCre($_POST['id_cre'],$_POST['id_resp']);
+		ajoutResponsableCre($_POST['id_cre'],$_POST['id_resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_GET['sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
@@ -120,11 +120,25 @@ else
 
 			print '<h2>Vos Créneaux</h2>';
 			print '<ul>';
-
+			$non_actif="";
 			foreach($tab as $creneau){
+				$verif=0;
+				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_cre = ".$creneau['id_cre']." ");
+				$verif = mysql_num_rows($query);
+				if ($verif != 0){
 				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
+				}
+				else{
+				$non_actif .= '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
+				}
 			}
 			print '</ul>';
+			print '<br />
+			<h2>Créneaux NON Actifs</h2>
+			<ul>
+			'.$non_actif.'
+			</ul>
+			';
 
 		} else {
 			print '<h2>Fiche Créneau</h2>';
@@ -142,19 +156,30 @@ else
 					</FORM></td>';
 			print '</tr>';
 			print '</table>';
+			
+			//Selection Promo
+			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion ORDER BY promo DESC");
+			print "<p>Promo:<SELECT id=\"promo\" >";
+			if (!$res || mysql_num_rows($res) <= 0)
+				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
+			while ($tmp_array_promo = mysql_fetch_array($res))
+				print "<OPTION value='".$tmp_array_promo['promo']."' ".(isset($_GET['promo']) && $_GET['promo'] == $tmp_array_promo['promo'] ? "selected" : "")." >".$tmp_array_promo['promo']."</OPTION>";
+			print "</SELECT></p>";
+			
 			//Liste de responsables
-			$resps = getResponsablesCre($_GET['creneau']);
+			$resps = getResponsablesCre($_GET['creneau'],$promo);
 			print '<h3>Responsables du créneau</h3>';
 			print '<ul>';
+			if(empty($resps)){print 'Aucun Responsable';}
 			foreach ($resps as $id => $adh) {
-				print '<FORM action="index.php?page=6&resp='.$id.'&creneau='.$_GET['creneau'].'" method="POST">
+				print '<FORM action="index.php?page=6&resp='.$id.'&creneau='.$_GET['creneau'].'&promo='.$promo.'" method="POST">
 					<input type="hidden" name="action" value="suppression_resp" />
 				<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
 				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
 			}
 			print '</ul>';
-			print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
+			print '<FORM action="index.php?page=6&creneau='.$_GET['creneau'].'&promo='.$promo.'" method="POST">
 			<input type="hidden" name="action" value="new_resp" />
 			<input type="hidden" name="id_cre" value="'.$_GET['creneau'].'">';
 			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" class="filterselect">';
@@ -169,15 +194,6 @@ else
 			$sups = getSup("creneau",$_GET['creneau'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments du créneau</h3>';
-		
-			//Selection Promo
-			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['creneau'].") ORDER BY promo DESC");
-			print "<p>Promo:<SELECT id=\"promo\" >";
-			if (!$res || mysql_num_rows($res) <= 0)
-				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
-			while ($tmp_array_promo = mysql_fetch_array($res))
-				print "<OPTION value='".$tmp_array_promo['promo']."' ".(isset($_GET['promo']) && $_GET['promo'] == $tmp_array_promo['promo'] ? "selected" : "")." >".$tmp_array_promo['promo']."</OPTION>";
-			print "</SELECT></p>";
 			
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';

@@ -6,7 +6,7 @@ function newAsso($tab)
 	require_once("saveImage.php");
 	if(empty($tab['nom'])) die();
 	include("opendb.php");
-	//Nouvelle entité
+	//Nouvelle entitÃ©
 	$q1 = "INSERT INTO {$GLOBALS['prefix_db']}entite VALUES ()";
 	$r1 = mysql_query($q1);
 	if (!$r1){ 
@@ -59,7 +59,7 @@ function getAssociations($userid)
 		else
 		{
 			if (!empty($userid))
-				$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id ORDER BY A.nom ASC";
+				$query = "SELECT * FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso R WHERE id_adh = '$userid' AND R.id_asso = A.id AND R.promo = ".getParam('promo.conf')." ORDER BY A.nom ASC";
 			else
 				return;
 		}
@@ -100,30 +100,30 @@ function modifAsso($tab)
 
 }
 
-function ajoutResponsableAsso($id_asso,$id_adh)
+function ajoutResponsableAsso($id_asso,$id_adh,$promo)
 {
 	include("opendb.php");
-	$query = "INSERT into {$GLOBALS['prefix_db']}resp_asso(id_asso,id_adh) VALUES ('$id_asso.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_asso(id_asso,id_adh,promo) VALUES ('$id_asso.','$id_adh','$promo')";
 	$results = mysql_query($query);
 	if (!$results)
 		echo mysql_error();	
 	include("closedb.php");
 	
 }
-function delRespAsso($id_asso,$id_adh)
+function delRespAsso($id_asso,$id_adh,$promo)
 {
 	include("opendb.php");
-	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_asso='$id_asso' AND id_adh='$id_adh' AND promo='$promo' ";
 	$results = mysql_query($query);
 	if (!$results)
 		echo mysql_error();	
 	include("closedb.php");
 }
 
-function getResponsablesAsso($id_asso)
+function getResponsablesAsso($id_asso,$promo)
 {
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso' ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A , {$GLOBALS['prefix_db']}resp_asso RA WHERE A.id=RA.id_adh AND RA.id_asso='$id_asso' AND promo='".$promo."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results)

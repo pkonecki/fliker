@@ -56,9 +56,9 @@ else{
 		header("Location: index.php?page=5");
 	}
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp')
-		delRespActivite($_GET['act'],$_GET['resp']);
+		delRespActivite($_GET['act'],$_GET['resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_resp')
-		ajoutResponsableAct($_POST['id_act'],$_POST['id_resp']);
+		ajoutResponsableAct($_POST['id_act'],$_POST['id_resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_GET['sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
@@ -138,19 +138,30 @@ else{
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'">
 			<INPUT type="submit" value="Nouveau">
 			</FORM></td>';
+			
+			//Selection Promo
+			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['act'].") ORDER BY promo DESC");
+			print "<p>Promo:<SELECT id=\"promo\" >";
+			if (!$res || mysql_num_rows($res) <= 0)
+				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
+			while ($tmp_array_promo = mysql_fetch_array($res))
+				print "<OPTION value='".$tmp_array_promo['promo']."' ".(isset($_GET['promo']) && $_GET['promo'] == $tmp_array_promo['promo'] ? "selected" : "")." >".$tmp_array_promo['promo']."</OPTION>";
+			print "</SELECT></p>";
+			
 			//Liste de responsables
-			$resps = getResponsablesAct($_GET['act']);
+			$resps = getResponsablesAct($_GET['act'],$promo);
 			print '<h3>Responsables de l\'activité</h3>';
 			print '<ul>';
+			if(empty($resps)){print 'Aucun Responsable';}
 			foreach ($resps as $id => $adh) {
-				print '<FORM action="index.php?page=5&resp='.$id.'&act='.$_GET['act'].'" method="POST">
+				print '<FORM action="index.php?page=5&resp='.$id.'&act='.$_GET['act'].'&promo='.$promo.'" method="POST">
 					<input type="hidden" name="action" value="suppression_resp" />
 				<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
 				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
 			}
 			print '</ul>';
-			print '<FORM action="index.php?page=5&act='.$_GET['act'].'" method="POST">
+			print '<FORM action="index.php?page=5&act='.$_GET['act'].'&promo='.$promo.'" method="POST">
 			<input type="hidden" name="action" value="new_resp" />
 			<input type="hidden" name="id_act" value="'.$_GET['act'].'">';
 			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" class="filterselect">';
@@ -165,16 +176,6 @@ else{
 			$sups = getSup("activite",$_GET['act'],$promo);
 			$assos = getAssos();
 			print '<h3>Suppléments de l\'activité</h3>';
-			
-			//Selection Promo
-			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['act'].") ORDER BY promo DESC");
-			print "<p>Promo:<SELECT id=\"promo\" >";
-			if (!$res || mysql_num_rows($res) <= 0)
-				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
-			while ($tmp_array_promo = mysql_fetch_array($res))
-				print "<OPTION value='".$tmp_array_promo['promo']."' ".(isset($_GET['promo']) && $_GET['promo'] == $tmp_array_promo['promo'] ? "selected" : "")." >".$tmp_array_promo['promo']."</OPTION>";
-			print "</SELECT></p>";
-			
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';
 			print '</tr>';

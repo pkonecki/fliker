@@ -100,10 +100,10 @@ function getCreneaux($userid)
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
-							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid')
-							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid')
-							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
+							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
+							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
+							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
+							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
 							/*OR CR.id IN (SELECT id_cre FROM adhesion WHERE id_adh = '$userid')*/
 							)
 							ORDER BY nom_sec, nom_act, CASE jour
@@ -181,25 +181,25 @@ function modifCreneau($tab){
 
 }
 
-function ajoutResponsableCre($id_cre,$id_adh){
+function ajoutResponsableCre($id_cre,$id_adh,$promo){
 	include("opendb.php");
-	$query = "INSERT into {$GLOBALS['prefix_db']}resp_cren(id_cre,id_adh) VALUES ('$id_cre.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_cren(id_cre,id_adh,promo) VALUES ('$id_cre.','$id_adh','$promo')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
 	
 }
-function delRespCre($id_cre,$id_adh){
+function delRespCre($id_cre,$id_adh,$promo){
 	include("opendb.php");
-	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_cre='$id_cre' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_cre='$id_cre' AND id_adh='$id_adh' AND promo='$promo' ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
 }
 
-function getResponsablesCre($id_cre){
+function getResponsablesCre($id_cre,$promo){
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_cren RA WHERE A.id=RA.id_adh AND RA.id_cre='".$id_cre."'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_cren RA WHERE A.id=RA.id_adh AND RA.id_cre='".$id_cre."' AND promo='".$promo."'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -214,10 +214,11 @@ function getResponsablesCre($id_cre){
 }
 
 function getAllCreneaux(){
-	
-	$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
-						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
+
+	$query = "SELECT A.id id_asso, A.nom nom_asso, F.id id_famille, F.nom nom_famille, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS, {$GLOBALS['prefix_db']}famille F, {$GLOBALS['prefix_db']}famille_section FS
 						WHERE CR.id_act=AC.id
+						AND S.id=FS.id_sec AND F.id=FS.id_famille
 						AND AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id
@@ -227,7 +228,7 @@ function getAllCreneaux(){
 							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act )
 							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren )
 							)
-						ORDER BY nom_sec, nom_act, CASE jour
+						ORDER BY nom_famille, nom_sec, nom_act, CASE jour
                  WHEN 'Lundi' THEN 1 
                  WHEN 'Mardi' THEN 2 
                  WHEN 'Mercredi' THEN 3 
@@ -240,11 +241,15 @@ function getAllCreneaux(){
 		include("opendb.php");
 		$results = mysql_query($query);
 		if (!$results) echo mysql_error();
-		$tab = array();
+		$tab_avec_famille = array();
+		$tab_sans_famille = array();
 		while($row = mysql_fetch_array($results)){
-			$tab[$row['id_cre']] = $row;
+				$tab_sans_famille[$row['id_cre']] = $row;
+				$tab_avec_famille[$row['id_cre'].'-'.$row['id_famille']] = $row;
 		}
 		include("closedb.php");
+		$tab['avec_famille'] = $tab_avec_famille;
+		$tab['sans_famille'] = $tab_sans_famille;
 		return $tab;
 	
 }
