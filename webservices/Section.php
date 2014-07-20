@@ -72,8 +72,8 @@ function getSections($userid)
 						AND HS.id_sec=S.id
 							AND
 							(
-							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
-							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid')
+							S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
+							OR A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE id_adh = '$userid' AND promo = ".getParam('promo.conf').")
 							)
 						ORDER BY S.nom";
 			}
@@ -136,25 +136,25 @@ function modifSection($tab){
 	include("closedb.php");
 
 }
-function ajoutResponsableSec($id_sec,$id_adh){
+function ajoutResponsableSec($id_sec,$id_adh,$promo){
 	include("opendb.php");
-	$query = "INSERT into {$GLOBALS['prefix_db']}resp_section(id_sec,id_adh) VALUES ('$id_sec.','$id_adh')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_section(id_sec,id_adh,promo) VALUES ('$id_sec.','$id_adh','$promo')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
 	
 }
-function delRespSec($id_sec,$id_adh){
+function delRespSec($id_sec,$id_adh,$promo){
 	include("opendb.php");
-	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_section WHERE id_sec='$id_sec' AND id_adh='$id_adh' ";
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}resp_section WHERE id_sec='$id_sec' AND id_adh='$id_adh' AND promo='$promo' ";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
 }
 
-function getResponsablesSec($id_sec){
+function getResponsablesSec($id_sec,$promo){
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_section RA WHERE A.id=RA.id_adh AND RA.id_sec='$id_sec' ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_section RA WHERE A.id=RA.id_adh AND RA.id_sec='$id_sec' AND promo='".$promo."' ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -165,6 +165,47 @@ function getResponsablesSec($id_sec){
 	include("closedb.php");
 	return $tab;
 	
+}
+
+
+function getFamilleSec($id_sec){
+
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}famille ORDER BY nom";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_array($results)){
+			$tab[$row['id']]['nom'] = $row['nom'];
+			$tab[$row['id']]['select'] = "null";
+			
+			$query2 = "SELECT * FROM {$GLOBALS['prefix_db']}famille_section WHERE id_sec=".$id_sec."";
+			$results2 = mysql_query($query2);
+			if (!$results2) echo mysql_error();
+			while($row2 = mysql_fetch_array($results2)){
+			if($row2['id_famille']==$row['id']){$tab[$row['id']]['select'] = "select";}
+			}
+	}
+	include("closedb.php");
+	return $tab;
 	
 }
+
+
+function modifFamilleSec($id_sec, $id_famille){
+	include("opendb.php");
+	$query = "INSERT into {$GLOBALS['prefix_db']}famille_section(id_famille,id_sec) VALUES ('$id_famille.','$id_sec')";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+}
+
+function suppressionFamilleSec($id_sec, $id_famille){
+	include("opendb.php");
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}famille_section WHERE id_sec='$id_sec' AND id_famille='$id_famille' ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();	
+	include("closedb.php");
+}
+
 ?>

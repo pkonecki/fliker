@@ -73,47 +73,54 @@ $adh = getAdherent($id_adh);
 $id_statut_adh = $adh['statut'];
 
 if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
+
 	print '<h2>Choisissez vos activités</h2>';
 	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
 	<input type="hidden" name="action" value="select_assos" />';
 	print '<ul id="tree_root">';
 	$tab=array();
-	foreach($creneaux as $creneau)
-	{
-		$tab[$creneau['id_act']]['nom']=$creneau['nom_act'];
-		$tab[$creneau['id_act']]['id']=$creneau['id_act'];
-		$tab[$creneau['id_act']]['nom_sec']=$creneau['nom_sec'];
-		$tab[$creneau['id_act']]['id_sec']=$creneau['id_sec'];
-		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour']=$creneau['jour_cre'];
-		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id']=$creneau['id_cre'];
-		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut']=$creneau['debut_cre'];
-		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['fin']=$creneau['fin_cre'];
-		$tab[$creneau['id_act']]['creneaux'][$creneau['id_cre']]['lieu']=$creneau['lieu'];
+	foreach($creneaux['avec_famille'] as $creneau ){
+		$tab[$creneau['id_famille']]['nom_famille'] = $creneau['nom_famille'];
+		$tab[$creneau['id_famille']]['id_famille'] = $creneau['id_famille'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['nom_sec'] = $creneau['nom_sec'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['id_sec'] = $creneau['id_sec'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['nom'] = $creneau['nom_act'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['id'] = $creneau['id_act'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour'] = $creneau['jour_cre'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id'] = $creneau['id_cre'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut'] = $creneau['debut_cre'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['fin'] = $creneau['fin_cre'];
+		$tab[$creneau['id_famille']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['lieu'] = $creneau['lieu'];
 	}
+
 	$ads=getAdhesions($id_adh,$promo);
-	foreach($tab as $act)
-	{
-		$out= '<li><input type="checkbox" name="act'.$act['id'].'"  value="'.$act['id'].'"><label>'.$act['nom_sec'].' - '.$act['nom'].'</label>';
-		$out.= '<ul id="creneaux">';
-		$i=0;
-		foreach($act['creneaux'] as $cre)
-		{
-			$resps = getResponsablesCre( $cre['id'] );
-			if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 )
-			{
-				$out.= '<li><input type="checkbox" name="cre[]"  value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
-				$i++;
+	foreach($tab as $famille){
+		$out = '<li><input type="checkbox" name="famille'.$famille['id_famille'].'" value="'.$famille['id_famille'].'"><label>'.$famille['nom_famille'].'</label>';
+		$out .= '<ul id="sections">';
+			foreach($famille['activites'] as $act){
+				$out2 = '<li><input type="checkbox" name="act'.$act['id'].'" value="'.$act['id'].'"><label>'.$act['nom_sec'].' - '.$act['nom'].'</label>';
+				$out2 .= '<ul id="creneaux">';
+				$i=0;
+				foreach($act['creneaux'] as $cre){
+					$resps = getResponsablesCre($cre['id'], $promo);
+					if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 ){
+					$out2 .= '<li><input type="checkbox" name="cre[]" value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
+					$i++;
+					}
+				}
+				$out2 .= '</ul>';
+				if ($i>0) $out .= $out2;
 			}
-		}
-		$out.= '</ul>';
+		$out .= '</ul>';
 		if ($i>0) print $out;
 	}
 	print '</ul>';
-	print '<INPUT type="submit" value="Suite"></FORM>';
-} 
+	print '<INPUT type="submit" value="Valider"></FORM>';
+
+
+}
 else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty($_POST['cre']) )
 {
-	print "<span class=\"tip\"><center>".getParam('text_select_asso.txt')."</center></span>";
 	print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">';
 	if (!isset($_POST['update']))
 	{
@@ -126,27 +133,41 @@ else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty
 	}
 	print '<TABLE>';
 	$assos_cre=getAssosCreneaux();
-	foreach($_POST['cre'] as $cre)
+	$creneaux = $creneaux['sans_famille'];
+	$post_creneau = array_unique($_POST['cre']);
+	foreach($post_creneau as $cre)
 	{
 		print '<tr>';
 		print '<td>'.$creneaux[$cre]['nom_sec'].' - '.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].'</td><td class="asso_cre">';
-		if(isset($assos_cre[$id_statut_adh][$cre]))
-		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso)
-		{
-			print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
-			<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
-		}
-		else{
+		
+		if(count($assos_cre[$id_statut_adh][$cre]) == 0){
 			print "<LABEL FOR=\"asso_cre_$cre\">Impossible</LABEL>
 			<input type=\"radio\" checked value=\"\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
+			$texte_impossible = "<span class=\"tip\"><center>".getParam('text_select_asso.txt')."</center></span>";
 		}
+		else{
+		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso)
+		{
+			if(count($assos_cre[$id_statut_adh][$cre]) == 1){
+				print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
+				<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\" checked>";
+			}
+			else{
+				print "<LABEL FOR=\"asso_cre_$cre\">$nom_asso</LABEL>
+				<input type=\"radio\" value=\"$id_asso\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">";
+			}
+		}
+		}
+
 		print '</tr>';
 	}
 // ici il manque une fonction de recalcul automatique du cout total des inscriptions selectionnées pour afficher à la palce du "?"
-	print "<tr><td>Total</td><td id=\"total\">?$currency</td></tr>";
+	print "<tr><td>Total</td><td id=\"total\">mm$currency</td></tr>";
 	print "<span style=\"display:none;\" id=\"id_statut_adh\">$id_statut_adh</span>";
 	print '</TABLE>
-	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>';
+	<INPUT type="submit" value="Valider"><INPUT type="reset" class="reset" value="Remettre à zéro" ></FORM>
+	'.$texte_impossible.'
+	';
 }
 else
 {
@@ -193,6 +214,7 @@ else
 		else
 			$ads=getMyAdhesions($id_adh,$promo);
 		$crens=getAllCreneaux();
+		$crens=$crens['sans_famille'];
 		$mycrens=getCreneaux($_SESSION['uid']);
 		$assos=getAllAssociations();
 		$assos_cre=getAssosCreneaux();
@@ -214,9 +236,9 @@ else
 		//Bouton nouvelle adhésion
 		if (($self || $resp_asso || $resp_section) && $promo == $current_promo && getParam("stop_adhesions.conf") == "false")
 			print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
-			<input type="hidden" name="action" value="nouvelle" />
-			<INPUT type="submit" value="Nouvelle">';
-		print '</FORM>';
+			<input type="hidden" name="action" value="nouvelle" /><br />
+			<INPUT type="submit" style="width:400px;height:30px;font-size:16px;" value="Cliquer ici pour ajouter un sport">';
+		print '</FORM><br />';
 		// Liste adhésions
 		print '<TABLE>';
 		print '<th>Date</th><th>Activité</th><th>Jour</th><th>Heure et Lieu</th><th>Etat</th><th>Promo</th><th>Gestionnaire</th>';
@@ -234,7 +256,7 @@ else
 				print "<td>{$value['date']}</td>";
 				print "<td>".($url_act != "" ? "<a href='$url_act'>" : null )."{$crens[$value['id_cre']]['nom_sec']} - {$crens[$value['id_cre']]['nom_act']}".($url_act != "" ? "</a>" : null )."</td>";
 				print "<td>{$crens[$value['id_cre']]['jour_cre']}</td>";
-				print "<td>{$crens[$value['id_cre']]['debut_cre']} - {$crens[$value['id_cre']]['fin_cre']} - {$crens[$value['id_cre']]['lieu']}</td>";
+				print "<td>".date("H\hi", strtotime($crens[$value['id_cre']]['debut_cre']))." - ".date("H\hi", strtotime($crens[$value['id_cre']]['fin_cre']))." - {$crens[$value['id_cre']]['lieu']}</td>";
 				print "<td>";
 				switch($value['statut'])
 				{
@@ -458,13 +480,12 @@ else
 //		if($self){
 			print '<h2>Totaux</h2><p>Préparez vos chèques comme suit SVP :</p>';
 			print '<table><th>A l\'ordre de</th><th>Montant</th>';
-// ici, c'est pas propre : il faudrait ajouter une nouvelle colonne "ordre gestion chèques" dans la table des associations et utiliser ce champs ici (au lieu du "nom asso")
+
 			foreach($tab['totaux'] as $asso => $total) {
-				if (substr($assos[$asso]['nom'], 0, 5) == 'SUAPS')
-				   	$ordre = 'Agent Comptable Université Paris Sud';
-				else
-					$ordre = $assos[$asso]['nom'];
+				if($total != 0){
+				$ordre = $assos[$asso]['ordre_cheques'];
 				print "<tr><td>$ordre</td><td>$total $currency</td></tr>";
+				}
 			}
 			print '</table>';
 //		}
@@ -524,13 +545,17 @@ else
 ?>
 <script type="text/javascript">
 $('#tree_root').checkboxTree({
-      /* specify here your options */
+      initializeChecked: 'collapsed', 
+      initializeUnchecked: 'collapsed',
       onCheck: {
-                descendants: 'check'
-            },
-            onUncheck: {
-                ancestors: 'uncheck'
-            }
+                descendants: 'check',
+	        node: 'expand',
+      },
+      onUncheck: {
+                  ancestors: 'uncheck',
+	          node: 'collapse',
+      }, 
+
     });
 $('.reset').click(function() {
                 $('#total').text("0");

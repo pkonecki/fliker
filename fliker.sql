@@ -1,26 +1,18 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 3.5.1
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 28 Septembre 2012 à 13:18
--- Version du serveur: 5.1.63
--- Version de PHP: 5.3.16
+-- Généré le: Dim 20 Juillet 2014 à 20:18
+-- Version du serveur: 5.5.24-log
+-- Version de PHP: 5.3.13
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 --
 -- Base de données: `fliker`
 --
-
--- CREATE DATABASE `fliker` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
--- USE `fliker`;
 
 -- --------------------------------------------------------
 
@@ -109,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `fliker_association` (
   `nom` varchar(255) NOT NULL,
   `description` longtext NOT NULL,
   `url` varchar(255) NOT NULL,
+  `ordre_cheques` varchar(225) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -295,8 +288,8 @@ CREATE TABLE IF NOT EXISTS `fliker_famille` (
 CREATE TABLE IF NOT EXISTS `fliker_famille_section` (
   `id_famille` int(16) NOT NULL,
   `id_sec` int(16) NOT NULL,
-  KEY `id_sec` (`id_sec`),
-  KEY `id_famille` (`id_famille`,`id_sec`)
+  UNIQUE KEY `id_famille` (`id_famille`,`id_sec`),
+  KEY `id_sec` (`id_sec`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -437,8 +430,8 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
   `id_act` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  PRIMARY KEY (`id_act`,`id_adh`),
-  KEY `id_adh` (`id_adh`)
+  KEY `id_adh` (`id_adh`),
+  KEY `id_act` (`id_act`,`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -451,8 +444,8 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
   `id_asso` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  PRIMARY KEY (`id_asso`,`id_adh`),
-  KEY `id_adh` (`id_adh`)
+  KEY `id_adh` (`id_adh`),
+  KEY `id_asso` (`id_asso`,`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -465,8 +458,8 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
   `id_cre` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  PRIMARY KEY (`id_cre`,`id_adh`),
-  KEY `id_adh` (`id_adh`)
+  KEY `id_adh` (`id_adh`),
+  KEY `id_cre` (`id_cre`,`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -479,8 +472,8 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   `id_sec` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  PRIMARY KEY (`id_sec`,`id_adh`),
-  KEY `id_adh` (`id_adh`)
+  KEY `id_adh` (`id_adh`),
+  KEY `id_sec` (`id_sec`,`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -669,13 +662,6 @@ ALTER TABLE `fliker_creneau`
   ADD CONSTRAINT `creneau_ibfk_2` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Contraintes pour la table `fliker_famille_section`
---
-ALTER TABLE `fliker_famille_section`
-  ADD CONSTRAINT `famille_section_ibfk_1` FOREIGN KEY (`id_famille`) REFERENCES `fliker_famille` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `famille_section_ibfk_2` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Contraintes pour la table `fliker_paiement`
 --
 ALTER TABLE `fliker_paiement`
@@ -743,7 +729,3 @@ ALTER TABLE `fliker_sup`
 ALTER TABLE `fliker_sup_fk`
   ADD CONSTRAINT `sup_fk_ibfk_1` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sup_fk_ibfk_2` FOREIGN KEY (`id_ent`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
