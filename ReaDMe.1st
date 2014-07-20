@@ -9,4 +9,3 @@
 5/ vous pouvez travailler !
 
 rmq/ ne PAS ajouter de fichier index.html dans ./includes/thumb_plugins sinon le module 'thumbs' (basé sur gd ou imagick) ne marchera plus !...
-
