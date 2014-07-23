@@ -453,7 +453,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			print '<SELECT name="action" >
 			      	       <OPTION value="sendmail">Envoyer Email</OPTION>
 				</SELECT>';
-			print '<input type="submit" value="Go"></input></FORM>';
+			print '<input type="button" value="Go" onclick="javascript:traiteform();"></input></FORM>';
 		break;
 		case 2: //Complet			
 			print '<table class="search_results" ><FORM name="all_results" action="index.php?page=10" method="POST">';
@@ -530,7 +530,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			print '<SELECT name="action" >
 					<OPTION value="sendmail" > Envoyer Email</OPTION>
 			       </SELECT>';
-			print '<input type="submit" value="Go"></FORM>';
+			print '<input type="button" value="Go" onclick="javascript:traiteform();"></input></FORM>';
 		break;
 		case 3: //Trombino
 			$i=0;
@@ -627,6 +627,29 @@ function cocheToute(value){
 				element.checked = false;
 		}
 	}
+}
+
+function traiteform(){
+
+   	var arr = document.getElementsByName("adh[]");
+   	var parent;
+	var arr2=[];
+	var append;
+
+		for (var i=0;i<arr.length;i++) {
+		   	arr2[arr2.length]=arr[i].value;
+		   	//parent = arr[0].parentNode;
+			//parent.removeChild(arr[0]);
+	}
+	//parent = arr[0].parentNode;
+	//parent.removeChild(arr[0]);
+	 document.forms['all_results'].reset();
+	var input = document.createElement("input");
+                input.type = "text";
+                input.name = "member";
+                input.value = arr2.join("_");
+    document.forms['all_results'].appendChild(input);
+	document.all_results.submit();
 }
 </script>
 

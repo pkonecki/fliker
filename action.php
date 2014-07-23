@@ -33,7 +33,7 @@ switch($_POST['action'])
 		
 		break;
 	case "sendmail":
-		if (isset($_POST['adh']))
+		if (isset($_POST['member']))
 		{
 			print "<h2>Envoi d'email</h2>";
 			if (isset($_POST['to']))
@@ -41,7 +41,8 @@ switch($_POST['action'])
 			else
 				$to = "";
 			print $to;
-			foreach($_POST['adh'] as $id)
+			$mytab = explode("_", $_POST['member']);
+			foreach($mytab as $id)
 				$adhs[$id] = getAdherent($id);
 			print "<div>Destinaires:";
 			$check_exist = array();
