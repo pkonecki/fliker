@@ -29,13 +29,14 @@ setlocale(LC_ALL, 'fr_FR');
 <html>
  <head>
   <title>::Fliker::Accueil</title>
-  
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-timepicker.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.multiselect.filter.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery.checkboxtree.min.css" />
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
+  <link rel="stylesheet" type="text/css" href="./includes/css/psud-style.css" />
   <script type="text/javascript" src="./includes/js/jquery.js"></script>
   <script type="text/javascript" src="./includes/js/jquery-ui.js"></script>
   <script type="text/javascript" src="./includes/js/jquery.ui.timepicker.js"></script>

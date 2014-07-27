@@ -1,0 +1,124 @@
+/* Boutons */
+.btn
+{
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	cursor: pointer;
+	/*font-family: inherit;*/
+	font-family: 'Open Sans', sans-serif;
+	line-height: normal;
+	margin: 0 0 1.25em;
+	position: relative;
+	text-decoration: none;
+	text-align: center;
+	display: inline-block;
+	padding-top: .75em;
+	padding-right: 1.2135em;
+	padding-bottom: .8125em;
+	padding-left: 1.2135em;
+	font-size: 1em;
+	background-color: #9c9c9c;
+	color: #fff;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border: 0;
+	max-width: 100%;
+	white-space: normal;
+	font-weight: 400;
+	text-transform: uppercase;
+	-moz-transition: -moz-transform .1s;
+	-o-transition: -o-transform .1s;
+	-webkit-transition: -webkit-transform .1s;
+	transition: transform .1s;
+	outline: 0;
+}
+
+.btn--primary
+{
+	background-color: #e16500;
+	border-color: #ae4e00;
+	color: #fff;
+}
+
+.btn--small
+{
+	padding-top: .5625em;
+	padding-right: .91013em;
+	padding-bottom: .625em;
+	padding-left: .91013em;
+	font-size: .8125em;
+}
+
+/* Boutons:hover */
+
+.btn:focus, .btn:hover
+{
+	background-color: #838383;
+	color: #fff;
+}
+
+.btn--primary:focus, .btn--primary:hover
+{
+	background-color: #ae4e00;
+	color: #fff;
+}
+
+/* Titres */
+h1, h2, h3, h4, h5, h6
+{
+	margin: 0;
+	color: #004871;
+	font-family: 'Open Sans', arial, sans-serif;
+	font-weight: bold;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+h2
+{
+	display: block;
+	font-size: 1.5em;
+	-webkit-margin-before: 0.83em;
+	-webkit-margin-after: 0.83em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+
+/* Tableaux */
+
+table
+{
+	border:none;
+	background-color: white;
+}
+
+.label
+{
+	/*display: inline-block;*/
+	margin: .5em 0 .3em;
+	color: #81b92f;
+	font-size: .8125em;
+	font-weight: 700;
+	text-transform: uppercase;
+	-webkit-font-smoothing: antialiased;
+}
+
+a.selected, a.link
+{
+	color: #e16500;
+	text-decoration: none;
+}
+
+th
+{
+	color: white;
+	background-color: #e16500;
+/*	border:solid 1px black;*/
+	text-transform: uppercase;
+	font-family: 'Open Sans', arial, sans-serif;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+}
