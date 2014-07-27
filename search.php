@@ -253,8 +253,8 @@ print '<span class="tip">'.getParam('text_search.txt').'</span>';
 	<input '.checked('affichage','3').' type="radio" name="affichage" value="3" >Trombino</input>
 	</fieldset>
 	<fieldset class="buttons">
-	<input type="submit" value="Chercher" />
-	<button type="reset" id="reset">Remettre à zéro</button>
+	<input class="btn btn--primary" type="submit" value="Chercher" />
+	<button class="btn btn--primary" type="reset" id="reset">Remettre à zéro</button>
 	</fieldset>
 	</form>';
 if(isset($_POST['action']) && $_POST['action']==="submitted")

@@ -1,3 +1,4 @@
+
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
 
@@ -97,7 +98,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'modification' && $self)
 	print '<input type="hidden" name="action" value="submitted" />';
 	print "<INPUT type='hidden' name='id_adh' value=\"$id_adh\">";
 	print "<INPUT type='hidden' name='email'  value=\"{$adh['email']}\">";
-	print '<tr><td colspan="2"><INPUT type="submit" value="Send"></td></tr>';
+	print '<tr><td colspan="2"><INPUT type="submit"  class="btn btn--primary" value="Enregistrer"></td></tr>';
 	print '</table>';
 	print '</FORM>';
 }
@@ -187,19 +188,19 @@ else
 		print '<div id="fiche">';
 		print "<h2>Fiche de {$adh['prenom']} {$adh['nom']}</h2>";
 		print '<br />';
-		if($self) print '<FORM action="index.php?page=1" method="POST">
+		if($self) print '<div style="float:left;"><FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="modification" />
-		<INPUT type="submit" value="Modifier"/>
-		</FORM>
+		<INPUT type="submit" class="btn btn--primary" value="Modifier"/>
+		</FORM></div>
 		';
-		print '<FORM action="index.php?page=1" method="POST">
+		print '<div style="float:left;"><FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="change_mdp" />
-		<INPUT type="submit" value="Changer de mot de passe"/>
-		</FORM>
+		<INPUT type="submit" class="btn btn--primary" value="Changer de mot de passe"/>
+		</FORM></div>
 		';
 		print '<FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="change_email" />
-		<INPUT type="submit" value="Changer d\'email"/>
+		<INPUT type="submit" class="btn btn--primary" value="Changer d\'email"/>
 		</FORM>
 		';
 		print "<br/>";
