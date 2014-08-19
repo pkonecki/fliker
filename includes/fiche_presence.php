@@ -18,6 +18,7 @@ else
 	$modif_week = 0;
 
 $compteur_modifs = 0;
+$compteur_modifs_vacances = 0;
 if (isset($_POST['save'])) {
 	$ancien_etat = explode(' ', $_POST['ancien_etat']);
 	$compteur = 0;
@@ -33,6 +34,33 @@ if (isset($_POST['save'])) {
 		}
 		$compteur++;
 	}
+	
+	
+	//Enregistrement modifications vacances
+	$ancien_etat_vacances = explode(' ', $_POST['ancien_etat_vacances']);
+	$compteur_vacances = 0;
+	while(isset($ancien_etat_vacances[$compteur_vacances])){
+		$tmp_ancien_vacances = explode('--', $ancien_etat_vacances[$compteur_vacances]);
+		$tmp_nouvau_vacances = isset($_POST[$ancien_etat_vacances[$compteur_vacances]]);
+		if (($tmp_ancien_vacances[3] != "checked" && $tmp_nouvau_vacances) || ($tmp_ancien_vacances[3] == "checked" && !$tmp_nouvau_vacances)) {
+			modifVacances($tmp_ancien_vacances[0], $tmp_ancien_vacances[1], $tmp_ancien_vacances[2], $tmp_nouvau_vacances);
+			$compteur_modifs_vacances++;
+		}
+		$compteur_vacances++;
+	}
+/* echo '<pre>';
+print_r($_POST['vacances']);
+echo '</pre>';
+echo '<pre>';
+print_r($_POST['ancien_vacances']);
+echo '</pre>';
+	foreach($_POST['vacances'] as $vacances){
+	$vacancese = explode('--', $vacances);
+	$week = $vacances[0];
+	if(in_array($vacances, $_POST['ancien_vacances'])){echo 'oui!!<br />';}
+	} */
+	
+	
 }
 else if (isset($_POST['previous']))
 	$modif_week--;
@@ -63,10 +91,25 @@ $w_debut = strtotime("next Monday", $w_debut);
 $w_fin = strtotime("".$date_fin."/{$promo}");
 $w_fin = strtotime("last Monday", $w_fin);
 
-$output = "<div class=\"tip\">".getParam('text_presence.txt')."</div>";
+$output = '<h3>'.getParam('text_presence.txt').'</h3>';
+
 if ($compteur_modifs > 0) $output .= "<div class=\"tip\"><font color=green>[ $compteur_modifs présences mises à jour sur $compteur cases affichées ]</font></div>";
+if ($compteur_modifs_vacances > 0) $output .= "<div class=\"tip\"><font color=green>[ $compteur_modifs_vacances fermetures mises à jour sur $compteur_vacances cases affichées ]</font></div>";
 
 if(isset($_POST['cre'])) {
+
+	$output .= '<p>Les cases <span style="background:#aa0202;color:#FFFFFF;">rouges</span> correspondent aux fermetures de l\'association</p>
+				<p>Les cases <span style="background:#DEDEDE;">grises</span> correspondent aux fermetures du créneau (et/ou de l\'encadrant) que vous pouvez modifier</p>';
+	
+	$InfoCreneau = getInfoCreneau($_POST['cre']);
+	
+	$semaines_vacances = array();
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}vacances
+	WHERE promo=".$promo." AND (id_entite=".$_POST['cre']." OR id_entite=".$InfoCreneau[$_POST['cre']]['id_association'].") ");
+	while($tmp_array = mysql_fetch_array($res)){
+		$semaines_vacances[$tmp_array['week']] = $tmp_array['id_entite'];
+	}
+
 	$cre = $_POST['cre'];
 	$adhs = getAdherentsByCreneau($cre,$promo);
 	if(isset($_POST['week']))
@@ -122,18 +165,43 @@ if(isset($_POST['cre'])) {
 		$count_cols = 3;
 	}
 	$date = $date_start;
+	$fermeture = ""; $ancien_etat_vacances = "";
 	while ($date <= $date_end) {
 		$week=strftime("%V",$date);
 //		if ($week[0] == '0') $week = $week[1]; // ne pas enlever le "leading zero" ici, sinon strtotime ne marche plus !
 		$p=strftime("%G",$date);
 		$range = utf8_decode(strftime("%d<br>%m",strtotime("$p-W$week-$jour_num")));
-		$output.= "<th>$range</th>";
+		
+		// Vacances
+		$color = "";
+		foreach($semaines_vacances as $week_vacances => $id_entite){
+			if($week_vacances == $week && $id_entite == $_POST['cre']){
+				$color = 'DEDEDE';
+				$fermeture .= '<th><input type="checkbox" name="'.$week.'--'.$_POST['cre'].'--'.$promo.'--checked" checked></th>';
+				$checked = "checked";
+			}
+			elseif($week_vacances == $week)
+				$color = 'aa0202';
+		}
+		if($color == "aa0202")
+			$fermeture .= '<th><input type="checkbox" checked disabled></th>';
+		if($color != ""){
+			$output.= '<th style="background:#'.$color.';">'.$range.'</th>';
+		}
+		else{
+			$output.= '<th>'.$range.'</th>';
+			$fermeture .= '<th><input type="checkbox" name="'.$week.'--'.$_POST['cre'].'--'.$promo.'--"></th>';
+			$checked = "";
+		}
+		$ancien_etat_vacances .= ''.$week.'--'.$_POST['cre'].'--'.$promo.'--'.$checked.' ';
+		
 		$count_cols++;
 		$date = strtotime("+1 week",$date);
 	}
 
 	if (isset($_POST['all_tab'])) {
-		$output .= "</tr></thead>";
+		$output .= '</tr></thead><input type="hidden" name="ancien_etat_vacances" value="'.$ancien_etat_vacances.'">';
+		$output .= '<tr><th></th><th></th><th></th><th></th><th>Fermetures</th>'.$fermeture;
 		$output .= "<tr><th></th><th></th><th></th><th></th><th>Présents</th>";
 	} else {
 		$output .= "<th><input type='submit' name='next' value='>>' /></th></tr></thead>";
@@ -231,15 +299,31 @@ if(isset($_POST['cre'])) {
 			while ($date <= $date_end) {
 				$week=strftime("%V",$date);
 				if ($week[0] == '0') $week = $week[1];
-				$output.= "<td ".($week==$current_week ? 'bgcolor=lightgreen' : '')." >";
+				
+				//Vacances
+				$color = "";
+				foreach($semaines_vacances as $week_vacances => $id_entite){
+					if($week_vacances == $week && $id_entite == $_POST['cre'])
+						$color = 'DEDEDE';
+					elseif($week_vacances == $week)
+						$color = 'aa0202';
+				}
+				
+				$output_vacances = "";
+				if($color != "") $output_vacances = 'style="background:#'.$color.';"';
+				$output.= "<td ".($week==$current_week ? 'bgcolor=lightgreen' : '')." ".$output_vacances." >";
 				if (isset($array_id[$week]))
 					$presence = 'checked';
 				else
 					$presence = '';
 //				$output.= "<input type=\"hidden\" name=\"_$compteur_id\" value=\"".$presence."\">";
 //				$output.= "<input type=\"hidden\" name=\"$compteur_id\" value=\"$id_adh--$cre--$week--$promo--$presence\">";
+								
+				//Vacances
+				$disabled="";
+				if($color != "") $disabled = 'disabled="disabled"';
 				$hiddeninput .= "${id_adh}--${cre}--${week}--${promo}--${presence} ";
-				$output.= "<input type=\"checkbox\" name=\"${id_adh}--${cre}--${week}--${promo}--${presence}\" ${presence} />";
+				$output.= "<input type=\"checkbox\" name=\"${id_adh}--${cre}--${week}--${promo}--${presence}\" ${presence} ".$disabled."/>";
 				$output.= "</td>";
 				$date = strtotime("+1 week",$date);
 				$compteur_id++;
