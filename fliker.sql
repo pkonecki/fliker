@@ -179,6 +179,18 @@ INSERT INTO `fliker_champs_adherent` (`nom`, `type`, `description`, `exemple`, `
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `fliker_batiment`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_batiment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(225) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `fliker_config`
 --
 
@@ -386,6 +398,7 @@ CREATE TABLE IF NOT EXISTS `fliker_paiement` (
   `confirmed_by` varchar(255) NOT NULL,
   `confirmed_date` datetime NOT NULL,
   `date_bordereau` datetime DEFAULT NULL COMMENT 'date=confirmé,0=annulé,null=en attente d''action',
+  `id_bordereau` int(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_adh_2` (`id_adh`),
   KEY `recorded_by` (`recorded_by`)
@@ -475,6 +488,18 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   KEY `id_adh` (`id_adh`),
   KEY `id_sec` (`id_sec`,`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_salle`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_salle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(225) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -616,6 +641,19 @@ INSERT INTO `fliker_type_transa` (`id`, `nom`) VALUES
 (5, 'Virement'),
 (6, 'CB');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_vacances`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_vacances` (
+  `week` int(2) NOT NULL,
+  `promo` int(4) NOT NULL,
+  `id_entite` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 --
 -- Contraintes pour les tables exportées
 --
@@ -660,6 +698,13 @@ ALTER TABLE `fliker_asso_section`
 ALTER TABLE `fliker_creneau`
   ADD CONSTRAINT `creneau_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fliker_entite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `creneau_ibfk_2` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+  --
+-- Contraintes pour la table `fliker_famille_section`
+--
+ALTER TABLE `fliker_famille_section`
+  ADD CONSTRAINT `famille_section_ibfk_1` FOREIGN KEY (`id_famille`) REFERENCES `fliker_famille` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `famille_section_ibfk_2` FOREIGN KEY (`id_sec`) REFERENCES `fliker_section` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `fliker_paiement`

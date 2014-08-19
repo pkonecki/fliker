@@ -90,6 +90,15 @@ function etaitPresent($adh,$cre,$week,$promo){
 	return $ret;
 }
 
+function modifVacances($week,$cre,$promo,$actif){
+	include("opendb.php");
+	if($actif) $query="INSERT INTO {$GLOBALS['prefix_db']}vacances(week,id_entite,promo) VALUES ('$week','$cre','$promo')";
+	else $query="DELETE FROM {$GLOBALS['prefix_db']}vacances WHERE id_entite='$cre' AND week='$week' AND promo='$promo' ";
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+}
+
 function doQuery($query, $stopIfError = false)
 {
 	include('opendb.php');
@@ -266,7 +275,7 @@ function getPaiementsAsso($id_asso, $promo, $tab_type)
 			}
 		}
 	}
-	return (array("Paiements" => $tab_type, "DemandÃ©" => $demander, "AutorisÃ©" => $autoriser, "Cotis_depot" => $cotis_depot));
+	return (array("Paiements" => $tab_type, "Demandé" => $demander, "Autorisé" => $autoriser, "Cotis_depot" => $cotis_depot));
 }
 
 function getPaiementsSec($id_asso, $id_sec, $promo, $tab_type, $list_id)
@@ -331,7 +340,7 @@ function getPaiementsSec($id_asso, $id_sec, $promo, $tab_type, $list_id)
 			}
 		}
 	}
-	return (array("Paiements" => $tab_type, "DemandÃ©" => $demander, "AutorisÃ©" => $autoriser, "Cotis_depot" => $cotis_depot));
+	return (array("Paiements" => $tab_type, "Demandé" => $demander, "Autorisé" => $autoriser, "Cotis_depot" => $cotis_depot));
 }
 
 function findColor($number)
