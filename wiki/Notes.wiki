@@ -47,7 +47,7 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
     * <s>Dans le module "Finances" rubrique "Récapitulatif", ne pas compter les Dispenses et dans "Cotisations" ne pas les afficher</s>
   * Mettre à jour Fiche Statistiques & Présences (cf Sylvain)
     * Bien compter les semaines de présences réelles par rapport aux vacances et aux jours fériés !
-    * Éventuellement, faire un suivi des présences des encadrants pour savoir exactement s'ils sont là ou pas -> qu'ils viennent signaler leur présence au secrétariat avant leur cours puis cocher un bouton. Cela permet de mieux calculer le nombre de cours véritable (cf gratification pour certains profs)
+    * r306 <s>Gestion des vacances : Ajout et Suppression depuis une asso et/ou un créneau (pour encadrants). Éventuellement, faire un suivi des présences des encadrants pour savoir exactement s'ils sont là ou pas -> qu'ils viennent signaler leur présence au secrétariat avant leur cours puis cocher un bouton. Cela permet de mieux calculer le nombre de cours véritable (cf gratification pour certains profs)</s>
   * Rajouter les pièces justificatives à fournir lors de l'inscription (cf liste SUAPS)
   * mailing fliker : pb du bouton return qui valide ??? pb limite 997 ! pb de la barre de progression ! pb du délai d'envoi DI / autre fonction php à utiliser ... (cf Florian)
 
