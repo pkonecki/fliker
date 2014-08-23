@@ -33,7 +33,7 @@ else
 
 if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un compte utilisateur
 {
-	print '<br />';
+	print '<br /><br />';
 	print 	"<FORM action=\"index.php?page=12\" method=\"POST\">
 			Chercher un autre compte ? <input type='text' name='modif_compte'></input>
 			<input type=\"submit\" />
@@ -49,6 +49,11 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 	else
 	{
 		$final = mysql_fetch_array($results);
+		
+		//Compter le nombre d'adhésion par rapport au statut
+		$ads=getMyAdhesions($final['id'],$promo);
+		
+		print '<p><a href="index.php?page=1&adh='.$final['id'].'">Retourner à sa fiche adhérent</a></p>';
 		print "Informations personnelles de <b>".$_POST['modif_compte']."</b> :<br/><br/>";
 		print "<table><form action='index.php?page=12' enctype='multipart/form-data' method='POST'>";
 		foreach($tab as $row)
@@ -75,7 +80,7 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 							</tr>";
 				}
 				else if($row['type']==='varchar')
-					print '<tr><td>'.$row['description'].' : </td><td><input type=text name='.$row['nom'].' value="'.$final[$row['nom']].'"></td></tr>';
+					print '<tr><td>'.$row['description'].' : </td><td><input type=text name="'.$row['nom'].'" value="'.$final[$row['nom']].'" ></td></tr>';
 				else if($row['type']==='tinyint')
 					print '<tr><td>'.$row['description'].' : </td><td><input type=checkbox name='.$row['nom'].' '.($final[$row['nom']] == 1 ? 'checked' : '').'></td></tr>';
 				else if($row['type']==='file')
@@ -85,10 +90,18 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 				else if($row['type']==='select')
 				{
 					$values = getSelect($row['nom']);
+					if($row['nom'] != "statut" || empty($ads)){
 					print '<tr><td>'.$row['description'].' : </td><td><SELECT name="id_'.$row['nom'].'" >';
 					foreach($values as $key => $value)
 						print '<OPTION value="'.$key.'" '.($final['id_'.$row['nom'].''] == $key ? 'selected' : '').'>'.$value.'</OPTION>';
 					print '</SELECT></td></tr>';
+					}
+					else{
+					include("opendb.php");
+					$query2 = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}statut WHERE id = ".$final['id_'.$row['nom'].'']." ");
+					$data = mysql_fetch_array($query2);
+					print '<tr><td>'.$row['description'].' : </td><td>'.$data['nom'].' (Le statut ne peut être changé, veuillez supprimer toutes les adhésions)<input type="hidden" name="'.$final['id_'.$row['nom'].''].'" ></td>';
+					}
 				}
 			}
 		}
@@ -116,8 +129,10 @@ else	// Page demande de l'adresse email et traitements
 		foreach ($champs as $champs)
  			if ($champs['admin'] == 1)
 			{
-				if ($champs['type'] == "select")
-					$values .= ", id_".$champs['nom']."=".(isset($_POST['id_'.$champs['nom']]) ? $_POST['id_'.$champs['nom']] : 0)."";
+				if ($champs['type'] == "select"){
+					if(isset($_POST['id_'.$champs['nom']]))
+						$values .= ", id_".$champs['nom']."=".(isset($_POST['id_'.$champs['nom']]) ? $_POST['id_'.$champs['nom']] : 0)."";
+				}
 				else if ($champs['type'] == "file")
 				{
 					if (isset($_POST[$champs['nom']]['name']))
@@ -227,7 +242,7 @@ else	// Page demande de l'adresse email et traitements
 			print "<FONT COLOR='#16B84E'><b>Mise à jour du compte effectuée avec succès.</b></font>";
 	}
 
-	print '<br />';
+	print '<br /><br />';
 	print 	"<FORM action=\"index.php?page=12\" method=\"POST\">
 			Adresse email du compte à modifier :<input type='text' name='modif_compte'></input>
 			<input type=\"submit\" />

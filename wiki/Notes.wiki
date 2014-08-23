@@ -28,19 +28,19 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
 == Nouvelle Liste Emmanuel ==
   * Mise à jour auto du <b>Total à payer</b> lors d'une nouvelle adhésion
     * en fait faire un "panier dynamique" dès coches/choix dans liste sports (et tab_sports ...)
-    * <font color="red">r302</font> <s>démarrer avec une liste de sports compacte + ajouter un niveau "famille de sport" (encore + compact) ...
+    * r302 <s>démarrer avec une liste de sports compacte + ajouter un niveau "famille de sport" (encore + compact) ...
      * rmq : pas de couleurs car discriminatoire ... (cf. aussi discrimination par les inhomogénéités de tarifs ...)
      * cocher par défaut bouton radio si un seul choix entité (+ msg rouge demandant de faire le choix si choix multiple / refuser valider et attendre bonnes valeurs comme pour fiche inscription)
      * changer le texte d'en-tête de la deuxième page (confirmation)</s>
     * remettre une acceptation de la charte à cet endroit (+ mise à jour texte charte sur site)
   * réfléchir à un système de "coupon de réduction" (ex : inscription tardive, cas des licences facultatives, etudiants boursiers, etc.)
     * ET/OU réorganiser les statuts par arborescence E/P/X -> UFR (+boursier ?) -> etc. Et faire en sorte que les supplement creneaux activite section prennent en compte le statut
-    * MISE A JOUR FACILE DU STATUT !!!
-      * ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
-  * <font color="red">r302</font> <s>Ajouter une sauvegarde de tous les Responsables (Asso, Section, Activité, Créneau) -> Ajout colonne "promo" dans tables sql + Ajout de selecteur de promo dans les gestions</s>
-  * <font color="red">r302</font> <s>Gestion de l'ordre des chèques pour les assos</s>
+    * r308 <s>MISE A JOUR FACILE DU STATUT !!! En fait il suffit de supprimer définitivement les adhésions + Système qui empêche de changer de statut s'il y a déjà des adhésions en cours</s>
+    * Ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
+  * r302 <s>Ajouter une sauvegarde de tous les Responsables (Asso, Section, Activité, Créneau) -> Ajout colonne "promo" dans tables sql + Ajout de selecteur de promo dans les gestions</s>
+  * r302 <s>Gestion de l'ordre des chèques pour les assos</s>
   * Gérer les chèques enregistrés pour les déposer à la banque ?? + validation de ceux déjà envoyés --> Peut être du coup rajouter le nom du payeur marqué sur le chèque (si différent)
-    * <font color="red">r294</font> <s>En mettant à jour le module "Finances" notamment "Cotisations" (qui ne devrait pas s'appeler comme ça ...)
+    * r294 <s>En mettant à jour le module "Finances" notamment "Cotisations" (qui ne devrait pas s'appeler comme ça ...)
       * Les id ne correspondent pas ...
       * Revoir la requête d'affichage puisqu'en tant que resp asso, on ne voit pas les paiements des suppléments
       * Dans la même requête, il faut afficher les chèques et pas les paiements (il y a actuellement des montants à 0 qui correspondent a des suppléments) --> utiliser table paiement plutôt que paiement_sup</s>
