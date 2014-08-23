@@ -80,6 +80,18 @@ function delAdhesion($id)
 	include("closedb.php");
 }
 
+function delAdhesionDefinitive($id)
+{
+	include("opendb.php");
+	if(!isset($id))
+		return;
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}adhesion WHERE id=$id ";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	include("closedb.php");
+}
+
 function actAdhesion($id)
 {
 	include("opendb.php");

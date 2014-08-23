@@ -183,6 +183,10 @@ else
 	{
 		delAdhesion($_POST['id_ads']);
 	}
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_ads_definitive')
+	{
+		delAdhesionDefinitive($_POST['id_ads']);
+	}
 	if (isset($_POST['action']) && $_POST['action'] === 'activation_ads')
 	{
 		actAdhesion($_POST['id_ads']);
@@ -380,8 +384,13 @@ else
 						print "";
 						break;
 					}
-					print '</FORM>
-					</td>';
+					print '</FORM></td>
+					<td><FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
+					<input type="hidden" name="action" value="suppression_ads_definitive" />
+					<input type="hidden" name="id_ads" value='.$key.' />
+					<input type="submit" name="act_sup_ads_ras_def" value="Supprimer définitivement">
+					</FORM></td>
+					';
 				}
 				print "</tr>";
 			}
