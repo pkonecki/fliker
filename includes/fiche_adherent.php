@@ -173,6 +173,20 @@ else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' 
 			print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
 //		else
 //			print "Une erreur est survenue lors de l'envoi du mail, veuillez vérifier votre adresse email ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
+		// Remplacement phpmailer
+		// $mail = new PHPMailer();
+		// $mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
+		// $mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
+		// $mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
+		// $mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
+		// $mail->Subject = $subject;
+		// $mail->Body = $message;
+		// $mail->AddAddress($to);
+		// if (getParam('allow_mail.conf') == true)
+		// {
+		// 	$mail->Send();
+		// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
+		// }
 	}
 }
 else

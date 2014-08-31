@@ -1,5 +1,7 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
+require_once('./includes/phpmailer/class.phpmailer.php');
+
 switch($_POST['action'])
 {
 	case "sendmail_confirm":
@@ -24,6 +26,21 @@ switch($_POST['action'])
 			flush();
 			if (getParam('allow_mail.conf') == true)
 				mail($email, stripslashes($subject), stripslashes($message), $headers);
+			// Remplacement phpmailer
+			// $mail = new PHPMailer();
+			// $mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
+			// $mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
+			// $mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
+			// $mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
+			// $mail->Subject = $subject;
+			// $mail->Body = $message;
+			// $mail->AddAddress($to);
+
+			// if (getParam('allow_mail.conf') == true)
+			// {
+			// 	$mail->Send();
+			// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
+			// }
 		}
 		include("opendb.php");
 		$res = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}config WHERE id = 'action_continuer.txt' ");
