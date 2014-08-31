@@ -96,6 +96,20 @@ if (isset($_POST['action']) && $_POST['action']==="submitted") {
 			mail($to, $subject, $message, $headers);
 		print '<p>Une demande de confirmation vient d\'être envoyée à l\'adresse '.$to.'. Une fois cette confirmation effectuée, le changement d\'adresse sera fait.</p>';
 		print $footer;
+		// Remplacement phpmailer
+		// $mail = new PHPMailer();
+		// $mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
+		// $mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
+		// $mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
+		// $mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
+		// $mail->Subject = $subject;
+		// $mail->Body = $message;
+		// $mail->AddAddress($to);
+		// if (getParam('allow_mail.conf') == true)
+		// {
+		// 	$mail->Send();
+		// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
+		// }
 	}
 }
 else
