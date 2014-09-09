@@ -49,22 +49,44 @@ else if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '</FORM>';
 
 }
+
+else if (isset($_POST['action']) && $_POST['action'] == 'new_vacances') {
+	print '<h2>Ajouter Vacances</h2>';
+	print 'Association : '.$_POST['nom_asso'].'<br /><br />';
+	print 'Selectionnez ci-dessous la semaine que vous souhaitez fermer (n\'importe quel jour de la semaine)<br /><br />';
+	print "<script>
+	$('.ui-datepicker-calendar tr').live('mousemove', function() { $(this).find('td a').addClass('ui-state-hover'); });
+	$('.ui-datepicker-calendar tr').live('mouseleave', function() { $(this).find('td a').removeClass('ui-state-hover'); });
+	</script>";
+	print '<FORM action="index.php?page=3&asso='.$_POST['id_asso'].'" method="POST">';
+	print 'Date : <input name="date_vacances" type="text" class="datepicker" required />';
+	print '<input type="hidden" name="id_asso" value="'.$_POST['id_asso'].'" />';
+	print '<input type="hidden" name="action" value="submitted_new_vacances" />';
+	print '<INPUT type="submit" value="Ajouter">';
+	print '</FORM>';
+
+}
+
 else
 {
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
 		modifAsso($_POST);
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new')
 		newAsso($_POST);
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_new_vacances')
+		ajouter_vacances($_POST['date_vacances'], $_POST['id_asso'], $promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression')
 		delAsso($_POST['id']);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp')
-		delRespAsso($_POST['id_asso'],$_POST['id_resp'],$promo);
+		delRespAsso($_POST['id_asso'],$_POST['id_resp'], $promo);
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_vacances')
+		delVacances($_POST['week'], $promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_resp')
 		ajoutResponsableAsso($_POST['id_asso'],$_POST['id_resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_POST['id_sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
-		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],$promo);
+		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],0,$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
 	{
 		$sups = getSup("association",$_GET['asso'],$_POST['old_promo']);
@@ -187,8 +209,8 @@ else
 			print '<INPUT type="submit" /> ';
 			print '</SELECT>';
 			print '</FORM>';
-			//Liste de suppléments
-			print '<h3>Suppléments de l\'association</h3>';
+			//Liste de suppléments = cotisations
+			print '<h3>Cotisations de l\'association</h3>';
 			$sups = getSup("association",$_GET['asso'],$promo);
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';
@@ -229,6 +251,41 @@ else
 				</FORM></td>';
 			}
 			print '</table>';
+			
+			//Gestion Vacances
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}vacances WHERE promo=".$promo." AND id_entite=".$_GET['asso']." ");
+			print "<h3>Vacances / Fermetures</h3><ul>";
+			if (!$res || mysql_num_rows($res) <= 0)
+				print "Pas de Fermetures";
+			while ($tmp_array_vacances = mysql_fetch_array($res)){
+				$date = date_create();
+				$annee = $promo;
+				date_isodate_set($date, $annee, $tmp_array_vacances['week']);
+				
+				if(date_format($date, 'm') >= 9)
+				date_isodate_set($date, $annee-1, $tmp_array_vacances['week']);
+				
+				$date_debut = date_format($date, 'd/m/Y');
+				date_add($date, date_interval_create_from_date_string('6 days'));
+				$date_fin = date_format($date, 'd/m/Y');
+				echo '<li>
+				<FORM action="index.php?page=3&asso='.$_GET['asso'].'&promo='.$promo.'" method="POST">
+				<input type="hidden" name="action" value="suppression_vacances" />
+				<input type="hidden" name="week" value="'.$tmp_array_vacances['week'].'" />
+				Semaine '.$tmp_array_vacances['week'].' : Fermé du '.$date_debut.' au '.$date_fin.'
+				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
+				</FORM></li>
+				';
+			}
+			print '</ul>
+			<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+			<input type="hidden" name="action" value="new_vacances" />
+			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
+			<input type="hidden" name="nom_asso" value="'.$tab[$_GET['asso']]['nom'].'" />
+			<INPUT type="submit" value="Nouvelle">
+			</FORM>
+			';
+			
 		}
 
 	}

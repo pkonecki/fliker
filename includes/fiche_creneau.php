@@ -88,12 +88,12 @@ else
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_GET['sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
-		addSup("creneau",$_POST['id_cre'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$promo);
+		addSup("creneau",$_POST['id_cre'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$_POST['facultatif'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
 	{
 		$sups = getSup("creneau",$_GET['creneau'],$_POST['old_promo']);
 		foreach ($sups as $key => $value)
-			addSup("creneau",$_GET['creneau'],$value['type'],$value['valeur'],$value['id_asso_adh'],$value['id_asso_paie'],$promo);
+			addSup("creneau",$_GET['creneau'],$value['type'],$value['valeur'],$value['id_asso_adh'],$value['id_asso_paie'],$value['facultatif'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
@@ -195,12 +195,13 @@ else
 			$assos = getAssos();
 			print '<h3>Suppléments du créneau</h3>';
 			
-			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th>';
+			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
 			if($promo==$current_promo) print '<th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup) {
+				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_supl ORDER BY nom ASC");
 				print '<tr>
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td>';
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td><td>'.($sup['facultatif']==1 ? "oui" : "non").'</td>';
 				if($promo==$current_promo) print '<td><FORM action="index.php?page=6&sup='.$id.'&creneau='.$_GET['creneau'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
 					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>';
@@ -226,6 +227,7 @@ else
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 				}
 				print '</SELECT></td>
+				<td><INPUT type="checkbox" name="facultatif" value="1"></td>
 				<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
 				';
 				print '</FORM>';

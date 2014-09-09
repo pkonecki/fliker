@@ -25,12 +25,9 @@ class EspaceMembre
 		print '<span id="title"><h1>';
 		print getParam('text_top.txt');
 		print '</h1></span>';
-		if(isset($_SESSION['user']))
-			include("menu.php");
+		include("menu.php");
 		print '<div class=userdiv id=userdiv >';
-		if(!isset($_SESSION['user']))
-			print '<a href="login.php">Connexion</a> | <a href="inscription.php">Inscription</a>';
-		else 
+		if(isset($_SESSION['user']))
 			print 'Connecté en tant que <b>'.$_SESSION['user'].'</b> | <a href="index.php?page=logout">Déconnexion</a>';
 		 print '</div>';
 		print '</div>';
