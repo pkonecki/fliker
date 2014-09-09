@@ -1,7 +1,11 @@
 <?php
 session_start();
-if (!isset($_GET['page']))
-	$_GET['page'] = 7;
+
+	if(!isset($_GET['page'])){
+		if(isset($_SESSION['user'])){$_GET['page']=7;}
+		else{$_GET['page']=23;}
+	}
+	
 define('_VALID_INCLUDE', TRUE);
 include_once("./includes/paths.php");
 include_once("Adherent.php");
@@ -52,19 +56,24 @@ setlocale(LC_ALL, 'fr_FR');
 print '<body>';
 
 $EspaceMembre = new EspaceMembre;
-if (isset($_GET['page']) && $_GET['page'] == "logout")
-	$EspaceMembre->logout();
 
 if (isset($_GET['page']))
 	$EspaceMembre->showMenu($_GET['page']);
 else
 	$EspaceMembre->showMenu(1);
+
+if (isset($_GET['page']) && $_GET['page'] == "logout"){
+	$EspaceMembre->logout();
+	include("fiche_accueil.php");
+	}
+
 	
-if(isset($_SESSION['user']))
-{
+
 	print '<div id="content">';
-	if(empty($_GET['page']))
-		$_GET['page']=7;
+	if(empty($_GET['page'])){
+		if(isset($_SESSION['user'])){$_GET['page']=21;}
+		else{$_GET['page']=23;}
+	}
 	switch($_GET['page'])
 	{
 		case 1:
@@ -116,7 +125,7 @@ if(isset($_SESSION['user']))
 			include("fiche_inventaire.php");
 			break;
 		case 18:
-			include("fiche_cotisations.php");
+			include("fiche_bordereaux.php");
 			break;
 		case 19:
 			include("fiche_champs.php");
@@ -124,17 +133,21 @@ if(isset($_SESSION['user']))
 		case 20:
 			include("fiche_statistiques.php");
 			break;
+		case 21:
+			include("fiche_sports.php");
+			break;
+		case 22:
+			include("fiche_contact.php");
+			break;
+		case 23:
+			include("fiche_accueil.php");
+			break;
+
 	}
 	print '</div>';
-}
-else
-{
-	print "Vous n'êtes pas connect&eacute;.";
-//	include_once("Welcome_msg.php");
-	$welcome_msg = getParam('text_accueil.txt');
-	print "<br><br><br><br><br><br><br>$welcome_msg";
-	print "</body></html>";
-}
+
+	include("fiche_u-psud.php");
+
 ?>
 
 <script type="text/javascript">

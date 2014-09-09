@@ -1,16 +1,16 @@
 <?php
 
-function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie,$promo){
+function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie,$facultatif,$promo){
 	//Add sup
 	if($tb==="association") $col = "id_statut";
 	else $col="id_asso_adh";
-	$query = "INSERT INTO {$GLOBALS['prefix_db']}sup(type,valeur,$col,id_asso_paie,promo) VALUES ('$type','$valeur','$id_fk','$id_asso_paie','$promo')";
+	$query = "INSERT INTO {$GLOBALS['prefix_db']}sup(type,valeur,$col,id_asso_paie,facultatif,promo) VALUES ('$type','$valeur','$id_fk','$id_asso_paie','$facultatif','$promo')";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	$id_sup = mysql_insert_id();
 
-	//Ajouter sup_fk avec id_sup_fk déterminé
+	//Ajouter sup_fk avec id_sup_fk dÃ©terminÃ©
 	$req3="INSERT INTO {$GLOBALS['prefix_db']}sup_fk (id_ent,id_sup) VALUES ('$id_tb','$id_sup')";
 	$res3=mysql_query($req3);
 	if (!$res3) echo mysql_error();
@@ -48,7 +48,7 @@ function getSup($tb,$id_tb,$promo){
 }
 
 function getAssosCreneaux(){
-	//Pour chaque asso, les supplément suivant le statut de l'adhérent
+	//Pour chaque asso, les supplÃ©ment suivant le statut de l'adhÃ©rent
 	$q1="SELECT  sup.id_statut id_statut_sup, A.id id_asso, A.nom nom_asso
 	FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}sup sup, {$GLOBALS['prefix_db']}sup_fk sup_fk
 	WHERE sup_fk.id_ent = A.id
@@ -57,7 +57,7 @@ function getAssosCreneaux(){
 	AND sup.promo={$GLOBALS['current_promo']}
 	GROUP BY id_asso,id_statut_sup";
 
-	//Pour chaque créneau, les supplément suivant l'asso de l'adhérent
+	//Pour chaque crÃ©neau, les supplÃ©ment suivant l'asso de l'adhÃ©rent
 	$q2="SELECT sup.id_asso_adh id_asso_adh, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
 	FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}sup sup, {$GLOBALS['prefix_db']}sup_fk sup_fk
 	WHERE CR.id_act=AC.id
@@ -103,13 +103,13 @@ function getFacture($ads,$id_statut_adh,$promo)
 						AND AC.id_sec=S.id
 						AND ($where)
 						ORDER BY nom_sec";
-	$assos = "SELECT DISTINCT sup.id, sup.valeur as valeur, sup.id_asso_paie, sup.id_asso_adh, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
+	$assos = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, sup.id_asso_paie, sup.id_asso_adh, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
 				WHERE sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut='$id_statut_adh' AND sup.promo='$promo'";
-	$secs = "SELECT DISTINCT sup.id, sup.valeur as valeur, S1.id_asso, S1.id_sec, S1.nom_sec, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
+	$secs = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_sec, S1.nom_sec, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_sec=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
-	$acts = "SELECT DISTINCT sup.id, sup.valeur as valeur, S1.id_asso, S1.id_act, S1.nom_sec, S1.nom_act, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
+	$acts = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_act, S1.nom_sec, S1.nom_act, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_act=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
-	$cres = "SELECT DISTINCT sup.id, sup.valeur as valeur, S1.id_asso, S1.id_cre, S1.nom_sec, S1.nom_act, S1.jour_cre, S1.debut_cre, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
+	$cres = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_cre, S1.nom_sec, S1.nom_act, S1.jour_cre, S1.debut_cre, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
 				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_cre=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
 	$t_assos = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($assos) AS A GROUP BY A.id_asso_paie";
 	$t_secs  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($secs)  AS A GROUP BY A.id_asso_paie";

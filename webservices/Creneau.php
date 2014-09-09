@@ -253,4 +253,29 @@ function getAllCreneaux(){
 		return $tab;
 	
 }
+
+
+
+function getInfoCreneau($creneau)
+{
+	$query = "SELECT AC.id AS id_activite, AC.id_sec AS id_section, HS.id_asso AS id_association
+	FROM {$GLOBALS['prefix_db']}creneau C, {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}asso_section HS, {$GLOBALS['prefix_db']}resp_cren RC
+	WHERE C.id=".$creneau."
+	AND RC.id_cre=".$creneau."
+	AND C.id_act=AC.id
+	AND AC.id_sec=HS.id_sec
+	";
+	
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$tab = array();
+	while($row = mysql_fetch_assoc($results))
+		$tab[$creneau] = $row;
+	include("closedb.php");
+	return $tab;
+}
+
+
 ?>

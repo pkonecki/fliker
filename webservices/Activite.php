@@ -144,7 +144,7 @@ function modifActivite($tab)
 function ajoutResponsableAct($id_act,$id_adh,$promo)
 {
 	include("opendb.php");
-	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh,promo) VALUES ('$id_act.','$id_adh','$promo')";
+	$query = "INSERT into {$GLOBALS['prefix_db']}resp_act(id_act,id_adh,promo) VALUES ('$id_act','$id_adh','$promo')";
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();	
 	include("closedb.php");
@@ -159,10 +159,10 @@ function delRespActivite($id_act,$id_adh,$promo)
 	include("closedb.php");
 }
 
-function getResponsablesAct($id_act)
+function getResponsablesAct($id_act,$promo)
 {
 
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='".$id_act."' AND promo='".$promo."'  ";
+	$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent A ,{$GLOBALS['prefix_db']}resp_act RA WHERE A.id=RA.id_adh AND RA.id_act='$id_act' AND promo='".$promo."'  ";
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();

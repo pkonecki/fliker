@@ -152,4 +152,25 @@ function getAllAssociations()
 	include("closedb.php");
 	return $tab;
 }
+
+function ajouter_vacances($date, $id_entite, $promo){
+	$date = explode('-', $date);
+	$week = date('W', mktime(0, 0, 0, $date[1], $date[2], $date[0]));
+	include("opendb.php");
+	$query = "INSERT into {$GLOBALS['prefix_db']}vacances(week,promo,id_entite) VALUES ('$week','$promo','$id_entite')";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();	
+	include("closedb.php");
+}
+
+function delVacances($week, $promo){
+	include("opendb.php");
+	$query = "DELETE FROM {$GLOBALS['prefix_db']}vacances WHERE week='$week' AND promo='$promo' ";
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();	
+	include("closedb.php");
+}
+
 ?>
