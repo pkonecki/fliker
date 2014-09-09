@@ -27,14 +27,14 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
 
 == Nouvelle Liste Emmanuel ==
   * Mise à jour auto du <b>Total à payer</b> lors d'une nouvelle adhésion
-    * en fait faire un "panier dynamique" dès coches/choix dans liste sports (et tab_sports ...)
+    * <s>en fait faire un "panier dynamique" dès coches/choix dans liste sports (et tab_sports ...) --> idée abandonnée car ajout du choix de l'asso et trop lourd pour l'utilisateur</s>
     * r302 <s>démarrer avec une liste de sports compacte + ajouter un niveau "famille de sport" (encore + compact) ...
      * rmq : pas de couleurs car discriminatoire ... (cf. aussi discrimination par les inhomogénéités de tarifs ...)
-     * cocher par défaut bouton radio si un seul choix entité (+ msg rouge demandant de faire le choix si choix multiple / refuser valider et attendre bonnes valeurs comme pour fiche inscription)
-     * changer le texte d'en-tête de la deuxième page (confirmation)</s>
-    * remettre une acceptation de la charte à cet endroit (+ mise à jour texte charte sur site)
-  * réfléchir à un système de "coupon de réduction" (ex : inscription tardive, cas des licences facultatives, etudiants boursiers, etc.)
-    * ET/OU réorganiser les statuts par arborescence E/P/X -> UFR (+boursier ?) -> etc. Et faire en sorte que les supplement creneaux activite section prennent en compte le statut
+     * ajout bouton radio d'annulation d'un créneau (+ msg rouge demandant de faire le choix)
+     * changer le texte d'en-tête de la deuxième page (confirmation)
+    * remettre une acceptation de la charte à cet endroit (+ mise à jour texte charte sur site)</s>
+  * <s>système de "coupon de réduction" (ex : inscription tardive, cas des licences facultatives, etudiants boursiers, etc.)
+    * ET/OU réorganiser les statuts par arborescence (Etudiant, Personnel, Extérieur)</s>
     * r308 <s>MISE A JOUR FACILE DU STATUT !!! En fait il suffit de supprimer définitivement les adhésions + Système qui empêche de changer de statut s'il y a déjà des adhésions en cours</s>
     * Ajouter une RE-validation obligatoire de la fiche utilisateur en début de promo
   * r302 <s>Ajouter une sauvegarde de tous les Responsables (Asso, Section, Activité, Créneau) -> Ajout colonne "promo" dans tables sql + Ajout de selecteur de promo dans les gestions</s>
@@ -46,23 +46,20 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
       * Dans la même requête, il faut afficher les chèques et pas les paiements (il y a actuellement des montants à 0 qui correspondent a des suppléments) --> utiliser table paiement plutôt que paiement_sup</s>
     * <s>Dans le module "Finances" rubrique "Récapitulatif", ne pas compter les Dispenses et dans "Cotisations" ne pas les afficher</s>
   * Mettre à jour Fiche Statistiques & Présences (cf Sylvain)
-    * Bien compter les semaines de présences réelles par rapport aux vacances et aux jours fériés !
+    * <s>Bien compter les semaines de présences réelles par rapport aux vacances et aux jours fériés !</s>
     * r306 <s>Gestion des vacances : Ajout et Suppression depuis une asso et/ou un créneau (pour encadrants). Éventuellement, faire un suivi des présences des encadrants pour savoir exactement s'ils sont là ou pas -> qu'ils viennent signaler leur présence au secrétariat avant leur cours puis cocher un bouton. Cela permet de mieux calculer le nombre de cours véritable (cf gratification pour certains profs)</s>
-  * Rajouter les pièces justificatives à fournir lors de l'inscription (cf liste SUAPS)
-  * mailing fliker : pb du bouton return qui valide ??? pb limite 997 ! pb de la barre de progression ! pb du délai d'envoi DI / autre fonction php à utiliser ... (cf Florian)
+  * <s>Rajouter les pièces justificatives à fournir lors de l'inscription (cf liste SUAPS)</s>
+  * r311 <s>mailing fliker : pb du bouton return qui valide ??? pb limite 997 ! pb de la barre de progression ! pb du délai d'envoi DI / autre fonction php à utiliser ...</s>
 
-  * Mettre à jour le système de carte avec numéro par adhérent -> le module ne fonctionne pas (il faut supprimer le javascript et exécuter le php)
-  * Désactiver le module du certificat médical (cf Jeff FFSU)
+  * <s>Mettre à jour le système de carte avec numéro par adhérent -> le module ne fonctionne pas (il faut supprimer le javascript et exécuter le php)</s>
   * pb utilisation des bornes imac
   * question ldap - pré-remplissage ... photo ... 3 sources différentes /// pb du mot de passe confidentiel
     * 2 appliances : pré-remplissage formulaire /// pointeuse présence ... (raccourci à cette étape en mémorisant l'id de la carte => pas de repassage par adonis ...)
-  * FFSU : cf jeff
   * quotas, listes d'attente ...
   * <s>Coder un design commun --> Relancer la DI pour l'unique portail http://sports.u-psud.fr</s>
   * <s>Simplifier la page d'accueil en mettant par exemple directement le formulaire de connexion</s>
-  * Gérer la Licence facultative car du coup presque personne n'est à jour en Boxe Française !! // OU // Demander aux responsables étudiants de mettre à jour
+  * r310 <s>Gestion de la Licence Facultative // Simplification pour le secrétaire si l'adhérent ne prend pas la licence</s>
   * Ajouter le détail du créneau dans le paiement - Il y a actuellement marqué "Supplément Section" ... et donc si plusieurs sports ont été payés, on ne sait pas lesquels
-  * Gestion Responsable Etudiant // Encadrant cf Section / Activité / Créneaux ... ??
   * <s>C'est un détail mais dans la recherche une fois le formulaire validé, passer les créneaux en "compact" javascript "initializeChecked: 'collapsed'" au lieu de expand</s>
 
 
