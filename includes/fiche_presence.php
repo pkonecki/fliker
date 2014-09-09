@@ -354,7 +354,7 @@ if(isset($_POST['cre'])) {
 			$output.= "<OPTION value=\"".$array_promo['promo']."\" ".($promo==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
 		$output.= "</SELECT></p>";
 	}
-	$output .= "<input type='submit' value='Afficher' /><table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure de début</th><th>Heure de fin</th><th>Inscrits</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
+	$output .= "<input type='submit' value='Afficher' /><table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Pré-Inscrits</th><th>dont à jour</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
 
 	$tab_regular = getAdherentsByPromo($promo);
 
@@ -458,7 +458,7 @@ if(isset($_POST['cre'])) {
 			$presence_encadrant = 100;
 		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
 //			$output.= '<tr align="center"><div><td><input  type="radio" name="cre" value='.$cre.' onchange="submit(this.form)" /></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$tmp_value  .'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
-			$output.= '<tr align="center"><div><td><input type="radio" name="cre" value='.$cre.'                               /></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$nb_inscrits.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
+			$output.= '<tr align="center"><div><td><input type="radio" name="cre" value='.$cre.'                               /></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.date("H\hi", strtotime($creneau['debut_cre'])).' - '.date("H\hi", strtotime($creneau['fin_cre'])).'</td><td>'.$nb_inscrits.'</td><td>'.Tri_Nombre_de_personne_par_creneau($cre, $promo, "Non Validés").'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
 	}
 	$output.= '</table></form>';
 }
