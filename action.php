@@ -30,19 +30,28 @@ switch($_POST['action'])
 //				mail($email, stripslashes($subject), stripslashes($message), $headers);
 // 2eme version avec la librairie phpmailer :
 				$mail = new PHPMailer();
-// le from sera toujours l'utilisateur connecté :
+                                // le from sera toujours l'utilisateur connecté :
 				$mail->SetFrom($_SESSION['user'], $_SESSION['prenom'].' '.$_SESSION['nom']);
-// ici il faut une condition si sender = responsable alors reply-to à l'asso :
+                                // ici il faut une condition si sender = responsable alors reply-to à l'asso :
 //				$mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
-// le return path sert surtout pour les problème de delivery donc seulement vers webmaster :
-				$mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
-// ensuite le reste est trivial :
+                                // le return path sert surtout pour les problèmes de delivery donc seulement vers webmaster :
+				$mail->AddCustomHeader('Return-Path: '.getParam('admin_email.conf'));
+                                // ensuite le reste est trivial :
 				$mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
 				$mail->Subject = stripslashes($subject);
 				$mail->Body = stripslashes($message);
 				$mail->AddAddress($email);
+//				if(!$mail->Send()) {
+//					echo "Mailer Error: " . $mail->ErrorInfo;
+//				} else {
+//					print "-";
+//				}
 				$mail->Send();
 			}
+			// cette ligne est nécessaire car on a mis $SMTPKeepAlive = true dans class.phpmailer !
+			$mail->SmtpClose();
+			// rmq : on aurait pu aussi mettre dans class.phpmailer $SingleTo = true afin de remplacer tout le foreach précédent !?
+// fin 2eme version !
 			ob_end_flush();
 		}
 		else
