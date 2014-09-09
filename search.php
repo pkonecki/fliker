@@ -6,7 +6,6 @@ function selected($post,$val)
 	else
 		return "";
 }
-
 function checked($post,$val)
 {
 	if (isset($_POST[$post]) && $_POST[$post]===$val)
@@ -14,7 +13,6 @@ function checked($post,$val)
 	else
 		return "";
 }
-
 function multiselected($post,$val)
 {
 	for($i=0; $i < sizeof($_POST[$post]); $i++)
@@ -24,55 +22,58 @@ function multiselected($post,$val)
 	}
 	return "";
 }
-
-if(!isset($_SESSION['user']))	// Si l'utilisateur est déconnecté
+if (!isset($_SESSION['user']))	// Si l'utilisateur est déconnecté
 {
-	print "<p>Vous n'êtes pas connecté !</p>";
+  print "<p>Vous n'êtes pas connecté !</p>";
 }
 else	// Si l'utilisateur est connecté
 {
-	if($_SESSION['privilege']==1)	// Si l'utilisateur est administrateur
-	{
-		$admin=true;
-		if (isset($_GET['adh']))
-			$id_adh=$_GET['adh'];
-		else
-			$id_adh = "";
-		$resp_asso=true;
-	}
-	else
-	{
-		if(count(getMyAssos($_SESSION['uid'])) > 0 ) {
-			$resp_asso=true;
-		}
-	}
-	$query = "SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
-	UNION
-	SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."'
- 	UNION
- 	SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION['uid']."'
- 	UNION
-	SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION['uid']."' ";
-	include("opendb.php");
-	$results = mysql_query($query);
-	include("closedb.php");
-	if (!$results) echo mysql_error();
-	else if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1'){
-		print "Vous n'avez pas acc&egrave;s &agrave; cette page.";
-	}
-	else{
+  if($_SESSION['privilege']==1)	// Si l'utilisateur est administrateur
+  {
+    $admin=true;
+    if (isset($_GET['adh']))
+      $id_adh=$_GET['adh'];
+    else
+      $id_adh = "";
+    $resp_asso=true;
+  }
+  else
+  {
+    if(count(getMyAssos($_SESSION['uid'])) > 0 )
+      $resp_asso=true;
+  }
+  $query = "SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
+  UNION
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."'
+  UNION
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION['uid']."'
+  UNION
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION['uid']."' ";
+  include("opendb.php");
+  $results = mysql_query($query);
+  include("closedb.php");
+  if (!$results)
+  {
+    echo mysql_error();
+  }
+  else // pas de mysql_error
+  {
+    if (mysql_num_rows($results)==0 AND $_SESSION['privilege']!='1')
+    {
+      print "Vous n'avez pas acc&egrave;s &agrave; cette page.";
+    }
+    else // utilisateur est un resp ou un admin
+    {
 ?>
 <div>
 <h2 class="inline">Recherche</h2>
 <img src="images/downarrow.gif" class="inline" id="toggle_f_search" ></img>
 </div>
 <?php
-print '<span class="tip">'.getParam('text_search.txt').'</span>';
-
+        print '<span class="tip">'.getParam('text_search.txt').'</span>';
 	if (empty($_POST['field_count'])) $_POST['field_count']=1;
 	if (empty($_POST['set1_text'])) $_POST['set1_text']="";
 	//print '<button id="toggle_f_search">Toggle</button>';
-
 	if(isset($_POST['select_promo']))
 		$promo=$_POST['select_promo'];
 	else
@@ -81,13 +82,11 @@ print '<span class="tip">'.getParam('text_search.txt').'</span>';
 	include("opendb.php");
 	$promoliste = mysql_query($query);
 	if (!$promoliste) echo mysql_error();
-
 	print '
 	<form id="f_search" method="post" action="index.php?page=2">
 	<fieldset class="main"><legend>Critères Adhérent</legend>
 	<input type="hidden" name="field_count" value="'.$_POST['field_count'].'" />
 	<input type="hidden" name="action" value="submitted" />
-
 	<div id="promo">
 	     <label for="select_promo">Promo est</label>
 	     <select id="select_promo" name="select_promo">
@@ -97,7 +96,6 @@ print '<span class="tip">'.getParam('text_search.txt').'</span>';
 	print '
 	      </select>
 	</div>
-
 	<div id="solde">
 		<label for="select_solde">Solde est</label>
 		<select id="select_solde" name="select_solde">
@@ -357,7 +355,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				$sql .= " OR CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    RC WHERE RC.id_adh=ADH.id)";
 			$sql .= " )))";
 		}
-		$sql .= " ) ORDER BY ADR.nom";
+		$sql .= " ) ORDER BY ADR.nom, ADR.prenom";
 	}
 	$tab = getChampsAdherents();
 	include("opendb.php");
@@ -421,6 +419,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				else
 					print '<tr class="odd '.$active.'">';
 				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
+//				print '<td>'.$i.'</td><td><input type="checkbox" class="adh" name="adh'.${i}.'" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
 				foreach($tab as $champ)
 				{
 					if ($champ['search_simple']==1){
@@ -450,9 +449,12 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			}
 			print '</tbody>';
 			print '</table>';
+//			print '<p id="debug">DEBUG INFO WILL APPEAR HERE</p>';
 			print '<SELECT name="action" >
 			      	       <OPTION value="sendmail">Envoyer Email</OPTION>
 				</SELECT>';
+//			print '<input type="hidden" name="adhcount" value="'.${i}.'"></input>';
+//			print '<input type="submit" value="Go"></input></FORM>';
 			print '<input type="button" value="Go" onclick="javascript:traiteform();"></input></FORM>';
 		break;
 		case 2: //Complet			
@@ -505,6 +507,7 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				if($i % 2 == 0) print '<tr class="'.$active.'">';
 				else print '<tr class="odd '.$active.'">';
 				print '<td>'.$i.'</td><td><input type="checkbox" name="adh[]" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
+//				print '<td>'.$i.'</td><td><input type="checkbox" name="adh'.${i}.'" value="'.$row['id'].'" ></td><td><a href="index.php?page=1&adh='.$row['id'].'"><img src="images/file.gif" height=25 ></a></td><td>'.getSolde($row['id'],$promo).'</td>';
 				foreach($tab as $champ){
 					if ($champ['user_viewable']==1){
 						if($champ['type']==='varchar')
@@ -527,9 +530,12 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			}
 			print '</tbody>';
 			print '</table>';
+//			print '<p id="debug">DEBUG INFO WILL APPEAR HERE</p>';
 			print '<SELECT name="action" >
 					<OPTION value="sendmail" > Envoyer Email</OPTION>
 			       </SELECT>';
+//			print '<input type="hidden" name="adhcount" value="'.${i}.'"></input>';
+//			print '<input type="submit" value="Go"></FORM>';
 			print '<input type="button" value="Go" onclick="javascript:traiteform();"></input></FORM>';
 		break;
 		case 3: //Trombino
@@ -582,79 +588,82 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 			}
 			print '</table>';
 		break;
-	}	
+	}
 }
 ?>
 
 <script type="text/javascript">
 $('#add_field').click(function() {
-	var nr_of_field = parseInt($('#f_search [name=field_count]').val()) + 1;
-	$('#filters').append('<div id="set'+nr_of_field+'"><select id="set'+nr_of_field+'_type" name="set'+nr_of_field+'_type"><option label="Nom" value="1">Nom</option><option label="Prénom" value="2">Prénom</option><option label="Email" value="3">Email</option><option label="Catégorie" value="4">Catégorie</option></select> <select id="set'+nr_of_field+'_action" name="set'+nr_of_field+'_action" ><option label="Contient" value="1">Contient</option><option label="Commence" value="2">Commence</option><option label="Est" value="3">Est</option></select> <input type="text" id="set'+nr_of_field+'_text" name="set'+nr_of_field+'_text"/></div>');
-	$('#f_search [name=field_count]').val(nr_of_field)
+    var nr_of_field = parseInt($('#f_search [name=field_count]').val()) + 1;
+    $('#filters').append('<div id="set'+nr_of_field+'"><select id="set'+nr_of_field+'_type" name="set'+nr_of_field+'_type"><option label="Nom" value="1">Nom</option><option label="Prénom" value="2">Prénom</option><option label="Email" value="3">Email</option><option label="Catégorie" value="4">Catégorie</option></select> <select id="set'+nr_of_field+'_action" name="set'+nr_of_field+'_action" ><option label="Contient" value="1">Contient</option><option label="Commence" value="2">Commence</option><option label="Est" value="3">Est</option></select> <input type="text" id="set'+nr_of_field+'_text" name="set'+nr_of_field+'_text"/></div>');
+    $('#f_search [name=field_count]').val(nr_of_field)
 });
 $('#reset').click(function() {
-	    $('#filters').children().remove();
-		$('#f_search [name=field_count]').val(1)
+    $('#filters').children().remove();
+    $('#f_search [name=field_count]').val(1)
 });
-$('#tree_root').checkboxTree({
-      /* specify here your options */
-      initializeChecked: 'expanded', 
-      initializeUnchecked: 'collapsed',
-      onCheck: {
-                descendants: 'check',
-	        node: 'expand',
-      },
-      onUncheck: {
-                  ancestors: 'uncheck',
-	          node: 'collapse',
-      }, 
+$('#tree_root').checkboxTree( {
+  /* specify here your options */
+    initializeChecked: 'expanded', 
+    initializeUnchecked: 'collapsed',
+    onCheck: {
+        descendants: 'check',
+        node: 'expand',
+    },
+    onUncheck: {
+        ancestors: 'uncheck',
+        node: 'collapse',
+    }
 });
 $("#toggle_f_search").click(function () {
-      $("#f_search").slideToggle("fast");
+    $("#f_search").slideToggle("fast")
 });
 
 function cocheToute(value){
-   var taille = document.forms['all_results'].elements.length;
-   var element = null;
-   for(i=0; i < taille; i++)
-   {
-		element = document.forms['all_results'].elements[i];
-		if(element.type == "checkbox")
-		{
-			if (value == 1)
-				element.checked = true;
-			else
-				element.checked = false;
-		}
-	}
+    var taille = document.forms['all_results'].elements.length;
+    var element = null;
+    for(i=0; i < taille; i++)
+    {
+        element = document.forms['all_results'].elements[i];
+        if(element.type == "checkbox")
+        {
+            if (value == 1)
+                element.checked = true;
+            else
+                element.checked = false
+        }
+    }
 }
 
-function traiteform(){
-
-   	var arr = document.getElementsByName("adh[]");
-   	var parent;
-	var arr2=[];
-	var append;
-
-		for (var i=0;i<arr.length;i++) {
-		   	arr2[arr2.length]=arr[i].value;
-		   	//parent = arr[0].parentNode;
-			//parent.removeChild(arr[0]);
-	}
-	//parent = arr[0].parentNode;
-	//parent.removeChild(arr[0]);
-	 document.forms['all_results'].reset();
-	var input = document.createElement("input");
-                input.type = "text";
-                input.name = "member";
-                input.value = arr2.join("_");
+function traiteform() {
+//  var arr = document.getElementsByName("adh[]");
+    var arr2=[];
+//  for (var i=0;i<arr.length;i++) {
+//      if(arr[i].checked) arr2[arr2.length]=arr[i].value;
+//  }
+    var taille = document.forms['all_results'].elements.length;
+    var element = null;
+    for(i=0; i < taille; i++)
+    {
+        element = document.forms['all_results'].elements[i];
+        if(element.type == "checkbox")
+        {
+            if (element.checked) arr2[arr2.length]=element.value;
+        }
+    }
+    document.forms['all_results'].reset();
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "member";
+    input.value = arr2.join("_");
+//  document.getElementById("debug").innerHTML = input.value;
     document.forms['all_results'].appendChild(input);
-	document.all_results.submit();
+    document.all_results.submit()
 }
 </script>
 
 <?php
-//fin else connexion
-}
-}
+    } // fin else (si utilisateur est un resp ou un admin)
+  }   // fin else (si pas de mysql_error)
+}     // fin else (si utilisateur connecté)
 ?>
