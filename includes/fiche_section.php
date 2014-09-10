@@ -47,6 +47,36 @@ else if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	print '</FORM>';
 
 }
+elseif(isset($_POST['action']) && $_POST['action'] == 'modif_sup'){
+	$res_sup = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup WHERE id=".$_GET['sup']." ");
+	$data_sup = mysql_fetch_assoc($res_sup);
+	$assos = getAssos();
+	print '<h2>Modifier Supplément</h2>
+	<table>
+	<tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th><th>Modif</th></tr>
+	<tr><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
+	<input type="hidden" name="action" value="submitted_modif_sup" />
+	<input type="hidden" name="entite" value="section" />
+	<input type="hidden" name="id_sup" value="'.$_GET['sup'].'" />
+	<td><select name="type">';
+	$res_type_sup = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_supl ORDER BY nom ASC");
+	while ($data_type_sup = mysql_fetch_array($res_type_sup))
+		print "<option value='".$data_type_sup['nom']."' ".($data_sup['type']==$data_type_sup['nom']?"selected":"").">".$data_type_sup['nom']."</option>";
+	print '</select></td>
+	<td><INPUT type="text" name="valeur" value="'.$data_sup['valeur'].'"></INPUT></td>
+	<td><SELECT name="id_asso_adh">';
+	foreach ($assos as $key => $value)
+		print '<OPTION value="'.$key.'" '.($data_sup['id_asso_adh']==$key?"selected":"").'>'.$value.'</OPTION>';
+	print '</SELECT></td>';
+	print '<td><SELECT name="id_asso_paie">';
+	foreach ($assos as $key => $value) {
+		print '<OPTION value="'.$key.'" '.($data_sup['id_asso_paie']==$key?"selected":"").'>'.$value.'</OPTION>';
+	}
+	print '</SELECT></td>
+	<td><INPUT type="checkbox" name="facultatif" value="1" '.($data_sup['facultatif']==1?"checked":"").'></td>
+	<td><INPUT type="image" width="20" height="20" src="images/Valid.png" value="submit"></td>
+	</FORM></table>';
+}
 else
 {
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted')
@@ -69,6 +99,8 @@ else
 		ajoutResponsableSec($_POST['id_sec'], $_POST['id_resp'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_GET['sup']);
+	if (isset($_POST['action']) && $_POST['action'] === 'submitted_modif_sup')
+		modifSup($_POST);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
 		addSup("section",$_POST['id_sec'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$_POST['facultatif'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
@@ -225,18 +257,22 @@ else
 			$assos = getAssos();
 			print '<h3>Suppléments de la section</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
-			if($promo==$current_promo) print '<th>+/-</th>';
+			if($promo==$current_promo) print '<th>Modif</th><th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup)
 			{
 				print '<tr>
 				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td><td>'.($sup['facultatif']==1 ? "oui" : "non").'</td>';
 				
-				if($promo==$current_promo) print '<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
+				if($promo==$current_promo) print '
+					<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
+					<input type="hidden" name="action" value="modif_sup" />
+					<INPUT type="image" src="images/icone_edit.png" width="14" value="submit"></FORM></td>
+					
+					<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
 					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>
-				';
-				print '</tr>';
+					</tr>';
 			}
 
 			if($promo==$current_promo) {
@@ -259,7 +295,7 @@ else
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 				}
 				print '</SELECT></td>
-				<td><INPUT type="checkbox" name="facultatif" value="1"></td>
+				<td><INPUT type="checkbox" name="facultatif" value="1"></td><td></td>
 				<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
 				';
 				print '</FORM>';

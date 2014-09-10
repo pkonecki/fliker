@@ -47,6 +47,17 @@ function getSup($tb,$id_tb,$promo){
 	return $tab;
 }
 
+function modifSup($post){
+	$query = "UPDATE {$GLOBALS['prefix_db']}sup SET
+	type = '".$post['type']."', valeur = '".$post['valeur']."', facultatif = '".$post['facultatif']."',
+	id_asso_adh = '".$post['id_asso_adh']."', id_asso_paie = '".$post['id_asso_paie']."'
+	WHERE id=".$post['id_sup']."  ";
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results) echo mysql_error();
+	include("closedb.php");
+}
+
 function getAssosCreneaux(){
 	//Pour chaque asso, les supplément suivant le statut de l'adhérent
 	$q1="SELECT  sup.id_statut id_statut_sup, A.id id_asso, A.nom nom_asso
