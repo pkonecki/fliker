@@ -26,7 +26,7 @@ Et faire en sorte que les supplément créneaux activité section prennent en co
   * compléter le manuel.doc: écrire un tuto pour une procédure de remplissage des bases de données vides sans passer par phpmyadmin
 
 == Nouvelle Liste Emmanuel ==
-  * Mise à jour auto du <b>Total à payer</b> lors d'une nouvelle adhésion
+  * <s>Mise à jour auto du <b>Total à payer</b> lors d'une nouvelle adhésion</s>
     * <s>en fait faire un "panier dynamique" dès coches/choix dans liste sports (et tab_sports ...) --> idée abandonnée car ajout du choix de l'asso et trop lourd pour l'utilisateur</s>
     * r302 <s>démarrer avec une liste de sports compacte + ajouter un niveau "famille de sport" (encore + compact) ...
      * rmq : pas de couleurs car discriminatoire ... (cf. aussi discrimination par les inhomogénéités de tarifs ...)
