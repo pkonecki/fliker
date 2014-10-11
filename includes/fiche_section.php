@@ -12,6 +12,8 @@ if(isset($_GET['section']) && !isset($tab[$_GET['section']]))
 	print '<p>Vous n\'avez pas accès à cette page!</p>';
 	die();
 }
+
+
 if(isset($_GET['promo']))
 	$promo=$_GET['promo'];
 else
@@ -111,33 +113,16 @@ else
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
-		print '<ul id="submenu">';
-		if($tot_asso > 0){
-			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-		}
-		if($tot_sec > 0){
-			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-		}
-		if($tot_act > 0){
-			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-		}
-		if($tot_cre > 0){
-			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-		}
-		if(isset($tot_asso) && $tot_asso > 0)
-			print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
-		if(isset($tot_cre) && $tot_cre > 0)
-			print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
-		print '</ul>';
+
 		$tab=getSections($_SESSION['uid']);
 		if(empty($_GET['section'])){
 
-			print '<h2>Sections AVEC Responsables</h2>';
+			print '<h2>Vos Sections</h2>';
 			print '<ul>';
 			$non_actif="";
 			foreach($tab as $section){
 				$verif=0;
-				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_section WHERE id_sec = ".$section['id']." ");
+				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_section WHERE id_sec = ".$section['id']." AND promo = ".$current_promo." ");
 				$verif = mysql_num_rows($query);
 				if ($verif != 0){
 				print '<li><a href=index.php?page=4&section='.$section['id'].'>'.$section['nom'].'</a></li>';
@@ -147,12 +132,13 @@ else
 				}
 			}
 			print '</ul>';
-			print '<br />
-			<h2>Sections SANS Responsables</h2>
-			<ul>
-			'.$non_actif.'
-			</ul>
-			';
+			if($non_actif != "")
+				print '<br />
+				<h2>Sections SANS Responsables</h2>
+				<ul>
+				'.$non_actif.'
+				</ul>
+				';
 
 
 		} else {
@@ -220,7 +206,8 @@ else
 			</FORM>';
 					
 			//Selection Promo
-			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['section'].") ORDER BY promo DESC");
+			// $res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['section'].") ORDER BY promo DESC");
+			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion ORDER BY promo DESC");
 			print "<p>Promo:<SELECT id=\"promo\" >";
 			if (!$res || mysql_num_rows($res) <= 0)
 				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
@@ -257,7 +244,6 @@ else
 			$assos = getAssos();
 			print '<h3>Suppléments de la section</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
-			if($promo==$current_promo) print '<th>Modif</th><th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup)
 			{

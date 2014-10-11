@@ -71,12 +71,13 @@ function getCreneaux($userid)
 {
 	if(!empty($_SESSION['user']))
 	{
-		if($_SESSION['privilege']==="1")
+		if($_SESSION['privilege']=="1")
 		{
-			$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
-						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
+			$query = "SELECT BAT.nom AS batiment, SALLE.nom AS salle, A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}batiment BAT, {$GLOBALS['prefix_db']}salle SALLE, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
+						AND CR.lieu=SALLE.id AND SALLE.id_batiment=BAT.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id 
 						ORDER BY nom_sec, nom_act, CASE jour
@@ -92,10 +93,11 @@ function getCreneaux($userid)
 		{
 			if (!empty($userid))
 			{
-				$query = "SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre , CR.fin fin_cre, CR.lieu lieu
-						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
+				$query = "SELECT BAT.nom AS batiment, SALLE.nom AS salle, A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre , CR.fin fin_cre, CR.lieu lieu
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}batiment BAT, {$GLOBALS['prefix_db']}salle SALLE, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS
 						WHERE CR.id_act=AC.id
 						AND AC.id_sec=S.id
+						AND CR.lieu=SALLE.id AND SALLE.id_batiment=BAT.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id
 							AND
@@ -118,6 +120,7 @@ function getCreneaux($userid)
 			else
 				return;
 		}
+
 
 		include("opendb.php");
 		$results = mysql_query($query);
@@ -215,18 +218,19 @@ function getResponsablesCre($id_cre,$promo){
 
 function getAllCreneaux(){
 
-	$query = "SELECT A.id id_asso, A.nom nom_asso, F.id id_famille, F.nom nom_famille, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
-						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS, {$GLOBALS['prefix_db']}famille F, {$GLOBALS['prefix_db']}famille_section FS
+	$query = "SELECT BAT.nom AS batiment, SALLE.nom AS salle, CR.quota AS quota, A.id id_asso, A.nom nom_asso, F.id id_famille, F.nom nom_famille, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
+						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}batiment BAT, {$GLOBALS['prefix_db']}salle SALLE, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section HS, {$GLOBALS['prefix_db']}famille F, {$GLOBALS['prefix_db']}famille_section FS
 						WHERE CR.id_act=AC.id
+						AND CR.lieu=SALLE.id AND SALLE.id_batiment=BAT.id
 						AND S.id=FS.id_sec AND F.id=FS.id_famille
 						AND AC.id_sec=S.id
 						AND A.id=HS.id_asso
 						AND HS.id_sec=S.id
 						AND (
-							A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso )
-							OR S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section )
-							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act )
-							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren )
+							A.id IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso WHERE promo = ".getParam('promo.conf')." )
+							OR S.id IN (SELECT id_sec FROM {$GLOBALS['prefix_db']}resp_section WHERE promo = ".getParam('promo.conf')." )
+							OR AC.id IN (SELECT id_act FROM {$GLOBALS['prefix_db']}resp_act WHERE promo = ".getParam('promo.conf')." )
+							OR CR.id IN (SELECT id_cre FROM {$GLOBALS['prefix_db']}resp_cren WHERE promo = ".getParam('promo.conf')." )
 							)
 						ORDER BY nom_famille, nom_sec, nom_act, CASE jour
                  WHEN 'Lundi' THEN 1 
@@ -275,6 +279,73 @@ function getInfoCreneau($creneau)
 		$tab[$creneau] = $row;
 	include("closedb.php");
 	return $tab;
+}
+
+function getAllLieux()
+{
+	$query = "SELECT BAT.nom AS batiment, SALLE.nom AS salle, SALLE.id AS id
+	FROM {$GLOBALS['prefix_db']}batiment BAT, {$GLOBALS['prefix_db']}salle SALLE
+	WHERE SALLE.id_batiment=BAT.id
+	ORDER BY BAT.nom, SALLE.nom
+	";
+	
+	include("opendb.php");
+	$results = mysql_query($query);
+	if (!$results)
+		echo mysql_error();
+	$tab = "";
+	while($row = mysql_fetch_assoc($results))
+		$tab .= '<option value="'.$row['id'].'">'.$row['batiment'].' '.$row['salle'].'</option>
+		';
+	include("closedb.php");
+	return $tab;
+}
+
+
+function nbre_a_jour($cre, $promo)
+{
+
+	$tab = getAllCreneaux();
+	$tab = $tab['sans_famille'];
+	// $tab=getCreneaux($_SESSION['uid']);
+	$creneau = $tab[$cre];
+	$adhs = getAdherentsByCreneau($cre,$promo);
+	foreach($adhs as $id_adh => $row) {
+	
+		$id_statut_adh = $row['id_statut'];
+		$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}adhesion a INNER JOIN {$GLOBALS['prefix_db']}association b ON a.id_asso=b.id WHERE id_adh={$row['id']} AND id_cre=$cre");
+		while ($tmp_array = mysql_fetch_array($res)) {
+			$id_asso = $tmp_array['id_asso'];
+			$nom_asso = $tmp_array['nom'];
+			$actif = $tmp_array['statut'];
+		}
+
+		if ($actif == 0) {
+			$deja_paye = 0;
+			$cout_cre = 0;
+			$list_sup = "";
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup_fk a INNER JOIN {$GLOBALS['prefix_db']}sup b ON a.id_sup=b.id WHERE promo=$promo AND ((id_asso_adh=$id_asso AND (id_ent=$cre OR id_ent={$creneau['id_act']} OR id_ent={$creneau['id_sec']})) OR (id_statut=$id_statut_adh AND id_ent=$id_asso))");
+			while ($tmp_array = mysql_fetch_array($res)) {
+					$cout_cre += $tmp_array['valeur'];
+					$list_sup .= ",".$tmp_array['id'];
+			}
+			if ($cout_cre > 0 && !empty($list_sup)) {
+				$list_sup[0] = " ";
+				$res = doQuery("SELECT * FROM `{$GLOBALS['prefix_db']}paiement_sup` a INNER JOIN `{$GLOBALS['prefix_db']}paiement` b ON a.`id_paiement`=b.`id` WHERE promo=$promo AND b.`id_adh`={$row['id']} AND a.`id_sup` IN ({$list_sup})");
+				while ($tmp_array = mysql_fetch_array($res))
+					   $deja_paye += $tmp_array['valeur'];
+			}
+			if ($cout_cre <= $deja_paye)
+				$a_jour ++;
+			else
+				$a_jour2 = "Pas à jour";
+		} else if ($actif == 1)
+			$a_jour2 = "Résilié";
+		else
+			$a_jour2 = "Impossible";
+	}
+	return $a_jour;
+	
 }
 
 

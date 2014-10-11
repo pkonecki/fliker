@@ -1,5 +1,6 @@
 <?php
 defined('_VALID_INCLUDE') or die('Direct access not allowed.');
+
 $tot_asso=count(getAssociations($_SESSION['uid']));
 $tot_sec=count(getSections($_SESSION['uid']));
 $tot_act=count(getActivites($_SESSION['uid']));
@@ -96,20 +97,7 @@ else
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
 		$tab=getAssociations($_SESSION['uid']);
-		print '<ul id="submenu">';
-		if(isset($tot_asso) && $tot_asso > 0)
-			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-		if(isset($tot_sec) && $tot_sec > 0)
-			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-		if(isset($tot_act) && $tot_act > 0)
-			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-		if(isset($tot_cre) && $tot_cre > 0)
-			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-		if(isset($tot_asso) && $tot_asso > 0)
-			print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
-		if(isset($tot_cre) && $tot_cre > 0)
-			print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
-		print '</ul>';
+
 		if(empty($_GET['asso'])){
 
 			print '<h2>Vos associations</h2>';
@@ -130,7 +118,7 @@ else
 			print "<div class=\"tip\">".getParam('text_asso.txt')."</div>";
 			print '<table>';
 			print '<tr><td class="label">Nom : </td><td>'.$tab[$_GET['asso']]['nom'].'</td></tr>';
-			print '<tr><td class="label">Description : </td><td>'.$tab[$_GET['asso']]['description'].'</td></tr>';
+			print '<tr><td class="label" style="vertical-align:top;">Description : </td><td>'.nl2br($tab[$_GET['asso']]['description']).'</td></tr>';
 			print '<tr><td class="label">Url : </td><td>'.$tab[$_GET['asso']]['url'].'</td></tr>';
 			$_SESSION['auth_thumb']='true';
 			$photo="includes/thumb.php?folder=logo_asso&file=".$_GET['asso'].".jpg";

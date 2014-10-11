@@ -46,6 +46,7 @@ function newAdherent($tab)
 			}
 		}
 	}
+	
 	$activationKey=mt_rand() . mt_rand() . mt_rand() . mt_rand() . mt_rand();
 	$colonnes .= "date_creation,last_modif,last_modif_droit_image,activationkey,";
 	$values .= "'".date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','". date( 'Y-m-d H:i:s')."','".$activationKey."',";
@@ -81,8 +82,7 @@ function newAdherent($tab)
 	// {
 	// 	$mail->Send();
 	// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
-	// }
-}
+	// }}
 
 function getAdherent($user)
 {
@@ -279,13 +279,13 @@ function isAmongMyAdherents($userid,$adhid)
 		AND    HS.id_asso = A.id
                 AND
 		 (
-		       CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    WHERE id_adh = '$userid')
+		       CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    WHERE id_adh = '$userid' AND promo=".getParam('promo.conf').")
 		       OR
-		       AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     WHERE id_adh = '$userid')
+		       AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     WHERE id_adh = '$userid' AND promo=".getParam('promo.conf').")
 		       OR
-		       S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid')
+		       S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section WHERE id_adh = '$userid' AND promo=".getParam('promo.conf').")
 		       OR
-		       A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    WHERE id_adh = '$userid')
+		       A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    WHERE id_adh = '$userid' AND promo=".getParam('promo.conf').")
 		 )
 		AND
                  (
@@ -329,19 +329,22 @@ function isAmongMyAdherents($userid,$adhid)
 	return $tab;
 }
 
-function getMyAssos($userid, $section = false)
+function getMyAssos($userid, $responsabilite)
 {
-	if($section)
+	if($responsabilite == "section")
 		$query="SELECT A.*, S.nom as 'section' FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section SA, {$GLOBALS['prefix_db']}resp_section RS, {$GLOBALS['prefix_db']}section S
-		        WHERE A.id=SA.id_asso AND SA.id_sec=RS.id_sec AND RS.id_adh=$userid AND S.id=RS.id_sec
-		";
+		        WHERE A.id=SA.id_asso AND SA.id_sec=RS.id_sec AND RS.id_adh=$userid AND S.id=RS.id_sec AND RS.promo=".getParam('promo.conf')." ";
+				
+	else if($responsabilite == "creneau")
+		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}asso_section SA, {$GLOBALS['prefix_db']}resp_cren RC, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}activite ACT, {$GLOBALS['prefix_db']}creneau CR
+		        WHERE CR.id_act=ACT.id AND ACT.id_sec=SA.id_sec AND A.id=SA.id_asso AND RC.id_adh=$userid AND CR.id=RC.id_cre AND RC.promo=".getParam('promo.conf')." ";
+		
 	else if($userid==-1)
-		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A
-		";
+		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A ";
 	else
 		$query="SELECT A.* FROM {$GLOBALS['prefix_db']}association A, {$GLOBALS['prefix_db']}resp_asso RS
-		        WHERE A.id=RS.id_asso AND RS.id_adh=$userid
-		";
+		        WHERE A.id=RS.id_asso AND RS.id_adh=$userid AND RS.promo=".getParam('promo.conf')." ";
+				
 	include("opendb.php");
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
@@ -366,7 +369,7 @@ function getSolde($id_adh,$promo)
 	$adh = getAdherent($id_adh);
 	if (!isset($adh['statut']))
 		$adh['statut'] = "";
-	$tab = getFacture($ads,$adh['statut'], $promo);
+	$tab = getFacture($ads, $adh['statut'], $promo, 0);
 	$p_sup = getPaiementsSup($id_adh, $promo);
 	$solde=0;
 	foreach($tab['assos'] as $row)
@@ -403,10 +406,17 @@ function getSolde($id_adh,$promo)
 function setNumCarte($num,$adh)
 {
 	$promo = getParam('promo.conf');
-	$q="UPDATE {$GLOBALS['prefix_db']}numcarte_fk SET numcarte=$num WHERE id_adh=$adh AND promo='".$promo."' ";
+	$q1 = "SELECT * FROM {$GLOBALS['prefix_db']}numcarte_fk WHERE id_adh=$adh AND promo='".$promo."' ";
+	$q2="UPDATE {$GLOBALS['prefix_db']}numcarte_fk SET numcarte=$num WHERE id_adh=$adh AND promo='".$promo."' ";
+	$q3="INSERT INTO {$GLOBALS['prefix_db']}numcarte_fk (numcarte, id_adh, promo) VALUES($num, $adh, $promo) ";
 	include("opendb.php");
-	$results = mysql_query($q);
-	if (!$results) echo mysql_error();
+	$results1 = mysql_query($q1);
+	$verif = mysql_num_rows($results1);
+	if($verif != 0)
+		$results2 = mysql_query($q2);
+	else
+		$results2 = mysql_query($q3);
+	if (!$results2) echo mysql_error();
 	include("closedb.php");
 }
 

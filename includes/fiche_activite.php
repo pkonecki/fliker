@@ -103,32 +103,15 @@ else{
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0)){
 		$tab=getActivites($_SESSION['uid']);
-		print '<ul id="submenu">';
-		if($tot_asso > 0){
-			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-		}
-		if($tot_sec > 0){
-			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-		}
-		if($tot_act > 0){
-			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-		}
-		if($tot_cre > 0){
-			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-		}
-		if(isset($tot_asso) && $tot_asso > 0)
-			print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
-		if(isset($tot_cre) && $tot_cre > 0)
-			print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
-		print '</ul>';
+
 		if(empty($_GET['act'])){
 
-			print '<h2>Activités AVEC Responsables</h2>';
+			print '<h2>Vos Activités</h2>';
 			print '<ul>';
 			$non_actif="";
 			foreach($tab as $act){
 				$verif=0;
-				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act = ".$act['id']." ");
+				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_act WHERE id_act = ".$act['id']." AND promo = ".$current_promo." ");
 				$verif = mysql_num_rows($query);
 				if ($verif != 0){
 				print '<li><a href=index.php?page=5&act='.$act['id'].'>'.$act['nom_sec'].' - '.$act['nom'].'</a></li>';
@@ -173,10 +156,11 @@ else{
 			print '<ul>';
 			foreach($crens as $creneau){
 				print '<FORM action="index.php?page=6&creneau='.$creneau['id'].'" method="POST">
-					<input type="hidden" name="action" value="suppression" />
-				<li><a href=index.php?page=6&creneau='.$creneau['id'].'>'.$creneau['jour'].' - '.$creneau['debut'].' - '.$creneau['fin'].'</a>
-				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
-					</FORM></li>';
+				<input type="hidden" name="action" value="suppression" />
+				<li><a href=index.php?page=6&creneau='.$creneau['id'].'>'.$creneau['jour'].' - '.$creneau['debut'].' - '.$creneau['fin'].'</a>';
+				if($_SESSION['privilege'] == 1)
+					print '<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">';
+				print '</FORM></li>';
 
 			}
 			print '</ul>';
@@ -187,7 +171,8 @@ else{
 			</FORM></td>';
 			
 			//Selection Promo
-			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['act'].") ORDER BY promo DESC");
+			// $res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['act'].") ORDER BY promo DESC");
+			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion ORDER BY promo DESC");
 			print "<p>Promo:<SELECT id=\"promo\" >";
 			if (!$res || mysql_num_rows($res) <= 0)
 				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
@@ -224,7 +209,6 @@ else{
 			$assos = getAssos();
 			print '<h3>Suppléments de l\'activité</h3>';
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
-			if($promo==$current_promo) print '<th>Modif</th><th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup) {
 				print '<tr>

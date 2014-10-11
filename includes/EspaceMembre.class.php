@@ -45,6 +45,24 @@ class EspaceMembre
 				print '<ul id="submenu"><li><a href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a class="selected" href="index.php?page=13">Messages</a></li><a href="index.php?page=19">Champs</a></ul>';
 			else if ($page == 19)
 				print '<ul id="submenu"><li><a href="index.php?page=9">Général</a></li><li><a href="index.php?page=11">Notifications</a></li><li><a href="index.php?page=13">Messages</a></li><a class="selected" href="index.php?page=19">Champs</a><li></li></ul>';
+			
+			else if ($page == 3 || $page == 4 || $page == 5 || $page == 6 || $page == 12 || $page == 20){
+				print '<ul id="submenu">';
+				if(isset($tot_asso) && $tot_asso > 0)
+					print '<li><a class="'.(($page==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
+				if(isset($tot_sec) && $tot_sec > 0)
+					print '<li><a class="'.(($page==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
+				if(isset($tot_act) && $tot_act > 0)
+					print '<li><a class="'.(($page==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
+				if(isset($tot_cre) && $tot_cre > 0)
+					print '<li><a class="'.(($page==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
+				if(isset($tot_asso) && $tot_asso > 0)
+					print '<li><a class="'.(($page==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
+				if(isset($tot_cre) && $tot_cre > 0)
+					print '<li><a class="'.(($page==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
+				print '</ul>';
+			}
+				
 		}
 	}
 	

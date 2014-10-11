@@ -35,10 +35,21 @@ function newAdhesions($tab,$id_adh)
 	$i=0;
 	foreach($tab as $cre => $asso)
 	{
-		if (!empty($asso))
-			{$query .="('$id_adh', '$cre', '$asso' ,'".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}' ),"; $n++;}
-		else
-			{$query2 .="('$id_adh', '$cre','".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}', 2 ),"; $i++;}
+			if($asso=="impossible"){
+				$query2 .="('$id_adh', '$cre','".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}', 2 ),";
+				$i++;
+			}
+			if($asso=="attente"){
+				$query2 .="('$id_adh', '$cre','".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}', 3 ),";
+				$i++;
+			}
+			elseif($asso==0){ // Si adhérent a selectionné "Annuler ce choix", on ne l'enregistre pas
+			}
+			else{
+				$query .="('$id_adh', '$cre', '$asso' ,'".date( 'Y-m-d H:i:s')."', '{$GLOBALS['current_promo']}' ),";
+				$n++;
+			}
+
 	}
 	$query = substr($query,0,-1);
 	$query2 = substr($query2,0,-1);
