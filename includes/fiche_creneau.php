@@ -23,6 +23,15 @@ if(isset($_GET['creneau']) && !isset($tab[$_GET['creneau']])){
 	die();
 }
 if (isset($_POST['action']) && $_POST['action'] == 'modification') {
+
+	$res = doQuery("SELECT BAT.nom AS batiment, SALLE.nom AS salle, SALLE.id AS id
+	FROM {$GLOBALS['prefix_db']}batiment BAT, {$GLOBALS['prefix_db']}salle SALLE
+	WHERE SALLE.id_batiment=BAT.id
+	ORDER BY BAT.nom, SALLE.nom");
+	while($data = mysql_fetch_assoc($res))
+		$all_lieux .= '<option value="'.$data['id'].'" '.($data['id']==$tab[$_GET['creneau']]['lieu']?"selected":"").'>'.$data['batiment'].' '.$data['salle'].'</option>
+		';
+	
 	print '<h2>Modifier Créneau</h2>';
 	print '<FORM id="f_creneau_modif" action="index.php?page=6&creneau='.$_GET['creneau'].'" enctype="multipart/form-data" method="POST">';
 	print '<table border=0>';
@@ -38,7 +47,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'modification') {
 	</SELECT></td></tr>';
 	print '<tr><td class="label"><LABEL for ="debut_cre" >Debut</LABEL> : </td><td><INPUT type=text readonly name="debut_cre" id="debut_cre" class="timepicker "value="'.$tab[$_GET['creneau']]['debut_cre'].'"></td></tr>';
 	print '<tr><td class="label"><LABEL for ="fin_cre" >Fin</LABEL> : </td><td><INPUT type=text readonly name="fin_cre" id="fin_cre" class="timepicker "value="'.$tab[$_GET['creneau']]['fin_cre'].'"></td></tr>';
-	print '<tr><td class="label"><LABEL for ="lieu" >Lieu</LABEL> : </td><td><INPUT type=text name="lieu" id="lieu" value="'.$tab[$_GET['creneau']]['lieu'].'"></td></tr>';
+	print '<tr><td class="label"><LABEL for ="lieu" >Lieu</LABEL> : </td><td><select name="lieu">'.$all_lieux.'</select></td></tr>';
 	print '<input type="hidden" name="action" value="submitted" />';
 	print '<input type="hidden" name="id_cre" value="'.$tab[$_GET['creneau']]['id_cre'].'" />';
 	print '<tr><td colspan="2"><INPUT type="submit" value="Envoyer" ></td></tr>';
@@ -62,7 +71,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'new') {
 	</SELECT></td></tr>';
 	print '<tr><td class="label"><LABEL for ="debut_cre" >Debut</LABEL> : </td><td><INPUT type=text readonly name="debut_cre" id="debut_cre" class="timepicker" ></td></tr>';
 	print '<tr><td class="label"><LABEL for ="fin_cre" >Fin</LABEL> : </td><td><INPUT type=text readonly name="fin_cre" id="fin_cre" class="timepicker" ></td></tr>';
-	print '<tr><td class="label"><LABEL for ="lieu" >Lieu</LABEL> : </td><td><INPUT type=text name="lieu" id="lieu" ></td></tr>';
+	print '<tr><td class="label"><LABEL for ="lieu" >Lieu</LABEL> : </td><td><select name="lieu">'.getAllLieux().'</select></td></tr>';
 	print '<input type="hidden" name="action" value="submitted_new" />';
 	print '<tr><td colspan="2"><INPUT type="submit" value="Envoyer"></td></tr>';
 	print '<input type="hidden" name="id_act" value="'.$_POST['id_act'].'">';
@@ -111,10 +120,34 @@ else
 		delcreneau($_GET['creneau']);
 		header("Location: index.php?page=6");
 	}
-	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp')
+	if (isset($_POST['action']) && $_POST['action'] === 'suppression_resp'){
 		delRespCre($_GET['creneau'],$_GET['resp'],$promo);
-	if (isset($_POST['action']) && $_POST['action'] === 'new_resp')
+		if (getParam('allow_mail.conf') == true && getParam('modif_rights.notif') == "now")
+			{
+				$to      = "webmaster.sport@u-psud.fr";
+				$subject = "[".getParam('text_top.txt')."] Suppression Responsable Créneau";
+				$message = "Bonjour,\r\n \r\n l'utilisateur ".$_SESSION['prenom']." ".$_SESSION['nom']." (id ".$_SESSION['uid'].") a supprimé l'id ".$_GET['resp']." comme responsable du créneau ".$_GET['creneau']." ";
+				$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+						   'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+						   'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+						   'X-Mailer: PHP/'.phpversion();
+				mail($to, $subject, $message, $headers);
+			}
+	}
+	if (isset($_POST['action']) && $_POST['action'] === 'new_resp'){
 		ajoutResponsableCre($_POST['id_cre'],$_POST['id_resp'],$promo);
+		if (getParam('allow_mail.conf') == true && getParam('modif_rights.notif') == "now")
+			{
+				$to      = "webmaster.sport@u-psud.fr";
+				$subject = "[".getParam('text_top.txt')."] Ajout Responsable Créneau";
+				$message = "Bonjour,\r\n \r\n l'utilisateur ".$_SESSION['prenom']." ".$_SESSION['nom']." (id ".$_SESSION['uid']." a ajouté l'id ".$_POST['id_resp']." comme responsable du créneau ".$_POST['id_cre']." ";
+				$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+						   'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+						   'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+						   'X-Mailer: PHP/'.phpversion();
+				mail($to, $subject, $message, $headers);
+			}
+	}
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_GET['sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted_modif_sup')
@@ -130,24 +163,7 @@ else
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
 		$tab=getCreneaux($_SESSION['uid']);
-		print '<ul id="submenu">';
-		if($tot_asso > 0){
-			print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-		}
-		if($tot_sec > 0){
-			print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-		}
-		if($tot_act > 0){
-			print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-		}
-		if($tot_cre > 0){
-			print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-		}
-		if(isset($tot_asso) && $tot_asso > 0)
-			print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
-		if(isset($tot_cre) && $tot_cre > 0)
-			print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
-		print '</ul>';
+
 		if(empty($_GET['creneau'])){
 
 			print '<h2>Vos Créneaux</h2>';
@@ -155,7 +171,7 @@ else
 			$non_actif="";
 			foreach($tab as $creneau){
 				$verif=0;
-				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_cre = ".$creneau['id_cre']." ");
+				$query = doQuery ("SELECT * FROM {$GLOBALS['prefix_db']}resp_cren WHERE id_cre = ".$creneau['id_cre']." AND promo = ".$current_promo." ");
 				$verif = mysql_num_rows($query);
 				if ($verif != 0){
 				print '<li><a href=index.php?page=6&creneau='.$creneau['id_cre'].'>'.$creneau['nom_sec'].' - '.$creneau['nom_act'].' - '.$creneau['jour_cre'].' - '.$creneau['debut_cre'].' - '.$creneau['fin_cre'].'</a></li>';
@@ -180,13 +196,14 @@ else
 			print '<tr><td class="label">Jour : </td><td>'.$tab[$_GET['creneau']]['jour_cre'].'</td></tr>';
 			print '<tr><td class="label">Debut : </td><td>'.$tab[$_GET['creneau']]['debut_cre'].'</td></tr>';
 			print '<tr><td class="label">Fin : </td><td>'.$tab[$_GET['creneau']]['fin_cre'].'</td></tr>';
-			print '<tr><td class="label">Lieu : </td><td>'.$tab[$_GET['creneau']]['lieu'].'</td></tr>';
-			print '<tr>';
-			print '<td colspan=2><FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
-					<input type="hidden" name="action" value="modification" />
-					<INPUT type="submit" value="Modifier">
-					</FORM></td>';
-			print '</tr>';
+			print '<tr><td class="label">Lieu : </td><td>'.$tab[$_GET['creneau']]['batiment'].' '.$tab[$_GET['creneau']]['salle'].'</td></tr>';
+			if($_SESSION['privilege'] == 1)
+				print '<tr>
+				<td colspan=2><FORM action="index.php?page=6&creneau='.$_GET['creneau'].'" method="POST">
+				<input type="hidden" name="action" value="modification" />
+				<INPUT type="submit" value="Modifier">
+				</FORM></td>
+				</tr>';
 			print '</table>';
 			
 			//Selection Promo
@@ -228,7 +245,6 @@ else
 			print '<h3>Suppléments du créneau</h3>';
 			
 			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
-			if($promo==$current_promo) print '<th>Modif</th><th>+/-</th>';
 			print '</tr>';
 			foreach ($sups as $id => $sup) {
 				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_supl ORDER BY nom ASC");

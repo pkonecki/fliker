@@ -1,4 +1,5 @@
 <?php
+
 function selected($post,$val)
 {
 	if (isset($_POST[$post]) && $_POST[$post]===$val)
@@ -39,16 +40,16 @@ else	// Si l'utilisateur est connecté
   }
   else
   {
-    if(count(getMyAssos($_SESSION['uid'])) > 0 )
+    if(count(getMyAssos($_SESSION['uid'], "")) > 0 )
       $resp_asso=true;
   }
-  $query = "SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."'
+  $query = "SELECT * FROM {$GLOBALS['prefix_db']}resp_act  WHERE id_adh='".$_SESSION['uid']."' AND promo='".$current_promo."'
   UNION
-  SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."'
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_cren  WHERE id_adh='".$_SESSION['uid']."' AND promo='".$current_promo."'
   UNION
-  SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION['uid']."'
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_section  WHERE id_adh='".$_SESSION['uid']."' AND promo='".$current_promo."'
   UNION
-  SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION['uid']."' ";
+  SELECT * FROM {$GLOBALS['prefix_db']}resp_asso  WHERE id_adh='".$_SESSION['uid']."' AND promo='".$current_promo."' ";
   include("opendb.php");
   $results = mysql_query($query);
   include("closedb.php");
@@ -205,7 +206,7 @@ else	// Si l'utilisateur est connecté
 	print '</div>
 	<button type="button" id="add_field">Ajouter un champ</button>
 	</fieldset>
-	<fieldset class="selects"><legend>Sélection des créneaux</legend>
+	<fieldset class="selects" style="width:350px;"><legend>Sélection des créneaux</legend>
 	<ul id="tree_root">
 		<li><input type="checkbox" name="sections" '.checked('sections','sections').' value="sections" ><label>Tout</label>
 			<ul id="sections"  >
@@ -213,27 +214,37 @@ else	// Si l'utilisateur est connecté
 	$creneaux=getCreneaux($_SESSION['uid']);
 	$tab=array();
 	foreach($creneaux as $creneau){
-		$tab[$creneau['id_sec']]['nom'] = $creneau['nom_sec'];
-		$tab[$creneau['id_sec']]['id'] = $creneau['id_sec'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['nom'] = $creneau['nom_act'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['id'] = $creneau['id_act'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour'] = $creneau['jour_cre'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id'] = $creneau['id_cre'];
-		$tab[$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut'] = $creneau['debut_cre'];
+		$tab[$creneau['id_asso']]['nom'] = $creneau['nom_asso'];
+		$tab[$creneau['id_asso']]['id'] = $creneau['id_asso'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['nom'] = $creneau['nom_sec'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['id'] = $creneau['id_sec'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['activites'][$creneau['id_act']]['nom'] = $creneau['nom_act'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['activites'][$creneau['id_act']]['id'] = $creneau['id_act'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['jour'] = $creneau['jour_cre'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['id'] = $creneau['id_cre'];
+		$tab[$creneau['id_asso']]['section'][$creneau['id_sec']]['activites'][$creneau['id_act']]['creneaux'][$creneau['id_cre']]['debut'] = $creneau['debut_cre'];
+	
 	}
-	foreach($tab as $section){
-		print '<li><input type="checkbox" name="section'.$section['id'].'" '.checked('section'.$section['id'],$section['id']).' value="'.$section['id'].'"><label>'.$section['nom'].'</label>';
-		print '<ul id="activites">';
-		foreach($section['activites'] as $act){
-			print '<li><input type="checkbox" name="act'.$act['id'].'" '.checked('act'.$act['id'],$act['id']).' value="'.$act['id'].'"><label>'.$act['nom'].'</label>';
-			print '<ul id="creneaux">';
-			foreach($act['creneaux'] as $cre){
-				print '<li><input type="checkbox" name="cre'.$cre['id'].'" '.checked('cre'.$cre['id'],$cre['id']).' value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).'</label>';
+
+	foreach($tab as $asso){
+		print '<li><input type="checkbox" name="asso'.$asso['id'].'" '.checked('asso'.$asso['id'],$asso['id']).' value="'.$asso['id'].'"><label>'.$asso['nom'].'</label>';
+		print '<ul id="sections">';
+		foreach($asso['section'] as $section){
+			print '<li><input type="checkbox" name="section'.$section['id'].'" '.checked('section'.$section['id'],$section['id']).' value="'.$section['id'].'"><label>'.$section['nom'].'</label>';
+			print '<ul id="activites">';
+			foreach($section['activites'] as $act){
+				print '<li><input type="checkbox" name="act'.$act['id'].'" '.checked('act'.$act['id'],$act['id']).' value="'.$act['id'].'"><label>'.$act['nom'].'</label>';
+				print '<ul id="creneaux">';
+				foreach($act['creneaux'] as $cre){
+					print '<li><input type="checkbox" name="cre'.$cre['id'].'" '.checked('cre'.$cre['id'],$cre['id']).' value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).'</label>';
+				}
+				print '</ul>';
 			}
 			print '</ul>';
 		}
 		print '</ul>';
 	}
+
 	print '</ul>';
 	if (isset($_POST['affichage']))
 		$first = empty($_POST['affichage']);
@@ -313,13 +324,14 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 	}
 	$in="('0'";
 	$i=0;
-	foreach($tab as $section)
-	{
-		foreach($section['activites'] as $activite){
-			foreach($activite['creneaux'] as $creneau){
-				if(!empty($_POST['cre'.$creneau['id']])){
-				 	$in.=",'".$creneau['id']."' ";
-					$i++;
+	foreach($tab as $asso){
+		foreach($asso['section'] as $section){
+			foreach($section['activites'] as $activite){
+				foreach($activite['creneaux'] as $creneau){
+					if(!empty($_POST['cre'.$creneau['id']])){
+						$in.=",'".$creneau['id']."' ";
+						$i++;
+					}
 				}
 			}
 		}
@@ -346,13 +358,13 @@ if(isset($_POST['action']) && $_POST['action']==="submitted")
 				AND CR.id IN $in
 				AND (0 ";
 			if (isset($_POST['responsable_asso']))
-				$sql .= " OR A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_adh=ADH.id)";
+				$sql .= " OR A.id  IN (SELECT id_asso FROM {$GLOBALS['prefix_db']}resp_asso    RA WHERE RA.id_adh=ADH.id AND RA.promo='".$promo."')";
 			if (isset($_POST['responsable_sect']))
-				$sql .= " OR S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section RS WHERE RS.id_adh=ADH.id)";
+				$sql .= " OR S.id  IN (SELECT id_sec  FROM {$GLOBALS['prefix_db']}resp_section RS WHERE RS.id_adh=ADH.id AND RS.promo='".$promo."')";
 			if (isset($_POST['responsable_acti']))
-				$sql .= " OR AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     RT WHERE RT.id_adh=ADH.id)";
+				$sql .= " OR AC.id IN (SELECT id_act  FROM {$GLOBALS['prefix_db']}resp_act     RT WHERE RT.id_adh=ADH.id AND RT.promo='".$promo."')";
 			if (isset($_POST['responsable_cren']))
-				$sql .= " OR CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    RC WHERE RC.id_adh=ADH.id)";
+				$sql .= " OR CR.id IN (SELECT id_cre  FROM {$GLOBALS['prefix_db']}resp_cren    RC WHERE RC.id_adh=ADH.id AND RC.promo='".$promo."')";
 			$sql .= " )))";
 		}
 		$sql .= " ) ORDER BY ADR.nom, ADR.prenom";
@@ -604,7 +616,7 @@ $('#reset').click(function() {
 });
 $('#tree_root').checkboxTree( {
   /* specify here your options */
-    initializeChecked: 'expanded', 
+    initializeChecked: 'collapsed', 
     initializeUnchecked: 'collapsed',
     onCheck: {
         descendants: 'check',

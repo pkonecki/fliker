@@ -115,4 +115,29 @@ print '
 
 
 print '</ul>';
+
+
+if(!empty($_SESSION['tab_responsabilite'])){
+
+	print '<form><h4>Basculer en tant que Responsable
+	<select name="responsabilite">
+	<option value="normal">Utilisateur Normal</option>
+	';
+
+	foreach($_SESSION['tab_responsabilite'] as $entite => $tab){
+	
+		foreach($tab as $id_ent => $nom)
+			print '<option value="'.$entite.'-'.$id_ent.'">'.$entite.' : '.$nom.'</option>';
+		
+	}
+		
+	if($_SESSION['privilege'] == 1)
+		print '<option value="admin">Administrateur</option>';
+
+	print '</select></h4>
+	</form>';
+
+}
+
+
 ?>
