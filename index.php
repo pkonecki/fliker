@@ -32,7 +32,8 @@ setlocale(LC_ALL, 'fr_FR');
    "http://www.w3.org/TR/html4/strict.dtd">
 <html>
  <head>
-  <title>::Fliker::Accueil</title>
+  <title><?php echo getParam('text_top.txt'); ?></title>
+  
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-timepicker.css" />
@@ -57,15 +58,21 @@ print '<body>';
 
 $EspaceMembre = new EspaceMembre;
 
-if (isset($_GET['page']))
-	$EspaceMembre->showMenu($_GET['page']);
-else
-	$EspaceMembre->showMenu(1);
-
 if (isset($_GET['page']) && $_GET['page'] == "logout"){
+
 	$EspaceMembre->logout();
+	$EspaceMembre->showMenu(1);
 	include("fiche_accueil.php");
-	}
+	
+}
+else{
+
+	if (isset($_GET['page']))
+		$EspaceMembre->showMenu($_GET['page']);
+	else
+		$EspaceMembre->showMenu(1);
+
+}
 
 	
 
@@ -265,6 +272,7 @@ $(function() {
 		changeYear: true , yearRange: "-100:+0" , changeMonth: true , dateFormat: "yy-mm-dd"  
 	});
 });
+
 $(".filterselect").multiselect({
 multiple: false,
 header: "Choisissez",
