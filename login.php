@@ -72,7 +72,7 @@ if(isset($_POST['submit']))
 print 	'<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 		<html>
 		<head>
-		<title>::Fliker::Connexion</title>
+		<title>'.getParam('text_top.txt').'</title>
 		<link rel="stylesheet" type="text/css" href="./includes/style.css" />
 		</head>
 		<body>';

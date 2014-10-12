@@ -6,7 +6,7 @@ $header = '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <html>
  <head>
-  <title>::Fliker::Validation</title>
+  <title>'.getParam('text_top.txt').'</title>
   <link rel="stylesheet" type="text/css" href="./includes/style.css" />
   <link rel="stylesheet" type="text/css" href="./includes/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
 	<script type="text/javascript" src="./includes/js/jquery.js"></script>

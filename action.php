@@ -35,7 +35,7 @@ switch($_POST['action'])
                                 // ici il faut une condition si sender = responsable alors reply-to à l'asso :
 //				$mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
                                 // le return path sert surtout pour les problèmes de delivery donc seulement vers webmaster :
-				$mail->AddCustomHeader('Return-Path: '.getParam('admin_email.conf'));
+				$mail->Sender = getParam('admin_email.conf');
                                 // ensuite le reste est trivial :
 				$mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
 				$mail->Subject = stripslashes($subject);
@@ -109,7 +109,9 @@ switch($_POST['action'])
 				print '<input type="hidden" name="to"     value="'.${to}          .'" />';
 			print '        <input type="hidden" name="action" value="sendmail_confirm"    />';
 			print '<dt>    <input type="submit"               value="envoyer"             /> </dt>';
-			print '</FORM> </td> </tr> </TABLE>';
+			print '</FORM> </td> </tr> </TABLE>
+			<style>.sendmail td{vertical-align:top;}</style>
+			';
 		}
 		else
 		{

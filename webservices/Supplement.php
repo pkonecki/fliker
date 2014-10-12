@@ -100,7 +100,7 @@ function getAssosCreneaux(){
 
 }
 
-function getFacture($ads,$id_statut_adh,$promo)
+function getFacture($ads, $id_statut_adh, $promo, $facultatif)
 {
 	$where=" false ";
 	foreach($ads as $key => $ad ){
@@ -108,6 +108,12 @@ function getFacture($ads,$id_statut_adh,$promo)
 		if(is_numeric($key) && $ad['statut']==0 ) $where.="OR (CR.id={$ad['id_cre']} AND A.id={$ad['id_asso']} ) ";
 		
 	}
+	
+	if($facultatif == 1)
+		$facultatif = "sup.facultatif=0 AND ";
+	else
+		$facultatif = "";
+	
 	$tout ="SELECT A.id id_asso, A.nom nom_asso, S.id id_sec, S.nom nom_sec, AC.id id_act, AC.nom nom_act, CR.id id_cre, CR.jour jour_cre, CR.debut debut_cre, CR.fin fin_cre, CR.lieu lieu
 						FROM {$GLOBALS['prefix_db']}activite AC, {$GLOBALS['prefix_db']}creneau CR, {$GLOBALS['prefix_db']}section S, {$GLOBALS['prefix_db']}association A
 						WHERE CR.id_act=AC.id
@@ -115,13 +121,13 @@ function getFacture($ads,$id_statut_adh,$promo)
 						AND ($where)
 						ORDER BY nom_sec";
 	$assos = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, sup.id_asso_paie, sup.id_asso_adh, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup
-				WHERE sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut='$id_statut_adh' AND sup.promo='$promo'";
+				WHERE ".$facultatif." sup.id_asso_adh IS NULL AND sup.id_asso_paie = S1.id_asso AND sup.id_statut='$id_statut_adh' AND sup.promo='$promo'";
 	$secs = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_sec, S1.nom_sec, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
-				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_sec=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
+				WHERE ".$facultatif." sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_sec=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
 	$acts = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_act, S1.nom_sec, S1.nom_act, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
-				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_act=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
+				WHERE ".$facultatif." sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_act=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
 	$cres = "SELECT DISTINCT sup.facultatif, sup.id, sup.valeur as valeur, S1.id_asso, S1.id_cre, S1.nom_sec, S1.nom_act, S1.jour_cre, S1.debut_cre, sup.id_asso_paie, sup.type FROM ($tout) AS S1 ,{$GLOBALS['prefix_db']}sup sup,{$GLOBALS['prefix_db']}sup_fk sup_fk
-				WHERE sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_cre=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
+				WHERE ".$facultatif." sup.id_statut IS NULL AND sup.id_asso_adh = S1.id_asso AND S1.id_cre=sup_fk.id_ent AND sup_fk.id_sup=sup.id AND sup.promo=$promo";
 	$t_assos = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($assos) AS A GROUP BY A.id_asso_paie";
 	$t_secs  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($secs)  AS A GROUP BY A.id_asso_paie";
 	$t_acts  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($acts)  AS A GROUP BY A.id_asso_paie";
