@@ -82,7 +82,8 @@ function newAdherent($tab)
 	// {
 	// 	$mail->Send();
 	// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
-	// }}
+	// }
+}
 
 function getAdherent($user)
 {
