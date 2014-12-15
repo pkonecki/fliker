@@ -472,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_act` (
   `id_act` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  UNIQUE KEY `id_act` (`id_act`,`id_adh`,`promo`)
+  UNIQUE KEY `id_act` (`id_act`,`id_adh`,`promo`),
   KEY `resp_act_ibfk_4` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -486,7 +486,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_asso` (
   `id_asso` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  UNIQUE KEY `id_asso` (`id_asso`,`id_adh`,`promo`)
+  UNIQUE KEY `id_asso` (`id_asso`,`id_adh`,`promo`),
   KEY `resp_asso_ibfk_4` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -500,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_cren` (
   `id_cre` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  UNIQUE KEY `id_cre` (`id_cre`,`id_adh`,`promo`)
+  UNIQUE KEY `id_cre` (`id_cre`,`id_adh`,`promo`),
   KEY `resp_cren_ibfk_4` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `fliker_resp_section` (
   `id_sec` int(16) NOT NULL,
   `id_adh` int(16) NOT NULL,
   `promo` int(4) NOT NULL,
-  UNIQUE KEY `id_sec` (`id_sec`,`id_adh`,`promo`)
+  UNIQUE KEY `id_sec` (`id_sec`,`id_adh`,`promo`),
   KEY `resp_section_ibfk_4` (`id_adh`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
