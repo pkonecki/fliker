@@ -27,6 +27,7 @@ else
 		print $die_footer;
 		die();
 	}
+	$admin = true;
 }
 $adh = getAdherent($id_adh);
 $dest_dossier = "../photos";
@@ -107,8 +108,8 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_mdp')
 	print '<h2>Changement de mot de passe</h2><br/>';
 	print '<FORM action="index.php?page=1" method="POST">';
 	print '<input type="hidden" name="action" value="change_mdp_submitted" />';
-	print '<input type="hidden" name="recup_mdp" value="'.$_SESSION['user'].'" />';
-	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_SESSION['user'].'</b> permettant de changer votre mot de passe.<br /><br /><input type="submit" value="Envoyer l\'email"></input>';
+	print '<input type="hidden" name="recup_mdp" value="'.$_POST['recup_mdp'].'" />';
+	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_POST['recup_mdp'].'</b> permettant de changer votre mot de passe.<br /><br /><input type="submit" value="Envoyer l\'email"></input>';
 	print '</form>';
 }
 else if (isset($_POST['action']) && $_POST['action'] == 'change_email')
@@ -117,8 +118,8 @@ else if (isset($_POST['action']) && $_POST['action'] == 'change_email')
 	print '<p>Pour pouvoir changer d\'adresse email, il vous faut pouvoir accéder à l\'ancienne ainsi qu\'à la nouvelle. Si vous n\'avez pas accès à l\'ancienne adresse, merci de contacter un administrateur.</p>';
 	print '<FORM action="index.php?page=1" method="POST">';
 	print '<input type="hidden" name="action" value="change_email_submitted" />';
-	print '<input type="hidden" name="recup_mdp" value="'.$_SESSION['user'].'" />';
-	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_SESSION['user'].'</b> permettant d\'indiquer la nouvelle adresse.<br /><br /><input type="submit" value="Envoyer l\'email"></input>';
+	print '<input type="hidden" name="recup_mdp" value="'.$_POST['recup_mdp'].'" />';
+	print 'Cliquez sur le bouton ci-dessous pour recevoir un email à l\'adresse <b>'.$_POST['recup_mdp'].'</b> permettant d\'indiquer la nouvelle adresse.<br /><br /><input type="submit" value="Envoyer l\'email"></input>';
 	print '</form>';
 }
 else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' || $_POST['action'] == 'change_email_submitted'))
@@ -155,38 +156,42 @@ else if (isset($_POST['action']) && ($_POST['action'] == 'change_mdp_submitted' 
 		if ($_POST['action'] == 'change_email_submitted')
 		{
 			$subject = "[".getParam('text_top.txt')."] Changement d'adresse email";
-			$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification de l'email lié à ce compte, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate_email.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre adresse email ne sera pas modifiée.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
+			$message = "Bonjour,\r\n\r\nVous êtes inscrit sur notre service d'inscription en ligne sur cette adresse email.\r\n\r\nSuite à une demande de modification de l'email lié à ce compte, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate_email.php?$activationKey\r\n\r\nSi c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre adresse email ne sera pas modifiée.\r\n\r\nExcellente saison sportive,\r\n\r\nhttp://sports.u-psud.fr/";
 		}
 		else
 		{
 			$subject = "[".getParam('text_top.txt')."] Changement de mot de passe";
-			$message = "Bonjour,\r\n  Vous, ou quelqu'un utilisant votre adresse email, êtes inscrit sur notre service d'adhésion en ligne.\r\n  Suite à une demande de modification du mot de passe lié à cette adresse email, veuillez cliquer sur le lien suivant :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n  Si c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre mot de passe ne sera pas modifié.\r\n   Excellente saison sportive,\r\n--\r\nles administrateurs.";
+			$message = "Bonjour,\r\n\r\nVous êtes inscrit sur notre service d'inscription en ligne sur cette adresse email.\r\n\r\nSuite à une demande de modification du mot de passe, veuillez cliquer sur le lien suivant pour en choisir un nouveau :\r\n".getParam('url_site.conf')."validate.php?$activationKey\r\n\r\nSi c'est une erreur ou une tentative d'usurpation, ignorez tout simplement cet email et votre mot de passe ne sera pas modifié.\r\n\r\nExcellente saison sportive,\r\n\r\nhttp://sports.u-psud.fr/";
 		}
-		$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
-		           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
-		           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
-		           'X-Mailer: PHP/'.phpversion();
-//		$return = FALSE;
+
+//		$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+//		           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+//		           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+//		           'X-Mailer: PHP/'.phpversion();
+////	$return = FALSE;
+//		if (getParam('allow_mail.conf') == true)
+//			mail($to, $subject, $message, $headers);
+////	if ($return == TRUE)
+//			print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
+////	else
+////		print "Une erreur est survenue lors de l'envoi du mail, veuillez vérifier votre adresse email ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
+
+
+		$mail = new PHPMailer();
+		$mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
+		$mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
+		$mail->Sender = getParam('admin_email.conf');
+		$mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
+		$mail->Subject = $subject;
+		$mail->Body = $message;
+		$mail->AddAddress($to);
+		$mail->ClearCustomHeaders("X-Mailer");
 		if (getParam('allow_mail.conf') == true)
-			mail($to, $subject, $message, $headers);
-//		if ($return == TRUE)
+		{
+			$mail->Send();
 			print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
-//		else
-//			print "Une erreur est survenue lors de l'envoi du mail, veuillez vérifier votre adresse email ainsi que votre connexion internet puis recommencer. <br/>Si le problème persiste merci de contacter les <a href=\"".getParam("url_resiliation.conf")."\">administrateurs</a>";
-		// Remplacement phpmailer
-		// $mail = new PHPMailer();
-		// $mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
-		// $mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
-		// $mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
-		// $mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
-		// $mail->Subject = $subject;
-		// $mail->Body = $message;
-		// $mail->AddAddress($to);
-		// if (getParam('allow_mail.conf') == true)
-		// {
-		// 	$mail->Send();
-		// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
-		// }
+		}
+		
 	}
 }
 else
@@ -207,13 +212,20 @@ else
 		<INPUT type="submit" class="btn btn--primary" value="Modifier"/>
 		</FORM></div>
 		';
+		elseif($admin == true) print '<div style="float:left;"><FORM action="index.php?page=12" method="POST">
+		<INPUT type="submit" class="btn btn--primary" value="Modifier"/>
+		<input type="hidden" name="modif_compte" value="'.$adh['email'].'">
+		</FORM></div>
+		';
 		print '<div style="float:left;"><FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="change_mdp" />
+		<input type="hidden" name="recup_mdp" value="'.$adh['email'].'" />
 		<INPUT type="submit" class="btn btn--primary" value="Changer de mot de passe"/>
 		</FORM></div>
 		';
 		print '<FORM action="index.php?page=1" method="POST">
 		<input type="hidden" name="action" value="change_email" />
+		<input type="hidden" name="recup_mdp" value="'.$adh['email'].'" />
 		<INPUT type="submit" class="btn btn--primary" value="Changer d\'email"/>
 		</FORM>
 		';

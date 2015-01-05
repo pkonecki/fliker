@@ -11,20 +11,6 @@ if(!($_SESSION['privilege'] === '1') && $tot_asso <= 0)
 	die();
 }
 
-print '<ul id="submenu">';
-if(isset($tot_asso) && $tot_asso > 0)
-	print '<li><a class="'.(($_GET['page']==3) ? 'selected' : '').'" href="index.php?page=3">Associations</a></li>';
-if(isset($tot_sec) && $tot_sec > 0)
-	print '<li><a class="'.(($_GET['page']==4) ? 'selected' : '').'" href="index.php?page=4">Sections</a></li>';
-if(isset($tot_act) && $tot_act > 0)
-	print '<li><a class="'.(($_GET['page']==5) ? 'selected' : '').'" href="index.php?page=5">Activités</a></li>';
-if(isset($tot_cre) && $tot_cre > 0)
-	print '<li><a class="'.(($_GET['page']==6) ? 'selected' : '').'" href="index.php?page=6">Créneaux</a></li>';
-if(isset($tot_asso) && $tot_asso > 0)
-	print '<li><a class="'.(($_GET['page']==12) ? 'selected' : '').'" href="index.php?page=12">Utilisateurs</a></li>';
-if(isset($tot_cre) && $tot_cre > 0)
-	print '<li><a class="'.(($_GET['page']==20) ? 'selected' : '').'" href="index.php?page=20">Statistiques</a></li>';
-print '</ul>';
 
 if(isset($_GET['promo']))
 	$promo = $_GET['promo'];
@@ -91,10 +77,39 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 				{
 					$values = getSelect($row['nom']);
 					if($row['nom'] != "statut" || empty($ads)){
-					print '<tr><td>'.$row['description'].' : </td><td><SELECT name="id_'.$row['nom'].'" >';
-					foreach($values as $key => $value)
+					print '<tr><td>'.$row['description'].' : </td><td><SELECT name="id_'.$row['nom'].'" id="id_'.$row['nom'].'" onchange="affichage_statuts()" >';
+					foreach($values as $key => $value){
 						print '<OPTION value="'.$key.'" '.($final['id_'.$row['nom'].''] == $key ? 'selected' : '').'>'.$value.'</OPTION>';
-					print '</SELECT></td></tr>';
+					
+					////////////////////////////////// A générer => modif statut_fk !
+								include("opendb.php");
+								$query = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}statut_fk WHERE id_statut=$key ORDER BY nom ");
+								$verif = mysql_num_rows($query);
+								if($verif > 1){
+								$style = 'style="display:none"';
+								if($final['id_'.$row['nom'].''] == $key)
+									$style = "";
+								
+								$detail_statuts .= '<SELECT name="id_statut_detail_'.$key.'" id="id_statut_detail_'.$key.'" '.$style.' ><OPTION value="" selected>Sélectionnez SVP :</OPTION>';
+								while($data = mysql_fetch_assoc($query))
+									$detail_statuts .= '<OPTION value="'.$data['id'].'" '.($final['id_'.$row['nom'].'_fk'] == $data['id'] ? 'selected' : '').'>'.$data['nom'].'</OPTION>
+									';
+								
+								$detail_statuts .= '</SELECT>';
+								$statut_javascript .= '
+									if(type == "'.$key.'"){
+										document.getElementById("id_statut_detail_'.$key.'").style.display="inline";
+										$("#id_statut_detail_'.$key.'").addClass("def_req");
+									}
+									else{
+										document.getElementById("id_statut_detail_'.$key.'").style.display="none";
+										$("#id_statut_detail_'.$key.'").removeClass("def_req");
+									}
+									';
+								}
+					//////////////////////////////////
+					}
+					print '</SELECT>'.$detail_statuts.'</td></tr>';
 					}
 					else{
 					include("opendb.php");
@@ -105,8 +120,19 @@ if (isset($_POST['modif_compte'])) // Page des informations personnelles d'un co
 				}
 			}
 		}
-		print "<tr><td colspan='2' align='center'><input type='submit' name='modif_compte_submitted' value='Enregistrer'></td></tr>";
+		print "<tr><td colspan='2' align='center'><input type='hidden' name='id_adh' value='".$final['id']."'><input type='submit' name='modif_compte_submitted' value='Enregistrer'></td></tr>";
 		print "</form></table>";
+
+		print '
+		<script type="text/javascript">
+			function affichage_statuts(){
+			var type = document.getElementById("id_statut").value;
+
+			'.$statut_javascript.'
+
+			}
+		</script>
+		';
 	}
 }
 else	// Page demande de l'adresse email et traitements
@@ -114,7 +140,7 @@ else	// Page demande de l'adresse email et traitements
 	if (isset($_POST['modif_compte_submitted']))
 	{
 		$champs = getChampsAdherents();
-		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `email` = '".$_POST['email']."'";
+		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent WHERE `id` = '".$_POST['id_adh']."'";
 		include('opendb.php');
 		$res = mysql_query($query);
 		$array_adh = null;
@@ -130,8 +156,10 @@ else	// Page demande de l'adresse email et traitements
  			if ($champs['admin'] == 1)
 			{
 				if ($champs['type'] == "select"){
-					if(isset($_POST['id_'.$champs['nom']]))
+					if(isset($_POST['id_'.$champs['nom']])){
 						$values .= ", id_".$champs['nom']."=".(isset($_POST['id_'.$champs['nom']]) ? $_POST['id_'.$champs['nom']] : 0)."";
+						$values .= ", id_".$champs['nom']."_fk=".(isset($_POST['id_statut_detail_'.$_POST['id_'.$champs['nom']]]) ? $_POST['id_statut_detail_'.$_POST['id_'.$champs['nom']]] : 0)."";
+					}
 				}
 				else if ($champs['type'] == "file")
 				{
@@ -153,26 +181,27 @@ else	// Page demande de l'adresse email et traitements
 							$to      = $_POST['email'];
 							$subject = "[".getParam('text_top.txt')."] Désactivation du compte";
 							$message = "Bonjour,\r\n  Votre compte a été désactivé, merci de contacter les administrateurs pour plus d'informations. \r\n  Remarque : pour pouvoir exercer votre droit de consultation et de modification de vos données personnelles, vous devez d'abord activer votre compte.\r\n  Excellente saison sportive,\r\n--\r\nles administrateurs.";
-							$headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
-							           'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
-							           'Return-Path: '.getParam('admin_email.conf')."\r\n" .
-							           'X-Mailer: PHP/'.phpversion();
-							if (getParam('allow_mail.conf') == true)
-								mail($to, $subject, $message, $headers);
-							// Remplacement phpmailer
-							// $mail = new PHPMailer();
-							// $mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
-							// $mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
-							// $mail->AddCustomHeader('Return-Path: '. getParam('admin_email.conf'));
-							// $mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
-							// $mail->Subject = $subject;
-							// $mail->Body = $message;
-							// $mail->AddAddress($to);
+							// $headers = 'From: '.getParam('admin_email.conf')."\r\n"        .
+							           // 'Reply-To: '.getParam('contact_email.conf')."\r\n"  .
+							           // 'Return-Path: '.getParam('admin_email.conf')."\r\n" .
+							           // 'X-Mailer: PHP/'.phpversion();
 							// if (getParam('allow_mail.conf') == true)
-							// {
-							// 	$mail->Send();
-							// 	print 'Un email vient d\'être envoyé à l\'adresse '.$to.', veuillez vérifier votre boîte mail.';
-							// }
+								// mail($to, $subject, $message, $headers);
+							
+							$mail = new PHPMailer();
+							$mail->SetFrom(getParam('admin_email.conf'), $_SESSION['prenom'] . ' ' . $_SESSION['nom']);
+							$mail->AddReplyTo(getParam('contact_email.conf'), "ASESCO");
+							$mail->Sender = getParam('admin_email.conf');
+							$mail->AddCustomHeader('X-Mailer: PHP/'.phpversion());
+							$mail->Subject = $subject;
+							$mail->Body = $message;
+							$mail->AddAddress($to);
+							$mail->ClearCustomHeaders("X-Mailer");
+							if (getParam('allow_mail.conf') == true)
+							{
+								$mail->Send();
+							}
+							
 						}
 					}
 					else
@@ -185,7 +214,7 @@ else	// Page demande de l'adresse email et traitements
 				}
 			}
 		$values[0] = " ";
-		$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$values." WHERE email=\"".$_POST['email']."\" ";
+		$query = "UPDATE {$GLOBALS['prefix_db']}adherent SET ".$values." WHERE id=\"".$_POST['id_adh']."\" ";
 		include("opendb.php");
 		$results = mysql_query($query);
 		if (!$results)

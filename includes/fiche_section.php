@@ -184,31 +184,35 @@ else
 			</FORM></td>';
 			
 			//Famille
-			print '<h3>Famille de la section</h3>';
+			print '<h3>Famille(s) de la section</h3>';
 			foreach (getFamilleSec($_GET['section']) as $id => $valeur){
-					if($valeur['select'] == "select"){$select .= '
-					<li><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-					<input type="hidden" name="action" value="suppression_famille" />
-					<input type="hidden" name="id_famille" value="'.$id.'" />
-					'.$valeur['nom'].'
-					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
-					</FORM></li>';}
-					else{$option .= '<OPTION value='.$id.'>'.$valeur['nom'].'</OPTION>';}
+					if($valeur['select'] == "select")
+						$select .= '
+						<li><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
+						<input type="hidden" name="action" value="suppression_famille" />
+						<input type="hidden" name="id_famille" value="'.$id.'" />
+						'.$valeur['nom'].'
+						<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
+						</FORM></li>';
+					else
+						$option .= '<OPTION value='.$id.'>'.$valeur['nom'].'</OPTION>';
 			}
-			print '<ul>'.$select.'</ul>
-			<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-			<input type="hidden" name="action" value="modif_famille" />
-			<input type="hidden" name="id_sec" value="'.$_GET['section'].'">
-			<SELECT name="id_famille">
-			'.$option.'
-			</SELECT>
-			<INPUT type="submit" value="Ajouter"/>
-			</FORM>';
-					
+			print '<ul>'.$select.'</ul>';
+			
+			if($option)
+				print '<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
+				<input type="hidden" name="action" value="modif_famille" />
+				<input type="hidden" name="id_sec" value="'.$_GET['section'].'">
+				<SELECT name="id_famille">
+				'.$option.'
+				</SELECT>
+				<INPUT type="submit" value="Ajouter"/>
+				</FORM>';
+			
 			//Selection Promo
 			// $res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}sup WHERE id IN (SELECT id_sup FROM {$GLOBALS['prefix_db']}sup_fk WHERE id_ent=".$_GET['section'].") ORDER BY promo DESC");
 			$res = doQuery("SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion ORDER BY promo DESC");
-			print "<p>Promo:<SELECT id=\"promo\" >";
+			print "<p><br />Promo : <SELECT id=\"promo\" >";
 			if (!$res || mysql_num_rows($res) <= 0)
 				print "<OPTION value='$promo' 'selected' >$promo</OPTION>";
 			while ($tmp_array_promo = mysql_fetch_array($res))

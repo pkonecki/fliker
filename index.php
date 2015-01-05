@@ -153,7 +153,7 @@ else{
 	}
 	print '</div>';
 
-	include("fiche_u-psud.php");
+	// include("fiche_u-psud.php");
 
 ?>
 

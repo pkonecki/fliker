@@ -65,7 +65,7 @@
 
         this.regional = []; // Available regional settings, indexed by language code
         this.regional[''] = { // Default regional settings
-            hourText: 'Hour', // Display text for hours section
+            hourText: 'Heure', // Display text for hours section
             minuteText: 'Minute', // Display text for minutes link
             amPmText: ['AM', 'PM'] // Display text for AM PM
         };
@@ -84,7 +84,7 @@
             showLeadingZero: true,          // Define whether or not to show a leading zero for hours < 10. [true/false]
             showMinutesLeadingZero: true,   // Define whether or not to show a leading zero for minutes < 10.
             altField: '',                   // Selector for an alternate field to store selected time into
-            defaultTime: '',                // Used as default time when input field is empty or for inline timePicker
+            defaultTime: '18:00',                // Used as default time when input field is empty or for inline timePicker
 
             //NEW: 2011-02-03
             onHourShow: null,			    // callback for enabling / disabling on selectable hours  ex : function(hour) { return true; }
