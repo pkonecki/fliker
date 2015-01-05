@@ -82,6 +82,7 @@ $creneaux = getAllCreneaux();
 $adh = getAdherent($id_adh);
 $id_statut_adh = $adh['statut'];
 
+$valeur_reduction=0;
 
 if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 	print '<h2>Choisissez vos activités</h2>';
@@ -105,6 +106,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 	}
 
 	$ads=getAdhesions($id_adh,$promo);
+	$assos_cre=getAssosCreneaux();
 	foreach($tab as $famille){
 		$out = '<li><input style="display:none;" type="checkbox" name="famille'.$famille['id_famille'].'" value="'.$famille['id_famille'].'"><label>'.$famille['nom_famille'].'</label>';
 		$out .= '<ul id="sections">';
@@ -113,11 +115,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle') {
 				$out2 .= '<ul id="creneaux">';
 				$i=0;
 				foreach($act['creneaux'] as $cre){
-					$resps = getResponsablesCre($cre['id'], $promo);
-					if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 ){
-					$out2 .= '<li><input type="checkbox" name="cre[]" value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
-					$i++;
-					}
+					// if(count($assos_cre[$id_statut_adh][$cre['id']]) != 0){
+						$resps = getResponsablesCre($cre['id'], $promo);
+						if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 ){
+						$out2 .= '<li><input type="checkbox" name="cre[]" class="cre" value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
+						$i++;
+						}
+					// }
 				}
 				$out2 .= '</ul>';
 				if ($i>0) $out .= $out2;
@@ -147,11 +151,12 @@ else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty
 	$assos_cre=getAssosCreneaux();
 	$creneaux = $creneaux['sans_famille'];
 	$post_creneau = array_unique($_POST['cre']);
-
+	$simulation_adhesion = array();
 	foreach($post_creneau as $cre)
 	{
 		print '<tr>';
 		print '<td>'.$creneaux[$cre]['nom_sec'].' - '.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].' - '.$creneaux[$cre]['batiment'].' '.$creneaux[$cre]['salle'].'</td>';
+		// print '<td>'.$creneaux[$cre]['nom_sec'].' - '.$creneaux[$cre]['nom_act'].' - '.$creneaux[$cre]['jour_cre'].' - '.$creneaux[$cre]['debut_cre'].' - '.$creneaux[$cre]['lieu'].'</td>';
 		
 		if(count($assos_cre[$id_statut_adh][$cre]) == 0){
 			print "<td class='asso_cre'><input type=\"radio\" value=\"impossible\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">
@@ -160,7 +165,13 @@ else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty
 			<LABEL>Annuler ce choix</LABEL></td>";
 			$texte_impossible = "<span class=\"tip\"><center>".getParam('text_select_asso.txt')."</center></span>";
 		}
-
+		// elseif(($creneaux[$cre]['quota'] - nbre_a_jour($cre, $promo) <= 0) AND $creneaux[$cre]['quota'] != 0){
+			// print "<td class='asso_cre'><input type=\"radio\" value=\"attente\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">
+			// <LABEL FOR=\"asso_cre_$cre\">Liste d'attente</LABEL></td><td>
+			// <input type=\"radio\" value=\"0\" name=\"asso_cre[$cre]\" cre=\"$cre\" class=\"radio_cre\">
+			// <LABEL>Annuler ce choix</LABEL></td>";
+			// $texte_impossible = "<span class=\"tip\"><center>Vous possédez un sport qui est en liste d'attente</center></span>";
+		// }
 		else{
 		foreach($assos_cre[$id_statut_adh][$cre] as $id_asso => $nom_asso)
 		{
@@ -179,6 +190,7 @@ else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty
 		}
 		}
 
+		// print '<td>QP='.$creneaux[$cre]['quota'].' & AJ='.nbre_a_jour($cre, $promo).'</td></tr>';
 	}
 	
 	$ChampsAdherents = getChampsAdherents();
@@ -254,10 +266,37 @@ else
 	{
 		if(empty($_POST['sup']) || empty($_POST['promo']) || empty($_POST['num']) || empty($_POST['date_t']) )
 			print "<pre>Il y a une erreur dans le paiement</pre>";
-		else
+		else{
+			if(isset($_POST['reductions'])){
+				$_POST_reductions = $_POST;
+				
+				include("opendb.php");
+				$query = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}reductions WHERE id = ".$_POST['reductions'][0]." ");
+				$data = mysql_fetch_assoc($query);
+				foreach($_POST['sup'] as $id => $valeur){
+				$_POST['sup'][$id] = $valeur*(1-$data['valeur']/100);
+				}
+				
+				$_POST_reductions['type'] = "Dispense";
+				$_POST_reductions['num'] = "Boursier";
+				foreach($_POST_reductions['sup'] as $id => $valeur){
+				$_POST_reductions['sup'][$id] = $valeur - $_POST['sup'][$id];
+				}
+				addPaiement($_POST_reductions);
+			}
+			if(isset($_POST['facultatif'])){
+				$_POST_dispense = $_POST;
+				$_POST_dispense['sup'] = $_POST_dispense['facultatif'];
+				$_POST_dispense['type'] = "Dispense";
+				$_POST_dispense['num'] = "Supplément Facultatif";
+				addPaiement($_POST_dispense);
+			}
+
+
+			$_POST['sup'] = array_filter($_POST['sup']); // Permet de supprimer les valeurs qui sont vides
 			addPaiement($_POST);
+		}
 	}
-}
 	if(isset($_POST['action']) && $_POST['action']==='setnumcarte')
 		setNumCarte($_POST['numcarte'],$id_adh);
 	if(!(strcmp($_SESSION['user'],"") == 0))
@@ -283,14 +322,16 @@ else
 
 		if (!$self)
 			$tri = "AND id_cre IN (".implode(", ", array_keys($mycrens)).")";
-		$query = "SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion WHERE id_adh = ".$id_adh." ".$tri." ORDER BY promo DESC";
+		$query = "SELECT DISTINCT promo FROM {$GLOBALS['prefix_db']}adhesion WHERE promo <> ".$current_promo." AND id_adh = ".$id_adh." ".$tri." ORDER BY promo DESC";
 		include("opendb.php");
 		$res = mysql_query($query);
 		if (!$res)
 			echo mysql_error();
 		else
 		{
-			print " Promo: <SELECT id='promo' >";
+			print ' Promo: <SELECT id="promo" >
+			<OPTION value="'.$current_promo.'" '.(isset($_GET['promo']) && $_GET['promo']==$current_promo ? "selected" : "").' >'.$current_promo.'</OPTION>
+			';
 			while ($array_promo = mysql_fetch_array($res))
 				print "<OPTION value=\"".$array_promo['promo']."\" ".(isset($_GET['promo']) && $_GET['promo']==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
 			print "</SELECT></h2>";
@@ -368,6 +409,31 @@ else
 							print "</td>";
 						}
 						break;
+					// case 3:
+					// $switch_impossible = 1;
+						// if($creneaux[$value['id_cre']]['quota'] - nbre_a_jour($value['id_cre'], $promo) > 0)
+						// {
+							// print "Possible";
+							// print "</td>";
+							// print "<td>{$value['promo']}</td>";
+							// print "<td>";
+							// print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.(isset($current_asso) ? $current_asso : "").'" method="POST">';
+							// print '<input type="hidden" name="action" value="select_assos" />';
+							// print '<input type="hidden" name="update" value="true" />';
+							// print '<input type="hidden" name="id_ads" value="'.$key.'" />';
+							// print '<input type="hidden" name="cre[]" value="'.$value['id_cre'].'" />';
+							// print '<input type="submit" value="Choisir" >';
+							// print '</FORM>';
+							// print "</td>";
+						// }
+						// else
+						// {
+							// print "".nbre_a_jour($value['id_cre'], $promo)."File d'attente";
+							// print "</td>";
+							// print "<td>{$value['promo']}</td>";
+							// print "<td>{$assos[$value['id_asso']]['nom']}</td>";
+						// }
+					// break;
 				}
 				$deja_venu = mysql_num_rows(doQuery("SELECT * FROM {$GLOBALS['prefix_db']}presence WHERE promo=$promo AND id_adh=$id_adh AND id_cre={$value['id_cre']}"));
 				$deja_paye = 0;
@@ -389,45 +455,8 @@ else
 					       $deja_paye++; // ici, peut importe le montant payé, même un paiement partiel ou "nul" (activités gratuites) doit être comptabilisé
 					}
 				}
-				if ($self || $resp_section || $resp_creneau)
-				{
-					if ($deja_paye == 0)
-					{
-						if ($deja_venu == 0)
-						{
-							print '<td align=center>
-							<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
-							<input type="hidden" name="id_ads" value='.$key.' />
-							';
-							switch($value['statut'])
-							{
-								case 0: 
-								print '<input type="hidden" name="action" value="suppression_ads" />';
-								print '<INPUT type="image" src="images/unchecked.gif" value="submit">';
-								break;
-								case 1:
-//								if ($resp_section) {
-								   	print '<input type="hidden" name="action" value="activation_ads" />';
-//								   	print '<INPUT type="image" src="images/checked.gif" value="submit">';
-								      	print '<INPUT type="submit" name="act_act_ads_rse" value="réactiver">';
-//								}
-//								else
-//									print "(seul un gestionnaire peut réactiver)";
-								break;
-								case 2:
-								print "";
-								break;
-							}
-							print '</FORM>
-							</td>';
-						}
-						else
-							print "<td align=center><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><!-- img src=\"images/warning.gif\" -->(d&eacute;j&agrave; venu)</a></td>";
-					}
-					else
-						print "<td align=center><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><!-- img src=\"images/warning.gif\" -->(d&eacute;j&agrave; pay&eacute;)</a></td>";
-				}
-				else if ($resp_asso)
+				
+				if($resp_asso)
 				{
 					$texte_suppr_definitive = '
 					<td><FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
@@ -469,6 +498,45 @@ else
 					print '</FORM></td>
 					'.$texte_suppr_definitive.'
 					';
+				}
+				
+				else if ($self || $resp_section || $resp_creneau)
+				{
+					if ($deja_paye == 0)
+					{
+						if ($deja_venu == 0)
+						{
+							print '<td align=center>
+							<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
+							<input type="hidden" name="id_ads" value='.$key.' />
+							';
+							switch($value['statut'])
+							{
+								case 0: 
+								print '<input type="hidden" name="action" value="suppression_ads" />';
+								print '<INPUT type="image" src="images/unchecked.gif" value="submit">';
+								break;
+								case 1:
+//								if ($resp_section) {
+								   	print '<input type="hidden" name="action" value="activation_ads" />';
+//								   	print '<INPUT type="image" src="images/checked.gif" value="submit">';
+								      	print '<INPUT type="submit" name="act_act_ads_rse" value="réactiver">';
+//								}
+//								else
+//									print "(seul un gestionnaire peut réactiver)";
+								break;
+								case 2:
+								print "";
+								break;
+							}
+							print '</FORM>
+							</td>';
+						}
+						else
+							print "<td align=center><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><!-- img src=\"images/warning.gif\" -->(d&eacute;j&agrave; venu)</a></td>";
+					}
+					else
+						print "<td align=center><a href=\"".getParam("url_resiliation.conf")."\" target=\"_blank\" ><!-- img src=\"images/warning.gif\" -->(d&eacute;j&agrave; pay&eacute;)</a></td>";
 				}
 				print "</tr>";
 			}
@@ -590,7 +658,6 @@ else
 		else
 			print 'Vous êtes à jour de vos règlements';
 
-	
 		//Paiements
 		print "<h2>Paiements</h2>";
 		$paiements=getMyPaiements($id_adh);

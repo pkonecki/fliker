@@ -45,7 +45,7 @@ if($tot > 0)
 		$tmp_stock = '';
 	print '<li><a class="'.$tmp_stock.'" href="index.php?page=2">Recherche</a></li>';
 }
-if($tot_asso > 0)
+if($_SESSION['privilege']==='1' || $tot_asso > 0)
 {
 	if (isset($_GET['page']))
 		$tmp_stock = (($_GET['page']==3 || $_GET['page']==4 || $_GET['page']==5 || $_GET['page']==6 || $_GET['page']==12 || $_GET['page']==20) ? 'selected' : '');

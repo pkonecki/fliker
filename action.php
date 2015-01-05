@@ -41,6 +41,7 @@ switch($_POST['action'])
 				$mail->Subject = stripslashes($subject);
 				$mail->Body = stripslashes($message);
 				$mail->AddAddress($email);
+				$mail->ClearCustomHeaders("X-Mailer");
 //				if(!$mail->Send()) {
 //					echo "Mailer Error: " . $mail->ErrorInfo;
 //				} else {

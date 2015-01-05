@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `fliker_association` (
   `description` longtext NOT NULL,
   `url` varchar(255) NOT NULL,
   `ordre_cheques` varchar(225) NOT NULL,
-  `couleur` varchar(6) NOT NULL,
+  `couleur` varchar(6) NOT NULL DEFAULT 'fff',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -136,7 +136,10 @@ CREATE TABLE IF NOT EXISTS `fliker_batiment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
+
+INSERT INTO `fliker_batiment` (`nom`) VALUES ('Batiment 1');
 
 -- --------------------------------------------------------
 
@@ -300,6 +303,9 @@ CREATE TABLE IF NOT EXISTS `fliker_famille` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+
+INSERT INTO `fliker_famille` (`nom`) VALUES ('Aucune Famille');
+
 -- --------------------------------------------------------
 
 --
@@ -459,8 +465,9 @@ CREATE TABLE IF NOT EXISTS `fliker_reductions` (
   `nom` varchar(1000) NOT NULL,
   `valeur` int(11) NOT NULL,
   `operation` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -532,6 +539,9 @@ CREATE TABLE IF NOT EXISTS `fliker_salle` (
   KEY `salle_ibfk_1` (`id_batiment`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+
+INSERT INTO `fliker_salle` (`nom`) VALUES ('Salle 1');
+
 -- --------------------------------------------------------
 
 --
@@ -558,6 +568,9 @@ CREATE TABLE IF NOT EXISTS `fliker_statut` (
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+INSERT INTO `fliker_statut` (`nom`) VALUES ('Extérieur');
 
 -- --------------------------------------------------------
 

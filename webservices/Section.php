@@ -24,19 +24,22 @@ function newSection($tab){
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}section ".$colonnes." VALUES ".$set." ";
 	//echo $query;
 	$results = mysql_query($query);
-	if (!$results){ 
+	if (!$results){
 		echo mysql_error();
 		die();
 	}
 	$query = "INSERT INTO {$GLOBALS['prefix_db']}asso_section (id_asso,id_sec) VALUES (".$tab['id_asso'].",".$id.")";
 	$results = mysql_query($query);
-	if (!$results){ 
+	if (!$results){
 		echo mysql_error();
 		die();
 	}
+	
 	saveImage(mysql_insert_id(),"logo_section");
 	include("closedb.php");
-
+	
+	modifFamilleSec($id, 1); // 1 == Famille Par Défault
+	
 }
 
 
