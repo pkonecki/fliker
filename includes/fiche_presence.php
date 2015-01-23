@@ -156,7 +156,7 @@ if(isset($_POST['cre'])) {
 		if ($date_start < $w_debut) $date_start = $w_debut;
 	}
 
-	$output.= "<table><form class=\"auto\" action=\"index.php?page=8\" method=\"POST\">";
+	$output.= "<table style='margin-bottom:20px;'><form class=\"auto\" action=\"index.php?page=8\" method=\"POST\">";
 	if (isset($_POST['all_tab'])) {
 		$output .= "<thead><tr><th></th><th></th><th>Association</th><th>A jour</th><th>Jour<br>Mois</th>";
 		$count_cols = 5;
@@ -284,7 +284,7 @@ if(isset($_POST['cre'])) {
 		else
 			$a_jour = "Impossible";
 		if (isset($_POST['all_tab']))
-			$output .= "<tr><th>{$i}</th><th>".($row['active'] == 0 ? "<font color='red'>{$row['prenom']}<br>{$row['nom']}</font>" : "{$row['prenom']}<br>{$row['nom']}")."</th><th>".$nom_asso."</th><th>".$a_jour."</th><th>$count_pre</th>";
+			$output .= "<tr><th>{$i}</th><th>".($row['active'] == 0 ? "<font color='red'>{$row['prenom']}<br>{$row['nom']}</font>" : "<a href='index.php?page=7&adh=".$row['id']."' target='_blank' style='color:white;'>{$row['prenom']}<br>{$row['nom']}</a>")."</th><th>".$nom_asso."</th><th>".$a_jour."</th><th>$count_pre</th>";
 		else if ($a_jour == "A jour")
 			$output .= "<tr><th>{$i}</th><th>".($row['active'] == 0 ? "<font color='red'>{$row['prenom']}<br>{$row['nom']}</font>" : "{$row['prenom']}<br>{$row['nom']}")."</th><th>$count_pre</th>";
 		if (isset($_POST['all_tab']) || $a_jour == "A jour") {
@@ -339,7 +339,7 @@ if(isset($_POST['cre'])) {
 	else
 		$tmp_string = '<input type="submit" name="all_tab" value="Afficher tout" /><input type="submit" name="current" value="Retour semaine courante" />';
 	$output.= "<input type=\"hidden\" name=\"ancien_etat\" value=\"${hiddeninput}\">";
-	$output.= '<tr><td colspan="'.$count_cols.'" align="right">'.$tmp_string.'<input type="submit" name="save" value="Sauvegarder" /></td></tr>';
+	$output.= '<tr><td colspan="'.$count_cols.'" align="left">'.$tmp_string.'<input type="submit" name="save" value="Sauvegarder" /></td></tr>';
 	$output.= "</form>";
 	$output.= "</table>";
 } else {
@@ -352,9 +352,9 @@ if(isset($_POST['cre'])) {
 		$output.= "<p>Promo :<SELECT id=\"promo\" name=\"promo\" >";
 		while ($array_promo = mysql_fetch_array($res))
 			$output.= "<OPTION value=\"".$array_promo['promo']."\" ".($promo==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
-		$output.= "</SELECT></p>";
+		$output.= "</SELECT>";
 	}
-	$output .= "<input type='submit' value='Afficher' /><table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Pré-Inscrits</th><th>dont à jour</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
+	$output .= "<input type='submit' value='Afficher' /></p><table><tr align='center'><th></th><th>Section</th><th>Activité</th><th>Jour</th><th>Heure</th><th>Pré-Inscrits</th><th>Présence des Inscrits<br/>(en %)</th><th>Réguliers</th><th align=center>Présence des réguliers<br/>(en %)</th><th>Encadrants</th><th>Présence des Encadrants<br/>(en %)</th></tr>";
 
 	$tab_regular = getAdherentsByPromo($promo);
 
@@ -457,8 +457,8 @@ if(isset($_POST['cre'])) {
 		else
 			$presence_encadrant = 100;
 		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
-//			$output.= '<tr align="center"><div><td><input  type="radio" name="cre" value='.$cre.' onchange="submit(this.form)" /></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.$creneau['debut_cre'].'</td><td>'.$creneau['fin_cre'].'</td><td>'.$tmp_value  .'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
-			$output.= '<tr align="center"><div><td><input type="radio" name="cre" value='.$cre.'                               /></td><h4><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td>'.date("H\hi", strtotime($creneau['debut_cre'])).' - '.date("H\hi", strtotime($creneau['fin_cre'])).'</td><td>'.$nb_inscrits.'</td><td>'.Tri_Nombre_de_personne_par_creneau($cre, $promo, "Non Validés").'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></h4></input></div></tr>';
+		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
+			$output.= '<tr align="center"><td><input type="radio" name="cre" value='.$cre.' /></td><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td width="100">'.date("H\hi", strtotime($creneau['debut_cre'])).' - '.date("H\hi", strtotime($creneau['fin_cre'])).'</td><td>'.$nb_inscrits.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></tr>';
 	}
 	$output.= '</table></form>';
 }
