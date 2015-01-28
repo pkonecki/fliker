@@ -457,7 +457,6 @@ if(isset($_POST['cre'])) {
 		else
 			$presence_encadrant = 100;
 		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
-		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
 			$output.= '<tr align="center"><td><input type="radio" name="cre" value='.$cre.' /></td><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td width="100">'.date("H\hi", strtotime($creneau['debut_cre'])).' - '.date("H\hi", strtotime($creneau['fin_cre'])).'</td><td>'.$nb_inscrits.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></tr>';
 	}
 	$output.= '</table></form>';
