@@ -472,6 +472,36 @@ CREATE TABLE IF NOT EXISTS `fliker_reductions` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `fliker_reductions_adherent`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_reductions_adherent` (
+  `id_adh` int(11) NOT NULL,
+  `id_reduc` int(11) DEFAULT NULL,
+  `id_sup` int(11) DEFAULT NULL,
+  `promo` int(4) NOT NULL,
+  UNIQUE KEY `unicite` (`id_adh`,`id_reduc`,`promo`),
+  UNIQUE KEY `unicite2` (`id_adh`,`id_sup`,`promo`),
+  KEY `id_reduc` (`id_reduc`),
+  KEY `id_sup` (`id_sup`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `fliker_reductions_sup`
+--
+
+CREATE TABLE IF NOT EXISTS `fliker_reductions_sup` (
+  `id_sup` int(11) NOT NULL,
+  `id_reduc` int(11) NOT NULL,
+  UNIQUE KEY `unicite` (`id_sup`,`id_reduc`),
+  KEY `id_reduc` (`id_reduc`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `fliker_resp_act`
 --
 
@@ -791,6 +821,21 @@ ALTER TABLE `fliker_presence`
 ALTER TABLE `fliker_resp_act`
   ADD CONSTRAINT `resp_act_ibfk_3` FOREIGN KEY (`id_act`) REFERENCES `fliker_activite` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `resp_act_ibfk_4` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `fliker_reductions_adherent`
+--
+ALTER TABLE `fliker_reductions_adherent`
+  ADD CONSTRAINT `fliker_reductions_adherent_ibfk_1` FOREIGN KEY (`id_adh`) REFERENCES `fliker_adherent` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fliker_reductions_adherent_ibfk_2` FOREIGN KEY (`id_reduc`) REFERENCES `fliker_reductions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fliker_reductions_adherent_ibfk_3` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `fliker_reductions_sup`
+--
+ALTER TABLE `fliker_reductions_sup`
+  ADD CONSTRAINT `fliker_reductions_sup_ibfk_1` FOREIGN KEY (`id_sup`) REFERENCES `fliker_sup` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fliker_reductions_sup_ibfk_2` FOREIGN KEY (`id_reduc`) REFERENCES `fliker_reductions` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `fliker_resp_asso`

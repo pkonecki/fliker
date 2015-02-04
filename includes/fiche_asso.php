@@ -87,12 +87,12 @@ else
 	if (isset($_POST['action']) && $_POST['action'] === 'suppression_sup')
 		delSup($_POST['id_sup']);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
-		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],0,$promo);
+		addSup("association",$_POST['id_asso'],$_POST['type'],$_POST['valeur'],$_POST['id_statut'],$_POST['id_asso'],0,$_POST['reduction'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
 	{
 		$sups = getSup("association",$_GET['asso'],$_POST['old_promo']);
 		foreach ($sups as $key => $value)
-			addSup("association",$_GET['asso'],$value['type'],$value['valeur'],$value['id_statut'],$value['id_asso_paie'],$promo);
+			addSup("association",$_GET['asso'],$value['type'],$value['valeur'],$value['id_statut'],$value['id_asso_paie'],0,$value['reduction'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
@@ -148,7 +148,7 @@ else
 			print '<ul>';
 			foreach($sections as $section){
 				print '<li>
-				<FORM action="index.php?page=4&section='.$section['id'].'"" method="POST">
+					<FORM action="index.php?page=4&section='.$section['id'].'"" method="POST">
 					<input type="hidden" name="action" value="suppression" />
 					<input type="hidden" name="id" value="'.$section['id'].'" />
 					<a href="index.php?page=4&section='.$section['id'].'">'.$section['nom'].'</a>
@@ -175,45 +175,64 @@ else
 			$resps = getResponsablesAsso($_GET['asso'],$promo);
 			print '<h3>Responsables de l\'association</h3>';
 			print '<ul>';
-			if(empty($resps)){print 'Aucun Responsable';}
-			foreach ($resps as $id => $adh) {
+			if(empty($resps))
+				print 'Aucun Responsable';
+			foreach ($resps as $id => $adh)
 				print '<FORM action="index.php?page=3&resp='.$id.'&asso='.$_GET['asso'].'&promo='.$promo.'" method="POST">
 					<input type="hidden" name="action" value="suppression_resp" />
 					<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
 					<input type="hidden" name="id_resp" value="'.$id.'" />
-				<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
-				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
+					<li><a href=index.php?page=1&adh='.$id.'>'.$adh['prenom'].' '.$adh['nom'].'</a>
+					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 					</FORM></li>';
-			}
+			
 			print '</ul>';
 			print '<FORM action="index.php?page=3&asso='.$_GET['asso'].'&promo='.$promo.'" method="POST">
 			<input type="hidden" name="action" value="new_resp" />
 			<input type="hidden" name="id_asso" value="'.$_GET['asso'].'">';
 			print '<label for="new_resp">Ajouter un Responsable </label><SELECT name="id_resp" class="filterselect" >';
 			$candidates = getAdherents();
-			foreach ($candidates as $key => $value) {
+			foreach ($candidates as $key => $value)
 				if(!isset($resps[$key])) print '<OPTION value='.$key.' >'.$value['prenom'].' '.$value['nom'].'</OPTION>';
-			}
+			
 			print '<INPUT type="submit" /> ';
 			print '</SELECT>';
 			print '</FORM>';
+			
 			//Liste de suppléments = cotisations
 			print '<h3>Cotisations de l\'association</h3>';
 			$sups = getSup("association",$_GET['asso'],$promo);
-			print '<table><tr><th>Type</th><th>Valeur</th><th>Pour</th>';
-			if($promo==$current_promo) print '<th>+/-</th>';
+			print '<p>Les cases vertes représentent les réductions, Coché = "Non" la réduction de la colonne ne s\'applique pas</p>
+			<table><tr><th>Type</th><th>Valeur</th><th>Pour</th>';
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ASC");
+			while ($tmp_array = mysql_fetch_array($res))
+			{
+				print '<th>'.$tmp_array['nom'].'</th>';
+				$liste_reductions[$tmp_array['id']] = 1;
+			}
+			if($promo==$current_promo)
+				print '<th>+/-</th>';
 			print '</tr>';
-			foreach ($sups as $id => $sup) {
+			foreach ($sups as $id => $sup)
+			{
+				$reductions = NULL;
+				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup WHERE id_sup = $id ");
+				while ($tmp_array = mysql_fetch_array($res))
+					$reductions[$tmp_array['id_reduc']] = 1;
 				print '<tr><td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$sup['statut'].'</td>';
-				if($promo==$current_promo) print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
+				foreach ($liste_reductions as $id_reduc => $value)
+					print '<td bgcolor="#CCFFCC">'.($reductions[$id_reduc]==1 ? "Non" : "Oui").'</td>';
+				if($promo==$current_promo)
+					print '<td><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
 					<input type="hidden" name="id_sup" value="'.$id.'" />
 					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></td>
 					</FORM>'; 
 				print '</tr>';
 			}
-
-			if($promo==$current_promo){
+			
+			if ($promo==$current_promo)
+			{
 				print '<tr><FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 				<input type="hidden" name="action" value="new_sup" />
 				<input type="hidden" name="id_asso" value="'.$_GET['asso'].'" />
@@ -225,12 +244,14 @@ else
 				foreach ($status as $key => $value) {
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 				}
-
-				print '</SELECT></td>
-				<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
-				';
-			print '</FORM></tr>';
-			} else {
+				print '</SELECT></td>';
+				foreach ($liste_reductions as $id_reduc => $value)
+					print '<td><INPUT type="checkbox" name="reduction['.$id_reduc.']" value="1"></td>';
+				print '<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
+				</FORM></tr>';
+			}
+			else
+			{
 				print '<td colspan=3>
 				<FORM action="index.php?page=3&asso='.$_GET['asso'].'" method="POST">
 				<input type="hidden" name="old_promo" value="'.$_GET['promo'].'" >
@@ -245,13 +266,13 @@ else
 			print "<h3>Vacances / Fermetures</h3><ul>";
 			if (!$res || mysql_num_rows($res) <= 0)
 				print "Pas de Fermetures";
-			while ($tmp_array_vacances = mysql_fetch_array($res)){
+			while ($tmp_array_vacances = mysql_fetch_array($res))
+			{
 				$date = date_create();
-				$annee = $promo;
-				date_isodate_set($date, $annee, $tmp_array_vacances['week']);
+				date_isodate_set($date, $promo, $tmp_array_vacances['week']);
 				
 				if(date_format($date, 'm') >= 9)
-				date_isodate_set($date, $annee-1, $tmp_array_vacances['week']);
+				date_isodate_set($date, $promo-1, $tmp_array_vacances['week']);
 				
 				$date_debut = date_format($date, 'd/m/Y');
 				date_add($date, date_interval_create_from_date_string('6 days'));
@@ -278,19 +299,13 @@ else
 
 	}
 	else
-	{
 		print "<p>Vous n'êtes pas connecté</p>";
-	}
+	
 }
-
-
 
 ?>
 <script type="text/javascript">
 $('#promo').change( function (){
 	window.location.search = "page=3&asso="+$.getUrlVar('asso')+"&promo="+$(this).val();
 });
-
-
-
 </script>

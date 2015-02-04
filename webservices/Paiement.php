@@ -1,17 +1,10 @@
 <?php
 
-/**
- * Fonctions en rapport avec les paiements
- *
- * @version $Id$
- * @copyright 2011
- */
-
-function getMyPaiements($userid)
+function getMyPaiements($userid, $promo)
 {
 	$query="SELECT  P.*
 		FROM {$GLOBALS['prefix_db']}paiement P
-		WHERE P.id_adh=$userid
+		WHERE P.id_adh = $userid AND promo = $promo
 		ORDER BY P.date DESC
 		";
 	include("opendb.php");

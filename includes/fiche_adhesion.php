@@ -119,14 +119,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'nouvelle')
 			$i=0;
 			foreach ($act['creneaux'] as $cre)
 			{
-			// if (count($assos_cre[$id_statut_adh][$cre['id']]) != 0) {
-				$resps = getResponsablesCre($cre['id'], $promo);
-				if (!isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0)
-				{
-					$out2 .= '<li><input type="checkbox" name="cre[]" class="cre" value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
-					$i++;
-				}
-			// }
+				// if (count($assos_cre[$id_statut_adh][$cre['id']]) != 0) {
+					$resps = getResponsablesCre($cre['id'], $promo);
+					if ( !isset( $ads['cre'.$cre['id']] ) and count( $resps ) != 0 ){
+						$out2 .= '<li><input type="checkbox" name="cre[]" class="cre" value="'.$cre['id'].'"><label>'.$cre['jour'].' - '.substr($cre['debut'],0,-3).' - '.substr($cre['fin'],0,-3).' - '.$cre['lieu'].'</label>';
+						$i++;
+					}
+				// }
 			}
 			$out2 .= '</ul>';
 			if ($i>0) $out .= $out2;
@@ -223,11 +222,11 @@ else if (isset($_POST['action']) && $_POST['action'] == 'select_assos' && !empty
 	$.ajax({
 	type: "POST",
 	url: "includes/fiche_adhesion_total.php",
-	data: {id_creneaux:data,
-	       id_statut_adh:'.$id_statut_adh.',
-	       id_adh:'.$id_adh.',
-	       current_promo:'.$current_promo.'
-	      },
+	data: {	id_creneaux:data,
+			id_statut_adh:'.$id_statut_adh.',
+			id_adh:'.$id_adh.',
+			current_promo:'.$current_promo.'
+	},
 	success: function(data){$("#affichage").html(data);}
 	});
 
@@ -267,38 +266,47 @@ else
 	{
 		delPaiement($_POST['id_paie']);
 	}
+	if (isset($_POST['action']) && $_POST['action'] === 'reductions')
+	{
+		$liste = "0, ";
+		if (isset($_POST['reductions']))
+			foreach ($_POST['reductions'] as $id => $value)
+			{
+				$liste .= $id.', ';
+				$result = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_adherent WHERE id_adh = ".$id_adh." AND id_reduc = ".$id." AND promo = ".$promo." ");
+				$result = mysql_fetch_assoc($result);
+				if (!$result)
+					doQuery("INSERT INTO {$GLOBALS['prefix_db']}reductions_adherent (id_reduc, id_adh, promo) VALUES (".$id.", ".$id_adh.", ".$promo.") ");
+			}
+		$liste = rtrim($liste, ", ");
+		doQuery("DELETE FROM {$GLOBALS['prefix_db']}reductions_adherent WHERE id_adh = ".$id_adh." AND id_reduc NOT IN (".$liste.") AND promo = ".$promo." ");
+	}
 	if (isset($_POST['action']) && $_POST['action']==='nouveau_paiement')
 	{
-		if(empty($_POST['sup']) || empty($_POST['promo']) || empty($_POST['num']) || empty($_POST['date_t']) )
-			print "<pre>Il y a une erreur dans le paiement</pre>";
+	
+		if (!isset($_POST['submit_paiement']))
+		{
+			$liste = "0, ";
+			if (isset($_POST['modification_sup_facultatif']))
+			foreach ($_POST['modification_sup_facultatif'] as $id => $value)
+			{
+				$liste .= $id.', ';
+				$result = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_adherent WHERE id_adh = ".$id_adh." AND id_sup = ".$id." AND promo = ".$promo." ");
+				$result = mysql_fetch_assoc($result);
+				if (!$result)
+					doQuery("INSERT INTO {$GLOBALS['prefix_db']}reductions_adherent (id_sup, id_adh, promo) VALUES (".$id.", ".$id_adh.", ".$promo.") ");
+			}
+			$liste = rtrim($liste, ", ");
+			doQuery("DELETE FROM {$GLOBALS['prefix_db']}reductions_adherent WHERE id_adh = ".$id_adh." AND id_sup NOT IN (".$liste.") AND promo = ".$promo." ");			
+		}
 		else{
-			if(isset($_POST['reductions'])){
-				$_POST_reductions = $_POST;
-				
-				include("opendb.php");
-				$query = mysql_query("SELECT * FROM {$GLOBALS['prefix_db']}reductions WHERE id = ".$_POST['reductions'][0]." ");
-				$data = mysql_fetch_assoc($query);
-				foreach($_POST['sup'] as $id => $valeur){
-					$_POST['sup'][$id] = $valeur*(1-$data['valeur']/100);
-				}
-				
-				$_POST_reductions['type'] = "Dispense";
-				$_POST_reductions['num'] = "Boursier";
-				foreach($_POST_reductions['sup'] as $id => $valeur){
-					$_POST_reductions['sup'][$id] = $valeur - $_POST['sup'][$id];
-				}
-				addPaiement($_POST_reductions);
+			if (empty($_POST['sup']) || empty($_POST['promo']) || empty($_POST['num']) || empty($_POST['date_t']) )
+				print "<pre>Il y a une erreur dans le paiement</pre>";
+			else
+			{
+				$_POST['sup'] = array_filter($_POST['sup']); // Permet de supprimer les valeurs qui sont vides
+				addPaiement($_POST);
 			}
-			if(isset($_POST['facultatif'])){
-				$_POST_dispense = $_POST;
-				$_POST_dispense['sup'] = $_POST_dispense['facultatif'];
-				$_POST_dispense['type'] = "Dispense";
-				$_POST_dispense['num'] = "Supplément Facultatif";
-				addPaiement($_POST_dispense);
-			}
-
-			$_POST['sup'] = array_filter($_POST['sup']); // Permet de supprimer les valeurs qui sont vides
-			addPaiement($_POST);
 		}
 	}
 	if(isset($_POST['action']) && $_POST['action']==='setnumcarte')
@@ -341,17 +349,17 @@ else
 				print "<OPTION value=\"".$array_promo['promo']."\" ".(isset($_GET['promo']) && $_GET['promo']==$array_promo['promo'] ? "selected" : "")." >".$array_promo['promo']."</OPTION>";
 			print "</SELECT></h2>";
 		}
+		
 		//Bouton nouvelle adhésion
 		if (($self || $resp_asso || $resp_section || $resp_creneau) && $promo == $current_promo && getParam("stop_adhesions.conf") == "false")
 			print '<FORM action="index.php?page=7&adh='.$id_adh.'" method="POST">
 			<input type="hidden" name="action" value="nouvelle" /><br />
 			<INPUT type="submit" style="width:400px;height:30px;font-size:16px;" value="Cliquer ici pour ajouter un sport">';
 		print '</FORM><br />';
+		
 		// Liste adhésions
-		if (empty($ads))
-		{
+		if(empty($ads))
 			print '<h4>Vous n\'avez aucun sport d\'enregistré</h4>';
-		}
 		else
 		{
 		$creneaux = $creneaux['sans_famille'];
@@ -551,14 +559,53 @@ else
 				print "</tr>";
 			}
 		print '</TABLE>';
+		
+		//Reductions
+		$reductions = array();
+		$input_reductions = "";
+		$query_reduction = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_adherent ADH LEFT JOIN {$GLOBALS['prefix_db']}reductions REDUC ON ADH.id_reduc=REDUC.id WHERE id_adh = ".$id_adh." AND promo = ".$promo." ORDER BY id_sup ");
+		while ($data = mysql_fetch_assoc($query_reduction))
+		{
+			if ($data['id_sup'])
+			{
+				$reductions[$data['id_sup']] = $data;
+				$reductions[$data['id_sup']]['valeur'] = 100;
+				// ici on force la valeur à 100 puisque la réduction s'applique à un sup facultatif !
+			}
+			else
+			{
+				$reductions['global-'.$data['id_reduc']] = $data;
+				$input_reductions .= $data['nom'].', ';
+			}
+		}
+		$input_reductions = rtrim($input_reductions, ", ");
+		
+		$query_all_reductions = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ");
+			while($data = mysql_fetch_assoc($query_all_reductions))
+				$all_reductions .= '<p><label><input type="checkbox" name="reductions['.$data['id'].']" value="1" onClick="submit();" '.($reductions['global-'.$data['id']] ? "checked" : "").'>
+				Cochez cette case si vous êtes '.$data['nom'].'</label></p>';
+		
+		$paiements = getMyPaiements($id_adh, $promo);
+		
+		if(!$paiements)
+			print '<h2>Gestion des réductions</h2>
+			<form method="POST">
+			'.$all_reductions.'
+			<input type="hidden" name="action" value="reductions" />
+			</form>
+			';
+		
+		elseif($paiements AND $input_reductions != "")
+			print '<h5 style="margin-top:40px;">Vous êtes actuellement '.$input_reductions.' et les réductions s\'appliquent ci-dessous</h5>';
+		
 		//Facture
 		if (!isset($current_asso))
 			$current_asso = "";
 		print '<h2>Facturation des prestations</h2>
-				<FORM id="f_adherent_modif" action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
+				<FORM id="f_adherent_modif" action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST" >
 				<input type="hidden" name="action" value="nouveau_paiement" />
 				<table>';
-		print "<th>Entité</th><th>Type</th><th>Montant</th><th>Déjà payé</th><th>Reste à payer</th><th>Gestionnaire</th>";
+		print '<th>Entité</th><th>Type</th><th>Montant</th>'.($reductions ? "<th>Remise</th>" : "").'<th>Déjà payé</th><th>Reste à payer</th><th>Gestionnaire</th>';
 		if ($resp_asso || $resp_section || $resp_creneau)
 			print "<th>Nouveau Paiement :</th>";
 		$tab = getFacture($ads, $adh['statut'], $promo, 0);
@@ -567,84 +614,156 @@ else
 		foreach ($tab['assos'] as $row)
 		{
 			$tmp_id = 0;
-			if (isset($p_sup[$row['id']])) $tmp_id = $p_sup[$row['id']];
-			print "<tr>
-			<td>{$assos[$row['id_asso_paie']]['nom']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td>{$row['valeur']}$currency</td>
-			<td>".$tmp_id."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
+			if (isset($p_sup[$row['id']]))
+				$tmp_id = $p_sup[$row['id']];
+			print "<tr><td>{$assos[$row['id_asso_paie']]['nom']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td>{$row['valeur']}$currency</td>";
+			$tmp_id2 = $tmp_id;
+			$remise = 0;
+			if ($reductions)
+			{
+				foreach ($reductions as $id => $reduc)
+					if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+						$remise += -$reduc['valeur']*$row['valeur']/100;
+				if ($row['valeur'] + $remise < 0)
+					$remise = -$row['valeur'];
+				$tmp_id = $tmp_id - $remise;
+				print "<td>".$remise."$currency</td>";
+			}
+			print "<td>".$tmp_id2."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
 			<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0)) {
+			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0))
+			{
 				$paiement_possible=true;
-				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency} ".($row['facultatif']==1 ? "<input type='checkbox' name='facultatif[".$row['id']."]' value='".$row['valeur']."'> Cocher s'il ne prend pas ce supplément facultatif" : "")."</td>";			} else if ($resp_asso || $resp_section || $resp_creneau) print "<td></td>";
+				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency} ".($row['facultatif']==1 ? "<input type='checkbox' name='facultatif[".$row['id']."]' value='".$row['valeur']."'> Cocher s'il ne prend pas ce supplément facultatif" : "")."</td>";
+			}
+			else if ($resp_asso || $resp_section || $resp_creneau)
+				print "<td></td>";
 			print "</tr>";
 			$tab['totaux'][$row['id_asso_paie']] = $tab['totaux'][$row['id_asso_paie']] - $tmp_id;
 		}
 		foreach ($tab['secs'] as $row)
 		{
 			$tmp_id = 0;
-			if (isset($p_sup[$row['id']])) $tmp_id = $p_sup[$row['id']];
-			print "<tr>
-			<td>{$row['nom_sec']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>
-			<td>".$tmp_id."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
+			if (isset($p_sup[$row['id']]))
+				$tmp_id = $p_sup[$row['id']];
+			print "<tr><td>{$row['nom_sec']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>";
+			$tmp_id2 = $tmp_id;
+			$remise = 0;
+			if ($reductions)
+			{
+				foreach ($reductions as $id => $reduc)
+					if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+						$remise += -$reduc['valeur']*$row['valeur']/100;
+				if ($row['valeur'] + $remise < 0)
+					$remise = -$row['valeur'];
+				$tmp_id = $tmp_id - $remise;
+				print "<td>".$remise."$currency</td>";
+			}
+			print "<td>".$tmp_id2."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
 			<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0)) {
+			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0))
+			{
 				$paiement_possible=true;
-				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency} ".($row['facultatif']==1 ? "<input type='checkbox' name='facultatif[".$row['id']."]' value='".$row['valeur']."'> Cocher s'il ne prend pas ce supplément facultatif" : "")."</td>";			} else if ($resp_asso || $resp_section || $resp_creneau) print "<td></td>";
+				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency}</td>";
+			}
+			else if ($resp_asso || $resp_section || $resp_creneau)
+				print "<td></td>";
+			if ($row['facultatif'] == 1 AND !isset($p_sup[$row['id']]))
+				print "<td><label><input type='checkbox' name='modification_sup_facultatif[".$row['id']."]' value='1' onClick='submit();' ".(isset($reductions[$row['id']]) ? "checked" : "" )."> Je ne prends pas ce supplément</label></td>";
+			if (isset($reductions[$row['id']]) AND isset($p_sup[$row['id']]))
+				print "<td><label>Je ne prends pas ce supplément</label></td>";
 			print "</tr>";
 			$tab['totaux'][$row['id_asso_paie']] = $tab['totaux'][$row['id_asso_paie']] - $tmp_id;
 		}
 		foreach ($tab['acts'] as $row)
 		{
 			$tmp_id = 0;
-			if (isset($p_sup[$row['id']])) $tmp_id = $p_sup[$row['id']];
-			print "<tr>
-			<td>{$row['nom_sec']} - {$row['nom_act']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>
-			<td>".$tmp_id."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
+			if (isset($p_sup[$row['id']]))
+				$tmp_id = $p_sup[$row['id']];
+			print "<tr><td>{$row['nom_sec']} - {$row['nom_act']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>";
+			$tmp_id2 = $tmp_id;
+			$remise = 0;
+			if ($reductions)
+			{
+				foreach ($reductions as $id => $reduc)
+					if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+						$remise += -$reduc['valeur']*$row['valeur']/100;
+				if ($row['valeur'] + $remise < 0)
+					$remise = -$row['valeur'];
+				$tmp_id = $tmp_id - $remise;
+				print "<td>".$remise."$currency</td>";
+			}
+			print "<td>".$tmp_id2."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
 			<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0)) {
+			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0))
+			{
 				$paiement_possible=true;
-				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency} ".($row['facultatif']==1 ? "<input type='checkbox' name='facultatif[".$row['id']."]' value='".$row['valeur']."'> Cocher s'il ne prend pas ce supplément facultatif" : "")."</td>";			} else if ($resp_asso || $resp_section || $resp_creneau) print "<td></td>";
+				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency}</td>";
+			}
+			else if ($resp_asso || $resp_section || $resp_creneau)
+				print "<td></td>";
+			if ($row['facultatif'] == 1 AND !isset($p_sup[$row['id']]))
+				print "<td><label><input type='checkbox' name='modification_sup_facultatif[".$row['id']."]' value='1' onClick='submit();' ".(isset($reductions[$row['id']]) ? "checked" : "" )."> Je ne prends pas ce supplément</label></td>";
+			if (isset($reductions[$row['id']]) AND isset($p_sup[$row['id']]))
+				print "<td><label>Je ne prends pas ce supplément</label></td>";
 			print "</tr>";
 			$tab['totaux'][$row['id_asso_paie']] = $tab['totaux'][$row['id_asso_paie']] - $tmp_id;
 		}
 		foreach ($tab['cres'] as $row)
 		{
 			$tmp_id = 0;
-			if (isset($p_sup[$row['id']])) $tmp_id = $p_sup[$row['id']];
-			print "<tr>
-			<td>{$row['nom_sec']} - {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>
-			<td>".$tmp_id."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
+			if (isset($p_sup[$row['id']]))
+				$tmp_id = $p_sup[$row['id']];
+			print "<tr><td>{$row['nom_sec']} - {$row['nom_act']} - {$row['jour_cre']} - {$row['debut_cre']}</td><td>{$row['type']}".($row['facultatif']==1 ? " (facultatif)" : "")."</td><td >{$row['valeur']}$currency</td>";
+			$tmp_id2 = $tmp_id;
+			$remise = 0;
+			if ($reductions)
+			{
+				foreach ($reductions as $id => $reduc)
+					if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+						$remise += -$reduc['valeur']*$row['valeur']/100;
+				if ($row['valeur'] + $remise < 0)
+					$remise = -$row['valeur'];
+				$tmp_id = $tmp_id - $remise;
+				print "<td>".$remise."$currency</td>";
+			}
+			print "<td>".$tmp_id2."$currency</td><td>".($row['valeur'] - $tmp_id)."$currency</td>
 			<td>{$assos[$row['id_asso_paie']]['nom']}</td>";
-			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0)) {
+			if (($resp_asso || $resp_section || $resp_creneau) && $row['id_asso_paie']==$current_asso && (($row['valeur'] - $tmp_id)!=0))
+			{
 				$paiement_possible=true;
-				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency} ".($row['facultatif']==1 ? "<input type='checkbox' name='facultatif[".$row['id']."]' value='".$row['valeur']."'> Cocher s'il ne prend pas ce supplément facultatif" : "")."</td>";
-			} else if ($resp_asso || $resp_section || $resp_creneau) print "<td></td>";
+				print "<td><INPUT name=\"sup[{$row['id']}]\" class=\"tot\" type=\"text\" size=\"4\" />{$currency}</td>";
+			}
+			else if ($resp_asso || $resp_section || $resp_creneau)
+				print "<td></td>";
+			if ($row['facultatif'] == 1 AND !isset($p_sup[$row['id']]))
+				print "<td><label><input type='checkbox' name='modification_sup_facultatif[".$row['id']."]' value='1' onClick='submit();' ".(isset($reductions[$row['id']]) ? "checked" : "" )."> Je ne prends pas ce supplément</label></td>";
+			if (isset($reductions[$row['id']]) AND isset($p_sup[$row['id']]))
+				print "<td><label>Je ne prends pas ce supplément</label></td>";
 			print "</tr>";
 			$tab['totaux'][$row['id_asso_paie']] = $tab['totaux'][$row['id_asso_paie']] - $tmp_id;
 		}
 //		if (($resp_asso || $resp_section || $resp_creneau) && isset($paiement_possible))
 		if ($paiement_possible)
 		{
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Réduction :</td><td>";
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ASC");
-			while ($tmp_array = mysql_fetch_array($res)){
-				print "<label><input type='checkbox' name='reductions[]' id='".$tmp_array['nom']."' value='".$tmp_array['id']."' onclick='UpdateCost()' >".$tmp_array['nom']."</label> ";
-				$valeur_reduction = $tmp_array['valeur'];
-			}
-			print "(Indiquer le montant sans la remise et elle sera enregistrée automatiquement)</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Total :</td><td><INPUT type=\"text\" name=\"total\" id=\"total\" style=\"background:#B3ADAD;\" size=\"4\" READONLY />{$currency}</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Type :</td><td><select id='type' name='type'>";
+			$table = "";
+			if($reductions)
+				$table = "<td></td>";
+			
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td>Total :</td><td><INPUT type=\"text\" name=\"total\" id=\"total\" style=\"background:#B3ADAD;\" size=\"4\" READONLY />{$currency}</td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td>Type :</td><td><select id='type' name='type'>";
 			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}type_transa ORDER BY nom ASC");
 			while ($tmp_array = mysql_fetch_array($res))
 				print "<option value='".$tmp_array['nom']."' ".('Chèque'==$tmp_array['nom'] ? "selected" : "")." >".$tmp_array['nom']."</option>";
 			print "</select></td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Numéro :</td><td><INPUT name=\"num\" type=\"text\" />de la transaction (NON NUL !)</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td colspan=2>*** Chèque   : indiquer nom banque et numéro chèque<br>
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td>Numéro :</td><td><INPUT name=\"num\" type=\"text\" />de la transaction (NON NUL !)</td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td colspan=2>*** Chèque   : indiquer nom banque et numéro chèque<br>
 			                                                                      *** Dispense : indiquer raison dispense<br>
 			                                                                      *** Espèces  : indiquer numéro bordereau dépôt</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Date :</td><td><INPUT name=\"date_t\" class=\"datepicker\" readonly type=\"text\" />de la transaction (pas de cet enregistrement !)</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td>Commentaire :</td><td><INPUT name=\"remarque\" type=\"text\" />(facultatif)</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td colspan=2>(par exemple, indiquer nom de l'émetteur du chèque si différent du pratiquant ...)</td></tr>";
-			print "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td><INPUT type=\"submit\" name=\"submit\" value=\"Enregistrer\" /></td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td>Date :</td><td><INPUT name=\"date_t\" class=\"datepicker\" readonly type=\"text\" />de la transaction (pas de cet enregistrement !)</td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td>Commentaire :</td><td><INPUT name=\"remarque\" type=\"text\" />(facultatif)</td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td colspan=2>(par exemple, indiquer nom de l'émetteur du chèque si différent du pratiquant ...)</td></tr>";
+			print "<tr><td></td><td></td><td></td><td></td><td></td>$table<td></td><td><INPUT type=\"submit\" name=\"submit_paiement\" value=\"Enregistrer\" /></td></tr>";
 			print "<INPUT type=\"hidden\" name=\"promo\" value=\"{$promo}\" />
                                <INPUT type=\"hidden\" name=\"id_adh\" value=$id_adh />
                                <INPUT type=\"hidden\" name=\"recorded_by\" value=\"{$_SESSION['nom']} {$_SESSION['prenom']}\" />";
@@ -658,14 +777,14 @@ else
 		$totaux = 0;
 		foreach ($tab['totaux'] as $asso => $total)
 		{
-			if ($total != 0)
-			{
+			if($total != 0){
 				if($assos[$asso]['ordre_cheques'] != "")
 					$ordre = $assos[$asso]['ordre_cheques'];
 				else
 					$ordre = $assos[$asso]['nom'];
-			$totaux_affichage .= "<tr><td>$ordre</td><td>$total $currency</td></tr>";
-			$totaux += $total;
+				
+				$totaux_affichage .= "<tr><td>$ordre</td><td>$total $currency</td></tr>";
+				$totaux += $total;
 			}
 		}
 		$totaux_affichage .= '</table>';
@@ -676,11 +795,11 @@ else
 
 		//Paiements
 		print "<h2>Paiements</h2>";
-		$paiements=getMyPaiements($id_adh);
+		// $paiements=getMyPaiements($id_adh, $promo); On utilise cette même fonction au niveau des réductions (évitons les doubons ...)
 		print "<table><th>Type</th><th>Numéro</th><th>Date</th><th>Remarque</th><th>Total</th><th>Promo</th><th>Enregistré par</th><th>Enregistré le</th><th>Détails</th>";
 		if ($resp_asso)
 			print "<th>Supprimer</th>";
-		foreach ($paiements as $id => $row )
+		foreach ($paiements as $id => $row)
 		{
 			if($row['promo']!=$promo) continue;
 			$tot=0;
@@ -697,7 +816,7 @@ else
 				print '<FORM action="index.php?page=7&adh='.$id_adh.'&asso='.$current_asso.'" method="POST">
 				<input type="hidden" name="action" value="suppression_paie" />
 				<input type="hidden" name="id_paie" value='.$id.' />
-				<INPUT type="image" src="images/unchecked.gif" value="submit">
+				<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit">
 				</form>
 				';
 				print '</td>';
@@ -724,9 +843,8 @@ else
 				</FORM>
 				"; 
 	}
-	else {
-		print "<p>Vous n'êtes pas connecté LOL</p>";
-	}
+	else
+		print "<p>Vous n'êtes pas connecté</p>";
 }
 ?>
 <script type="text/javascript">
@@ -769,23 +887,6 @@ $(".tot").change(function(){
         });
         $("#total").val(total);
 });
-
-function UpdateCost() {
-	total = document.getElementById("total").value;
-	if(document.getElementById("Boursier").checked == true){
-		document.getElementById("total").value =  (1-<?php echo $valeur_reduction; ?>/100)*total;
-	}
-	else{
-        total = 0.0;
-        $(".tot").each(function(){
-                if(!isNaN(parseFloat($(this).val()))){
-                        total= total + parseFloat($(this).val());
-                }
-        });
-        $("#total").val(total);
-	}
-}
-
 
 $(".toggle").click(function () {
       $(this).parent().parent().next().toggle();

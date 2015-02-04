@@ -1,6 +1,6 @@
 <?php
 
-function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie,$facultatif,$promo){
+function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie,$facultatif,$reduction,$promo){
 	//Add sup
 	if($tb==="association") $col = "id_statut";
 	else $col="id_asso_adh";
@@ -10,11 +10,17 @@ function addSup($tb,$id_tb,$type,$valeur,$id_fk,$id_asso_paie,$facultatif,$promo
 	if (!$results) echo mysql_error();
 	$id_sup = mysql_insert_id();
 
-	//Ajouter sup_fk avec id_sup_fk déterminé
+	// Ajoute sup_fk avec id_sup_fk déterminé
 	$req3="INSERT INTO {$GLOBALS['prefix_db']}sup_fk (id_ent,id_sup) VALUES ('$id_tb','$id_sup')";
 	$res3=mysql_query($req3);
 	if (!$res3) echo mysql_error();
 	include("closedb.php");
+	
+	// Ajoute les réductions
+	if ($reduction)
+		foreach($reduction as $id_reduc => $value)
+			doQuery("INSERT INTO {$GLOBALS['prefix_db']}reductions_sup (id_sup,id_reduc) VALUES ('$id_sup','$id_reduc')");
+			
 }
 
 function delSup($id){
@@ -31,9 +37,10 @@ function getSup($tb,$id_tb,$promo){
 		FROM {$GLOBALS['prefix_db']}sup S ,{$GLOBALS['prefix_db']}sup_fk SF , {$GLOBALS['prefix_db']}statut ST 
 		WHERE SF.id_sup=S.id AND S.id_statut=ST.id AND SF.id_ent='$id_tb' AND S.promo='$promo' ";
 	} else {
-		$query = "SELECT S.*,SF.id_ent id_ent 
-		FROM {$GLOBALS['prefix_db']}sup S ,{$GLOBALS['prefix_db']}sup_fk SF 
-		WHERE SF.id_sup=S.id AND SF.id_ent='$id_tb' AND S.promo='$promo' ";
+		$query = "SELECT S.*,SF.id_ent id_ent, REDUC.id_reduc
+		FROM {$GLOBALS['prefix_db']}sup S LEFT JOIN {$GLOBALS['prefix_db']}sup_fk SF ON SF.id_sup=S.id
+		LEFT JOIN {$GLOBALS['prefix_db']}reductions_sup REDUC ON REDUC.id_sup=S.id
+		WHERE SF.id_ent='$id_tb' AND S.promo='$promo' ";
 	}
 
 	include("opendb.php");
@@ -56,6 +63,20 @@ function modifSup($post){
 	$results = mysql_query($query);
 	if (!$results) echo mysql_error();
 	include("closedb.php");
+	
+	// Ajoute les réductions
+	$liste = "0, ";
+	if ($post['reduction'])
+		foreach ($post['reduction'] as $id => $value)
+		{
+			$liste .= $id.', ';
+			$result = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup WHERE id_sup = ".$post['id_sup']." AND id_reduc = ".$id." ");
+			$result = mysql_fetch_assoc($result);
+			if (!$result)
+				doQuery("INSERT INTO {$GLOBALS['prefix_db']}reductions_sup (id_reduc, id_sup) VALUES (".$id.", ".$post['id_sup'].") ");
+		}
+	$liste = rtrim($liste, ", ");
+	doQuery("DELETE FROM {$GLOBALS['prefix_db']}reductions_sup WHERE id_sup = ".$post['id_sup']." AND id_reduc NOT IN (".$liste.") ");
 }
 
 function getAssosCreneaux(){
@@ -132,31 +153,42 @@ function getFacture($ads, $id_statut_adh, $promo, $facultatif)
 	$t_secs  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($secs)  AS A GROUP BY A.id_asso_paie";
 	$t_acts  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($acts)  AS A GROUP BY A.id_asso_paie";
 	$t_cres  = "SELECT SUM(A.valeur) total, A.id_asso_paie FROM ($cres)  AS A GROUP BY A.id_asso_paie";
-
+	
+	
+	$reductions = NULL;
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup ");
+	while ($tmp_array = mysql_fetch_array($res))
+		$reductions[$tmp_array['id_sup']][$tmp_array['id_reduc']] = 1;
+	
+	
 	include("opendb.php");
 	$results = mysql_query($assos);
 	if (!$results) echo mysql_error();
 	$tab_assos = array();
-	while($results != false && ($row = mysql_fetch_array($results))){
+	while($results != false && ($row = mysql_fetch_assoc($results))){
 		$tab_assos[$row['id']] = $row;
+		$tab_assos[$row['id']]['sup_reductions'] = $reductions[$row['id']];
 	}
 	$results = mysql_query($secs);
 	if (!$results) echo mysql_error();
 	$tab_secs = array();
-	while($row = mysql_fetch_array($results)){
+	while($row = mysql_fetch_assoc($results)){
 		$tab_secs[$row['id']] = $row;
+		$tab_secs[$row['id']]['sup_reductions'] = $reductions[$row['id']];
 	}
 	$results = mysql_query($acts);
 	if (!$results) echo mysql_error();
 	$tab_acts = array();
-	while($row = mysql_fetch_array($results)){
+	while($row = mysql_fetch_assoc($results)){
 		$tab_acts[$row['id']] = $row;
+		$tab_acts[$row['id']]['sup_reductions'] = $reductions[$row['id']];
 	}
 	$results = mysql_query($cres);
 	if (!$results) echo mysql_error();
 	$tab_cres = array();
-	while($row = mysql_fetch_array($results)){
+	while($row = mysql_fetch_assoc($results)){
 		$tab_cres[$row['id']] = $row;
+		$tab_cres[$row['id']]['sup_reductions'] = $reductions[$row['id']];
 	}
 	
 	$totaux = array();
