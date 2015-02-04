@@ -264,10 +264,39 @@ if(isset($_POST['cre'])) {
 			$deja_paye = 0;
 			$cout_cre = 0;
 			$list_sup = "";
-			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup_fk a INNER JOIN {$GLOBALS['prefix_db']}sup b ON a.id_sup=b.id WHERE promo=$promo AND ((id_asso_adh=$id_asso AND (id_ent=$cre OR id_ent={$creneau['id_act']} OR id_ent={$creneau['id_sec']})) OR (id_statut=$id_statut_adh AND id_ent=$id_asso))");
+			
+			
+			$reductions = array();
+			$query_reduction = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_adherent ADH LEFT JOIN {$GLOBALS['prefix_db']}reductions REDUC ON ADH.id_reduc=REDUC.id WHERE id_adh = ".$id_adh." AND promo = ".$promo." ORDER BY id_sup ");
+			while($data = mysql_fetch_assoc($query_reduction)){
+				if($data['id_sup']){
+					$reductions[$data['id_sup']] = $data;
+					$reductions[$data['id_sup']]['valeur'] = 100;
+					// ici on force la valeur à 100 puisque la réduction s'applique à un sup facultatif !
+				}
+				else
+					$reductions['global-'.$data['id_reduc']] = $data;
+			}
+			
+			$sup_reductions = NULL;
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup ");
+			while ($tmp_array = mysql_fetch_array($res))
+				$sup_reductions[$tmp_array['id_sup']][$tmp_array['id_reduc']] = 1;
+			
+			
+			$res = doQuery("SELECT sup.valeur, sup.id, sup.reduction FROM {$GLOBALS['prefix_db']}sup_fk sup_fk INNER JOIN {$GLOBALS['prefix_db']}sup sup ON sup_fk.id_sup=sup.id WHERE promo=$promo AND ((id_asso_adh=$id_asso AND (id_ent=$cre OR id_ent={$creneau['id_act']} OR id_ent={$creneau['id_sec']})) OR (id_statut=$id_statut_adh AND id_ent=$id_asso))");
 			while ($tmp_array = mysql_fetch_array($res)) {
-			       	$cout_cre += $tmp_array['valeur'];
-			       	$list_sup .= ",".$tmp_array['id'];
+				
+				$remise = 0;
+					foreach($reductions as $id => $reduc)
+						if ((substr($id, 0, 6) == "global" AND empty($sup_reductions[$tmp_array['id']][substr($id, 7)])) OR ($tmp_array['id'] == $id))
+							$remise += -$reduc['valeur']*$tmp_array['valeur']/100;
+							
+				if ($tmp_array['valeur'] + $remise < 0)
+					$remise = -$tmp_array['valeur'];
+				$tmp_array['valeur'] = $tmp_array['valeur'] + $remise;
+				$cout_cre += $tmp_array['valeur'];
+				$list_sup .= ",".$tmp_array['id'];
 			}
 			if ($cout_cre > 0 && !empty($list_sup)) {
 				$list_sup[0] = " ";
@@ -456,6 +485,7 @@ if(isset($_POST['cre'])) {
 			$presence_encadrant /= (sizeof($nb_encadrant) * $nb_week);
 		else
 			$presence_encadrant = 100;
+		
 		if (($nb_inscrits != 0) && (sizeof($nb_encadrant) != 0 || $promo != $current_promo))
 			$output.= '<tr align="center"><td><input type="radio" name="cre" value='.$cre.' /></td><td>'.$creneau['nom_sec'].'</td><td>'.$creneau['nom_act'].'</td><td>'.$creneau['jour_cre'].'</td><td width="100">'.date("H\hi", strtotime($creneau['debut_cre'])).' - '.date("H\hi", strtotime($creneau['fin_cre'])).'</td><td>'.$nb_inscrits.'</td><td>'.$count_presence_inscrit.'</td><td>'.$count_regular_adh.'</td><td>'.$count_presence.'</td><td>'.sizeof($nb_encadrant).'</td><td>'.round($presence_encadrant).'</td></tr>';
 	}

@@ -53,9 +53,19 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'modif_sup'){
 	$res_sup = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}sup WHERE id=".$_GET['sup']." ");
 	$data_sup = mysql_fetch_assoc($res_sup);
 	$assos = getAssos();
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup WHERE id_sup = ".$_GET['sup']." ");
+		while ($tmp_array = mysql_fetch_array($res))
+			$reductions[$tmp_array['id_reduc']] = 1;
 	print '<h2>Modifier Supplément</h2>
 	<table>
-	<tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th><th>Modif</th></tr>
+	<tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+	{
+		print '<th>'.$tmp_array['nom'].'</th>';
+		$liste_reductions[$tmp_array['id']] = 1;
+	}
+	print '<th>Modif</th></tr>
 	<tr><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
 	<input type="hidden" name="action" value="submitted_modif_sup" />
 	<input type="hidden" name="entite" value="section" />
@@ -75,8 +85,10 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'modif_sup'){
 		print '<OPTION value="'.$key.'" '.($data_sup['id_asso_paie']==$key?"selected":"").'>'.$value.'</OPTION>';
 	}
 	print '</SELECT></td>
-	<td><INPUT type="checkbox" name="facultatif" value="1" '.($data_sup['facultatif']==1?"checked":"").'></td>
-	<td><INPUT type="image" width="20" height="20" src="images/Valid.png" value="submit"></td>
+	<td><INPUT type="checkbox" name="facultatif" value="1" '.($data_sup['facultatif']==1?"checked":"").'></td>';
+	foreach ($liste_reductions as $id_reduc => $value)
+		print '<td bgcolor="#CCFFCC"><INPUT type="checkbox" name="reduction['.$id_reduc.']" value="1" '.($reductions[$id_reduc]==1?"checked":"").'></td>';
+	print '<td><INPUT type="image" width="20" height="20" src="images/Valid.png" value="submit"></td>
 	</FORM></table>';
 }
 else
@@ -104,12 +116,12 @@ else
 	if (isset($_POST['action']) && $_POST['action'] === 'submitted_modif_sup')
 		modifSup($_POST);
 	if (isset($_POST['action']) && $_POST['action'] === 'new_sup')
-		addSup("section",$_POST['id_sec'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$_POST['facultatif'],$promo);
+		addSup("section",$_POST['id_sec'],$_POST['type'],$_POST['valeur'],$_POST['id_asso_adh'],$_POST['id_asso_paie'],$_POST['facultatif'],$_POST['reduction'],$promo);
 	if (isset($_POST['action']) && $_POST['action'] === 'copy_old_sups')
 	{
 		$sups = getSup("section",$_GET['section'],$_POST['old_promo']);
 		foreach ($sups as $key => $value)
-			addSup("section",$_GET['section'],$value['type'],$value['valeur'],$value['id_asso_adh'],$value['id_asso_paie'],$value['facultatif'],$promo);
+			addSup("section",$_GET['section'],$value['type'],$value['valeur'],$value['id_asso_adh'],$value['id_asso_paie'],$value['facultatif'],$value['reduction'],$promo);
 	}
 	if(!(strcmp($_SESSION['user'],"") == 0))
 	{
@@ -246,26 +258,43 @@ else
 			//Liste de suppléments
 			$sups = getSup("section",$_GET['section'],$promo);
 			$assos = getAssos();
-			print '<h3>Suppléments de la section</h3>';
-			print '<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
+			print '<h3>Suppléments du créneau</h3>
+			<p>Les cases vertes représentent les réductions, Coché = "Non" la réduction de la colonne ne s\'applique pas</p>
+			<table><tr><th>Type</th><th>Valeur</th><th>Asso de l\'adherent</th><th>Payer à</th><th>Facultatif</th>';
+			$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ASC");
+			while ($tmp_array = mysql_fetch_array($res))
+			{
+				print '<th>'.$tmp_array['nom'].'</th>';
+				$liste_reductions[$tmp_array['id']] = 1;
+			}
 			print '</tr>';
 			foreach ($sups as $id => $sup)
 			{
+				$reductions = NULL;
+				$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_sup WHERE id_sup = $id ");
+				while ($tmp_array = mysql_fetch_array($res))
+					$reductions[$tmp_array['id_reduc']] = 1;
 				print '<tr>
-				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td><td>'.($sup['facultatif']==1 ? "oui" : "non").'</td>';
-				
-				if($promo==$current_promo) print '
-					<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
-					<input type="hidden" name="action" value="modif_sup" />
-					<INPUT type="image" src="images/icone_edit.png" width="14" value="submit"></FORM></td>
+				<td>'.$sup['type'].'</td><td>'.$sup['valeur'].getParam('currency.conf').'</td><td>'.$assos[$sup['id_asso_adh']].'</td><td>'.$assos[$sup['id_asso_paie']].'</td><td>'.($sup['facultatif']==1 ? "Oui" : "Non").'</td>';
+				foreach ($liste_reductions as $id_reduc => $value)
+					print '<td bgcolor="#CCFFCC">'.($reductions[$id_reduc]==1 ? "Non" : "Oui").'</td>';
+				if ($promo==$current_promo)
+				{
+					if($_SESSION['privilege'] == 1)
+						print '
+						<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
+						<input type="hidden" name="action" value="modif_sup" />
+						<INPUT type="image" src="images/icone_edit.png" width="14" value="submit"></FORM></td>';
 					
-					<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
+					print '<td><FORM action="index.php?page=4&sup='.$id.'&section='.$_GET['section'].'" method="POST">
 					<input type="hidden" name="action" value="suppression_sup" />
-					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>
-					</tr>';
+					<INPUT type="image" src="images/unchecked.gif" class="confirm" value="submit"></FORM></td>';
+				}
+				print '</tr>';
 			}
 
-			if($promo==$current_promo) {
+			if ($promo==$current_promo)
+			{
 				print '<tr><FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
 				<input type="hidden" name="action" value="new_sup" />
 				<input type="hidden" name="id_sec" value="'.$_GET['section'].'">
@@ -276,37 +305,38 @@ else
 				print '</select></td>
 				<td><INPUT type="text" name="valeur"></INPUT></td>
 				<td><SELECT name="id_asso_adh">';
-				foreach ($assos as $key => $value) {
+				foreach ($assos as $key => $value)
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
-				}
 				print '</SELECT></td>';
 				print '<td><SELECT name="id_asso_paie">';
 				foreach ($assos as $key => $value) {
 					print '<OPTION value="'.$key.'">'.$value.'</OPTION>';
 				}
 				print '</SELECT></td>
-				<td><INPUT type="checkbox" name="facultatif" value="1"></td><td></td>
-				<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
+				<td><INPUT type="checkbox" name="facultatif" value="1"></td>';
+				foreach ($liste_reductions as $id_reduc => $value)
+					print '<td><INPUT type="checkbox" name="reduction['.$id_reduc.']" value="1"></td>';
+				print '<td><INPUT type="image" width="14" height="14" src="images/icone_add.png" value="submit"></td>
 				';
 				print '</FORM>';
-			}	else {
-					print '<td colspan=4>
-					<FORM action="index.php?page=4&section='.$_GET['section'].'" method="POST">
-					<input type="hidden" name="old_promo" value="'.$_GET['promo'].'" >
-					<input type="hidden" name="action" value="copy_old_sups" >
-					<INPUT type="submit" class="confirm" value="Recopier ces suppléments dans la promo courante" >
-					</FORM></td>';
-				}
+			}
+			else
+			{
+				print '<td colspan=4>
+				<FORM action="index.php?page=6&section='.$_GET['section'].'" method="POST">
+				<input type="hidden" name="old_promo" value="'.$_GET['promo'].'" >
+				<input type="hidden" name="action" value="copy_old_sups" >
+				<INPUT type="submit" class="confirm" value="Recopier ces suppléments dans la promo courante" >
+				</FORM></td>';
+			}
 			print '</table>';
 		}
 
 	}
-	else {
+	else
 		print "<p>Vous n'êtes pas connecté</p>";
-	}
+	
 }
-
-
 
 ?>
 <script type="text/javascript">

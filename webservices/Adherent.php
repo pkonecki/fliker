@@ -372,30 +372,75 @@ function getSolde($id_adh,$promo)
 		$adh['statut'] = "";
 	$tab = getFacture($ads, $adh['statut'], $promo, 0);
 	$p_sup = getPaiementsSup($id_adh, $promo);
+	
+	$reductions = array();
+	$query_reduction = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions_adherent ADH LEFT JOIN {$GLOBALS['prefix_db']}reductions REDUC ON ADH.id_reduc=REDUC.id WHERE id_adh = ".$id_adh." AND promo = ".$promo." ORDER BY id_sup ");
+	while($data = mysql_fetch_assoc($query_reduction)){
+		if($data['id_sup']){
+			$reductions[$data['id_sup']] = $data;
+			$reductions[$data['id_sup']]['valeur'] = 100;
+			// ici on force la valeur à 100 puisque la réduction s'applique à un sup facultatif !
+		}
+		else
+			$reductions['global-'.$data['id_reduc']] = $data;
+	}
+	
+// echo '<pre>';
+// print_r($reductions);
+// echo '</pre>';
+	
 	$solde=0;
-	foreach($tab['assos'] as $row)
+	foreach($tab['assos'] as $id_sup => $row)
 	{
+		$remise = 0;
+			foreach($reductions as $id => $reduc)
+				if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+					$remise += -$reduc['valeur']*$row['valeur']/100;
+		if ($row['valeur'] + $remise < 0)
+				$remise = -$row['valeur'];
+		$row['valeur'] = $row['valeur'] + $remise;
 		if (empty($p_sup[$row['id']]))
 			$solde += $row['valeur'];
 		else
 			$solde += $row['valeur'] - $p_sup[$row['id']];
 	}
-	foreach($tab['secs'] as $row)
+	foreach($tab['secs'] as $id_sup => $row)
 	{
+		$remise = 0;
+			foreach($reductions as $id => $reduc)
+				if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+					$remise += -$reduc['valeur']*$row['valeur']/100;
+		if ($row['valeur'] + $remise < 0)
+				$remise = -$row['valeur'];
+		$row['valeur'] = $row['valeur'] + $remise;
 		if (empty($p_sup[$row['id']]))
 			$solde += $row['valeur'];
 		else
 			$solde += $row['valeur'] - $p_sup[$row['id']];
 	}
-	foreach($tab['acts'] as $row)
+	foreach($tab['acts'] as $id_sup => $row)
 	{
+		$remise = 0;
+			foreach($reductions as $id => $reduc)
+				if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+					$remise += -$reduc['valeur']*$row['valeur']/100;
+		if ($row['valeur'] + $remise < 0)
+				$remise = -$row['valeur'];
+		$row['valeur'] = $row['valeur'] + $remise;
 		if (empty($p_sup[$row['id']]))
 			$solde += $row['valeur'];
 		else
 			$solde += $row['valeur'] - $p_sup[$row['id']];
 	}
-	foreach($tab['cres'] as $row)
+	foreach($tab['cres'] as $id_sup => $row)
 	{
+		$remise = 0;
+			foreach($reductions as $id => $reduc)
+				if ((substr($id, 0, 6) == "global" AND empty($row['sup_reductions'][substr($id, 7)])) OR ($row['id'] == $id))
+					$remise += -$reduc['valeur']*$row['valeur']/100;
+		if ($row['valeur'] + $remise < 0)
+				$remise = -$row['valeur'];
+		$row['valeur'] = $row['valeur'] + $remise;
 		if (empty($p_sup[$row['id']]))
 			$solde += $row['valeur'];
 		else

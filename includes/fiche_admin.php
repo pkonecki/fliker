@@ -94,6 +94,30 @@ else
 		else
 			print "<FONT COLOR='#16B84E'><b>Valeur ajouté avec succès.</b></font>";
 	}
+	else if (isset($_POST['new_famille']))
+	{
+		$res = doQuery("INSERT INTO {$GLOBALS['prefix_db']}famille (nom) VALUES('".secur_data($_POST['new_famille'])."')");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur ajouté avec succès.</b></font>";
+	}
+	else if (isset($_POST['modif_famille']))
+	{
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}famille SET nom='".secur_data($_POST['modif_famille'])."' WHERE id=".$_POST['old_famille']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur modifié avec succès.</b></font>";
+	}
+	else if (isset($_POST['modifier_reductions']))
+	{
+		$res = doQuery("UPDATE {$GLOBALS['prefix_db']}reductions SET valeur='".secur_data($_POST['valeur'])."' WHERE id=".$_POST['id']." ");
+		if (!$res)
+			print "<FONT COLOR='#FF0000'><b>Une erreur c'est produite lors de l'opération.</b></font>";
+		else
+			print "<FONT COLOR='#16B84E'><b>Valeur modifié avec succès.</b></font>";
+	}
 	else if (isset($_POST['synchro_wiki']))	// Page synchronisant les comptes avec le wiki
 	{
 		$query = "SELECT * FROM {$GLOBALS['prefix_db']}adherent";
@@ -288,6 +312,25 @@ else
 		// print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";
 	// print 	"</select></td><td><input type='submit'/></td></tr></form>";
 	print 		"</table>";
+	
+	print 	"<br/><table>
+			<tr><th colspan='3' align='center'>Gestion des familles</th></tr>
+			<form method='POST' action='index.php?page=9'><tr><td>Ajouter : </td><td><input name='new_famille' type='text'/></td><td><input type='submit'/></td></tr></form>
+			
+			<form method='POST' action='index.php?page=9'><tr><td>Modifier : </td><td>Ancien : <select name='old_famille'>";
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}famille ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+		print "<option name='choix' value='".$tmp_array['id']."'>".$tmp_array['nom']."</option>";	
+	print	"</select><br/>Nouveau : <input name='modif_famille' type='text'/></td><td><input type='submit'/></td></tr></form>";
+	print 	"</table>";
+	
+		
+	print 	"<br/><table>
+			<tr><th colspan='3' align='center'>Gestion des réductions</th></tr>";
+	$res = doQuery("SELECT * FROM {$GLOBALS['prefix_db']}reductions ORDER BY nom ASC");
+	while ($tmp_array = mysql_fetch_array($res))
+		print "<tr><form method='POST' action='index.php?page=9'><td align='right'>".$tmp_array['nom']." :</td><td><input type='text' name='valeur' value='".$tmp_array['valeur']."' size='2'>%</td><td><input type='hidden' name='id' value='".$tmp_array['id']."' ><input type='hidden' name='modifier_reductions' ><input type='submit' value='Modifier' ></td></tr></form>";	
+	print 	"</table>";
 	
 	print "<br/><br/>";
 	$table_config = "<table id=\"table_config\" >";
